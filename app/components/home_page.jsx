@@ -1,6 +1,8 @@
 import React from "react";
 import ListeningComponent from "app/templates/listening_component";
 
+import Clickable from "app/components/clickable";
+
 
 class HomePage extends ListeningComponent {
 
@@ -8,6 +10,9 @@ class HomePage extends ListeningComponent {
     return (
       <div className={"general-page"}>
         Welcome to the home page.
+        <Clickable
+          route={"/editor"}
+          content={"Editor"} />
       </div>
     );
   }
