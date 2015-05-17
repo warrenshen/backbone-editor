@@ -1,0 +1,35 @@
+{
+  "name": "warrensterling",
+  "version": "0.0.1",
+  "description": "warren sterling's personal website",
+  "main": "app/app.js",
+  "scripts": {
+    "build": "webpack",
+    "deploy": "NODE_ENV=production webpack -p --config webpack.production.config.js",
+    "dev-server": "webpack-dev-server --devtool eval --progress --colors --hot --content-base build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/warrenshen/warrensterling.github.io"
+  },
+  "author": "warrensterling",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/warrenshen/warrensterling.github.io/issues"
+  },
+  "homepage": "https://github.com/warrenshen/warrensterling.github.io",
+  "devDependencies": {
+    "babel-core": "^5.4.3",
+    "babel-loader": "^5.1.2",
+    "backbone": "^1.2.0",
+    "backbone-relational": "^0.9.0",
+    "flux": "^2.0.3",
+    "jquery": "^2.1.4",
+    "node-libs-browser": "^0.5.0",
+    "react": "^0.13.3",
+    "react-hot-loader": "^1.2.7",
+    "style-loader": "^0.12.2",
+    "webpack": "^1.9.7",
+    "webpack-dev-server": "^1.8.2"
+  }
+}
