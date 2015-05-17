@@ -10,12 +10,11 @@ class Router extends Backbone.Router {
 
   routes() {
     return {
-      "index.html": "home",
+      "": "home",
     };
   }
 
   home() {
-    debugger
     React.render(
       <div>Hello</div>,
       document.body
