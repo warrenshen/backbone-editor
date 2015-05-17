@@ -2,9 +2,11 @@
   "name": "warrensterling",
   "version": "0.0.1",
   "description": "warren sterling's personal website",
-  "main": "index.js",
+  "main": "app/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack",
+    "deploy": "NODE_ENV=production webpack -p --config webpack.production.config.js",
+    "dev-server": "webpack-dev-server --devtool eval --progress --colors --hot --content-base build"
   },
   "repository": {
     "type": "git",
@@ -27,6 +29,7 @@
     "react": "^0.13.3",
     "react-hot-loader": "^1.2.7",
     "style-loader": "^0.12.2",
-    "webpack": "^1.9.7"
+    "webpack": "^1.9.7",
+    "webpack-dev-server": "^1.8.2"
   }
 }

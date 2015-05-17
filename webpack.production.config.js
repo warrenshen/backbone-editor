@@ -1,15 +1,10 @@
-var webpack = require("webpack");
 
 module.exports = {
   entry: __dirname + "/app/app.js",
   output: {
-    path: __dirname + "/build",
+    path: __dirname + "/dist",
     filename: "bundle.js",
   },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
-  ],
   module: {
     loaders: [
       { test: /\.jsx$/, exclude: /node_modules/, loader: "react-hot-loader!babel-loader" },
