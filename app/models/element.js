@@ -5,7 +5,12 @@ import ModelDirectory from "app/directories/model_directory";
 class Element extends Model {
 
   get defaults() {
-    return {};
+    return {
+      end: 0,
+      link: "",
+      start: 0,
+      type: "bold",
+    };
   }
 
   get name() {

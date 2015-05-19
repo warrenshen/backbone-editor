@@ -5,7 +5,10 @@ import ModelDirectory from "app/directories/model_directory";
 class Section extends Model {
 
   get defaults() {
-    return {};
+    return {
+      index: 0,
+      type: "standard",
+    };
   }
 
   get name() {
