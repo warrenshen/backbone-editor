@@ -2,6 +2,7 @@ import Backbone from "backbone";
 import Router from "app/routers/router";
 
 import Models from "app/buckets/models";
+import Stores from "app/buckets/stores";
 
 import ModelDirectory from "app/directories/model_directory";
 import RouterDirectory from "app/directories/router_directory";
@@ -12,13 +13,13 @@ import "app/styles/general.scss";
 
 class App {
 
-  constructor(models) {
-    this.initialize(models);
+  constructor(models, stores) {
+    this.initialize(models, stores);
     RouterDirectory.add(Router);
     Backbone.history.start({ pushState: true });
   }
 
-  initialize(models) {
+  initialize(models, stores) {
     models.map(function(model) {
       ModelDirectory.add(model);
     });
@@ -33,4 +34,4 @@ class App {
 }
 
 
-module.exports = new App(Models);
+module.exports = new App(Models, Stores);
