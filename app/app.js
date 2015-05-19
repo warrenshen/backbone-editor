@@ -1,7 +1,7 @@
 import Backbone from "backbone";
 import Router from "app/routers/router";
 
-import Models from "app/buckets/models.js";
+import Models from "app/buckets/models";
 
 import ModelDirectory from "app/directories/model_directory";
 import RouterDirectory from "app/directories/router_directory";
