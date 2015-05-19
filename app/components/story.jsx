@@ -9,7 +9,9 @@ import Story from "app/models/story";
 class StoryComponent extends Component {
 
   renderSection(section) {
-    <SectionComponent key={section.get("cid")} section={section} />
+    return (
+      <SectionComponent key={section.cid} section={section} />
+    );
   }
 
   renderSections() {

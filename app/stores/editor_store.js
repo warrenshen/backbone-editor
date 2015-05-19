@@ -1,5 +1,7 @@
 import Store from "app/templates/store";
 
+import Block from "app/models/block";
+import Element from "app/models/element";
 import Section from "app/models/section";
 import Story from "app/models/story";
 
@@ -10,7 +12,7 @@ class EditorStore extends Store {
     this._current = new Story();
     var initialSection = new Section();
     this.addSection(initialSection);
-    // initialSection.addBlock(new Block());
+    initialSection.addBlock(new Block());
     // initialSection.addBlock(new Block(), 1);
   }
 

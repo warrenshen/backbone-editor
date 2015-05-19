@@ -9,7 +9,9 @@ import Section from "app/models/section";
 class SectionComponent extends Component {
 
   renderBlock(block) {
-    <BlockComponent key={block.get("cid")} block={block} />
+    return (
+      <BlockComponent key={block.cid} block={block} />
+    );
   }
 
   renderBlocks() {

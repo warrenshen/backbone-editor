@@ -14,14 +14,6 @@ class Block extends Model {
     };
   }
 
-  id: null
-  block_type: "paragraph"
-  index: 0
-  creation_index: 0
-  text: ""
-  centered: false
-  image_url: ""
-
   get name() {
     return "Block";
   }
