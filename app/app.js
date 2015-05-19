@@ -6,6 +6,8 @@ import Models from "app/buckets/models";
 import ModelDirectory from "app/directories/model_directory";
 import RouterDirectory from "app/directories/router_directory";
 
+import "app/styles/general.scss";
+
 
 class App {
 
