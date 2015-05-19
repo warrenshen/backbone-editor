@@ -13,8 +13,6 @@ class ListeningComponent extends Component {
   }
 
   getDefaultState() {
-    // TODO: Move this request call to a different lifecycle method.
-    this.requestFromStore();
     return this.getStoreState();
   }
 

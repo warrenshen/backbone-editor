@@ -1,10 +1,17 @@
 import Model from "app/templates/model";
+import ModelDirectory from "app/directories/model_directory";
 
 
 class Block extends Model {
 
   get defaults() {
-    return {};
+    return {
+      centered: false,
+      content: "",
+      image_url: "",
+      index: 0,
+      type: "paragraph",
+    };
   }
 
   get name() {

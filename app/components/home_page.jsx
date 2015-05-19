@@ -8,8 +8,8 @@ class HomePage extends ListeningComponent {
 
   render() {
     return (
-      <div className={"general-page"}>
-        Welcome to the home page.
+      <div>
+        <h1>Welcome to the home page.</h1>
         <Clickable
           route={"/editor"}
           content={"Editor"} />
