@@ -1,4 +1,5 @@
 import Model from "app/templates/model";
+import ModelDirectory from "app/directories/model_directory";
 
 
 class Element extends Model {

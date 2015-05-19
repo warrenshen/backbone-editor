@@ -1,15 +1,38 @@
 import React from "react";
 import Component from "app/templates/component";
 
+import BlockComponent from "app/components/block";
 
-class Section extends Component {
+import Section from "app/models/section";
+
+
+class SectionComponent extends Component {
+
+  renderBlock(block) {
+    <BlockComponent key={block.get("cid")} block={block} />
+  }
+
+  renderBlocks() {
+    var blocks = this.props.section.get("blocks");
+    return blocks.map(this.renderBlock, this);
+  }
 
   render() {
     return (
-      <span>test section</span>
+      <div>
+        {this.renderBlocks()}
+      </div>
     );
   }
 }
 
+SectionComponent.propTypes = {
+  section: React.PropTypes.object.isRequired,
+}
 
-module.exports = Section;
+SectionComponent.defaultProps = {
+  section: new Section(),
+}
+
+
+module.exports = SectionComponent;
