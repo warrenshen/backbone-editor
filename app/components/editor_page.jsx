@@ -1,38 +1,30 @@
 import React from "react";
 import ListeningComponent from "app/templates/listening_component";
 
-import Section from "app/components/section";
-
-import Story from "app/models/story";
+import StoryComponent from "app/components/story";
 
 
 class EditorPage extends ListeningComponent {
 
-  renderSection(section) {
-    <Section key={section.get("cid")} section={section} />
-  }
-
-  renderSections() {
-    var sections = this.props.story.get("sections");
-    return sections.map(this.renderSection(), this);
-  }
-
   render() {
     return (
-      <div className={"general-page"}>
+      <div style={this.styles.container}>
         Welcome to the editor page.
-        {this.renderSections()}
+        <StoryComponent />
       </div>
     );
   }
-}
 
-EditorPage.propTypes = {
-  story: React.PropTypes.object.isRequired,
-}
-
-EditorPage.defaultProps = {
-  story: new Story(),
+  set styles(styles) {}
+  get styles() {
+    return {
+      container: {
+        position: "relative",
+        width: "100%",
+        padding: "172px 0",
+      }
+    };
+  }
 }
 
 
