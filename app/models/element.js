@@ -1,14 +1,14 @@
 import Model from "app/templates/model";
 
 
-class Story extends Model {
+class Element extends Model {
 
   get defaults() {
     return {};
   }
 
   get name() {
-    return "Story";
+    return "Element";
   }
 
   get relations() {
@@ -17,4 +17,4 @@ class Story extends Model {
 }
 
 
-module.exports = Story;
+module.exports = Element;
