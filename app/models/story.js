@@ -1,4 +1,5 @@
 import Model from "app/templates/model";
+import ModelDirectory from "app/directories/model_directory";
 
 
 class Story extends Model {
@@ -12,7 +13,13 @@ class Story extends Model {
   }
 
   get relations() {
-    return [];
+    return [
+      {
+        type: "HasMany",
+        key: "sections",
+        relatedModel: ModelDirectory.get("Section"),
+      },
+    ];
   }
 }
 
