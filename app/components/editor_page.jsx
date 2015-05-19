@@ -22,7 +22,7 @@ class EditorPage extends ListeningComponent {
         position: "relative",
         width: "100%",
         padding: "172px 0",
-      }
+      },
     };
   }
 }
