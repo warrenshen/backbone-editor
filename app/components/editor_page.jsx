@@ -1,6 +1,8 @@
 import React from "react";
 import ListeningComponent from "app/templates/listening_component";
 
+import Story from "app/models/story";
+
 
 class EditorPage extends ListeningComponent {
 
@@ -11,6 +13,14 @@ class EditorPage extends ListeningComponent {
       </div>
     );
   }
+}
+
+EditorPage.propTypes = {
+  story: React.PropTypes.object.isRequired,
+}
+
+EditorPage.defaultProps = {
+  story: new Story(),
 }
 
 

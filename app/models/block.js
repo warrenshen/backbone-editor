@@ -12,7 +12,13 @@ class Block extends Model {
   }
 
   get relations() {
-    return [];
+    return [
+      {
+        type: "HasMany",
+        key: "elements",
+        relatedModel: ModelDirectory.get("Element"),
+      },
+    ];
   }
 }
 

@@ -12,7 +12,13 @@ class Section extends Model {
   }
 
   get relations() {
-    return [];
+    return [
+      {
+        type: "HasMany",
+        key: "blocks",
+        relatedModel: ModelDirectory.get("Block"),
+      },
+    ];
   }
 }
 
