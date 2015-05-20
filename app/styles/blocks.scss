@@ -8,12 +8,12 @@
   margin: "0 auto";
   cursor: "text";
   outline: "none";
-  WebkitUserSelect: "all";
+  -webkit-user-select: "all";
 }
 
 .block-content {
   position: "relative";
   width: "100%";
   outline: "none";
-  wordWrap: "break-word";
+  word-wrap: "break-word";
 }
