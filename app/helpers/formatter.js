@@ -5,12 +5,12 @@ class Formatter {
     var characters = block.get("content").split("");
     var openers = {};
     var closers = {};
-    parse(elements, openers, closers);
-    return merge(characters, openers, closers);
+    this.parse(elements, openers, closers);
+    return this.merge(characters, openers, closers);
   }
 
   parse(elements, openers, closers) {
-    for (element : elements) {
+    elements.map(function(element) {
       var start = element.get("start");
       var end = element.get("end");
       var opener = "";
@@ -31,12 +31,12 @@ class Formatter {
       } else {
         closers[end] = ["</" + closer + ">"];
       }
-    }
+    });
   }
 
   merge(characters, openers, closers) {
     var content = "";
-    for (i = 0; i < characters.length; i += 1) {
+    for (var i = 0; i < characters.length; i += 1) {
       if (openers[i]) {
         content += openers[i];
       } else if (closers[i]) {

@@ -3,21 +3,12 @@ import Component from "app/templates/component";
 
 import Block from "app/models/block";
 
-import Formatter from "app/helpers/formatter";
-
 
 class BlockComponent extends Component {
 
   render() {
     return (
-      <div className={"block-container"}>
-        <p
-          className={"block-content"}
-          contentEditable={true}
-          ref={"content"}>
-          {Formatter.format(this.props.block.get("content"))}
-        </p>
-      </div>
+      <div></div>
     );
   }
 }

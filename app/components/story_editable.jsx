@@ -1,16 +1,16 @@
 import React from "react";
 import Component from "app/templates/component";
 
-import SectionComponent from "app/components/section";
+import SectionStandard from "app/components/section_standard";
 
 import Story from "app/models/story";
 
 
-class StoryComponent extends Component {
+class StoryEditable extends Component {
 
   renderSection(section) {
     return (
-      <SectionComponent key={section.cid} section={section} />
+      <SectionStandard key={section.cid} section={section} />
     );
   }
 
@@ -28,13 +28,13 @@ class StoryComponent extends Component {
   }
 }
 
-StoryComponent.propTypes = {
+StoryEditable.propTypes = {
   story: React.PropTypes.object.isRequired,
 }
 
-StoryComponent.defaultProps = {
+StoryEditable.defaultProps = {
   story: new Story(),
 }
 
 
-module.exports = StoryComponent;
+module.exports = StoryEditable;

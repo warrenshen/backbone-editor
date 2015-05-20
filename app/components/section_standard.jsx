@@ -1,16 +1,16 @@
 import React from "react";
 import Component from "app/templates/component";
 
-import BlockComponent from "app/components/block";
+import BlockStandard from "app/components/block_standard";
 
 import Section from "app/models/section";
 
 
-class SectionComponent extends Component {
+class SectionStandard extends Component {
 
   renderBlock(block) {
     return (
-      <BlockComponent key={block.cid} block={block} />
+      <BlockStandard key={block.cid} block={block} />
     );
   }
 
@@ -28,13 +28,13 @@ class SectionComponent extends Component {
   }
 }
 
-SectionComponent.propTypes = {
+SectionStandard.propTypes = {
   section: React.PropTypes.object.isRequired,
 }
 
-SectionComponent.defaultProps = {
+SectionStandard.defaultProps = {
   section: new Section(),
 }
 
 
-module.exports = SectionComponent;
+module.exports = SectionStandard;

@@ -1,7 +1,7 @@
 import React from "react";
 import ListeningComponent from "app/templates/listening_component";
 
-import StoryComponent from "app/components/story";
+import StoryEditable from "app/components/story_editable";
 
 import EditorStore from "app/stores/editor_store";
 
@@ -21,7 +21,7 @@ class EditorPage extends ListeningComponent {
   render() {
     return (
       <div className={"general-page"}>
-        <StoryComponent story={this.state.story} />
+        <StoryEditable story={this.state.story} />
       </div>
     );
   }
