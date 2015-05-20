@@ -1,9 +1,5 @@
-$white: #FFFFFF;
-$ash: #565A5C;
-// $gray: #989C9E;
-// $input-gray: #DCE0E0;
-// $border-gray: #ECECEC;
-// $background-gray: #F5F5F5;
+@import "colors";
+
 
 body {
   position: relative;
@@ -92,6 +88,12 @@ p {
 //   border: 1px solid $coral;
 //   box-shadow: 0 0 2px $coral;
 // }
+
+.general-page {
+  position: "relative";
+  width: "100vw";
+  height: "100vh";
+}
 
 // .general-button {
 //   display: inline-block;

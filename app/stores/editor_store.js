@@ -12,7 +12,7 @@ class EditorStore extends Store {
     this._current = new Story();
     var initialSection = new Section();
     this.addSection(initialSection);
-    initialSection.addBlock(new Block());
+    initialSection.addBlock(new Block({ content: "Welcome to the editor." }));
     // initialSection.addBlock(new Block(), 1);
   }
 

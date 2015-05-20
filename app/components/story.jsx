@@ -21,8 +21,7 @@ class StoryComponent extends Component {
 
   render() {
     return (
-      <div>
-        <span>test story</span>
+      <div className={"story-container"}>
         {this.renderSections()}
       </div>
     );

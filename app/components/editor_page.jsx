@@ -19,24 +19,11 @@ class EditorPage extends ListeningComponent {
   }
 
   render() {
-    console.log(this.state.story);
     return (
-      <div style={this.styles.container}>
-        Welcome to the editor page.
+      <div className={"general-page"}>
         <StoryComponent story={this.state.story} />
       </div>
     );
-  }
-
-  set styles(styles) {}
-  get styles() {
-    return {
-      container: {
-        position: "relative",
-        width: "100%",
-        padding: "172px 0",
-      },
-    };
   }
 }
 
