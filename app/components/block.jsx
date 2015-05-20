@@ -3,6 +3,8 @@ import Component from "app/templates/component";
 
 import Block from "app/models/block";
 
+import Formatter from "app/helpers/formatter";
+
 
 class BlockComponent extends Component {
 
@@ -13,7 +15,7 @@ class BlockComponent extends Component {
           className={"block-content"}
           contentEditable={true}
           ref={"content"}>
-          {this.props.block.get("content")}
+          {Formatter.format(this.props.block.get("content"))}
         </p>
       </div>
     );
