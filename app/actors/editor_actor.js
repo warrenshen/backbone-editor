@@ -5,10 +5,10 @@ import ActionConstants from "app/constants/action_constants";
 
 class EditorActor extends Actor {
 
-  splitBlock(point) {
+  splitBlock(vector) {
     this.act({
       type: ActionConstants.editor.splitBlock,
-      point: point,
+      vector: vector,
     });
   }
 }

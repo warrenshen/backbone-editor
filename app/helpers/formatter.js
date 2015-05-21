@@ -1,15 +1,15 @@
 class Formatter {
 
-  format(block) {
+  formatBlock(block) {
     var elements = block.get("elements");
     var characters = block.get("content").split("");
     var openers = {};
     var closers = {};
-    this.parse(elements, openers, closers);
-    return this.merge(characters, openers, closers);
+    this.parseElements(elements, openers, closers);
+    return this.mergeElements(characters, openers, closers);
   }
 
-  parse(elements, openers, closers) {
+  parseElements(elements, openers, closers) {
     elements.map(function(element) {
       var start = element.get("start");
       var end = element.get("end");
@@ -34,7 +34,7 @@ class Formatter {
     });
   }
 
-  merge(characters, openers, closers) {
+  mergeElements(characters, openers, closers) {
     var content = "";
     for (var i = 0; i < characters.length; i += 1) {
       if (openers[i]) {

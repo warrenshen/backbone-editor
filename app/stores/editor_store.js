@@ -37,8 +37,9 @@ class EditorStore extends Store {
     story.get("sections").add(section, { at: index });
   }
 
-  splitBlock(point) {
-    console.log(point);
+  splitBlock(vector) {
+    var post = this._current;
+    console.log(vector);
   }
 
   // --------------------------------------------------
@@ -49,7 +50,7 @@ class EditorStore extends Store {
     var action = payload.action;
     switch (action.type) {
       case ActionConstants.editor.splitBlock:
-        this.splitBlock(action.point);
+        this.splitBlock(action.vector);
         break;
     }
   }
