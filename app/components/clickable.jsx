@@ -17,7 +17,7 @@ class Clickable extends Component {
   }
 
   render() {
-    if (this.props.source.length == 0) {
+    if (this.props.source.length === 0) {
       return (
         <a
           className={this.props.style}
