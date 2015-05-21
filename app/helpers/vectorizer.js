@@ -49,7 +49,6 @@ class Vectorizer {
     var anchorCharOffset = anchorElementOffset + selection.anchorOffset;
     var focusCharOffset = focusElementOffset + selection.focusOffset;
 
-    debugger
     var anchorSectionIndex = parseInt(anchorSectionNode.dataset.index);
     var focusSectionIndex = parseInt(focusSectionNode.dataset.index);
 

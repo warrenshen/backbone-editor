@@ -18,43 +18,9 @@ class BlockComponent extends Component {
     if (event.which === KeyConstants.enter) {
       event.preventDefault();
       var vector = Vectorizer.generateVector(selection);
-      debugger
       EditorActor.splitBlock(vector);
     }
   }
-
-  // handleKeyPress: (event) ->
-  //   selection = window.getSelection()
-
-  //   # Conditional clause to handle enter key press.
-  //   if event.which is KeyCodes.enter
-  //     event.preventDefault()
-
-  //     caretOffset = @getCaretOffset(selection)
-  //     pointObject = new Point(@props.sectionIndex, @props.index, caretOffset)
-  //     EditorActionCreators.splitBlock(pointObject)
-  //     @saveDraft()
-
-  //   # Conditional clause to handle any other "input" key presses.
-  //   else
-  //     caretOffset = @getCaretOffset(selection)
-  //     text = @props.block.getText()
-  //     char = String.fromCharCode(event.which)
-  //     @props.block.addFragment(caretOffset, char)
-
-  //     switch char
-  //       when ".", ",", "?", "!"
-  //         @saveDraft(false)
-
-  //     unless text
-  //       event.preventDefault()
-  //       pointObject = new Point(@props.sectionIndex, @props.index, 1)
-  //       EditorActionCreators.updateCaret(pointObject)
-  //       @props.truifyUpdateEdit()
-
-  //     else if @props.block.getText().substring(0, 3) is "1. "
-  //       EditorActionCreators.formatOrderedList(@props.sectionIndex, @props.index)
-  //       @props.truifyUpdateEdit()
 
   componentDidMount() {
     super.componentDidMount();
