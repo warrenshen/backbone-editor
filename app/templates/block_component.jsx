@@ -3,12 +3,31 @@ import Component from "app/templates/component";
 
 import Block from "app/models/block";
 
+import Formatter from "app/helpers/formatter";
+
 
 class BlockComponent extends Component {
 
+  componentDidMount() {
+    super.componentDidMount();
+    this.renderContent();
+  }
+
+  componentDidUpdate() {
+    super.componentDidUpdate();
+    this.renderContent();
+  }
+
+  renderContent() {
+    var node = React.findDOMNode(this.refs.content);
+    node.innerHTML = Formatter.format(this.props.block);
+  }
+
   render() {
     return (
-      <div></div>
+      <div>
+        <p ref={"content"}></p>
+      </div>
     );
   }
 }

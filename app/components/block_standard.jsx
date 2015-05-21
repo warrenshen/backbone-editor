@@ -1,8 +1,6 @@
 import React from "react";
 import BlockComponent from "app/templates/block_component";
 
-import Formatter from "app/helpers/formatter";
-
 
 class BlockStandard extends BlockComponent {
 
@@ -13,7 +11,6 @@ class BlockStandard extends BlockComponent {
           className={"block-content"}
           contentEditable={true}
           ref={"content"}>
-          {Formatter.format(this.props.block)}
         </p>
       </div>
     );

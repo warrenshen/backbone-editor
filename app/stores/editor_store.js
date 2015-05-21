@@ -5,6 +5,8 @@ import Element from "app/models/element";
 import Section from "app/models/section";
 import Story from "app/models/story";
 
+import ActionConstants from "app/constants/action_constants";
+
 
 class EditorStore extends Store {
 
@@ -40,7 +42,12 @@ class EditorStore extends Store {
   // --------------------------------------------------
   // Stores that listen for dispatches must override this method.
   handleDispatch(payload) {
-
+    var action = payload.action;
+    switch (action.type) {
+      case ActionConstants.editor.create:
+        debugger
+        break;
+    }
   }
 }
 
