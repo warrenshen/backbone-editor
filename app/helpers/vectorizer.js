@@ -46,8 +46,8 @@ class Vectorizer {
     var anchorElementOffset = this.getElementOffset(anchorParentNode, anchorNode);
     var focusElementOffset = this.getElementOffset(focusParentNode, focusNode);
 
-    var anchorCharOffset = anchorElementOffset + selection.anchorOffset;
-    var focusCharOffset = focusElementOffset + selection.focusOffset;
+    var anchorCaretOffset = anchorElementOffset + selection.anchorOffset;
+    var focusCaretOffset = focusElementOffset + selection.focusOffset;
 
     var anchorSectionIndex = parseInt(anchorSectionNode.dataset.index);
     var focusSectionIndex = parseInt(focusSectionNode.dataset.index);
@@ -55,8 +55,8 @@ class Vectorizer {
     var anchorBlockIndex = parseInt(anchorParentNode.dataset.index);
     var focusBlockIndex = parseInt(focusParentNode.dataset.index);
 
-    var anchorPoint = new Point(anchorSectionIndex, anchorBlockIndex, anchorCharOffset);
-    var focusPoint = new Point(focusSectionIndex, focusBlockIndex, focusCharOffset);
+    var anchorPoint = new Point(anchorSectionIndex, anchorBlockIndex, anchorCaretOffset);
+    var focusPoint = new Point(focusSectionIndex, focusBlockIndex, focusCaretOffset);
 
     if (anchorPoint.compareTo(focusPoint) < 0) {
       return new Vector(anchorPoint, focusPoint);

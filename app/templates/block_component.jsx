@@ -15,10 +15,24 @@ class BlockComponent extends Component {
 
   handleKeyPress(event) {
     var selection = window.getSelection();
+    var vector = Vectorizer.generateVector(selection);
     if (event.which === KeyConstants.enter) {
       event.preventDefault();
-      var vector = Vectorizer.generateVector(selection);
       EditorActor.splitBlock(vector);
+    } else {
+      var block = this.props.block;
+      var character = String.fromCharCode(event.which);
+      block.addFragment(vector, character);
+
+      // unless text
+      //   event.preventDefault()
+      //   pointObject = new Point(@props.sectionIndex, @props.index, 1)
+      //   EditorActionCreators.updateCaret(pointObject)
+      //   @props.truifyUpdateEdit()
+
+      // else if @props.block.getText().substring(0, 3) is "1. "
+      //   EditorActionCreators.formatOrderedList(@props.sectionIndex, @props.index)
+      //   @props.truifyUpdateEdit()
     }
   }
 

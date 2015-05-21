@@ -1,9 +1,9 @@
 class Point {
 
-  constructor(sectionIndex, blockIndex, charOffset) {
+  constructor(sectionIndex, blockIndex, caretOffset) {
     this._sectionIndex = sectionIndex;
     this._blockIndex = blockIndex;
-    this._charOffset = charOffset;
+    this._caretOffset = caretOffset;
   }
 
   getSectionIndex() {
@@ -14,8 +14,8 @@ class Point {
     return this._blockIndex;
   }
 
-  getCharOffset() {
-    return this._charOffset;
+  getCaretOffset() {
+    return this._caretOffset;
   }
 
   compareTo(other) {
@@ -23,7 +23,7 @@ class Point {
     if (sectionDifference === 0) {
       var blockDifference = this._blockIndex - other.getBlockIndex();
       if (blockDifference === 0) {
-        return this.charOffset - other.getCharOffset();
+        return this._caretOffset - other.getCaretOffset();
       } else {
         return blockDifference;
       }
