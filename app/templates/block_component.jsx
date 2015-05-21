@@ -6,6 +6,7 @@ import Block from "app/models/block";
 import EditorActor from "app/actors/editor_actor";
 
 import Formatter from "app/helpers/formatter";
+import Vectorizer from "app/helpers/vectorizer";
 
 import KeyConstants from "app/constants/key_constants";
 
@@ -16,7 +17,9 @@ class BlockComponent extends Component {
     var selection = window.getSelection();
     if (event.which === KeyConstants.enter) {
       event.preventDefault();
-      EditorActor.splitBlock(1);
+      var vector = Vectorizer.generateVector(selection);
+      debugger
+      EditorActor.splitBlock(vector);
     }
   }
 

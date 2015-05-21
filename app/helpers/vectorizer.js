@@ -1,5 +1,5 @@
-import Point from "app/objects/point";
-import Vector from "app/objects/vector";
+import Point from "app/helpers/point";
+import Vector from "app/helpers/vector";
 
 
 class Vectorizer {
@@ -15,14 +15,14 @@ class Vectorizer {
 
   getParentNode(childNode) {
     var parentNode = childNode;
-    while (!node.dataset || !node.dataset.index) {
-      parentNode = child.parentNode;
+    while (!parentNode.dataset || !parentNode.dataset.index) {
+      parentNode = parentNode.parentNode;
     }
     return parentNode;
   }
 
-  getElementOffset(baseNode, elementNode) {
-    var walker = this.createTreeWalker(baseNode);
+  getElementOffset(blockNode, elementNode) {
+    var walker = this.createTreeWalker(blockNode);
     var offset = 0;
     while (walker.nextNode()) {
       if (!walker.currentNode.isSameNode(elementNode)) {
@@ -33,7 +33,7 @@ class Vectorizer {
     }
   }
 
-  createVector(selection) {
+  generateVector(selection) {
     var anchorNode = selection.anchorNode;
     var focusNode = selection.focusNode;
 
@@ -49,6 +49,7 @@ class Vectorizer {
     var anchorCharOffset = anchorElementOffset + selection.anchorOffset;
     var focusCharOffset = focusElementOffset + selection.focusOffset;
 
+    debugger
     var anchorSectionIndex = parseInt(anchorSectionNode.dataset.index);
     var focusSectionIndex = parseInt(focusSectionNode.dataset.index);
 
@@ -67,4 +68,4 @@ class Vectorizer {
 }
 
 
-module.exports = Vectorizer;
+module.exports = new Vectorizer();

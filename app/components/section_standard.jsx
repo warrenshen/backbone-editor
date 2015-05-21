@@ -20,8 +20,12 @@ class SectionStandard extends Component {
   }
 
   render() {
+    var section = this.props.section;
+    console.log(section.get("index"));
     return (
-      <div>
+      <div
+        className={"section-container"}
+        data-index={section.get("index")}>
         {this.renderBlocks()}
       </div>
     );
