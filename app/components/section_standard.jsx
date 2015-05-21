@@ -21,7 +21,6 @@ class SectionStandard extends Component {
 
   render() {
     var section = this.props.section;
-    console.log(section.get("index"));
     return (
       <div
         className={"section-container"}
