@@ -1,3 +1,7 @@
+import Point from "app/objects/point";
+import Vector from "app/objects/vector";
+
+
 class Vectorizer {
 
   createTreeWalker(anchorNode) {
@@ -36,18 +40,31 @@ class Vectorizer {
     var anchorParentNode = this.getParentNode(anchorNode);
     var focusParentNode = this.getParentNode(focusNode);
 
-    var anchorGrandparentNode = anchorParentNode.parentNode;
-    var focusGrandparentNode = focusParentNode.parentNode;
+    var anchorSectionNode = anchorParentNode.parentNode;
+    var focusSectionNode = focusParentNode.parentNode;
 
     var anchorElementOffset = this.getElementOffset(anchorParentNode, anchorNode);
     var focusElementOffset = this.getElementOffset(focusParentNode, focusNode);
 
-    anchorElementOffset += selection.anchorOffset;
-    focusElementOffset += selection.focusOffset;
+    var anchorCharOffset = anchorElementOffset + selection.anchorOffset;
+    var focusCharOffset = focusElementOffset + selection.focusOffset;
 
-    var sectionDifference = parseInt(anchorGrandparentNode.dataset.index) -
-                            parseInt(focusGrandparentNode.dataset.index);
-    var blockDifference = parseInt(anchorParentNode.dataset.index) -
-                          parseInt(focusParentNode.dataset.index);
+    var anchorSectionIndex = parseInt(anchorSectionNode.dataset.index);
+    var focusSectionIndex = parseInt(focusSectionNode.dataset.index);
+
+    var anchorBlockIndex = parseInt(anchorParentNode.dataset.index);
+    var focusBlockIndex = parseInt(focusParentNode.dataset.index);
+
+    var anchorPoint = new Point(anchorSectionIndex, anchorBlockIndex, anchorCharOffset);
+    var focusPoint = new Point(focusSectionIndex, focusBlockIndex, focusCharOffset);
+
+    if (anchorPoint.compareTo(focusPoint) < 0) {
+      return new Vector(anchorPoint, focusPoint);
+    } else {
+      return new Vector(focusPoint, anchorPoint);
+    }
   }
 }
+
+
+module.exports = Vectorizer;
