@@ -1,5 +1,5 @@
 module.exports = {
   editor: {
-    create: "create",
+    splitBlock: "split-block",
   },
 }

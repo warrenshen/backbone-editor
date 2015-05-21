@@ -11,4 +11,4 @@ class Actor {
 }
 
 
-module.exports = Actions;
+module.exports = Actor;

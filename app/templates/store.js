@@ -13,6 +13,7 @@ class Store extends Events.EventEmitter {
   }
 
   initialize() {
+    Dispatcher.register(this.handleDispatch.bind(this));
     if (this.setDefaults) {
       this.setDefaults();
     }

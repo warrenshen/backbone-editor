@@ -1,14 +1,14 @@
-import Actions from "app/templates/actor";
+import Actor from "app/templates/actor";
 
 import ActionConstants from "app/constants/action_constants";
 
 
 class EditorActor extends Actor {
 
-  create(attributes) {
+  splitBlock(point) {
     this.act({
-      type: ActionConstants.editor.create,
-      attributes: attributes,
+      type: ActionConstants.editor.splitBlock,
+      point: point,
     });
   }
 }

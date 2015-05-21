@@ -37,6 +37,10 @@ class EditorStore extends Store {
     story.get("sections").add(section, { at: index });
   }
 
+  splitBlock(point) {
+    console.log(point);
+  }
+
   // --------------------------------------------------
   // Dispatch
   // --------------------------------------------------
@@ -44,8 +48,8 @@ class EditorStore extends Store {
   handleDispatch(payload) {
     var action = payload.action;
     switch (action.type) {
-      case ActionConstants.editor.create:
-        debugger
+      case ActionConstants.editor.splitBlock:
+        this.splitBlock(action.point);
         break;
     }
   }
