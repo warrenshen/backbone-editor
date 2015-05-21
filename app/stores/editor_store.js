@@ -42,43 +42,6 @@ class EditorStore extends Store {
     console.log(vector);
   }
 
-  // splitBlock: (point) ->
-  //   post = @getCurrentPost()
-  //   sectionIndex = point.getSectionIndex()
-  //   blockIndex = point.getBlockIndex()
-  //   caretOffset = point.getCaretOffset()
-
-  //   section = post.getSections().models[sectionIndex]
-  //   blocks = section.getBlocks().models
-  //   block = blocks[blockIndex]
-
-  //   needsAdd = true;
-  //   nextBlock = new Block(block_type: block.getBlockType())
-
-  //   if blockIndex < blocks.length - 1
-  //     afterBlock = blocks[blockIndex + 1]
-  //     unless afterBlock.getLength() or afterBlock.hasSpecialType()
-  //       needsAdd = false;
-  //       nextBlock = afterBlock;
-  //       nextBlock.setBlockType(block.getBlockType())
-
-  //   unless caretOffset is block.getLength()
-  //     nextText = block.getText().substring(caretOffset)
-  //     savedElements = block.removeElementsFromOffset(caretOffset)
-  //     block.removeFragment(caretOffset, block.getLength())
-
-  //     nextBlock.setText(nextText)
-  //     nextBlock.addElementsWithOffset(caretOffset, savedElements)
-  //   else if nextBlock.getBlockType() isnt Block.types.listItem
-  //     nextBlock.setBlockType(Block.types.paragraph)
-
-  //   if needsAdd
-  //     section.addBlock(nextBlock, blockIndex + 1)
-  //   @updateCaret(new Point(sectionIndex, blockIndex + 1, 0))
-
-  //   if not block.getLength() and block.getBlockType() isnt Block.types.listItem
-  //     block.setBlockType(Block.types.paragraph)
-
   // --------------------------------------------------
   // Dispatch
   // --------------------------------------------------
