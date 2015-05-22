@@ -5,6 +5,8 @@ import SectionStandard from "app/components/section_standard";
 
 import Story from "app/models/story";
 
+import Vector from "app/helpers/vector";
+
 
 class StoryEditable extends Component {
 
@@ -30,10 +32,12 @@ class StoryEditable extends Component {
 
 StoryEditable.propTypes = {
   story: React.PropTypes.object.isRequired,
+  vector: React.PropTypes.object.isRequired,
 }
 
 StoryEditable.defaultProps = {
   story: new Story(),
+  vector: new Vector(),
 }
 
 

@@ -14,14 +14,17 @@ class EditorPage extends ListeningComponent {
 
   getStoreState() {
     return {
-      story: EditorStore.getCurrent(),
+      story: EditorStore.getStory(),
+      vector: EditorStore.getVector(),
     }
   }
 
   render() {
     return (
       <div className={"general-page"}>
-        <StoryEditable story={this.state.story} />
+        <StoryEditable
+          story={this.state.story}
+          vector={this.state.vector} />
       </div>
     );
   }

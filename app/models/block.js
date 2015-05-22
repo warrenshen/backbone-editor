@@ -27,6 +27,10 @@ class Block extends Model {
       },
     ];
   }
+
+  get length() {
+    return this.get("content").length;
+  }
 }
 
 
