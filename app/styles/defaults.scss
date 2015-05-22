@@ -1,0 +1,123 @@
+@import "colors";
+@import "fonts";
+
+
+body {
+  position: relative;
+  min-width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  position: relative;
+  margin: 0;
+  color: $ash;
+  font-family: $font-family-primary;
+  font-weight: $font-weight-medium;
+  letter-spacing: 2px;
+}
+
+h1 {
+  font-size: $font-size-largest;
+  letter-spacing: 4px;
+  line-height: 72px;
+}
+
+h2 {
+  font-size: $font-size-larger;
+  line-height: 48px;
+}
+
+h3 {
+  font-size: $font-size-large;
+  line-height: 36px;
+}
+
+h4 {
+  font-size: $font-size-medium;
+  line-height: 30px;
+}
+
+h5 {
+  font-size: $font-size-small;
+  line-height: 24px;
+}
+
+h6 {
+  font-size: $font-size-smaller;
+  line-height: 18px;
+}
+
+a,
+p,
+li,
+span,
+input {
+  margin: 0;
+  color: $ash;
+  font-size: $font-size-smallest;
+  font-family: $font-family-primary;
+  font-weight: $font-weight-medium;
+  text-decoration: none;
+  outline: none;
+}
+
+input[type=text],
+input[type=password],
+textarea {
+  border: 1px solid;
+  border-color: $input-gray;
+  outline: none;
+  box-sizing: border-box;
+  -webkit-transition: all 0.30s ease-in-out;
+  -moz-transition: all 0.30s ease-in-out;
+  -ms-transition: all 0.30s ease-in-out;
+  -o-transition: all 0.30s ease-in-out;
+}
+
+input[type=text]:focus,
+input[type=password]:focus,
+textarea:focus {
+  border: 1px solid $gray;
+  box-shadow: 0 0 2px $gray;
+}
+
+.general-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+.general-button {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  padding: 6px 12px;
+  margin-right: 12px;
+  color: $white;
+  border-bottom: 2px solid;
+  border-color: $border-gray;
+  border-radius: 2px;
+  background-color: $border-gray;
+  font-size: 14px;
+
+  &:hover {
+    background-color: $input-gray;
+    cursor: pointer;
+  }
+}
+
+.vertical-anchor {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  height: 100%;
+}

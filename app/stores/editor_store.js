@@ -5,6 +5,8 @@ import Element from "app/models/element";
 import Section from "app/models/section";
 import Story from "app/models/story";
 
+import ActionConstants from "app/constants/action_constants";
+
 
 class EditorStore extends Store {
 
@@ -12,7 +14,7 @@ class EditorStore extends Store {
     this._current = new Story();
     var initialSection = new Section();
     this.addSection(initialSection);
-    initialSection.addBlock(new Block());
+    initialSection.addBlock(new Block({ content: "Welcome to the editor." }));
     // initialSection.addBlock(new Block(), 1);
   }
 
@@ -35,12 +37,22 @@ class EditorStore extends Store {
     story.get("sections").add(section, { at: index });
   }
 
+  splitBlock(vector) {
+    var post = this._current;
+    console.log(vector);
+  }
+
   // --------------------------------------------------
   // Dispatch
   // --------------------------------------------------
   // Stores that listen for dispatches must override this method.
   handleDispatch(payload) {
-
+    var action = payload.action;
+    switch (action.type) {
+      case ActionConstants.editor.splitBlock:
+        this.splitBlock(action.vector);
+        break;
+    }
   }
 }
 
