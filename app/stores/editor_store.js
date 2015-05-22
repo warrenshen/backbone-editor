@@ -5,13 +5,16 @@ import Element from "app/models/element";
 import Section from "app/models/section";
 import Story from "app/models/story";
 
+import Vector from "app/helpers/vector";
+
 import ActionConstants from "app/constants/action_constants";
 
 
 class EditorStore extends Store {
 
   setDefaults() {
-    this._current = new Story();
+    this._story = new Story();
+    this._vector = new Vector();
     var initialSection = new Section();
     this.addSection(initialSection);
     initialSection.addBlock(new Block({ content: "Welcome to the editor." }));
@@ -30,16 +33,50 @@ class EditorStore extends Store {
   }
 
   // --------------------------------------------------
+  // Getters
+  // --------------------------------------------------
+  getStory() {
+    return this._story;
+  }
+
+  getVector() {
+    return this._vector;
+  }
+
+  // --------------------------------------------------
   // Actions
   // --------------------------------------------------
   addSection(section, index=0) {
-    var story = this._current;
+    var story = this._story;
     story.get("sections").add(section, { at: index });
   }
 
   splitBlock(vector) {
-    var post = this._current;
-    console.log(vector);
+    var story = this._story;
+
+    var startPoint = vector.getStartPoint();
+    var endPoint = vector.getEndPoint();
+
+    var startSectionIndex = startPoint.getSectionIndex();
+    var startBlockIndex = startPoint.getBlockIndex();
+
+    var startCaretOffset = startPoint.getCaretOffset();
+    var endCaretOffset = endPoint.getCaretOffset();
+
+    if (startPoint.equalsShallowly(endPoint)) {
+      var section = story.get("sections").models[startSectionIndex];
+      var block = section.get("blocks").models[startBlockIndex];
+
+      var newBlock = new Block();
+      if (endCaretOffset < block.length) {
+        newBlock.set("content", block.get("content").substring(endCaretOffset));
+        newBlock.set("type", block.get("type"));
+        // TODO: Extract "new" elements here.
+      }
+      section.addBlock(emptyBlock, startBlockIndex + 1);
+      // TODO: Should this be manually called?
+      this.emitChange();
+    }
   }
 
   // --------------------------------------------------

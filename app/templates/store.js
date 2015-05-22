@@ -7,11 +7,6 @@ var CHANGE_EVENT = "change";
 
 class Store extends Events.EventEmitter {
 
-  constructor() {
-    super();
-    this._current = null;
-  }
-
   initialize() {
     Dispatcher.register(this.handleDispatch.bind(this));
     if (this.setDefaults) {
@@ -33,9 +28,6 @@ class Store extends Events.EventEmitter {
   // --------------------------------------------------
   // Getters
   // --------------------------------------------------
-  getCurrent() {
-    return this._current;
-  }
 
   // --------------------------------------------------
   // Actions

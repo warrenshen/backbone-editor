@@ -58,7 +58,7 @@ class Vectorizer {
     var anchorPoint = new Point(anchorSectionIndex, anchorBlockIndex, anchorCaretOffset);
     var focusPoint = new Point(focusSectionIndex, focusBlockIndex, focusCaretOffset);
 
-    if (anchorPoint.compareTo(focusPoint) < 0) {
+    if (anchorPoint.compareDeeply(focusPoint) < 0) {
       return new Vector(anchorPoint, focusPoint);
     } else {
       return new Vector(focusPoint, anchorPoint);

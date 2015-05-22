@@ -43,7 +43,6 @@ class Formatter {
         content += closers[i];
       }
       if (i === characters.length - 1 && characters[i] === " ") {
-        console.log("sup");
         content += "&nbsp;";
       } else {
         content += characters[i];

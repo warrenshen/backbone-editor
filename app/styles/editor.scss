@@ -1,4 +1,5 @@
 @import "colors";
+@import "fonts";
 
 
 .block-container {
@@ -16,4 +17,18 @@
   width: 100%;
   outline: none;
   word-wrap: break-word;
+}
+
+.section-container {
+  position: relative;
+  width: 100%;
+  -webkit-user-select: text;
+}
+
+.story-container {
+  position: relative;
+  width: 712px;
+  padding: 144px 0 0;
+  margin: auto;
+  -webkit-user-select: none;
 }
