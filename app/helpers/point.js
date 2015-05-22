@@ -18,7 +18,6 @@ class Point {
     return this._caretOffset;
   }
 
-  // findDifferenceWith?
   compareDeeply(other) {
     var sectionDifference = this._sectionIndex - other.getSectionIndex();
     if (sectionDifference === 0) {
@@ -33,7 +32,6 @@ class Point {
     }
   }
 
-  // sharesBlockWith?
   equalsShallowly(other) {
     var sectionDifference = this._sectionIndex - other.getSectionIndex();
     var blockDifference = this._blockIndex - other.getBlockIndex();

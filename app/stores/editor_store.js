@@ -77,31 +77,6 @@ class EditorStore extends Store {
       // TODO: Should this be manually called?
       this.emitChange();
     }
-
-    // sections = post.getSections().models
-    // if startSectionIndex is endSectionIndex and startBlockIndex is endBlockIndex
-    //   section = sections[startSectionIndex]
-    //   block = section.getBlocks().models[startBlockIndex]
-    //   newBlock = new Block(block_type: Block.types.paragraph)
-
-    //   unless endCaretOffset is block.getLength()
-    //     newText = block.getText().substring(endCaretOffset)
-    //     savedElements = block.removeElementsFromOffset(endCaretOffset)
-    //     newBlock.setText(newText)
-    //     newBlock.addElementsWithOffset(endCaretOffset, savedElements)
-    //     section.addBlock(newBlock, startBlockIndex + 1)
-
-    //   block.removeFragment(startCaretOffset, block.getLength())
-
-    // else
-    //   @removeSelection(selection)
-    //   section = sections[startSectionIndex]
-    //   anotherBlock = new Block(block_type: Block.types.paragraph)
-    //   section.addBlock(anotherBlock, startBlockIndex + 1)
-    //   @updateCaret(new Point(startSectionIndex, startBlockIndex + 1, 0))
-    //   section.updateBlockIndices()
-
-    // post.mergeSections()
   }
 
   // --------------------------------------------------
