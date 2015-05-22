@@ -44,7 +44,6 @@ class BlockComponent extends Component {
   }
 
   componentDidUpdate() {
-    super.componentDidUpdate();
     var node = React.findDOMNode(this.refs.content);
     this.renderContent(node);
   }

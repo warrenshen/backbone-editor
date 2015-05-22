@@ -18,7 +18,8 @@ class Point {
     return this._caretOffset;
   }
 
-  compareTo(other) {
+  // findDifferenceWith?
+  compareDeeply(other) {
     var sectionDifference = this._sectionIndex - other.getSectionIndex();
     if (sectionDifference === 0) {
       var blockDifference = this._blockIndex - other.getBlockIndex();
@@ -29,6 +30,17 @@ class Point {
       }
     } else {
       return sectionDifference;
+    }
+  }
+
+  // sharesBlockWith?
+  compareShallowly(other) {
+    var sectionDifference = this._sectionIndex - other.getSectionIndex();
+    var blockDifference = this._blockIndex - other.getBlockIndex();
+    if (sectionDifference === 0 && blockDifference === 0) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

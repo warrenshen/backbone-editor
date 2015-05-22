@@ -39,7 +39,26 @@ class EditorStore extends Store {
 
   splitBlock(vector) {
     var post = this._current;
-    console.log(vector);
+
+    var startPoint = vector.getStartPoint();
+    var endPoint = vector.getEndPoint();
+
+    var startSectionIndex = startPoint.getSectionIndex();
+    var startBlockIndex = startPoint.getBlockIndex();
+
+    var startCaretOffset = startPoint.getCaretOffset();
+    var endCaretOffset = endPoint.getCaretOffset();
+
+    if (startPoint.compareShallowly(endPoint)) {
+      var section = post.get("sections").models[startSectionIndex];
+      var block = section.get("blocks").models[startBlockIndex];
+      var emptyBlock = new Block({});
+      section.addBlock(emptyBlock, startBlockIndex + 1);
+      // TODO: Should this be manually called?
+      this.emitChange();
+    } else {
+
+    }
   }
 
   // --------------------------------------------------
