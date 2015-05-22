@@ -36,10 +36,17 @@ class BlockComponent extends Component {
     }
   }
 
+  handleMouseUp(event) {
+    var selection = window.getSelection()
+    var vector = Vectorizer.generateVector(selection);
+    EditorActor.updateVector(vector);
+  }
+
   componentDidMount() {
     super.componentDidMount();
     var node = React.findDOMNode(this.refs.content);
     node.addEventListener("keypress", this.handleKeyPress);
+    node.addEventListener("mouseup", this.handleMouseUp);
     this.renderContent(node);
   }
 
@@ -52,6 +59,7 @@ class BlockComponent extends Component {
     super.componentWillUnmount();
     var node = React.findDOMNode(this.refs.content);
     node.removeEventListener("keypress", this.handleKeyPress);
+    node.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   renderContent(node) {

@@ -13,11 +13,11 @@ class StoryEditable extends Component {
 
   componentDidMount() {
     super.componentDidMount();
-    this.createSelection(this.props.vector);
+    this.createCaret(this.props.vector);
   }
 
   componentDidUpdate() {
-    this.createSelection(this.props.vector);
+    this.createCaret(this.props.vector);
   }
 
   createTreeWalker(anchorNode) {
@@ -29,7 +29,7 @@ class StoryEditable extends Component {
     );
   }
 
-  createSelection(vector) {
+  createCaret(vector) {
     var startPoint = vector.getStartPoint();
     var endPoint = vector.getEndPoint();
 
@@ -57,8 +57,6 @@ class StoryEditable extends Component {
       }
       selection.removeAllRanges();
       selection.addRange(range);
-    } else {
-
     }
   }
 

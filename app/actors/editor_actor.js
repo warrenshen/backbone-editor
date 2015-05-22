@@ -11,6 +11,13 @@ class EditorActor extends Actor {
       vector: vector,
     });
   }
+
+  updateVector(vector) {
+    this.act({
+      type: ActionConstants.editor.updateVector,
+      vector: vector,
+    });
+  }
 }
 
 

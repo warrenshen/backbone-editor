@@ -79,6 +79,11 @@ class EditorStore extends Store {
     }
   }
 
+  updateVector(vector) {
+    this._vector = vector;
+    this.emitChange();
+  }
+
   // --------------------------------------------------
   // Dispatch
   // --------------------------------------------------
@@ -88,6 +93,9 @@ class EditorStore extends Store {
     switch (action.type) {
       case ActionConstants.editor.splitBlock:
         this.splitBlock(action.vector);
+        break;
+      case ActionConstants.editor.updateVector:
+        this.updateVector(action.vector);
         break;
     }
   }
