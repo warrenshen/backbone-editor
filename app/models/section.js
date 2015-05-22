@@ -29,10 +29,22 @@ class Section extends Model {
   }
 
   // --------------------------------------------------
+  // Methods
+  // --------------------------------------------------
+  updateBlockIndex(block, index) {
+    block.set("index", index);
+  }
+
+  updateBlockIndices() {
+    this.get("blocks").map(this.updateBlockIndex);
+  }
+
+  // --------------------------------------------------
   // Actions
   // --------------------------------------------------
   addBlock(block, index=0) {
     this.get("blocks").add(block, { at: index });
+    this.updateBlockIndices();
   }
 }
 

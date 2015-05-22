@@ -5,6 +5,7 @@ import Element from "app/models/element";
 import Section from "app/models/section";
 import Story from "app/models/story";
 
+import Point from "app/helpers/point";
 import Vector from "app/helpers/vector";
 
 import ActionConstants from "app/constants/action_constants";
@@ -73,14 +74,16 @@ class EditorStore extends Store {
         newBlock.set("type", block.get("type"));
         // TODO: Extract "new" elements here.
       }
-      section.addBlock(emptyBlock, startBlockIndex + 1);
-      // TODO: Should this be manually called?
-      this.emitChange();
+      section.addBlock(newBlock, startBlockIndex + 1);
+      var newPoint = new Point(startSectionIndex, startBlockIndex + 1, 0);
+      this.updateVector(new Vector(newPoint, newPoint));
     }
   }
 
   updateVector(vector) {
     this._vector = vector;
+    console.log("updating vector");
+    // TODO: Should this be manually called?
     this.emitChange();
   }
 

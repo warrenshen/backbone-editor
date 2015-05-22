@@ -37,7 +37,7 @@ class BlockComponent extends Component {
   }
 
   handleMouseUp(event) {
-    var selection = window.getSelection()
+    var selection = window.getSelection();
     var vector = Vectorizer.generateVector(selection);
     EditorActor.updateVector(vector);
   }
