@@ -14,7 +14,7 @@ class EditorStore extends Store {
 
   setDefaults() {
     this._story = new Story();
-    this._vector = new Vector(new Point(0, 0), new Point(0, 0));
+    this._vector = new Vector();
     var initialSection = new Section();
     this.addSection(initialSection);
     initialSection.addBlock(new Block({ content: "Welcome to the editor." }));
@@ -63,7 +63,7 @@ class EditorStore extends Store {
     var startCaretOffset = startPoint.getCaretOffset();
     var endCaretOffset = endPoint.getCaretOffset();
 
-    if (startPoint.compareShallowly(endPoint)) {
+    if (startPoint.equalsShallowly(endPoint)) {
       var section = story.get("sections").models[startSectionIndex];
       var block = section.get("blocks").models[startBlockIndex];
 

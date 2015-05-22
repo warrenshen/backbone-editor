@@ -10,6 +10,35 @@ import Vector from "app/helpers/vector";
 
 class StoryEditable extends Component {
 
+  componentDidMount() {
+    super.componentDidMount();
+    this.createSelection(this.props.vector);
+  }
+
+  componentDidUpdate() {
+    this.createSelection(this.props.vector);
+  }
+
+  createTreeWalker(anchorNode) {
+    return document.createTreeWalker(
+      anchorNode,
+      NodeFilter.SHOW_TEXT,
+      function(node) { return NodeFilter.FILTER_ACCEPT },
+      false
+    );
+  }
+
+  createSelection(vector) {
+    var startPoint = vector.getStartPoint();
+    var endPoint = vector.getEndPoint();
+
+    if (startPoint.equalsDeeply(endPoint)) {
+      var section = $('[data-index="' + startPoint.getSectionIndex() + '"]')[0];
+    } else {
+
+    }
+  }
+
   renderSection(section) {
     return (
       <SectionStandard key={section.cid} section={section} />
