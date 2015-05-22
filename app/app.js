@@ -11,7 +11,6 @@ import StoreDirectory from "app/directories/store_directory";
 import "app/styles/blocks.scss";
 import "app/styles/defaults.scss";
 import "app/styles/elements.scss";
-import "app/styles/sections.scss";
 
 
 class App {
