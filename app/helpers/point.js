@@ -1,6 +1,6 @@
 class Point {
 
-  constructor(sectionIndex, blockIndex, caretOffset) {
+  constructor(sectionIndex=0, blockIndex=0, caretOffset=0) {
     this._sectionIndex = sectionIndex;
     this._blockIndex = blockIndex;
     this._caretOffset = caretOffset;

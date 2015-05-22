@@ -22,11 +22,11 @@ class SectionStandard extends Component {
   render() {
     var section = this.props.section;
     return (
-      <div
+      <section
         className={"section-container"}
         data-index={section.get("index")}>
         {this.renderBlocks()}
-      </div>
+      </section>
     );
   }
 }

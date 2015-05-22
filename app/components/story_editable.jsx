@@ -1,3 +1,4 @@
+import $ from "jquery";
 import React from "react";
 import Component from "app/templates/component";
 
@@ -33,7 +34,29 @@ class StoryEditable extends Component {
     var endPoint = vector.getEndPoint();
 
     if (startPoint.equalsDeeply(endPoint)) {
-      var section = $('[data-index="' + startPoint.getSectionIndex() + '"]')[0];
+      var section = $('section[data-index="' + startPoint.getSectionIndex() + '"]')[0];
+      var block = section.childNodes[startPoint.getBlockIndex()];
+      var caretOffset = startPoint.getCaretOffset();
+
+      var node = block.childNodes[0];
+      node.focus();
+
+      var selection = window.getSelection();
+      var range = document.createRange();
+
+      var walker = this.createTreeWalker(node);
+      while (walker.nextNode()) {
+        if (caretOffset - walker.currentNode.length <= 0) {
+          range.setStart(walker.currentNode, caretOffset);
+          range.setEnd(walker.currentNode, caretOffset);
+          range.collapse(true);
+          return;
+        } else {
+          caretOffset -= walker.currentNode.length;
+        }
+      }
+      selection.removeAllRanges();
+      selection.addRange(range);
     } else {
 
     }
