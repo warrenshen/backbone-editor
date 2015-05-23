@@ -13,9 +13,33 @@ import KeyConstants from "app/constants/key_constants";
 
 class BlockComponent extends Component {
 
+  handleKeyDown(event) {
+    var selection = window.getSelection();
+    var vector = Vectorizer.generateVector(selection);
+
+    if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
+      if (!event.shiftKey) {
+        // handle arrow key
+      }
+    } else if (event.which === KeyConstants.backspace) {
+      if (vector.doesStartBlock()) {
+        event.preventDefault();
+        EditorActor.removeBlock(vector);
+      } else {
+        var block = this.props.block;
+        var caretOffset = vector.getCaretOffset();
+        block.removeFragment(caretOffset - 1, caretOffset);
+      }
+    } else if (event.which === KeyConstants.tab) {
+      event.preventDefault();
+      // handle tab
+    }
+  }
+
   handleKeyPress(event) {
     var selection = window.getSelection();
     var vector = Vectorizer.generateVector(selection);
+
     if (event.which === KeyConstants.enter) {
       event.preventDefault();
       EditorActor.splitBlock(vector);
@@ -45,6 +69,7 @@ class BlockComponent extends Component {
   componentDidMount() {
     super.componentDidMount();
     var node = React.findDOMNode(this.refs.content);
+    node.addEventListener("keydown", this.handleKeyDown.bind(this));
     node.addEventListener("keypress", this.handleKeyPress.bind(this));
     node.addEventListener("mouseup", this.handleMouseUp.bind(this));
     this.renderContent(node);
@@ -58,6 +83,7 @@ class BlockComponent extends Component {
   componentWillUnmount() {
     super.componentWillUnmount();
     var node = React.findDOMNode(this.refs.content);
+    node.removeEventListener("keydown", this.handleKeyDown);
     node.removeEventListener("keypress", this.handleKeyPress);
     node.removeEventListener("mouseup", this.handleMouseUp);
   }

@@ -21,6 +21,12 @@ class Vector {
       return this._startPoint.getCaretOffset();
     }
   }
+
+  doesStartBlock() {
+    if (this._startPoint.equalsDeeply(this._endPoint)) {
+      return this._startPoint.getCaretOffset() === 0;
+    }
+  }
 }
 
 

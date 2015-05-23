@@ -5,6 +5,13 @@ import ActionConstants from "app/constants/action_constants";
 
 class EditorActor extends Actor {
 
+  removeBlock(vector) {
+    this.act({
+      type: ActionConstants.editor.removeBlock,
+      vector: vector,
+    });
+  }
+
   splitBlock(vector) {
     this.act({
       type: ActionConstants.editor.splitBlock,

@@ -52,6 +52,10 @@ class EditorStore extends Store {
     story.get("sections").add(section, { at: index });
   }
 
+  removeBlock(vector) {
+
+  }
+
   splitBlock(vector) {
     var story = this._story;
 
@@ -103,6 +107,9 @@ class EditorStore extends Store {
   handleDispatch(payload) {
     var action = payload.action;
     switch (action.type) {
+      case ActionConstants.editor.removeBlock:
+        this.removeBlock(action.vector);
+        break;
       case ActionConstants.editor.splitBlock:
         this.splitBlock(action.vector);
         break;
