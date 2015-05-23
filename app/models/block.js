@@ -52,16 +52,6 @@ class Block extends Model {
     this.set("content", prefix + suffix);
     // TODO: Shift down elements here.
   }
-
-  // removeFragment: (startOffset, endOffset) ->
-  //   #
-  //   # Delete a fragment of text from this block from given start to end offsets.
-  //   # @param startOffset (integer) : The offset at which fragment removal should start.
-  //   # @param endOffset (integer) : The offset at which fragment removal should end.
-  //   #
-  //   originalText = @getText()
-  //   @setText(originalText[0...startOffset] + originalText[endOffset..])
-  //   @shiftDownElements(startOffset, endOffset - startOffset)
 }
 
 
