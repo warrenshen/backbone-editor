@@ -18,6 +18,10 @@ class Point {
     return this._caretOffset;
   }
 
+  set caretOffset(caretOffset) {
+    this._caretOffset = caretOffset;
+  }
+
   compareDeeply(other) {
     var sectionDifference = this._sectionIndex - other.getSectionIndex();
     if (sectionDifference === 0) {

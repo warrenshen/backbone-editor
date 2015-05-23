@@ -48,8 +48,9 @@ class StoryEditable extends Component {
           caretOffset -= walker.currentNode.length;
         }
 
-        range.setStart(walker.currentNode, caretOffset);
-        range.setEnd(walker.currentNode, caretOffset);
+        var currentNode = walker.currentNode;
+        range.setStart(currentNode, caretOffset);
+        range.setEnd(currentNode, caretOffset);
         range.collapse(true);
 
         selection.removeAllRanges();
