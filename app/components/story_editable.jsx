@@ -6,6 +6,7 @@ import SectionStandard from "app/components/section_standard";
 
 import Story from "app/models/story";
 
+import Point from "app/helpers/point";
 import Vector from "app/helpers/vector";
 
 
@@ -13,11 +14,11 @@ class StoryEditable extends Component {
 
   componentDidMount() {
     super.componentDidMount();
-    this.createCaret(this.props.vector);
+    this.createCaret(this.props.point);
   }
 
   componentDidUpdate() {
-    this.createCaret(this.props.vector);
+    this.createCaret(this.props.point);
   }
 
   createTreeWalker(anchorNode) {
@@ -29,14 +30,11 @@ class StoryEditable extends Component {
     );
   }
 
-  createCaret(vector) {
-    var startPoint = vector.getStartPoint();
-    var endPoint = vector.getEndPoint();
-
-    if (startPoint.equalsDeeply(endPoint)) {
-      var section = $('section[data-index="' + startPoint.getSectionIndex() + '"]')[0];
-      var block = section.childNodes[startPoint.getBlockIndex()];
-      var caretOffset = startPoint.getCaretOffset();
+  createCaret(point) {
+    if (point) {
+      var section = $('section[data-index="' + point.getSectionIndex() + '"]')[0];
+      var block = section.childNodes[point.getBlockIndex()];
+      var caretOffset = point.getCaretOffset();
 
       var node = block.childNodes[0];
       node.focus();
@@ -83,11 +81,13 @@ class StoryEditable extends Component {
 }
 
 StoryEditable.propTypes = {
+  point: React.PropTypes.object.isRequired,
   story: React.PropTypes.object.isRequired,
   vector: React.PropTypes.object.isRequired,
 }
 
 StoryEditable.defaultProps = {
+  point: new Point(),
   story: new Story(),
   vector: new Vector(),
 }

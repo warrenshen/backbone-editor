@@ -14,8 +14,8 @@ import ActionConstants from "app/constants/action_constants";
 class EditorStore extends Store {
 
   setDefaults() {
-    this._story = new Story();
     this._point = new Point();
+    this._story = new Story();
     this._vector = new Vector();
     var initialSection = new Section();
     this.addSection(initialSection);
@@ -37,6 +37,10 @@ class EditorStore extends Store {
   // --------------------------------------------------
   // Getters
   // --------------------------------------------------
+  getPoint() {
+    return this._point;
+  }
+
   getStory() {
     return this._story;
   }
@@ -53,8 +57,8 @@ class EditorStore extends Store {
     story.get("sections").add(section, { at: index });
   }
 
-  removeBlock(vector) {
-    if (!vector.prefixesEverything()) {
+  removeBlock(point) {
+    if (!point.prefixesEverything()) {
       var story = this._story;
       var point = vector.getStartPoint();
 
@@ -82,7 +86,7 @@ class EditorStore extends Store {
       }
 
       section.removeBlock(block);
-      this.updateVector(vector);
+      this.updatePoint(point);
       this.emitChange();
     }
   }
@@ -124,7 +128,15 @@ class EditorStore extends Store {
     // post.mergeSections()
   }
 
+  updatePoint(point) {
+    this._point = point;
+    this._vector = null;
+    console.log("updating point");
+    this.emitChange();
+  }
+
   updateVector(vector) {
+    this._point = null;
     this._vector = vector;
     console.log("updating vector");
     // TODO: Should this be manually called?
@@ -139,13 +151,13 @@ class EditorStore extends Store {
     var action = payload.action;
     switch (action.type) {
       case ActionConstants.editor.removeBlock:
-        this.removeBlock(action.vector);
+        this.removeBlock(action.point);
         break;
       case ActionConstants.editor.splitBlock:
-        this.splitBlock(action.vector);
+        this.splitBlock(action.point);
         break;
       case ActionConstants.editor.updateVector:
-        this.updateVector(action.vector);
+        this.updateVector(action.point);
         break;
     }
   }

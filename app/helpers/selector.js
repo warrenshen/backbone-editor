@@ -2,7 +2,7 @@ import Point from "app/helpers/point";
 import Vector from "app/helpers/vector";
 
 
-class Vectorizer {
+class Selector {
 
   createTreeWalker(anchorNode) {
     return document.createTreeWalker(
@@ -28,6 +28,17 @@ class Vectorizer {
       offset += walker.currentNode.length;
     }
     return offset;
+  }
+
+  generatePoint(selection) {
+    var anchorNode = selection.anchorNode;
+    var anchorParentNode = this.getParentNode(anchorNode);
+    var anchorSectionNode = anchorParentNode.parentNode;
+    var anchorElementOffset = this.getElementOffset(anchorParentNode, anchorNode);
+    var anchorCaretOffset = anchorElementOffset + selection.anchorOffset;
+    var anchorSectionIndex = parseInt(anchorSectionNode.dataset.index);
+    var anchorBlockIndex = parseInt(anchorParentNode.dataset.index);
+    return new Point(anchorSectionIndex, anchorBlockIndex, anchorCaretOffset);
   }
 
   generateVector(selection) {
@@ -64,4 +75,4 @@ class Vectorizer {
 }
 
 
-module.exports = new Vectorizer();
+module.exports = new Selector();

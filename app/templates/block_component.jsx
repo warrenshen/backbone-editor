@@ -6,7 +6,7 @@ import Block from "app/models/block";
 import EditorActor from "app/actors/editor_actor";
 
 import Formatter from "app/helpers/formatter";
-import Vectorizer from "app/helpers/vectorizer";
+import Selector from "app/helpers/selector";
 
 import KeyConstants from "app/constants/key_constants";
 
@@ -15,7 +15,7 @@ class BlockComponent extends Component {
 
   handleKeyDown(event) {
     var selection = window.getSelection();
-    var vector = Vectorizer.generateVector(selection);
+    var point = Selector.generatePoint(selection);
 
     if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
       if (!event.shiftKey) {
@@ -23,12 +23,12 @@ class BlockComponent extends Component {
       }
     } else if (event.which === KeyConstants.backspace) {
       debugger
-      if (vector.prefixesBlock()) {
+      if (point.prefixesBlock()) {
         event.preventDefault();
-        EditorActor.removeBlock(vector);
+        EditorActor.removeBlock(point);
       } else {
         var block = this.props.block;
-        var caretOffset = vector.getCaretOffset();
+        var caretOffset = point.getCaretOffset();
         block.removeFragment(caretOffset - 1, caretOffset);
       }
     } else if (event.which === KeyConstants.tab) {
@@ -39,15 +39,15 @@ class BlockComponent extends Component {
 
   handleKeyPress(event) {
     var selection = window.getSelection();
-    var vector = Vectorizer.generateVector(selection);
+    var point = Selector.generatePoint(selection);
 
     if (event.which === KeyConstants.enter) {
       event.preventDefault();
-      EditorActor.splitBlock(vector);
+      EditorActor.splitBlock(point);
     } else {
       var block = this.props.block;
       var character = String.fromCharCode(event.which);
-      block.addFragment(vector.getCaretOffset(), character);
+      block.addFragment(point.getCaretOffset(), character);
 
       // unless text
       //   event.preventDefault()
@@ -63,8 +63,8 @@ class BlockComponent extends Component {
 
   handleMouseUp(event) {
     var selection = window.getSelection();
-    var vector = Vectorizer.generateVector(selection);
-    EditorActor.updateVector(vector);
+    var point = Selector.generatePoint(selection);
+    EditorActor.updateVector(point);
   }
 
   componentDidMount() {

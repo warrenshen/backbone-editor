@@ -14,6 +14,7 @@ class EditorPage extends ListeningComponent {
 
   getStoreState() {
     return {
+      point: EditorStore.getPoint(),
       story: EditorStore.getStory(),
       vector: EditorStore.getVector(),
     }
@@ -23,6 +24,7 @@ class EditorPage extends ListeningComponent {
     return (
       <div className={"general-page"}>
         <StoryEditable
+          point={this.state.point}
           story={this.state.story}
           vector={this.state.vector} />
       </div>

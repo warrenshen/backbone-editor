@@ -5,24 +5,24 @@ import ActionConstants from "app/constants/action_constants";
 
 class EditorActor extends Actor {
 
-  removeBlock(vector) {
+  removeBlock(point) {
     this.act({
       type: ActionConstants.editor.removeBlock,
-      vector: vector,
+      point: point,
     });
   }
 
-  splitBlock(vector) {
+  splitBlock(point) {
     this.act({
       type: ActionConstants.editor.splitBlock,
-      vector: vector,
+      point: point,
     });
   }
 
-  updateVector(vector) {
+  updateVector(point) {
     this.act({
       type: ActionConstants.editor.updateVector,
-      vector: vector,
+      point: point,
     });
   }
 }

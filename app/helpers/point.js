@@ -45,6 +45,10 @@ class Point {
   equalsDeeply(other) {
     return this.equalsShallowly(other) && this._caretOffset === other.getCaretOffset();
   }
+
+  prefixesEverything() {
+    return this._sectionIndex === 0 && this._blockIndex === 0 && this._caretOffset === 0;
+  }
 }
 
 
