@@ -15,11 +15,12 @@ class EditorStore extends Store {
 
   setDefaults() {
     this._story = new Story();
+    this._point = new Point();
     this._vector = new Vector();
     var initialSection = new Section();
     this.addSection(initialSection);
-    initialSection.addBlock(new Block({ content: "Welcome to the editor." }));
-    // initialSection.addBlock(new Block(), 1);
+    // initialSection.addBlock(new Block({ content: "Welcome to the editor." }));
+    initialSection.addBlock(new Block());
   }
 
   // --------------------------------------------------
@@ -53,7 +54,37 @@ class EditorStore extends Store {
   }
 
   removeBlock(vector) {
+    if (!vector.prefixesEverything()) {
+      var story = this._story;
+      var point = vector.getStartPoint();
 
+      var sectionIndex = point.getSectionIndex();
+      var blockIndex = point.getBlockIndex();
+
+      var sections = story.get("sections").models;
+      var section = sections[sectionIndex];
+
+      var blocks = section.get("blocks").models;
+      var block = blocks[blockIndex];
+
+      var beforeBlock;
+      if (blockIndex === 0) {
+        var beforeSection = sections[sectionIndex - 1];
+        beforeBlock = beforeSection.getLastBlock();
+      } else {
+        beforeBlock = blocks[blockIndex - 1];
+      }
+
+      var content = block.get("content");
+      if (content.length > 0) {
+        beforeBlock.set("content", beforeBlock.get("content") + content);
+        beforeBlock.set("type", block.get("type"));
+      }
+
+      section.removeBlock(block);
+      this.updateVector(vector);
+      this.emitChange();
+    }
   }
 
   splitBlock(vector) {

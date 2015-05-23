@@ -24,13 +24,10 @@ class Vectorizer {
   getElementOffset(blockNode, elementNode) {
     var walker = this.createTreeWalker(blockNode);
     var offset = 0;
-    while (walker.nextNode()) {
-      if (!walker.currentNode.isSameNode(elementNode)) {
-        offset += walker.currentNode.length;
-      } else {
-        return offset;
-      }
+    while (walker.nextNode() && !walker.currentNode.isSameNode(elementNode)) {
+      offset += walker.currentNode.length;
     }
+    return offset;
   }
 
   generateVector(selection) {

@@ -46,6 +46,11 @@ class Section extends Model {
     this.get("blocks").add(block, { at: index });
     this.updateBlockIndices();
   }
+
+  removeBlock(block) {
+    this.get("blocks").remove(block);
+    this.updateBlockIndices();
+  }
 }
 
 
