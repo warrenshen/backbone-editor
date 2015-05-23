@@ -45,8 +45,8 @@ class BlockComponent extends Component {
   componentDidMount() {
     super.componentDidMount();
     var node = React.findDOMNode(this.refs.content);
-    node.addEventListener("keypress", this.handleKeyPress);
-    node.addEventListener("mouseup", this.handleMouseUp);
+    node.addEventListener("keypress", this.handleKeyPress.bind(this));
+    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
     this.renderContent(node);
   }
 

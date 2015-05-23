@@ -31,6 +31,20 @@ class Block extends Model {
   get length() {
     return this.get("content").length;
   }
+
+  // --------------------------------------------------
+  // Methods
+  // --------------------------------------------------
+  addFragment(vector, character) {
+    var startPoint = vector.getStartPoint();
+    var caretOffset = startPoint.getCaretOffset();
+
+    var content = this.get("content");
+    var prefix = content.substring(0, caretOffset);
+    var suffix = content.substring(caretOffset);
+
+    this.set("content", prefix + character + suffix);
+  }
 }
 
 
