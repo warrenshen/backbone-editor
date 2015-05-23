@@ -6,6 +6,7 @@ import SectionStandard from "app/components/section_standard";
 
 import Story from "app/models/story";
 
+import Point from "app/helpers/point";
 import Vector from "app/helpers/vector";
 
 
@@ -13,11 +14,11 @@ class StoryEditable extends Component {
 
   componentDidMount() {
     super.componentDidMount();
-    this.createSelection(this.props.vector);
+    this.createCaret(this.props.point);
   }
 
   componentDidUpdate() {
-    this.createSelection(this.props.vector);
+    this.createCaret(this.props.point);
   }
 
   createTreeWalker(anchorNode) {
@@ -29,36 +30,33 @@ class StoryEditable extends Component {
     );
   }
 
-  createSelection(vector) {
-    var startPoint = vector.getStartPoint();
-    var endPoint = vector.getEndPoint();
-
-    if (startPoint.equalsDeeply(endPoint)) {
-      var section = $('section[data-index="' + startPoint.getSectionIndex() + '"]')[0];
-      var block = section.childNodes[startPoint.getBlockIndex()];
-      var caretOffset = startPoint.getCaretOffset();
+  createCaret(point) {
+    if (point) {
+      var section = $('section[data-index="' + point.getSectionIndex() + '"]')[0];
+      var block = section.childNodes[point.getBlockIndex()];
+      var caretOffset = point.getCaretOffset();
 
       var node = block.childNodes[0];
       node.focus();
 
-      var selection = window.getSelection();
-      var range = document.createRange();
+      if (caretOffset > 0) {
+        var selection = window.getSelection();
+        var range = document.createRange();
 
-      var walker = this.createTreeWalker(node);
-      while (walker.nextNode()) {
-        if (caretOffset - walker.currentNode.length <= 0) {
-          range.setStart(walker.currentNode, caretOffset);
-          range.setEnd(walker.currentNode, caretOffset);
-          range.collapse(true);
-          return;
-        } else {
-          caretOffset -= walker.currentNode.length;
+        var walker = this.createTreeWalker(node);
+        while (walker.nextNode()) {
+          if (caretOffset - walker.currentNode.length <= 0) {
+            range.setStart(walker.currentNode, caretOffset);
+            range.setEnd(walker.currentNode, caretOffset);
+            range.collapse(true);
+            return;
+          } else {
+            caretOffset -= walker.currentNode.length;
+          }
         }
+        selection.removeAllRanges();
+        selection.addRange(range);
       }
-      selection.removeAllRanges();
-      selection.addRange(range);
-    } else {
-
     }
   }
 
@@ -83,13 +81,15 @@ class StoryEditable extends Component {
 }
 
 StoryEditable.propTypes = {
+  point: React.PropTypes.object,
   story: React.PropTypes.object.isRequired,
-  vector: React.PropTypes.object.isRequired,
+  vector: React.PropTypes.object,
 }
 
 StoryEditable.defaultProps = {
+  // point: new Point(),
   story: new Story(),
-  vector: new Vector(),
+  // vector: new Vector(),
 }
 
 

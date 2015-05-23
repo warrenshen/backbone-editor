@@ -21,6 +21,17 @@ class Story extends Model {
       },
     ];
   }
+
+  // --------------------------------------------------
+  // Methods
+  // --------------------------------------------------
+  updateSectionIndex(section, index) {
+    section.set("index", index);
+  }
+
+  updateSectionIndices() {
+    this.get("sections").map(this.updateSectionIndex);
+  }
 }
 
 

@@ -6,23 +6,47 @@ import Block from "app/models/block";
 import EditorActor from "app/actors/editor_actor";
 
 import Formatter from "app/helpers/formatter";
-import Vectorizer from "app/helpers/vectorizer";
+import Selector from "app/helpers/selector";
 
 import KeyConstants from "app/constants/key_constants";
 
 
 class BlockComponent extends Component {
 
+  handleKeyDown(event) {
+    var selection = window.getSelection();
+    var point = Selector.generatePoint(selection);
+
+    if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
+      if (!event.shiftKey) {
+        // handle arrow key
+      }
+    } else if (event.which === KeyConstants.backspace) {
+      if (point.prefixesBlock()) {
+        event.preventDefault();
+        EditorActor.removeBlock(point);
+      } else {
+        var block = this.props.block;
+        var caretOffset = point.getCaretOffset();
+        block.removeFragment(caretOffset - 1, caretOffset);
+      }
+    } else if (event.which === KeyConstants.tab) {
+      event.preventDefault();
+      // handle tab
+    }
+  }
+
   handleKeyPress(event) {
     var selection = window.getSelection();
-    var vector = Vectorizer.generateVector(selection);
+    var point = Selector.generatePoint(selection);
+
     if (event.which === KeyConstants.enter) {
       event.preventDefault();
-      EditorActor.splitBlock(vector);
+      EditorActor.splitBlock(point);
     } else {
       var block = this.props.block;
       var character = String.fromCharCode(event.which);
-      block.addFragment(vector, character);
+      block.addFragment(point.getCaretOffset(), character);
 
       // unless text
       //   event.preventDefault()
@@ -36,10 +60,18 @@ class BlockComponent extends Component {
     }
   }
 
+  handleMouseUp(event) {
+    var selection = window.getSelection();
+    var point = Selector.generatePoint(selection);
+    EditorActor.updatePoint(point);
+  }
+
   componentDidMount() {
     super.componentDidMount();
     var node = React.findDOMNode(this.refs.content);
-    node.addEventListener("keypress", this.handleKeyPress);
+    node.addEventListener("keydown", this.handleKeyDown.bind(this));
+    node.addEventListener("keypress", this.handleKeyPress.bind(this));
+    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
     this.renderContent(node);
   }
 
@@ -51,7 +83,9 @@ class BlockComponent extends Component {
   componentWillUnmount() {
     super.componentWillUnmount();
     var node = React.findDOMNode(this.refs.content);
+    node.removeEventListener("keydown", this.handleKeyDown);
     node.removeEventListener("keypress", this.handleKeyPress);
+    node.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   renderContent(node) {

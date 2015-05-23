@@ -32,18 +32,16 @@ class Point {
     }
   }
 
-  equalsShallowly(other) {
-    var sectionDifference = this._sectionIndex - other.getSectionIndex();
-    var blockDifference = this._blockIndex - other.getBlockIndex();
-    if (sectionDifference === 0 && blockDifference === 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   equalsDeeply(other) {
     return this.equalsShallowly(other) && this._caretOffset === other.getCaretOffset();
+  }
+
+  prefixesBlock() {
+    return this._caretOffset === 0;
+  }
+
+  prefixesEverything() {
+    return this._sectionIndex === 0 && this._blockIndex === 0 && this._caretOffset === 0;
   }
 }
 
