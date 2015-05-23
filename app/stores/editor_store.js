@@ -72,37 +72,20 @@ class EditorStore extends Store {
       if (endCaretOffset < block.length) {
         newBlock.set("content", block.get("content").substring(endCaretOffset));
         newBlock.set("type", block.get("type"));
-        // TODO: Extract "new" elements here.
+        // TODO: Extract "new" elements and add to new block here.
         block.removeFragment(startCaretOffset, block.length);
       }
       section.addBlock(newBlock, startBlockIndex + 1);
       var newPoint = new Point(startSectionIndex, startBlockIndex + 1, 0);
       this.updateVector(new Vector(newPoint, newPoint));
+    } else {
+      //   @removeSelection(selection)
+      //   section = sections[startSectionIndex]
+      //   anotherBlock = new Block(block_type: Block.types.paragraph)
+      //   section.addBlock(anotherBlock, startBlockIndex + 1)
+      //   @updateCaret(new Point(startSectionIndex, startBlockIndex + 1, 0))
+      //   section.updateBlockIndices()
     }
-
-    // sections = post.getSections().models
-    // if startSectionIndex is endSectionIndex and startBlockIndex is endBlockIndex
-    //   section = sections[startSectionIndex]
-    //   block = section.getBlocks().models[startBlockIndex]
-    //   newBlock = new Block(block_type: Block.types.paragraph)
-
-    //   unless endCaretOffset is block.getLength()
-    //     newText = block.getText().substring(endCaretOffset)
-    //     savedElements = block.removeElementsFromOffset(endCaretOffset)
-    //     newBlock.setText(newText)
-    //     newBlock.addElementsWithOffset(endCaretOffset, savedElements)
-    //     section.addBlock(newBlock, startBlockIndex + 1)
-
-
-
-    // else
-    //   @removeSelection(selection)
-    //   section = sections[startSectionIndex]
-    //   anotherBlock = new Block(block_type: Block.types.paragraph)
-    //   section.addBlock(anotherBlock, startBlockIndex + 1)
-    //   @updateCaret(new Point(startSectionIndex, startBlockIndex + 1, 0))
-    //   section.updateBlockIndices()
-
     // post.mergeSections()
   }
 
