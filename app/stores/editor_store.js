@@ -19,8 +19,8 @@ class EditorStore extends Store {
     this._vector = new Vector();
     var initialSection = new Section();
     this.addSection(initialSection);
-    // initialSection.addBlock(new Block({ content: "Welcome to the editor." }));
-    initialSection.addBlock(new Block());
+    initialSection.addBlock(new Block({ content: "Welcome to the editor." }));
+    // initialSection.addBlock(new Block());
   }
 
   // --------------------------------------------------
@@ -55,12 +55,12 @@ class EditorStore extends Store {
   addSection(section, index=0) {
     var story = this._story;
     story.get("sections").add(section, { at: index });
+    this.emitChange();
   }
 
   removeBlock(point) {
     if (!point.prefixesEverything()) {
       var story = this._story;
-      var point = vector.getStartPoint();
 
       var sectionIndex = point.getSectionIndex();
       var blockIndex = point.getBlockIndex();
@@ -74,6 +74,7 @@ class EditorStore extends Store {
       var beforeBlock;
       if (blockIndex === 0) {
         var beforeSection = sections[sectionIndex - 1];
+        // TODO: Create get last block convenience method.
         beforeBlock = beforeSection.getLastBlock();
       } else {
         beforeBlock = blocks[blockIndex - 1];
@@ -86,46 +87,31 @@ class EditorStore extends Store {
       }
 
       section.removeBlock(block);
-      this.updatePoint(point);
+      // TODO: Refactor below method invocation.
+      this.updatePoint(new Point(sectionIndex - 1, beforeSection.get("blocks").length, beforeBlock.length));
       this.emitChange();
     }
   }
 
-  splitBlock(vector) {
+  splitBlock(point) {
     var story = this._story;
 
-    var startPoint = vector.getStartPoint();
-    var endPoint = vector.getEndPoint();
+    var sectionIndex = point.getSectionIndex();
+    var blockIndex = point.getBlockIndex();
+    var caretOffset = point.getCaretOffset();
 
-    var startSectionIndex = startPoint.getSectionIndex();
-    var startBlockIndex = startPoint.getBlockIndex();
+    var section = story.get("sections").models[sectionIndex];
+    var block = section.get("blocks").models[blockIndex];
 
-    var startCaretOffset = startPoint.getCaretOffset();
-    var endCaretOffset = endPoint.getCaretOffset();
-
-    if (startPoint.equalsShallowly(endPoint)) {
-      var section = story.get("sections").models[startSectionIndex];
-      var block = section.get("blocks").models[startBlockIndex];
-
-      var newBlock = new Block();
-      if (endCaretOffset < block.length) {
-        newBlock.set("content", block.get("content").substring(endCaretOffset));
-        newBlock.set("type", block.get("type"));
-        // TODO: Extract "new" elements and add to new block here.
-        block.removeFragment(startCaretOffset, block.length);
-      }
-      section.addBlock(newBlock, startBlockIndex + 1);
-      var newPoint = new Point(startSectionIndex, startBlockIndex + 1, 0);
-      this.updateVector(new Vector(newPoint, newPoint));
-    } else {
-      //   @removeSelection(selection)
-      //   section = sections[startSectionIndex]
-      //   anotherBlock = new Block(block_type: Block.types.paragraph)
-      //   section.addBlock(anotherBlock, startBlockIndex + 1)
-      //   @updateCaret(new Point(startSectionIndex, startBlockIndex + 1, 0))
-      //   section.updateBlockIndices()
+    var newBlock = new Block();
+    if (caretOffset < block.length) {
+      newBlock.set("content", block.get("content").substring(caretOffset));
+      newBlock.set("type", block.get("type"));
+      // TODO: Extract "new" elements and add to new block here.
+      block.removeFragment(caretOffset, block.length);
     }
-    // post.mergeSections()
+    section.addBlock(newBlock, blockIndex + 1);
+    this.updatePoint(new Point(sectionIndex, blockIndex + 1, 0));
   }
 
   updatePoint(point) {
@@ -156,8 +142,11 @@ class EditorStore extends Store {
       case ActionConstants.editor.splitBlock:
         this.splitBlock(action.point);
         break;
+      case ActionConstants.editor.updatePoint:
+        this.updatePoint(action.point);
+        break;
       case ActionConstants.editor.updateVector:
-        this.updateVector(action.point);
+        this.updateVector(action.vector);
         break;
     }
   }

@@ -81,15 +81,15 @@ class StoryEditable extends Component {
 }
 
 StoryEditable.propTypes = {
-  point: React.PropTypes.object.isRequired,
+  point: React.PropTypes.object,
   story: React.PropTypes.object.isRequired,
-  vector: React.PropTypes.object.isRequired,
+  vector: React.PropTypes.object,
 }
 
 StoryEditable.defaultProps = {
-  point: new Point(),
+  // point: new Point(),
   story: new Story(),
-  vector: new Vector(),
+  // vector: new Vector(),
 }
 
 

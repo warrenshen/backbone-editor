@@ -22,7 +22,6 @@ class BlockComponent extends Component {
         // handle arrow key
       }
     } else if (event.which === KeyConstants.backspace) {
-      debugger
       if (point.prefixesBlock()) {
         event.preventDefault();
         EditorActor.removeBlock(point);
