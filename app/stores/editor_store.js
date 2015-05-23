@@ -62,8 +62,8 @@ class EditorStore extends Store {
     if (!point.prefixesEverything()) {
       var story = this._story;
 
-      var sectionIndex = point.getSectionIndex();
-      var blockIndex = point.getBlockIndex();
+      var sectionIndex = point.sectionIndex;
+      var blockIndex = point.blockIndex;
 
       var sections = story.get("sections").models;
       var section = sections[sectionIndex];
@@ -72,12 +72,15 @@ class EditorStore extends Store {
       var block = blocks[blockIndex];
 
       var beforeBlock;
+      var newPoint;
       if (blockIndex === 0) {
         var beforeSection = sections[sectionIndex - 1];
         // TODO: Create get last block convenience method.
         beforeBlock = beforeSection.getLastBlock();
+        newPoint = new Point(sectionIndex - 1, beforeSection.length, beforeBlock.length);
       } else {
         beforeBlock = blocks[blockIndex - 1];
+        newPoint = new Point(sectionIndex, blockIndex - 1, beforeBlock.length);
       }
 
       var content = block.get("content");
@@ -87,18 +90,16 @@ class EditorStore extends Store {
       }
 
       section.removeBlock(block);
-      // TODO: Refactor below method invocation.
-      this.updatePoint(new Point(sectionIndex - 1, beforeSection.get("blocks").length, beforeBlock.length));
-      this.emitChange();
+      this.updatePoint(newPoint);
     }
   }
 
   splitBlock(point) {
     var story = this._story;
 
-    var sectionIndex = point.getSectionIndex();
-    var blockIndex = point.getBlockIndex();
-    var caretOffset = point.getCaretOffset();
+    var sectionIndex = point.sectionIndex;
+    var blockIndex = point.blockIndex;
+    var caretOffset = point.caretOffset;
 
     var section = story.get("sections").models[sectionIndex];
     var block = section.get("blocks").models[blockIndex];

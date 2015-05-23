@@ -32,9 +32,9 @@ class StoryEditable extends Component {
 
   createCaret(point) {
     if (point) {
-      var section = $('section[data-index="' + point.getSectionIndex() + '"]')[0];
-      var block = section.childNodes[point.getBlockIndex()];
-      var caretOffset = point.getCaretOffset();
+      var section = $('section[data-index="' + point.sectionIndex + '"]')[0];
+      var block = section.childNodes[point.blockIndex];
+      var caretOffset = point.caretOffset;
 
       var node = block.childNodes[0];
       node.focus();
@@ -44,16 +44,14 @@ class StoryEditable extends Component {
         var range = document.createRange();
 
         var walker = this.createTreeWalker(node);
-        while (walker.nextNode()) {
-          if (caretOffset - walker.currentNode.length <= 0) {
-            range.setStart(walker.currentNode, caretOffset);
-            range.setEnd(walker.currentNode, caretOffset);
-            range.collapse(true);
-            return;
-          } else {
-            caretOffset -= walker.currentNode.length;
-          }
+        while (walker.nextNode() && caretOffset - walker.currentNode.length > 0) {
+          caretOffset -= walker.currentNode.length;
         }
+
+        range.setStart(walker.currentNode, caretOffset);
+        range.setEnd(walker.currentNode, caretOffset);
+        range.collapse(true);
+
         selection.removeAllRanges();
         selection.addRange(range);
       }

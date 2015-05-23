@@ -27,7 +27,7 @@ class BlockComponent extends Component {
         EditorActor.removeBlock(point);
       } else {
         var block = this.props.block;
-        var caretOffset = point.getCaretOffset();
+        var caretOffset = point.caretOffset;
         block.removeFragment(caretOffset - 1, caretOffset);
       }
     } else if (event.which === KeyConstants.tab) {
@@ -46,7 +46,7 @@ class BlockComponent extends Component {
     } else {
       var block = this.props.block;
       var character = String.fromCharCode(event.which);
-      block.addFragment(point.getCaretOffset(), character);
+      block.addFragment(point.caretOffset, character);
 
       // unless text
       //   event.preventDefault()

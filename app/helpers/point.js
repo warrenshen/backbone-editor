@@ -6,15 +6,15 @@ class Point {
     this._caretOffset = caretOffset;
   }
 
-  getSectionIndex() {
+  get sectionIndex() {
     return this._sectionIndex;
   }
 
-  getBlockIndex() {
+  get blockIndex() {
     return this._blockIndex;
   }
 
-  getCaretOffset() {
+  get caretOffset() {
     return this._caretOffset;
   }
 

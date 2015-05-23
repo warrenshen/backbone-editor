@@ -28,6 +28,10 @@ class Section extends Model {
     ];
   }
 
+  get length() {
+    return this.get("blocks").length;
+  }
+
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------
