@@ -24,6 +24,34 @@ class BlockComponent extends Component {
     var walker = Selector.createTreeWalker(node);
 
     switch (event.which) {
+      case KeyConstants.down:
+        var floorOffset = 0;
+        if (block.length > 0) {
+          var bottom = node.getBoundingClientRect().bottom;
+          var complete = false;
+          while (walker.nextNode() && !complete) {
+            var currentNode = walker.currentNode;
+            var length = currentNode.textContent.length;
+            for (var i = 0; i < length - 1; i += 1) {
+              range.setStart(currentNode, count);
+              range.setEnd(currentNode, count + 1);
+
+              if (bottom - range.getBoundingClientRect().bottom < 10) {
+                floorOffset += count - length - 1;
+                complete = true;
+                i = length;
+              }
+            }
+            floorOffset += length;
+          }
+        }
+        if (caretOffset > floorOffset - 1) {
+          event.preventDefault();
+          point.caretOffset = caretOffset - floorOffset;
+          EditorActor.shiftDown(point);
+        }
+        break;
+
       case KeyConstants.up:
         var altitude = 0;
         if (block.length > 0) {
@@ -46,38 +74,9 @@ class BlockComponent extends Component {
         }
         if (altitude < 10) {
           event.preventDefault();
-          EditorActor.shiftCaretUp(point);
+          EditorActor.shiftUp(point);
         }
         break;
-
-      case KeyConstants.down:
-        var floorOffset = 0;
-        if (block.length > 0) {
-          var bottom = node.getBoundingClientRect().bottom;
-          var complete = false;
-          while (walker.nextNode() && !complete) {
-            var currentNode = walker.currentNode;
-            var length = currentNode.textContent.length;
-            for (int i = 0; i < length - 1; i += 1) {
-              range.setStart(currentNode, count);
-              range.setEnd(currentNode, count + 1);
-
-              if (bottom - range.getBoundingClientRect().bottom < 10) {
-                floorOffset += count - length - 1;
-                complete = true;
-                i = length;
-              }
-            }
-            floorOffset += length;
-          }
-        }
-        if (caretOffset > floorOffset - 1) {
-          event.preventDefault();
-          point.caretOffset = caretOffset - floorOffset;
-          EditorActor.shiftCaretDown(point);
-        }
-        break;
-
     }
   }
 

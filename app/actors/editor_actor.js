@@ -12,6 +12,20 @@ class EditorActor extends Actor {
     });
   }
 
+  shiftDown(point) {
+    this.act({
+      type: ActionConstants.editor.shiftDown,
+      point: point,
+    });
+  }
+
+  shiftUp(point) {
+    this.act({
+      type: ActionConstants.editor.shiftUp,
+      point: point,
+    });
+  }
+
   splitBlock(point) {
     this.act({
       type: ActionConstants.editor.splitBlock,

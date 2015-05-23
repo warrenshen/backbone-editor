@@ -45,7 +45,7 @@ class Point {
   }
 
   prefixesEverything() {
-    return this._sectionIndex === 0 && this._blockIndex === 0 && this._caretOffset === 0;
+    return this._sectionIndex === 0 && this._blockIndex === 0;
   }
 }
 

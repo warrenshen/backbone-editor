@@ -39,23 +39,21 @@ class StoryEditable extends Component {
       var node = block.childNodes[0];
       node.focus();
 
-      if (caretOffset > 0) {
-        var selection = window.getSelection();
-        var range = document.createRange();
+      var selection = window.getSelection();
+      var range = document.createRange();
 
-        var walker = this.createTreeWalker(node);
-        while (walker.nextNode() && caretOffset - walker.currentNode.length > 0) {
-          caretOffset -= walker.currentNode.length;
-        }
-
-        var currentNode = walker.currentNode;
-        range.setStart(currentNode, caretOffset);
-        range.setEnd(currentNode, caretOffset);
-        range.collapse(true);
-
-        selection.removeAllRanges();
-        selection.addRange(range);
+      var walker = this.createTreeWalker(node);
+      while (walker.nextNode() && caretOffset - walker.currentNode.length > 0) {
+        caretOffset -= walker.currentNode.length;
       }
+
+      var currentNode = walker.currentNode;
+      range.setStart(currentNode, caretOffset);
+      range.setEnd(currentNode, caretOffset);
+      range.collapse(true);
+
+      selection.removeAllRanges();
+      selection.addRange(range);
     }
   }
 

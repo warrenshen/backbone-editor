@@ -59,22 +59,22 @@ class EditorStore extends Store {
   }
 
   removeBlock(point) {
-    if (!point.prefixesEverything()) {
+    if (!point.prefixesEverything() && !point.prefixesBlock()) {
       var story = this._story;
 
       var sectionIndex = point.sectionIndex;
       var blockIndex = point.blockIndex;
 
-      var sections = story.get("sections").models;
-      var section = sections[sectionIndex];
+      var sections = story.get("sections");
+      var section = sections.at(sectionIndex);
 
-      var blocks = section.get("blocks").models;
-      var block = blocks[blockIndex];
+      var blocks = section.get("blocks");
+      var block = blocks.at(blockIndex);
 
       var beforeBlock;
       var newPoint;
       if (blockIndex === 0) {
-        var beforeSection = sections[sectionIndex - 1];
+        var beforeSection = sections.at(sectionIndex - 1);
         // TODO: Create get last block convenience method.
         beforeBlock = beforeSection.getLastBlock();
         newPoint = new Point(sectionIndex - 1, beforeSection.length, beforeBlock.length);
@@ -94,6 +94,43 @@ class EditorStore extends Store {
     }
   }
 
+  shiftDown(point) {
+    var story = this._story;
+
+    var sectionIndex = point.sectionIndex;
+    var blockIndex = point.blockIndex;
+    var caretOffset = point.caretOffset;
+  }
+
+  shiftUp(point) {
+    if (point.prefixesEverything()) {
+      if (!point.prefixesBlock()) {
+        this.updatePoint(new Point(0, 0, 0));
+      }
+    } else {
+      var story = this._story;
+      var sections = story.get("sections");
+
+      var sectionIndex = point.sectionIndex;
+      var blockIndex = point.blockIndex;
+      var caretOffset = point.caretOffset;
+
+      if (blockIndex === 0) {
+        sectionIndex -= 1;
+        blockIndex = sections.at(sectionIndex).length();
+      } else {
+        blockIndex -= 1;
+      }
+
+      var block = sections.at(sectionIndex).get("blocks").at(blockIndex);
+      if (block.length < caretOffset) {
+        caretOffset = block.length;
+      }
+
+      this.updatePoint(new Point(sectionIndex, blockIndex, caretOffset));
+    }
+  }
+
   splitBlock(point) {
     var story = this._story;
 
@@ -101,8 +138,8 @@ class EditorStore extends Store {
     var blockIndex = point.blockIndex;
     var caretOffset = point.caretOffset;
 
-    var section = story.get("sections").models[sectionIndex];
-    var block = section.get("blocks").models[blockIndex];
+    var section = story.get("sections").at(sectionIndex);
+    var block = section.get("blocks").at(blockIndex);
 
     var newBlock = new Block();
     if (caretOffset < block.length) {
@@ -139,6 +176,12 @@ class EditorStore extends Store {
     switch (action.type) {
       case ActionConstants.editor.removeBlock:
         this.removeBlock(action.point);
+        break;
+      case ActionConstants.editor.shiftDown:
+        this.shiftDown(action.point);
+        break;
+      case ActionConstants.editor.shiftUp:
+        this.shiftUp(action.point);
         break;
       case ActionConstants.editor.splitBlock:
         this.splitBlock(action.point);
