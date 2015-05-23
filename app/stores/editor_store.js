@@ -73,6 +73,7 @@ class EditorStore extends Store {
         newBlock.set("content", block.get("content").substring(endCaretOffset));
         newBlock.set("type", block.get("type"));
         // TODO: Extract "new" elements here.
+        block.removeFragment(startCaretOffset, block.length);
       }
       section.addBlock(newBlock, startBlockIndex + 1);
       var newPoint = new Point(startSectionIndex, startBlockIndex + 1, 0);
@@ -92,7 +93,7 @@ class EditorStore extends Store {
     //     newBlock.addElementsWithOffset(endCaretOffset, savedElements)
     //     section.addBlock(newBlock, startBlockIndex + 1)
 
-    //   block.removeFragment(startCaretOffset, block.getLength())
+
 
     // else
     //   @removeSelection(selection)

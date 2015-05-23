@@ -15,6 +15,12 @@ class Vector {
   getEndPoint() {
     return this._endPoint;
   }
+
+  getCaretOffset() {
+    if (this._startPoint.equalsDeeply(this._endPoint)) {
+      return this._startPoint.getCaretOffset();
+    }
+  }
 }
 
 

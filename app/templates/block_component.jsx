@@ -22,7 +22,7 @@ class BlockComponent extends Component {
     } else {
       var block = this.props.block;
       var character = String.fromCharCode(event.which);
-      block.addFragment(vector, character);
+      block.addFragment(vector.getCaretOffset(), character);
 
       // unless text
       //   event.preventDefault()
