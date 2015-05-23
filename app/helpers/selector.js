@@ -30,41 +30,23 @@ class Selector {
     return offset;
   }
 
-  generatePoint(selection) {
-    var anchorNode = selection.anchorNode;
-    var anchorParentNode = this.getParentNode(anchorNode);
-    var anchorSectionNode = anchorParentNode.parentNode;
-    var anchorElementOffset = this.getElementOffset(anchorParentNode, anchorNode);
-    var anchorCaretOffset = anchorElementOffset + selection.anchorOffset;
-    var anchorSectionIndex = parseInt(anchorSectionNode.dataset.index);
-    var anchorBlockIndex = parseInt(anchorParentNode.dataset.index);
-    return new Point(anchorSectionIndex, anchorBlockIndex, anchorCaretOffset);
+  generatePoint(selection, type="anchor") {
+    var node = selection[type + "Node"];
+    var parentNode = this.getParentNode(node);
+    var grandparentNode = parentNode.parentNode;
+
+    var elementOffset = this.getElementOffset(parentNode, node);
+    var caretOffset = elementOffset + selection[type + "Offset"];
+
+    var blockIndex = parseInt(parentNode.dataset.index);
+    var sectionIndex = parseInt(grandparentNode.dataset.index);
+
+    return new Point(sectionIndex, blockIndex, caretOffset);
   }
 
   generateVector(selection) {
-    var anchorNode = selection.anchorNode;
-    var focusNode = selection.focusNode;
-
-    var anchorParentNode = this.getParentNode(anchorNode);
-    var focusParentNode = this.getParentNode(focusNode);
-
-    var anchorSectionNode = anchorParentNode.parentNode;
-    var focusSectionNode = focusParentNode.parentNode;
-
-    var anchorElementOffset = this.getElementOffset(anchorParentNode, anchorNode);
-    var focusElementOffset = this.getElementOffset(focusParentNode, focusNode);
-
-    var anchorCaretOffset = anchorElementOffset + selection.anchorOffset;
-    var focusCaretOffset = focusElementOffset + selection.focusOffset;
-
-    var anchorSectionIndex = parseInt(anchorSectionNode.dataset.index);
-    var focusSectionIndex = parseInt(focusSectionNode.dataset.index);
-
-    var anchorBlockIndex = parseInt(anchorParentNode.dataset.index);
-    var focusBlockIndex = parseInt(focusParentNode.dataset.index);
-
-    var anchorPoint = new Point(anchorSectionIndex, anchorBlockIndex, anchorCaretOffset);
-    var focusPoint = new Point(focusSectionIndex, focusBlockIndex, focusCaretOffset);
+    var anchorPoint = this.generatePoint(selection);
+    var focusPoint = this.generatePoint(selection, "focus");
 
     if (anchorPoint.compareDeeply(focusPoint) < 0) {
       return new Vector(anchorPoint, focusPoint);

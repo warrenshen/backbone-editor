@@ -64,7 +64,7 @@ class BlockComponent extends Component {
   handleMouseUp(event) {
     var selection = window.getSelection();
     var point = Selector.generatePoint(selection);
-    EditorActor.updateVector(point);
+    EditorActor.updatePoint(point);
   }
 
   componentDidMount() {
