@@ -26,27 +26,25 @@ class BlockComponent extends Component {
     switch (event.which) {
       case KeyConstants.down:
         var floorOffset = 0;
-        if (block.length > 0) {
-          var bottom = node.getBoundingClientRect().bottom;
-          var complete = false;
-          while (walker.nextNode() && !complete) {
-            var currentNode = walker.currentNode;
-            var length = currentNode.textContent.length;
-            for (var i = 0; i < length - 1; i += 1) {
-              range.setStart(currentNode, i);
-              range.setEnd(currentNode, i + 1);
+        var bottom = node.getBoundingClientRect().bottom;
 
-              if (bottom - range.getBoundingClientRect().bottom < 10) {
-                floorOffset += i - length - 1;
-                complete = true;
-                i = length;
-              }
+        var complete = false;
+        while (walker.nextNode() && !complete) {
+          var currentNode = walker.currentNode;
+          var length = currentNode.textContent.length;
+          for (var i = 0; i < length && !complete; i += 1) {
+            console.log(floorOffset);
+            range.setStart(currentNode, i);
+            range.setEnd(currentNode, i + 1);
+            if (bottom - range.getBoundingClientRect().bottom < 10) {
+              complete = true;
+            } else {
+              floorOffset += 1;
             }
-            floorOffset += length;
           }
         }
 
-        if (caretOffset > floorOffset - 1) {
+        if (caretOffset >= floorOffset) {
           event.preventDefault();
           point.caretOffset = caretOffset - floorOffset;
           EditorActor.shiftDown(point);
@@ -55,27 +53,25 @@ class BlockComponent extends Component {
 
       case KeyConstants.up:
         // TODO: Come up with a better name here.
-        var ceilingDifference = 0;
-        if (block.length > 0) {
-          var top = node.getBoundingClientRect().top;
-          while (walker.nextNode()) {
-            var currentNode = walker.currentNode;
-            if (caretOffset - walker.currentNode.length <= 0) {
-              if (caretOffset >= currentNode.length) {
-                range.setStart(currentNode, caretOffset - 1);
-                range.setEnd(currentNode, caretOffset);
-              } else {
-                range.setStart(currentNode, caretOffset);
-                range.setEnd(currentNode, caretOffset + 1);
-              }
-            } else {
-              caretOffset -= currentNode.length;
+        var ceilingOffset = 0;
+        var top = node.getBoundingClientRect().top;
+
+        var complete = false;
+        while (walker.nextNode() && !complete) {
+          var currentNode = walker.currentNode;
+          var length = currentNode.textContent.length;
+          for (var i = 0; i < length && !complete; i += 1) {
+            ceilingOffset += 1;
+            console.log(ceilingOffset);
+            range.setStart(currentNode, i);
+            range.setEnd(currentNode, i + 1);
+            if (range.getBoundingClientRect().top - top > 10) {
+              complete = true;
             }
           }
-          ceilingDifference = range.getBoundingClientRect().top - top;
         }
 
-        if (ceilingDifference < 10) {
+        if (caretOffset <= ceilingOffset) {
           event.preventDefault();
           point.caretOffset = (-1) * caretOffset;
           EditorActor.shiftUp(point);
