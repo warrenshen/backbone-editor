@@ -127,12 +127,51 @@ class EditorStore extends Store {
 
   shiftLeft(point) {
     if (!point.prefixesEverything()) {
-      console.log("shifting left");
+      var story = this._story;
+
+      var sectionIndex = point.sectionIndex;
+      var blockIndex = point.blockIndex;
+
+      var sections = story.get("sections");
+
+      var beforeBlock;
+      var newPoint;
+      if (blockIndex === 0) {
+        var beforeSection = sections.at(sectionIndex - 1);
+        // TODO: Create get last block convenience method.
+        beforeBlock = beforeSection.getLastBlock();
+        newPoint = new Point(sectionIndex - 1, beforeSection.length, beforeBlock.length);
+      } else {
+        var section = sections.at(sectionIndex);
+        beforeBlock = section.get("blocks").at(blockIndex - 1);
+        newPoint = new Point(sectionIndex, blockIndex - 1, beforeBlock.length);
+      }
+
+      this.updatePoint(newPoint);
     }
   }
 
   shiftRight(point) {
-    console.log("shifting right");
+    var story = this._story;
+
+    var sectionIndex = point.sectionIndex;
+    var blockIndex = point.blockIndex;
+
+    var sections = story.get("sections");
+    var section = sections.at(sectionIndex);
+
+    if (blockIndex === section.get("blocks").length - 1) {
+      if (sectionIndex === sections.length - 1) {
+        return;
+      } else {
+        sectionIndex += 1;
+        blockIndex = 0;
+      }
+    } else {
+      blockIndex += 1;
+    }
+
+    this.updatePoint(new Point(sectionIndex, blockIndex, 0));
   }
 
   shiftUp(point) {

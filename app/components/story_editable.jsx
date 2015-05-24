@@ -42,7 +42,6 @@ class StoryEditable extends Component {
       var selection = window.getSelection();
       var range = document.createRange();
 
-      console.log(point.needsOffset);
       if (point.needsOffset) {
         caretOffset = Math.abs(caretOffset);
         var bottom = block.getBoundingClientRect().bottom;
