@@ -1,9 +1,10 @@
 class Point {
 
-  constructor(sectionIndex=0, blockIndex=0, caretOffset=0) {
+  constructor(sectionIndex=0, blockIndex=0, caretOffset=0, needsOffset=false) {
     this._sectionIndex = sectionIndex;
     this._blockIndex = blockIndex;
     this._caretOffset = caretOffset;
+    this._needsOffset = needsOffset;
   }
 
   get sectionIndex() {
@@ -18,8 +19,16 @@ class Point {
     return this._caretOffset;
   }
 
+  get needsOffset() {
+    return this._needsOffset;
+  }
+
   set caretOffset(caretOffset) {
     this._caretOffset = caretOffset;
+  }
+
+  set needsOffset(needsOffset) {
+    this._needsOffset = needsOffset;
   }
 
   compareDeeply(other) {

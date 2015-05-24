@@ -34,11 +34,12 @@ class BlockComponent extends Component {
           var currentNode = walker.currentNode;
           var length = currentNode.textContent.length;
           for (var i = 0; i < length && !complete; i += 1) {
-            floorOffset += 1;
             range.setStart(currentNode, i);
             range.setEnd(currentNode, i + 1);
             if (bottom - range.getBoundingClientRect().bottom < 10) {
               complete = true;
+            } else {
+              floorOffset += 1;
             }
           }
         }
@@ -59,18 +60,19 @@ class BlockComponent extends Component {
           var currentNode = walker.currentNode;
           var length = currentNode.textContent.length;
           for (var i = 0; i < length && !complete; i += 1) {
-            ceilingOffset += 1;
             range.setStart(currentNode, i);
             range.setEnd(currentNode, i + 1);
             if (range.getBoundingClientRect().top - top > 10) {
               complete = true;
+            } else {
+              ceilingOffset += 1;
             }
           }
         }
 
-        if (caretOffset <= ceilingOffset) {
+        if (caretOffset < ceilingOffset) {
           event.preventDefault();
-          point.caretOffset = (-1) * caretOffset;
+          point.needsOffset = true;
           EditorActor.shiftUp(point);
         }
         break;

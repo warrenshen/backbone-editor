@@ -137,6 +137,7 @@ class EditorStore extends Store {
       var sectionIndex = point.sectionIndex;
       var blockIndex = point.blockIndex;
       var caretOffset = point.caretOffset;
+      var needsOffset = point.needsOffset;
 
       if (blockIndex === 0) {
         sectionIndex -= 1;
@@ -150,7 +151,7 @@ class EditorStore extends Store {
         caretOffset = block.length;
       }
 
-      this.updatePoint(new Point(sectionIndex, blockIndex, caretOffset));
+      this.updatePoint(new Point(sectionIndex, blockIndex, caretOffset, needsOffset));
     }
   }
 

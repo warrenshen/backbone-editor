@@ -42,7 +42,8 @@ class StoryEditable extends Component {
       var selection = window.getSelection();
       var range = document.createRange();
 
-      if (caretOffset < 0) {
+      console.log(point.needsOffset);
+      if (point.needsOffset) {
         caretOffset = Math.abs(caretOffset);
         var bottom = block.getBoundingClientRect().bottom;
 
@@ -86,10 +87,14 @@ class StoryEditable extends Component {
           range.setEnd(currentNode, currentNode.length);
           range.collapse(true);
         }
-
-        selection.removeAllRanges();
-        selection.addRange(range);
+      } else {
+        range.setStart(node, 0);
+        range.setEnd(node, 0);
+        range.collapse(true);
       }
+
+      selection.removeAllRanges();
+      selection.addRange(range);
     }
   }
 
