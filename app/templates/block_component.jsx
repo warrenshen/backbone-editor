@@ -33,11 +33,11 @@ class BlockComponent extends Component {
             var currentNode = walker.currentNode;
             var length = currentNode.textContent.length;
             for (var i = 0; i < length - 1; i += 1) {
-              range.setStart(currentNode, count);
-              range.setEnd(currentNode, count + 1);
+              range.setStart(currentNode, i);
+              range.setEnd(currentNode, i + 1);
 
               if (bottom - range.getBoundingClientRect().bottom < 10) {
-                floorOffset += count - length - 1;
+                floorOffset += i - length - 1;
                 complete = true;
                 i = length;
               }
@@ -61,10 +61,10 @@ class BlockComponent extends Component {
             if (caretOffset - walker.currentNode.length <= 0) {
               if (caretOffset >= currentNode.length) {
                 range.setStart(currentNode, caretOffset - 1);
-                range.setStart(currentNode, caretOffset);
+                range.setEnd(currentNode, caretOffset);
               } else {
                 range.setStart(currentNode, caretOffset);
-                range.setStart(currentNode, caretOffset + 1);
+                range.setEnd(currentNode, caretOffset + 1);
               }
             } else {
               caretOffset -= currentNode.length;
@@ -72,6 +72,7 @@ class BlockComponent extends Component {
           }
           altitude = range.getBoundingClientRect().top - top;
         }
+        console.log(altitude);
         if (altitude < 10) {
           event.preventDefault();
           EditorActor.shiftUp(point);

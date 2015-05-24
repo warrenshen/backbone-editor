@@ -96,10 +96,33 @@ class EditorStore extends Store {
 
   shiftDown(point) {
     var story = this._story;
+    var sections = story.get("sections");
 
     var sectionIndex = point.sectionIndex;
     var blockIndex = point.blockIndex;
     var caretOffset = point.caretOffset;
+
+    var section = sections.at(sectionIndex);
+    if (blockIndex === section.get("blocks").length - 1) {
+      // TODO: Is there a better way to do this?
+      if (sectionIndex === sections.length - 1) {
+        var block = section.get("blocks").at(blockIndex);
+        this.updatePoint(new Point(sectionIndex, blockIndex, block.length));
+        return;
+      } else {
+        sectionIndex += 1;
+        blockIndex = 0;
+      }
+    } else {
+      blockIndex += 1;
+    }
+
+    var block = sections.at(sectionIndex).get("blocks").at(blockIndex);
+    if (block.length < caretOffset) {
+      caretOffset = block.length;
+    }
+
+    this.updatePoint(new Point(sectionIndex, blockIndex, caretOffset));
   }
 
   shiftUp(point) {
