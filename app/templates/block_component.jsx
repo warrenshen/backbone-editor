@@ -25,6 +25,7 @@ class BlockComponent extends Component {
 
     switch (event.which) {
       case KeyConstants.down:
+        // TODO: Maybe refactor finding the ceiling and floor offsets?
         var floorOffset = 0;
         var bottom = node.getBoundingClientRect().bottom;
 
@@ -33,13 +34,11 @@ class BlockComponent extends Component {
           var currentNode = walker.currentNode;
           var length = currentNode.textContent.length;
           for (var i = 0; i < length && !complete; i += 1) {
-            console.log(floorOffset);
+            floorOffset += 1;
             range.setStart(currentNode, i);
             range.setEnd(currentNode, i + 1);
             if (bottom - range.getBoundingClientRect().bottom < 10) {
               complete = true;
-            } else {
-              floorOffset += 1;
             }
           }
         }
@@ -52,7 +51,6 @@ class BlockComponent extends Component {
         break;
 
       case KeyConstants.up:
-        // TODO: Come up with a better name here.
         var ceilingOffset = 0;
         var top = node.getBoundingClientRect().top;
 
@@ -62,7 +60,6 @@ class BlockComponent extends Component {
           var length = currentNode.textContent.length;
           for (var i = 0; i < length && !complete; i += 1) {
             ceilingOffset += 1;
-            console.log(ceilingOffset);
             range.setStart(currentNode, i);
             range.setEnd(currentNode, i + 1);
             if (range.getBoundingClientRect().top - top > 10) {

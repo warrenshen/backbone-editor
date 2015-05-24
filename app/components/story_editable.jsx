@@ -52,17 +52,15 @@ class StoryEditable extends Component {
         while (walker.nextNode() && !complete) {
           var currentNode = walker.currentNode;
           var length = currentNode.textContent.length;
-          for (var i = 0; i < length - 1; i += 1) {
+          for (var i = 0; i < length && !complete; i += 1) {
             range.setStart(currentNode, i);
             range.setEnd(currentNode, i + 1);
-
             if (bottom - range.getBoundingClientRect().bottom < 30) {
-              floorOffset += i - length - 1;
               complete = true;
-              i = length;
+            } else {
+              floorOffset += 1;
             }
           }
-          floorOffset += length;
         }
         caretOffset += floorOffset;
       }
@@ -81,6 +79,7 @@ class StoryEditable extends Component {
           caretOffset -= currentNode.length;
         }
 
+        // Default to end of block if leftover caret offset present.
         if (caretOffset > 0) {
           var currentNode = walker.currentNode;
           range.setStart(currentNode, currentNode.length);

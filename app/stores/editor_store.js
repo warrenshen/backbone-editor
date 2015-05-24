@@ -178,7 +178,6 @@ class EditorStore extends Store {
   updatePoint(point) {
     this._point = point;
     this._vector = null;
-    console.log(point);
     console.log("updating point");
     this.emitChange();
   }
