@@ -8,11 +8,11 @@ class Vector {
     this._endPoint = endPoint;
   }
 
-  getStartPoint() {
+  get startPoint() {
     return this._startPoint;
   }
 
-  getEndPoint() {
+  get endPoint() {
     return this._endPoint;
   }
 }

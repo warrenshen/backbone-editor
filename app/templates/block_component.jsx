@@ -13,13 +13,79 @@ import KeyConstants from "app/constants/key_constants";
 
 class BlockComponent extends Component {
 
+  handleArrowKey(event, selection) {
+    var block = this.props.block;
+    var node = React.findDOMNode(this.refs.content);
+
+    var point = Selector.generatePoint(selection);
+    var caretOffset = point.caretOffset;
+
+    var range = document.createRange();
+    var walker = Selector.createTreeWalker(node);
+
+    switch (event.which) {
+      case KeyConstants.down:
+        // TODO: Maybe refactor finding the ceiling and floor offsets?
+        var floorOffset = 0;
+        var bottom = node.getBoundingClientRect().bottom;
+
+        var complete = false;
+        while (walker.nextNode() && !complete) {
+          var currentNode = walker.currentNode;
+          var length = currentNode.textContent.length;
+          for (var i = 0; i < length && !complete; i += 1) {
+            range.setStart(currentNode, i);
+            range.setEnd(currentNode, i + 1);
+            if (bottom - range.getBoundingClientRect().bottom < 10) {
+              complete = true;
+            } else {
+              floorOffset += 1;
+            }
+          }
+        }
+
+        if (caretOffset >= floorOffset) {
+          event.preventDefault();
+          point.caretOffset = caretOffset - floorOffset;
+          EditorActor.shiftDown(point);
+        }
+        break;
+
+      case KeyConstants.up:
+        var ceilingOffset = 0;
+        var top = node.getBoundingClientRect().top;
+
+        var complete = false;
+        while (walker.nextNode() && !complete) {
+          var currentNode = walker.currentNode;
+          var length = currentNode.textContent.length;
+          for (var i = 0; i < length && !complete; i += 1) {
+            range.setStart(currentNode, i);
+            range.setEnd(currentNode, i + 1);
+            if (range.getBoundingClientRect().top - top > 10) {
+              complete = true;
+            } else {
+              ceilingOffset += 1;
+            }
+          }
+        }
+
+        if (caretOffset < ceilingOffset) {
+          event.preventDefault();
+          point.needsOffset = true;
+          EditorActor.shiftUp(point);
+        }
+        break;
+    }
+  }
+
   handleKeyDown(event) {
     var selection = window.getSelection();
     var point = Selector.generatePoint(selection);
 
     if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
       if (!event.shiftKey) {
-        // handle arrow key
+        this.handleArrowKey(event, selection);
       }
     } else if (event.which === KeyConstants.backspace) {
       if (point.prefixesBlock()) {
@@ -27,7 +93,7 @@ class BlockComponent extends Component {
         EditorActor.removeBlock(point);
       } else {
         var block = this.props.block;
-        var caretOffset = point.getCaretOffset();
+        var caretOffset = point.caretOffset;
         block.removeFragment(caretOffset - 1, caretOffset);
       }
     } else if (event.which === KeyConstants.tab) {
@@ -46,7 +112,7 @@ class BlockComponent extends Component {
     } else {
       var block = this.props.block;
       var character = String.fromCharCode(event.which);
-      block.addFragment(point.getCaretOffset(), character);
+      block.addFragment(point.caretOffset, character);
 
       // unless text
       //   event.preventDefault()

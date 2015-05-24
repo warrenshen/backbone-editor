@@ -1,21 +1,34 @@
 class Point {
 
-  constructor(sectionIndex=0, blockIndex=0, caretOffset=0) {
+  constructor(sectionIndex=0, blockIndex=0, caretOffset=0, needsOffset=false) {
     this._sectionIndex = sectionIndex;
     this._blockIndex = blockIndex;
     this._caretOffset = caretOffset;
+    this._needsOffset = needsOffset;
   }
 
-  getSectionIndex() {
+  get sectionIndex() {
     return this._sectionIndex;
   }
 
-  getBlockIndex() {
+  get blockIndex() {
     return this._blockIndex;
   }
 
-  getCaretOffset() {
+  get caretOffset() {
     return this._caretOffset;
+  }
+
+  get needsOffset() {
+    return this._needsOffset;
+  }
+
+  set caretOffset(caretOffset) {
+    this._caretOffset = caretOffset;
+  }
+
+  set needsOffset(needsOffset) {
+    this._needsOffset = needsOffset;
   }
 
   compareDeeply(other) {
@@ -41,7 +54,7 @@ class Point {
   }
 
   prefixesEverything() {
-    return this._sectionIndex === 0 && this._blockIndex === 0 && this._caretOffset === 0;
+    return this._sectionIndex === 0 && this._blockIndex === 0;
   }
 }
 
