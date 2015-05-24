@@ -13,11 +13,10 @@ import KeyConstants from "app/constants/key_constants";
 
 class BlockComponent extends Component {
 
-  handleArrowKey(event, selection) {
+  handleArrowKey(event, point) {
     var block = this.props.block;
     var node = React.findDOMNode(this.refs.content);
 
-    var point = Selector.generatePoint(selection);
     var caretOffset = point.caretOffset;
 
     var range = document.createRange();
@@ -51,6 +50,20 @@ class BlockComponent extends Component {
         }
         break;
 
+      case KeyConstants.left:
+        if (point.prefixesBlock()) {
+          event.preventDefault();
+          EditorActor.shiftLeft(point);
+        }
+        break;
+
+      case KeyConstants.right:
+        if (point.caretOffset === block.get("content").length) {
+          event.preventDefault();
+          EditorActor.shiftRight(point);
+        }
+        break;
+
       case KeyConstants.up:
         var ceilingOffset = 0;
         var top = node.getBoundingClientRect().top;
@@ -70,7 +83,7 @@ class BlockComponent extends Component {
           }
         }
 
-        if (caretOffset < ceilingOffset) {
+        if (caretOffset < ceilingOffset || caretOffset === 0) {
           event.preventDefault();
           point.needsOffset = true;
           EditorActor.shiftUp(point);
@@ -85,7 +98,7 @@ class BlockComponent extends Component {
 
     if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
       if (!event.shiftKey) {
-        this.handleArrowKey(event, selection);
+        this.handleArrowKey(event, point);
       }
     } else if (event.which === KeyConstants.backspace) {
       if (point.prefixesBlock()) {

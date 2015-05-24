@@ -125,6 +125,16 @@ class EditorStore extends Store {
     this.updatePoint(new Point(sectionIndex, blockIndex, caretOffset));
   }
 
+  shiftLeft(point) {
+    if (!point.prefixesEverything()) {
+      console.log("shifting left");
+    }
+  }
+
+  shiftRight(point) {
+    console.log("shifting right");
+  }
+
   shiftUp(point) {
     if (point.prefixesEverything()) {
       if (!point.prefixesBlock()) {
@@ -203,6 +213,12 @@ class EditorStore extends Store {
         break;
       case ActionConstants.editor.shiftDown:
         this.shiftDown(action.point);
+        break;
+      case ActionConstants.editor.shiftLeft:
+        this.shiftLeft(action.point);
+        break;
+      case ActionConstants.editor.shiftRight:
+        this.shiftRight(action.point);
         break;
       case ActionConstants.editor.shiftUp:
         this.shiftUp(action.point);
