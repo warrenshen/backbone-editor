@@ -42,18 +42,55 @@ class StoryEditable extends Component {
       var selection = window.getSelection();
       var range = document.createRange();
 
-      var walker = this.createTreeWalker(node);
-      while (walker.nextNode() && caretOffset - walker.currentNode.length > 0) {
-        caretOffset -= walker.currentNode.length;
+      if (caretOffset < 0) {
+        caretOffset = Math.abs(caretOffset);
+        var bottom = block.getBoundingClientRect().bottom;
+
+        var floorOffset = 0;
+        var complete = false;
+        var walker = this.createTreeWalker(node);
+        while (walker.nextNode() && !complete) {
+          var currentNode = walker.currentNode;
+          var length = currentNode.textContent.length;
+          for (var i = 0; i < length - 1; i += 1) {
+            range.setStart(currentNode, i);
+            range.setEnd(currentNode, i + 1);
+
+            if (bottom - range.getBoundingClientRect().bottom < 30) {
+              floorOffset += i - length - 1;
+              complete = true;
+              i = length;
+            }
+          }
+          floorOffset += length;
+        }
+        caretOffset += floorOffset;
       }
 
-      var currentNode = walker.currentNode;
-      range.setStart(currentNode, caretOffset);
-      range.setEnd(currentNode, caretOffset);
-      range.collapse(true);
+      if (caretOffset > 0) {
+        var complete = false;
+        var walker = this.createTreeWalker(node);
+        while (walker.nextNode() && !complete) {
+          var currentNode = walker.currentNode;
+          if (caretOffset - currentNode.length <= 0) {
+            range.setStart(currentNode, caretOffset);
+            range.setEnd(currentNode, caretOffset);
+            range.collapse(true);
+            complete = true;
+          }
+          caretOffset -= currentNode.length;
+        }
 
-      selection.removeAllRanges();
-      selection.addRange(range);
+        if (caretOffset > 0) {
+          var currentNode = walker.currentNode;
+          range.setStart(currentNode, currentNode.length);
+          range.setEnd(currentNode, currentNode.length);
+          range.collapse(true);
+        }
+
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
     }
   }
 

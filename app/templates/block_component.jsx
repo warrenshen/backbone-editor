@@ -45,6 +45,7 @@ class BlockComponent extends Component {
             floorOffset += length;
           }
         }
+
         if (caretOffset > floorOffset - 1) {
           event.preventDefault();
           point.caretOffset = caretOffset - floorOffset;
@@ -53,7 +54,8 @@ class BlockComponent extends Component {
         break;
 
       case KeyConstants.up:
-        var altitude = 0;
+        // TODO: Come up with a better name here.
+        var ceilingDifference = 0;
         if (block.length > 0) {
           var top = node.getBoundingClientRect().top;
           while (walker.nextNode()) {
@@ -70,11 +72,12 @@ class BlockComponent extends Component {
               caretOffset -= currentNode.length;
             }
           }
-          altitude = range.getBoundingClientRect().top - top;
+          ceilingDifference = range.getBoundingClientRect().top - top;
         }
-        console.log(altitude);
-        if (altitude < 10) {
+
+        if (ceilingDifference < 10) {
           event.preventDefault();
+          point.caretOffset = (-1) * caretOffset;
           EditorActor.shiftUp(point);
         }
         break;
