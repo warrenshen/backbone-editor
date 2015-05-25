@@ -42,7 +42,7 @@ class Formatter {
       } else if (closers[i]) {
         content += closers[i];
       }
-      if (i === characters.length - 1 && characters[i] === " ") {
+      if ((i === 0 || i === characters.length - 1) && characters[i] === " ") {
         content += "&nbsp;";
       } else {
         content += characters[i];
