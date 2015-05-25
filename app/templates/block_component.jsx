@@ -35,7 +35,13 @@ class BlockComponent extends Component {
       }
     }
 
-    return ceilingOffset;
+    if (complete) {
+      return ceilingOffset;
+    } else {
+      // Return -1 if node doesn't even span one line, meaning that
+      // the caret should always move up to the preceding block.
+      return -1;
+    }
   }
 
   findFloorOffset(node) {
@@ -94,7 +100,7 @@ class BlockComponent extends Component {
 
       case KeyConstants.up:
         var ceilingOffset = this.findCeilingOffset(node);
-        if (caretOffset < ceilingOffset || caretOffset === 0) {
+        if (caretOffset < ceilingOffset || caretOffset === 0 || ceilingOffset < 0) {
           event.preventDefault();
           point.needsOffset = true;
           EditorActor.shiftUp(point);
