@@ -52,7 +52,7 @@ class StyleModal extends Component {
       walker = Selector.createTreeWalker(endBlock);
       while (walker.nextNode() && !complete) {
         currentNode = walker.currentNode;
-        if (endCaretOffset - currentNode.length < 0) {
+        if (endCaretOffset - currentNode.length <= 0) {
           range.setEnd(currentNode, endCaretOffset);
           complete = true;
         } else {
