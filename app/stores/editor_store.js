@@ -142,9 +142,13 @@ class EditorStore extends Store {
 
     if (blockIndex < section.length - 1) {
       point.blockIndex += 1;
+      point.caretOffset = 0;
     } else if (sectionIndex < sections.length - 1) {
       point.sectionIndex += 1;
       point.blockIndex = 0;
+      point.caretOffset = 0;
+    } else {
+      return;
     }
 
     this.updatePoint(point);
