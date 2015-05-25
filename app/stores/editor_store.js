@@ -14,9 +14,11 @@ import ActionConstants from "app/constants/action_constants";
 class EditorStore extends Store {
 
   setDefaults() {
-    this._point = new Point();
+    // this._point = new Point();
+    this._point = null;
     this._story = new Story();
-    this._vector = new Vector();
+    // this._vector = null;
+    this._vector = new Vector(new Point(0, 0, 3), new Point(0, 0, 7));
     var initialSection = new Section();
     this.addSection(initialSection);
     initialSection.addBlock(new Block({ content: "Welcome to the editor." }));

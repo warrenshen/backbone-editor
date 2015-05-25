@@ -19,7 +19,48 @@ class StyleModal extends Component {
 
   createVector(vector) {
     if (vector) {
+      var startPoint = vector.startPoint;
+      var endPoint = vector.endPoint;
 
+      var startSection = $('section[data-index="' + startPoint.sectionIndex + '"]')[0];
+      var endSection = $('section[data-index="' + endPoint.sectionIndex + '"]')[0];
+
+      var startBlock = startSection.childNodes[startPoint.blockIndex];
+      var endBlock = endSection.childNodes[endPoint.blockIndex];
+
+      var startCaretOffset = startPoint.caretOffset;
+      var endCaretOffset = endPoint.caretOffset;
+
+      var selection = window.getSelection();
+      var range = document.createRange();
+
+      var currentNode;
+      var complete = false;
+      var walker = Selector.createTreeWalker(startBlock);
+      while (walker.nextNode() && !complete) {
+        currentNode = walker.currentNode;
+        if (startCaretOffset - currentNode.length < 0) {
+          range.setStart(currentNode, startCaretOffset);
+          complete = true;
+        } else {
+          startCaretOffset -= currentNode.length;
+        }
+      }
+
+      complete = false;
+      walker = Selector.createTreeWalker(endBlock);
+      while (walker.nextNode() && !complete) {
+        currentNode = walker.currentNode;
+        if (endCaretOffset - currentNode.length < 0) {
+          range.setEnd(currentNode, endCaretOffset);
+          complete = true;
+        } else {
+          endCaretOffset -= currentNode.length;
+        }
+      }
+
+      selection.removeAllRanges();
+      selection.addRange(range);
     }
   }
 
