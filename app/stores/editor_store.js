@@ -16,11 +16,10 @@ class EditorStore extends Store {
   setDefaults() {
     this._point = new Point();
     this._story = new Story();
-    this._vector = new Vector();
+    this._vector = null;
     var initialSection = new Section();
     this.addSection(initialSection);
-    initialSection.addBlock(new Block({ content: "Welcome to the editor." }));
-    // initialSection.addBlock(new Block());
+    initialSection.addBlock(new Block());
   }
 
   // --------------------------------------------------
@@ -55,6 +54,7 @@ class EditorStore extends Store {
   addSection(section, index=0) {
     var story = this._story;
     story.get("sections").add(section, { at: index });
+    story.updateSectionIndices();
     this.emitChange();
   }
 
@@ -170,6 +170,7 @@ class EditorStore extends Store {
       point = new Point();
     }
 
+    point.shouldFloor = true;
     this.updatePoint(point);
   }
 

@@ -54,7 +54,7 @@ class EditorActor extends Actor {
     });
   }
 
-  updateVector(point) {
+  updateVector(vector) {
     this.act({
       type: ActionConstants.editor.updateVector,
       vector: vector,
