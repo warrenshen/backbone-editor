@@ -61,12 +61,21 @@ class StyleModal extends Component {
 
       selection.removeAllRanges();
       selection.addRange(range);
+      this.positionModal(range);
     }
+  }
+
+  positionModal(range) {
+    var rectangle = range.getBoundingClientRect();
+    var modal = React.findDOMNode(this.refs.modal);
+    var offset = rectangle.width / 2 - modal.offsetWidth / 2;
+    modal.style.top = rectangle.top - 40 + "px";
+    modal.style.left = rectangle.left + offset + "px";
   }
 
   render() {
     return (
-      <div className="style-modal">
+      <div className="style-modal" ref="modal">
         <span className="vertical-anchor"></span>
         <span className="style-modal-triangle"></span>
       </div>
