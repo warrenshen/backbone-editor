@@ -7,6 +7,7 @@ import SectionStandard from "app/components/section_standard";
 import Story from "app/models/story";
 
 import Point from "app/helpers/point";
+import Selector from "app/helpers/selector";
 import Vector from "app/helpers/vector";
 
 
@@ -43,37 +44,19 @@ class StoryEditable extends Component {
       var range = document.createRange();
 
       if (point.needsOffset) {
-        caretOffset = Math.abs(caretOffset);
-        var bottom = block.getBoundingClientRect().bottom;
-
-        var floorOffset = 0;
-        var complete = false;
-        var walker = this.createTreeWalker(node);
-        while (walker.nextNode() && !complete) {
-          var currentNode = walker.currentNode;
-          var length = currentNode.textContent.length;
-          for (var i = 0; i < length && !complete; i += 1) {
-            range.setStart(currentNode, i);
-            range.setEnd(currentNode, i + 1);
-            if (bottom - range.getBoundingClientRect().bottom < 30) {
-              complete = true;
-            } else {
-              floorOffset += 1;
-            }
-          }
-        }
+        var floorOffset = Selector.findFloorOffset(node, 30);
         caretOffset += floorOffset;
       }
 
       if (caretOffset > 0) {
         var complete = false;
+        var currentNode = node;
         var walker = this.createTreeWalker(node);
         while (walker.nextNode() && !complete) {
-          var currentNode = walker.currentNode;
+          currentNode = walker.currentNode;
           if (caretOffset - currentNode.length <= 0) {
             range.setStart(currentNode, caretOffset);
             range.setEnd(currentNode, caretOffset);
-            range.collapse(true);
             complete = true;
           }
           caretOffset -= currentNode.length;
@@ -81,17 +64,15 @@ class StoryEditable extends Component {
 
         // Default to end of block if leftover caret offset present.
         if (caretOffset > 0) {
-          var currentNode = walker.currentNode;
           range.setStart(currentNode, currentNode.length);
           range.setEnd(currentNode, currentNode.length);
-          range.collapse(true);
         }
       } else {
         range.setStart(node, 0);
         range.setEnd(node, 0);
-        range.collapse(true);
       }
 
+      range.collapse(true);
       selection.removeAllRanges();
       selection.addRange(range);
     }

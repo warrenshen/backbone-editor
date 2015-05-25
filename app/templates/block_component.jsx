@@ -13,62 +13,6 @@ import KeyConstants from "app/constants/key_constants";
 
 class BlockComponent extends Component {
 
-  findCeilingOffset(node) {
-    var range = document.createRange();
-    var walker = Selector.createTreeWalker(node);
-
-    var ceilingOffset = 0;
-    var top = node.getBoundingClientRect().top;
-
-    var complete = false;
-    while (walker.nextNode() && !complete) {
-      var currentNode = walker.currentNode;
-      var length = currentNode.textContent.length;
-      for (var i = 0; i < length && !complete; i += 1) {
-        range.setStart(currentNode, i);
-        range.setEnd(currentNode, i + 1);
-        if (range.getBoundingClientRect().top - top > 10) {
-          complete = true;
-        } else {
-          ceilingOffset += 1;
-        }
-      }
-    }
-
-    if (complete) {
-      return ceilingOffset;
-    } else {
-      // Return -1 if node doesn't even span one line, meaning that
-      // the caret should always move up to the preceding block.
-      return -1;
-    }
-  }
-
-  findFloorOffset(node) {
-    var range = document.createRange();
-    var walker = Selector.createTreeWalker(node);
-
-    var floorOffset = 0;
-    var bottom = node.getBoundingClientRect().bottom;
-
-    var complete = false;
-    while (walker.nextNode() && !complete) {
-      var currentNode = walker.currentNode;
-      var length = currentNode.textContent.length;
-      for (var i = 0; i < length && !complete; i += 1) {
-        range.setStart(currentNode, i);
-        range.setEnd(currentNode, i + 1);
-        if (bottom - range.getBoundingClientRect().bottom < 10) {
-          complete = true;
-        } else {
-          floorOffset += 1;
-        }
-      }
-    }
-
-    return floorOffset;
-  }
-
   handleArrowKey(event, point) {
     var block = this.props.block;
     var node = React.findDOMNode(this.refs.content);
@@ -76,7 +20,7 @@ class BlockComponent extends Component {
 
     switch (event.which) {
       case KeyConstants.down:
-        var floorOffset = this.findFloorOffset(node);
+        var floorOffset = Selector.findFloorOffset(node);
         if (caretOffset >= floorOffset) {
           event.preventDefault();
           point.caretOffset = caretOffset - floorOffset;
@@ -99,7 +43,7 @@ class BlockComponent extends Component {
         break;
 
       case KeyConstants.up:
-        var ceilingOffset = this.findCeilingOffset(node);
+        var ceilingOffset = Selector.findCeilingOffset(node);
         if (caretOffset < ceilingOffset || caretOffset === 0 || ceilingOffset < 0) {
           event.preventDefault();
           point.needsOffset = true;
