@@ -51,7 +51,7 @@ class BlockComponent extends Component {
         break;
 
       case KeyConstants.left:
-        if (point.prefixesBlock()) {
+        if (point.prefixesBlock() && !point.prefixesEverything()) {
           event.preventDefault();
           EditorActor.shiftLeft(point);
         }
@@ -102,8 +102,10 @@ class BlockComponent extends Component {
       }
     } else if (event.which === KeyConstants.backspace) {
       if (point.prefixesBlock()) {
-        event.preventDefault();
-        EditorActor.removeBlock(point);
+        if (!point.prefixesEverything()) {
+          event.preventDefault();
+          EditorActor.removeBlock(point);
+        }
       } else {
         var block = this.props.block;
         var caretOffset = point.caretOffset;

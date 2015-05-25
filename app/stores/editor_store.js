@@ -59,158 +59,124 @@ class EditorStore extends Store {
   }
 
   removeBlock(point) {
-    if (!point.prefixesEverything() && !point.prefixesBlock()) {
-      var story = this._story;
+    var story = this._story;
 
-      var sectionIndex = point.sectionIndex;
-      var blockIndex = point.blockIndex;
+    var sectionIndex = point.sectionIndex;
+    var blockIndex = point.blockIndex;
 
-      var sections = story.get("sections");
-      var section = sections.at(sectionIndex);
+    var sections = story.get("sections");
+    var section = sections.at(sectionIndex);
 
-      var blocks = section.get("blocks");
-      var block = blocks.at(blockIndex);
+    var blocks = section.get("blocks");
+    var block = blocks.at(blockIndex);
 
-      var beforeBlock;
-      var newPoint;
-      if (blockIndex === 0) {
-        var beforeSection = sections.at(sectionIndex - 1);
-        // TODO: Create get last block convenience method.
-        beforeBlock = beforeSection.getLastBlock();
-        newPoint = new Point(sectionIndex - 1, beforeSection.length, beforeBlock.length);
-      } else {
-        beforeBlock = blocks[blockIndex - 1];
-        newPoint = new Point(sectionIndex, blockIndex - 1, beforeBlock.length);
-      }
-
-      var content = block.get("content");
-      if (content.length > 0) {
-        beforeBlock.set("content", beforeBlock.get("content") + content);
-        beforeBlock.set("type", block.get("type"));
-      }
-
-      section.removeBlock(block);
-      this.updatePoint(newPoint);
+    var beforeBlock;
+    var newPoint;
+    if (blockIndex === 0) {
+      var beforeSection = sections.at(sectionIndex - 1);
+      beforeBlock = beforeSection.getLastBlock();
+      newPoint = new Point(sectionIndex - 1, beforeSection.get("blocks").length, beforeBlock.length);
+    } else {
+      beforeBlock = blocks.at(blockIndex - 1);
+      newPoint = new Point(sectionIndex, blockIndex - 1, beforeBlock.length);
     }
+
+    var content = block.get("content");
+    beforeBlock.set("content", beforeBlock.get("content") + content);
+
+    section.removeBlock(block);
+    this.updatePoint(newPoint);
   }
 
   shiftDown(point) {
-    var story = this._story;
-    var sections = story.get("sections");
-
     var sectionIndex = point.sectionIndex;
     var blockIndex = point.blockIndex;
-    var caretOffset = point.caretOffset;
 
+    var story = this._story;
+    var sections = story.get("sections");
     var section = sections.at(sectionIndex);
-    if (blockIndex === section.get("blocks").length - 1) {
-      // TODO: Is there a better way to do this?
-      if (sectionIndex === sections.length - 1) {
-        var block = section.get("blocks").at(blockIndex);
-        this.updatePoint(new Point(sectionIndex, blockIndex, block.length));
-        return;
-      } else {
-        sectionIndex += 1;
-        blockIndex = 0;
-      }
+
+    if (blockIndex < section.length - 1) {
+      point.blockIndex += 1;
+    } else if (sectionIndex === sections.length - 1) {
+      var block = section.get("blocks").at(blockIndex);
+      point.caretOffset = block.length;
     } else {
-      blockIndex += 1;
+      point.sectionIndex += 1;
+      point.blockIndex = 0;
     }
 
-    var block = sections.at(sectionIndex).get("blocks").at(blockIndex);
-    if (block.length < caretOffset) {
-      caretOffset = block.length;
-    }
-
-    this.updatePoint(new Point(sectionIndex, blockIndex, caretOffset));
+    this.updatePoint(point);
   }
 
   shiftLeft(point) {
-    if (!point.prefixesEverything()) {
-      var story = this._story;
-
-      var sectionIndex = point.sectionIndex;
-      var blockIndex = point.blockIndex;
-
-      var sections = story.get("sections");
-
-      var beforeBlock;
-      var newPoint;
-      if (blockIndex === 0) {
-        var beforeSection = sections.at(sectionIndex - 1);
-        // TODO: Create get last block convenience method.
-        beforeBlock = beforeSection.getLastBlock();
-        newPoint = new Point(sectionIndex - 1, beforeSection.length, beforeBlock.length);
-      } else {
-        var section = sections.at(sectionIndex);
-        beforeBlock = section.get("blocks").at(blockIndex - 1);
-        newPoint = new Point(sectionIndex, blockIndex - 1, beforeBlock.length);
-      }
-
-      this.updatePoint(newPoint);
-    }
-  }
-
-  shiftRight(point) {
-    var story = this._story;
-
     var sectionIndex = point.sectionIndex;
     var blockIndex = point.blockIndex;
 
+    var story = this._story;
+    var sections = story.get("sections");
+
+    if (blockIndex === 0) {
+      var beforeSection = sections.at(sectionIndex - 1);
+      var beforeBlock = beforeSection.get("blocks").at(section.length);
+      point.sectionIndex -= 1;
+      point.blockIndex = beforeSection.length;
+      point.caretOffset = beforeBlock.length;
+    } else {
+      var section = sections.at(sectionIndex);
+      var beforeBlock = section.get("blocks").at(blockIndex - 1);
+      point.blockIndex -= 1;
+      point.caretOffset = beforeBlock.length;
+    }
+
+    this.updatePoint(point);
+  }
+
+  shiftRight(point) {
+    var sectionIndex = point.sectionIndex;
+    var blockIndex = point.blockIndex;
+
+    var story = this._story;
     var sections = story.get("sections");
     var section = sections.at(sectionIndex);
 
-    if (blockIndex === section.get("blocks").length - 1) {
-      if (sectionIndex === sections.length - 1) {
-        return;
-      } else {
-        sectionIndex += 1;
-        blockIndex = 0;
-      }
-    } else {
-      blockIndex += 1;
+    if (blockIndex < section.length - 1) {
+      point.blockIndex += 1;
+    } else if (sectionIndex < sections.length - 1) {
+      point.sectionIndex += 1;
+      point.blockIndex = 0;
     }
 
-    this.updatePoint(new Point(sectionIndex, blockIndex, 0));
+    this.updatePoint(point);
   }
 
   shiftUp(point) {
-    if (point.prefixesEverything()) {
-      if (!point.prefixesBlock()) {
-        this.updatePoint(new Point(0, 0, 0));
-      }
-    } else {
+    if (!point.prefixesEverything()) {
+      var sectionIndex = point.sectionIndex;
+      var blockIndex = point.blockIndex;
+
       var story = this._story;
       var sections = story.get("sections");
 
-      var sectionIndex = point.sectionIndex;
-      var blockIndex = point.blockIndex;
-      var caretOffset = point.caretOffset;
-      var needsOffset = point.needsOffset;
-
       if (blockIndex === 0) {
-        sectionIndex -= 1;
-        blockIndex = sections.at(sectionIndex).length();
+        point.sectionIndex -= 1;
+        point.blockIndex = sections.at(sectionIndex).length;
       } else {
-        blockIndex -= 1;
+        point.blockIndex -= 1;
       }
-
-      var block = sections.at(sectionIndex).get("blocks").at(blockIndex);
-      if (block.length < caretOffset) {
-        caretOffset = block.length;
-      }
-
-      this.updatePoint(new Point(sectionIndex, blockIndex, caretOffset, needsOffset));
+    } else {
+      point = new Point();
     }
+
+    this.updatePoint(point);
   }
 
   splitBlock(point) {
-    var story = this._story;
-
     var sectionIndex = point.sectionIndex;
     var blockIndex = point.blockIndex;
     var caretOffset = point.caretOffset;
 
+    var story = this._story;
     var section = story.get("sections").at(sectionIndex);
     var block = section.get("blocks").at(blockIndex);
 

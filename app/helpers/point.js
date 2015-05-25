@@ -23,6 +23,14 @@ class Point {
     return this._needsOffset;
   }
 
+  set sectionIndex(sectionIndex) {
+    this._sectionIndex = sectionIndex;
+  }
+
+  set blockIndex(blockIndex) {
+    this._blockIndex = blockIndex;
+  }
+
   set caretOffset(caretOffset) {
     this._caretOffset = caretOffset;
   }
