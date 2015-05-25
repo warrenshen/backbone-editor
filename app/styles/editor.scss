@@ -39,18 +39,22 @@
   z-index: $z-index-9;
   top: 0;
   left: 0;
-  height: 40px;
+  // TODO: Remove this hardcoded value later.
+  min-width: 72px;
+  height: 36px;
   padding: 0 12px;
-  background-color: $ash;
+  background-color: $black;
   border-radius: 3px;
-  box-shadow: 0, 0, 3px, $ash;
+  box-shadow: 0, 0, 3px, $black;
 }
 
 .style-modal-triangle {
+  display: block;
   position: relative;
   width: 0;
   height: 0;
   margin: auto;
-  border: 10px solid $ash;
+  border: 10px solid transparent;
+  border-top: 10px solid $black;
   line-height: 0;
 }

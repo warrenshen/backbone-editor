@@ -26,7 +26,8 @@ class EditorPage extends ListeningComponent {
       <div className={"general-page"}>
         <StoryEditable
           point={this.state.point}
-          story={this.state.story}
+          story={this.state.story} />
+        <StyleModal
           vector={this.state.vector} />
       </div>
     );

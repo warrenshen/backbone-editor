@@ -17,9 +17,16 @@ class StyleModal extends Component {
     this.createVector(this.props.vector);
   }
 
+  createVector(vector) {
+    if (vector) {
+
+    }
+  }
+
   render() {
     return (
       <div className="style-modal">
+        <span className="vertical-anchor"></span>
         <span className="style-modal-triangle"></span>
       </div>
     );
@@ -32,16 +39,3 @@ StyleModal.propTypes = {
 
 
 module.exports = StyleModal;
-
-
-render: ->
-  <div
-    style={@modalStyle()}
-    onMouseDown={@handleMouseDown}
-    onMouseUp={@handleMouseUp}
-    onClick={@handleClick}>
-    <VerticalAnchor />
-    {@renderStyleOptions()}
-    <div style={@styles.triangle}></div>
-    {@renderLinkModal()}
-  </div>
