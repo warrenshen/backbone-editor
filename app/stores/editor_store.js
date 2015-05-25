@@ -14,15 +14,12 @@ import ActionConstants from "app/constants/action_constants";
 class EditorStore extends Store {
 
   setDefaults() {
-    // this._point = new Point();
-    this._point = null;
+    this._point = new Point();
     this._story = new Story();
-    // this._vector = null;
-    this._vector = new Vector(new Point(0, 0, 3), new Point(0, 0, 7));
+    this._vector = null;
     var initialSection = new Section();
     this.addSection(initialSection);
-    initialSection.addBlock(new Block({ content: "Welcome to the editor." }));
-    // initialSection.addBlock(new Block());
+    initialSection.addBlock(new Block());
   }
 
   // --------------------------------------------------
@@ -57,6 +54,7 @@ class EditorStore extends Store {
   addSection(section, index=0) {
     var story = this._story;
     story.get("sections").add(section, { at: index });
+    story.updateSectionIndices();
     this.emitChange();
   }
 
