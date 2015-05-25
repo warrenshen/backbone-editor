@@ -170,6 +170,7 @@ class EditorStore extends Store {
       point = new Point();
     }
 
+    point.shouldFloor = true;
     this.updatePoint(point);
   }
 

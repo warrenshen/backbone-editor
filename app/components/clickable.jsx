@@ -43,7 +43,7 @@ Clickable.propTypes = {
   style:   React.PropTypes.string.isRequired,
   content: React.PropTypes.string.isRequired,
   source:  React.PropTypes.string,
-}
+};
 
 Clickable.defaultProps = {
   action:  null,
@@ -51,7 +51,7 @@ Clickable.defaultProps = {
   style:   "",
   content: "",
   source:  "",
-}
+};
 
 
 module.exports = Clickable;

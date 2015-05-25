@@ -33,11 +33,11 @@ class SectionStandard extends Component {
 
 SectionStandard.propTypes = {
   section: React.PropTypes.object.isRequired,
-}
+};
 
 SectionStandard.defaultProps = {
   section: new Section(),
-}
+};
 
 
 module.exports = SectionStandard;

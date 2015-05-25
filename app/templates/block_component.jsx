@@ -46,7 +46,6 @@ class BlockComponent extends Component {
         var ceilingOffset = Selector.findCeilingOffset(node);
         if (caretOffset < ceilingOffset || caretOffset === 0 || ceilingOffset < 0) {
           event.preventDefault();
-          point.needsOffset = true;
           EditorActor.shiftUp(point);
         }
         break;
@@ -143,11 +142,11 @@ class BlockComponent extends Component {
 
 BlockComponent.propTypes = {
   block: React.PropTypes.object.isRequired,
-}
+};
 
 BlockComponent.defaultProps = {
   block: new Block(),
-}
+};
 
 
 module.exports = BlockComponent;
