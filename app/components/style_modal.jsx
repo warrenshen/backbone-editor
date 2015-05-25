@@ -1,4 +1,5 @@
 import $ from "jquery";
+import ClassNames from "classnames";
 import React from "react";
 import Component from "app/templates/component";
 
@@ -74,10 +75,14 @@ class StyleModal extends Component {
   }
 
   render() {
+    var modalClass = ClassNames(
+      {"style-modal": true},
+      {"general-hidden": !this.props.vector}
+    );
     return (
-      <div className="style-modal" ref="modal">
-        <span className="vertical-anchor"></span>
-        <span className="style-modal-triangle"></span>
+      <div className={modalClass} ref="modal">
+        <span className={"vertical-anchor"}></span>
+        <span className={"style-modal-triangle"}></span>
       </div>
     );
   }

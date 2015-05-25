@@ -40,11 +40,11 @@ class Point {
   }
 
   compareDeeply(other) {
-    var sectionDifference = this._sectionIndex - other.getSectionIndex();
+    var sectionDifference = this._sectionIndex - other.sectionIndex;
     if (sectionDifference === 0) {
-      var blockDifference = this._blockIndex - other.getBlockIndex();
+      var blockDifference = this._blockIndex - other.blockIndex;
       if (blockDifference === 0) {
-        return this._caretOffset - other.getCaretOffset();
+        return this._caretOffset - other.caretOffset;
       } else {
         return blockDifference;
       }
