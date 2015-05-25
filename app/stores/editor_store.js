@@ -59,30 +59,28 @@ class EditorStore extends Store {
   }
 
   removeBlock(point) {
-    var story = this._story;
-
     var sectionIndex = point.sectionIndex;
     var blockIndex = point.blockIndex;
 
+    var story = this._story;
     var sections = story.get("sections");
     var section = sections.at(sectionIndex);
-
     var blocks = section.get("blocks");
     var block = blocks.at(blockIndex);
 
     var beforeBlock;
-    var newPoint;
     if (blockIndex === 0) {
-      var beforeSection = sections.at(sectionIndex - 1);
-      beforeBlock = beforeSection.getLastBlock();
-      newPoint = new Point(sectionIndex - 1, beforeSection.get("blocks").length, beforeBlock.length);
+      beforeBlock = sections.at(sectionIndex - 1).getLastBlock();
+      point.sectionIndex -= 1;
+      point.blockIndex = beforeSection.length;
     } else {
       beforeBlock = blocks.at(blockIndex - 1);
-      newPoint = new Point(sectionIndex, blockIndex - 1, beforeBlock.length);
+      point.blockIndex -= 1;
     }
 
     var content = block.get("content");
     beforeBlock.set("content", beforeBlock.get("content") + content);
+    point.caretOffset = beforeBlock.length;
 
     section.removeBlock(block);
     this.updatePoint(newPoint);
@@ -191,8 +189,11 @@ class EditorStore extends Store {
       // TODO: Extract "new" elements and add to new block here.
       block.removeFragment(caretOffset, block.length);
     }
+
     section.addBlock(newBlock, blockIndex + 1);
-    this.updatePoint(new Point(sectionIndex, blockIndex + 1, 0));
+    point.blockIndex += 1;
+    point.caretOffset = 0;
+    this.updatePoint(point);
   }
 
   updatePoint(point) {
@@ -206,7 +207,6 @@ class EditorStore extends Store {
     this._point = null;
     this._vector = vector;
     console.log("updating vector");
-    // TODO: Should this be manually called?
     this.emitChange();
   }
 
