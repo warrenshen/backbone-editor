@@ -10,7 +10,11 @@ class SectionStandard extends Component {
 
   renderBlock(block) {
     return (
-      <BlockStandard key={block.cid} block={block} />
+      <BlockStandard
+        key={block.cid}
+        block={block}
+        shouldEnableEdits={this.props.shouldEnableEdits}
+        shouldUpdateContent={this.props.shouldUpdateContent} />
     );
   }
 
@@ -32,11 +36,15 @@ class SectionStandard extends Component {
 }
 
 SectionStandard.propTypes = {
-  section: React.PropTypes.object.isRequired,
+  section: React.PropTypes.instanceOf(Section).isRequired,
+  shouldEnableEdits: React.PropTypes.bool.isRequired,
+  shouldUpdateContent: React.PropTypes.bool.isRequired,
 };
 
 SectionStandard.defaultProps = {
   section: new Section(),
+  shouldEnableEdits: true,
+  shouldUpdateContent: true,
 };
 
 

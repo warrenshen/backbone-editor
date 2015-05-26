@@ -38,11 +38,11 @@ class EditorPage extends ListeningComponent {
   }
 
   enableEdits() {
-    this.setState({ shouldAllowEdits: true });
+    this.setState({ shouldEnableEdits: true });
   }
 
   disableEdits() {
-    this.setState({ shouldAllowEdits: false });
+    this.setState({ shouldEnableEdits: false });
   }
 
   updateContent() {
@@ -90,7 +90,7 @@ class EditorPage extends ListeningComponent {
       <div className={"general-page"} ref="page">
         <StoryEditable
           point={this.state.point}
-          shouldAllowEdits={this.state.shouldAllowEdits}
+          shouldEnableEdits={this.state.shouldEnableEdits}
           shouldUpdateContent={this.state.shouldUpdateContent}
           story={this.state.story} />
         <StyleModal

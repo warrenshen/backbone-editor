@@ -131,6 +131,10 @@ class BlockComponent extends Component {
     node.removeEventListener("mouseup", this.handleMouseUp);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.shouldUpdateContent;
+  }
+
   renderContent(node) {
     node.innerHTML = Formatter.formatBlock(this.props.block);
   }
@@ -145,11 +149,15 @@ class BlockComponent extends Component {
 }
 
 BlockComponent.propTypes = {
-  block: React.PropTypes.object.isRequired,
+  block: React.PropTypes.instanceOf(Block).isRequired,
+  shouldEnableEdits: React.PropTypes.bool.isRequired,
+  shouldUpdateContent: React.PropTypes.bool.isRequired,
 };
 
 BlockComponent.defaultProps = {
   block: new Block(),
+  shouldEnableEdits: true,
+  shouldUpdateContent: true,
 };
 
 
