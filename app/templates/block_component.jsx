@@ -3,6 +3,8 @@ import Component from "app/templates/component";
 
 import Block from "app/models/block";
 
+import EditorStore from "app/stores/editor_store";
+
 import EditorActor from "app/actors/editor_actor";
 
 import Formatter from "app/helpers/formatter";
@@ -12,13 +14,6 @@ import KeyConstants from "app/constants/key_constants";
 
 
 class BlockComponent extends Component {
-
-  getDefaultState() {
-    return {
-      justPressed: false,
-      justDragged: false,
-    }
-  }
 
   handleArrowKey(event, point) {
     var block = this.props.block;
@@ -108,8 +103,7 @@ class BlockComponent extends Component {
 
   handleMouseDown(event) {
     event.stopPropagation();
-    this.state.justPressed = true;
-    this.state.justDragged = false;
+    EditorStore.mouse = "Down";
     if (this.props.shouldEnableEdits) {
       this.props.disableEdits();
     }
@@ -117,14 +111,14 @@ class BlockComponent extends Component {
 
   handleMouseMove(event) {
     event.stopPropagation();
-    if (this.state.justPressed && !this.state.justDragged) {
-      this.state.justDragged = true;
+    if (EditorStore.mouse === "Down") {
+      EditorStore.mouse = "Move";
     }
   }
 
   handleMouseUp(event) {
-    if (!this.state.justDragged) {
-      this.state.justPressed = false;
+    if (EditorStore.mouse !== "Move") {
+      EditorStore.mouse = "Up";
       this.props.enableEdits();
 
       var selection = window.getSelection();
