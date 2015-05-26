@@ -63,12 +63,19 @@ class EditorPage extends ListeningComponent {
     this.setState({ shouldUpdateModal: false });
   }
 
+  handleMouseDown(event) {
+    // TODO: Maybe we should turn this into an action that
+    // does not emit any change (to not be an anti-pattern).
+    EditorStore.mouse = "Down";
+  }
+
   handleMouseUp(event) {
     var selection = window.getSelection();
-    if (selection.type === "Range") {
+    if (EditorStore.mouse === "Move") {
       var vector = Selector.generateVector(selection);
       EditorActor.updateVector(vector);
-    } else if (selection.type === "None") {
+    } else {
+      EditorStore.mouse = "Up";
       EditorActor.updateVector(null);
     }
   }
@@ -76,12 +83,14 @@ class EditorPage extends ListeningComponent {
   componentDidMount() {
     super.componentDidMount();
     var node = React.findDOMNode(this.refs.page);
+    node.addEventListener("mousedown", this.handleMouseDown.bind(this));
     node.addEventListener("mouseup", this.handleMouseUp.bind(this));
   }
 
   componentWillUnmount() {
     super.componentWillUnmount();
     var node = React.findDOMNode(this.refs.page);
+    node.removeEventListener("mousedown", this.handleMouseDown);
     node.removeEventListener("mouseup", this.handleMouseUp);
   }
 
