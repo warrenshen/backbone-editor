@@ -14,6 +14,7 @@ import ActionConstants from "app/constants/action_constants";
 class EditorStore extends Store {
 
   setDefaults() {
+    // TODO: Turn mouse states into constants.
     this._mouse = "Up";
     this._point = new Point();
     this._story = new Story();
@@ -207,14 +208,12 @@ class EditorStore extends Store {
   updatePoint(point) {
     this._point = point;
     this._vector = null;
-    console.log("updating point");
     this.emitChange();
   }
 
   updateVector(vector) {
     this._point = null;
     this._vector = vector;
-    console.log("updating vector");
     this.emitChange();
   }
 
