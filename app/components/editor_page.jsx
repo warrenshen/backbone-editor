@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React from "react";
 import ListeningComponent from "app/templates/listening_component";
 
@@ -17,6 +18,17 @@ class EditorPage extends ListeningComponent {
     return [EditorStore];
   }
 
+  getDefaultState() {
+    return _.merge(
+      {
+        shouldEnableEdits: true,
+        shouldUpdateContent: true,
+        shouldUpdateModal: true,
+      },
+      super.getDefaultState()
+    );
+  }
+
   getStoreState() {
     return {
       point: EditorStore.getPoint(),
@@ -25,12 +37,39 @@ class EditorPage extends ListeningComponent {
     }
   }
 
+  enableEdits() {
+    this.setState({ shouldAllowEdits: true });
+  }
+
+  disableEdits() {
+    this.setState({ shouldAllowEdits: false });
+  }
+
+  updateContent() {
+    this.setState({ shouldUpdateContent: true });
+  }
+
+  downdateContent() {
+    this.setState( { shouldUpdateContent: false });
+  }
+
+  updateModal() {
+    this.setState({ shouldUpdateModal: true });
+  }
+
+  downdateModal() {
+    this.setState({ shouldUpdateModal: false });
+  }
+
   handleMouseUp(event) {
-    console.log("page mouse up");
     var selection = window.getSelection();
+    console.log(selection.type);
+
     if (selection.type === "Range") {
       var vector = Selector.generateVector(selection);
       EditorActor.updateVector(vector);
+    } else if (selection.type === "None") {
+      EditorActor.updateVector(null);
     }
   }
 
@@ -51,8 +90,11 @@ class EditorPage extends ListeningComponent {
       <div className={"general-page"} ref="page">
         <StoryEditable
           point={this.state.point}
+          shouldAllowEdits={this.state.shouldAllowEdits}
+          shouldUpdateContent={this.state.shouldUpdateContent}
           story={this.state.story} />
         <StyleModal
+          shouldUpdateModal={this.state.shouldUpdateModal}
           vector={this.state.vector} />
       </div>
     );

@@ -102,6 +102,7 @@ class BlockComponent extends Component {
   handleMouseUp(event) {
     console.log("block mouse up");
     var selection = window.getSelection();
+
     if (selection.type === "Caret") {
       var point = Selector.generatePoint(selection);
       EditorActor.updatePoint(point);
