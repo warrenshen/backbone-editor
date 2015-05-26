@@ -37,15 +37,17 @@
 .style-modal {
   position: fixed;
   z-index: $z-index-9;
-  top: 0;
-  left: 0;
+  top: 128px;
+  left: 128px;
   // TODO: Remove this hardcoded value later.
   min-width: 72px;
   height: 36px;
   padding: 0 12px;
-  background-color: $black;
+  // background-color: $black;
   border-radius: 3px;
   box-shadow: 0, 0, 3px, $black;
+  transition: top 75ms, left 75ms;
+  background-image: linear-gradient(to bottom, $ash, $black);
 }
 
 .style-modal-triangle {
@@ -54,7 +56,7 @@
   width: 0;
   height: 0;
   margin: auto;
-  border: 10px solid transparent;
-  border-top: 10px solid $black;
+  border: 8px solid transparent;
+  border-top: 8px solid $black;
   line-height: 0;
 }
