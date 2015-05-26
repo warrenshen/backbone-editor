@@ -19,6 +19,7 @@ class EditorPage extends ListeningComponent {
   }
 
   getDefaultState() {
+    // TODO: Do we really need to track content and modal states?
     return _.merge(
       {
         shouldEnableEdits: true,
@@ -63,8 +64,6 @@ class EditorPage extends ListeningComponent {
 
   handleMouseUp(event) {
     var selection = window.getSelection();
-    console.log(selection.type);
-
     if (selection.type === "Range") {
       var vector = Selector.generateVector(selection);
       EditorActor.updateVector(vector);
@@ -89,6 +88,8 @@ class EditorPage extends ListeningComponent {
     return (
       <div className={"general-page"} ref="page">
         <StoryEditable
+          disableEdits={this.disableEdits.bind(this)}
+          enableEdits={this.enableEdits.bind(this)}
           point={this.state.point}
           shouldEnableEdits={this.state.shouldEnableEdits}
           shouldUpdateContent={this.state.shouldUpdateContent}

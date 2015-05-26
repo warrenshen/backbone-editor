@@ -13,6 +13,13 @@ import KeyConstants from "app/constants/key_constants";
 
 class BlockComponent extends Component {
 
+  getDefaultState() {
+    return {
+      justPressed: false,
+      justDragged: false,
+    }
+  }
+
   handleArrowKey(event, point) {
     var block = this.props.block;
     var node = React.findDOMNode(this.refs.content);
@@ -99,11 +106,32 @@ class BlockComponent extends Component {
     }
   }
 
-  handleMouseUp(event) {
-    console.log("block mouse up");
-    var selection = window.getSelection();
+  handleMouseDown(event) {
+    event.stopPropagation();
+    this.state.justPressed = true;
+    this.state.justDragged = false;
+    if (this.props.shouldEnableEdits) {
+      this.props.disableEdits();
+    }
+  }
 
-    if (selection.type === "Caret") {
+  handleMouseMove(event) {
+    event.stopPropagation();
+    if (this.state.justPressed && !this.state.justDragged) {
+      this.state.justDragged = true;
+    }
+  }
+
+  handleMouseUp(event) {
+    if (!this.state.justDragged) {
+      this.state.justPressed = false;
+      this.props.enableEdits();
+
+      var selection = window.getSelection();
+      var range = document.caretRangeFromPoint(event.clientX, event.clientY);
+      selection.removeAllRanges()
+      selection.addRange(range)
+
       var point = Selector.generatePoint(selection);
       EditorActor.updatePoint(point);
     }
@@ -114,6 +142,8 @@ class BlockComponent extends Component {
     var node = React.findDOMNode(this.refs.content);
     node.addEventListener("keydown", this.handleKeyDown.bind(this));
     node.addEventListener("keypress", this.handleKeyPress.bind(this));
+    node.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    node.addEventListener("mousemove", this.handleMouseMove.bind(this));
     node.addEventListener("mouseup", this.handleMouseUp.bind(this));
     this.renderContent(node);
   }
@@ -128,6 +158,8 @@ class BlockComponent extends Component {
     var node = React.findDOMNode(this.refs.content);
     node.removeEventListener("keydown", this.handleKeyDown);
     node.removeEventListener("keypress", this.handleKeyPress);
+    node.removeEventListener("mousedown", this.handleMouseDown);
+    node.removeEventListener("mousemove", this.handleMouseMove);
     node.removeEventListener("mouseup", this.handleMouseUp);
   }
 
@@ -150,12 +182,16 @@ class BlockComponent extends Component {
 
 BlockComponent.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
+  disableEdits: React.PropTypes.func.isRequired,
+  enableEdits: React.PropTypes.func.isRequired,
   shouldEnableEdits: React.PropTypes.bool.isRequired,
   shouldUpdateContent: React.PropTypes.bool.isRequired,
 };
 
 BlockComponent.defaultProps = {
   block: new Block(),
+  disableEdits: null,
+  enableEdits: null,
   shouldEnableEdits: true,
   shouldUpdateContent: true,
 };

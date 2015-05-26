@@ -8,7 +8,6 @@ class BlockStandard extends BlockComponent {
 
   render() {
     var block = this.props.block;
-    console.log(this.props.shouldEnableEdits);
     return (
       <div
         className={"block-container"}
