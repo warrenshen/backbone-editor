@@ -3,6 +3,8 @@ import ClassNames from "classnames";
 import React from "react";
 import Component from "app/templates/component";
 
+import StyleOption from "app/components/style_option";
+
 import Selector from "app/helpers/selector";
 import Vector from "app/helpers/vector";
 
@@ -68,10 +70,44 @@ class StyleModal extends Component {
 
   positionModal(range) {
     var rectangle = range.getBoundingClientRect();
-    var node = React.findDOMNode(this.refs.modal);
+    var modal = React.findDOMNode(this.refs.modal);
     var offset = rectangle.width / 2 - modal.offsetWidth / 2;
-    node.style.top = rectangle.top - 42 + "px";
-    node.style.left = rectangle.left + offset + "px";
+    modal.style.top = rectangle.top - 42 + "px";
+    modal.style.left = rectangle.left + offset + "px";
+  }
+
+  renderOption(props, index) {
+    return (
+      <StyleOption
+        key={index}
+        {...props} />
+    );
+  }
+
+  renderOptions() {
+    var templates = [
+      {
+        action: null,
+        className:"fa fa-header",
+      },
+      {
+        action: null,
+        className: "fa fa-bold",
+      },
+      {
+        action: null,
+        className: "fa fa-italic",
+      },
+      {
+        action: null,
+        className: "fa fa-quote-right",
+      },
+      {
+        action: null,
+        className: "fa fa-link",
+      },
+    ];
+    return templates.map(this.renderOption, this);
   }
 
   render() {
@@ -82,6 +118,7 @@ class StyleModal extends Component {
     return (
       <div className={modalClass} ref="modal">
         <span className={"vertical-anchor"}></span>
+        {this.renderOptions()}
         <span className={"style-modal-triangle"}></span>
       </div>
     );

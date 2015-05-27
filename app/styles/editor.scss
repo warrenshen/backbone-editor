@@ -46,10 +46,8 @@
   z-index: $z-index-9;
   top: 128px;
   left: 128px;
-  // TODO: Remove this hardcoded value later.
-  min-width: 72px;
   height: 36px;
-  padding: 0 12px;
+  padding: 0 8px;
   border-radius: 3px;
   box-shadow: 0, 0, 3px, $black;
   transition: top 75ms, left 75ms;
