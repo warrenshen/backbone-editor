@@ -47,9 +47,10 @@ class EditorActor extends Actor {
     });
   }
 
-  styleHeading(which) {
+  styleHeading(vector, which) {
     this.act({
       type: ActionConstants.editor.styleHeading,
+      vector: vector,
       which: which,
     })
   }

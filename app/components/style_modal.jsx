@@ -23,7 +23,7 @@ class StyleModal extends Component {
   }
 
   styleHeading(event) {
-    EditorActor.styleHeading(1);
+    EditorActor.styleHeading(this.props.vector, 1);
   }
 
   createVector(vector) {

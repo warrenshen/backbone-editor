@@ -1,3 +1,5 @@
+import _ from "lodash"
+
 import Store from "app/templates/store";
 
 import Block from "app/models/block";
@@ -205,8 +207,48 @@ class EditorStore extends Store {
     this.updatePoint(point);
   }
 
-  styleHeading(which) {
-    console.log(which);
+  styleBlock(vector, type) {
+    var startPoint = vector.startPoint;
+    var endPoint = vector.endPoint;
+
+    var startSectionIndex = startPoint.sectionIndex;
+    var endSectionIndex = endPoint.sectionIndex;
+
+    var startBlockIndex = startPoint.blockIndex;
+    var endBlockIndex = endPoint.blockIndex;
+
+    var story = this._story;
+    var sections = story.get("sections");
+
+    var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
+    for (var sectionIndex in sectionIndices) {
+      var section = sections.at(sectionIndex);
+      var blocks = section.get("blocks");
+
+      var blockIndices;
+      if (sectionIndices.first() === sectionIndices.last()) {
+        blockIndices = _.range(startBlockIndex, endBlockIndex + 1);
+      } else if (sectionIndex === sectionIndices.first()) {
+        blockIndices = _.range(startBlockIndex, blocks.length);
+      } else if (sectionIndex === sectionIndices.last()) {
+        blockIndices = _.range(0, endBlockIndex + 1);
+      } else {
+        blockIndices = _.range(0, blocks.length);
+      }
+
+      for (var blockIndex in blockIndices) {
+        var block = blocks.at(blockIndex);
+        if (block.get("type") === type) {
+          block.set("type", "paragraph");
+        } else {
+          block.set("type", type);
+        }
+      }
+    }
+  }
+
+  styleHeading(vector, which) {
+    this.styleBlock(vector, "heading-one");
   }
 
   updatePoint(point) {
@@ -247,7 +289,7 @@ class EditorStore extends Store {
         this.splitBlock(action.point);
         break;
       case ActionConstants.editor.styleHeading:
-        this.styleHeading(action.which);
+        this.styleHeading(action.vector, action.which);
         break;
       case ActionConstants.editor.updatePoint:
         this.updatePoint(action.point);
