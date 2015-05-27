@@ -70,7 +70,13 @@ class StoryEditable extends Component {
 
   renderSection(section) {
     return (
-      <SectionStandard key={section.cid} section={section} />
+      <SectionStandard
+        key={section.cid}
+        disableEdits={this.props.disableEdits}
+        enableEdits={this.props.enableEdits}
+        section={section}
+        shouldEnableEdits={this.props.shouldEnableEdits}
+        shouldUpdateContent={this.props.shouldUpdateContent} />
     );
   }
 
@@ -89,11 +95,19 @@ class StoryEditable extends Component {
 }
 
 StoryEditable.propTypes = {
-  point: React.PropTypes.object,
-  story: React.PropTypes.object.isRequired,
+  disableEdits: React.PropTypes.func.isRequired,
+  enableEdits: React.PropTypes.func.isRequired,
+  point: React.PropTypes.instanceOf(Point),
+  shouldEnableEdits: React.PropTypes.bool.isRequired,
+  shouldUpdateContent: React.PropTypes.bool.isRequired,
+  story: React.PropTypes.instanceOf(Story).isRequired,
 };
 
 StoryEditable.defaultProps = {
+  disableEdits: null,
+  enableEdits: null,
+  shouldEnableEdits: true,
+  shouldUpdateContent: true,
   story: new Story(),
 };
 

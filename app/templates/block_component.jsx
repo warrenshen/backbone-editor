@@ -3,6 +3,8 @@ import Component from "app/templates/component";
 
 import Block from "app/models/block";
 
+import EditorStore from "app/stores/editor_store";
+
 import EditorActor from "app/actors/editor_actor";
 
 import Formatter from "app/helpers/formatter";
@@ -99,10 +101,31 @@ class BlockComponent extends Component {
     }
   }
 
+  handleMouseDown(event) {
+    event.stopPropagation();
+    EditorStore.mouse = "Down";
+    if (this.props.shouldEnableEdits) {
+      this.props.disableEdits();
+    }
+  }
+
+  handleMouseMove(event) {
+    event.stopPropagation();
+    if (EditorStore.mouse === "Down") {
+      EditorStore.mouse = "Move";
+    }
+  }
+
   handleMouseUp(event) {
-    console.log("block mouse up");
-    var selection = window.getSelection();
-    if (selection.type === "Caret") {
+    if (EditorStore.mouse !== "Move") {
+      EditorStore.mouse = "Up";
+      this.props.enableEdits();
+
+      var selection = window.getSelection();
+      var range = document.caretRangeFromPoint(event.clientX, event.clientY);
+      selection.removeAllRanges()
+      selection.addRange(range)
+
       var point = Selector.generatePoint(selection);
       EditorActor.updatePoint(point);
     }
@@ -113,6 +136,8 @@ class BlockComponent extends Component {
     var node = React.findDOMNode(this.refs.content);
     node.addEventListener("keydown", this.handleKeyDown.bind(this));
     node.addEventListener("keypress", this.handleKeyPress.bind(this));
+    node.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    node.addEventListener("mousemove", this.handleMouseMove.bind(this));
     node.addEventListener("mouseup", this.handleMouseUp.bind(this));
     this.renderContent(node);
   }
@@ -127,7 +152,13 @@ class BlockComponent extends Component {
     var node = React.findDOMNode(this.refs.content);
     node.removeEventListener("keydown", this.handleKeyDown);
     node.removeEventListener("keypress", this.handleKeyPress);
+    node.removeEventListener("mousedown", this.handleMouseDown);
+    node.removeEventListener("mousemove", this.handleMouseMove);
     node.removeEventListener("mouseup", this.handleMouseUp);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.shouldUpdateContent;
   }
 
   renderContent(node) {
@@ -144,11 +175,19 @@ class BlockComponent extends Component {
 }
 
 BlockComponent.propTypes = {
-  block: React.PropTypes.object.isRequired,
+  block: React.PropTypes.instanceOf(Block).isRequired,
+  disableEdits: React.PropTypes.func.isRequired,
+  enableEdits: React.PropTypes.func.isRequired,
+  shouldEnableEdits: React.PropTypes.bool.isRequired,
+  shouldUpdateContent: React.PropTypes.bool.isRequired,
 };
 
 BlockComponent.defaultProps = {
   block: new Block(),
+  disableEdits: null,
+  enableEdits: null,
+  shouldEnableEdits: true,
+  shouldUpdateContent: true,
 };
 
 

@@ -1,6 +1,8 @@
 import React from "react";
 import BlockComponent from "app/templates/block_component";
 
+import Block from "app/models/block";
+
 
 class BlockStandard extends BlockComponent {
 
@@ -12,7 +14,7 @@ class BlockStandard extends BlockComponent {
         data-index={block.get("index")}>
         <p
           className={"block-content"}
-          contentEditable={true}
+          contentEditable={this.props.shouldEnableEdits}
           ref={"content"}>
         </p>
       </div>

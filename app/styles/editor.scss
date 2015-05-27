@@ -8,7 +8,7 @@
   margin: 0 auto;
   cursor: text;
   outline: none;
-  -webkit-user-select: all;
+  -webkit-user-select: text;
 }
 
 .block-content {
@@ -18,6 +18,13 @@
   line-height: 1.5;
   outline: none;
   word-wrap: break-word;
+}
+
+.editor-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  -webkit-user-select: none;
 }
 
 .section-container {
@@ -37,15 +44,14 @@
 .style-modal {
   position: fixed;
   z-index: $z-index-9;
-  top: 0;
-  left: 0;
-  // TODO: Remove this hardcoded value later.
-  min-width: 72px;
+  top: 128px;
+  left: 128px;
   height: 36px;
-  padding: 0 12px;
-  background-color: $black;
+  padding: 0 8px;
   border-radius: 3px;
   box-shadow: 0, 0, 3px, $black;
+  transition: top 75ms, left 75ms;
+  background-image: linear-gradient(to bottom, $ash, $black);
 }
 
 .style-modal-triangle {
@@ -54,7 +60,18 @@
   width: 0;
   height: 0;
   margin: auto;
-  border: 10px solid transparent;
-  border-top: 10px solid $black;
+  border: 8px solid transparent;
+  border-top: 8px solid $black;
   line-height: 0;
+}
+
+.style-option {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  width: 36px;
+  height: 18px;
+  color: $white;
+  text-align: center;
+  cursor: pointer;
 }

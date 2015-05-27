@@ -14,9 +14,12 @@ import ActionConstants from "app/constants/action_constants";
 class EditorStore extends Store {
 
   setDefaults() {
+    // TODO: Turn mouse states into constants.
+    this._mouse = "Up";
     this._point = new Point();
     this._story = new Story();
     this._vector = null;
+
     var initialSection = new Section();
     this.addSection(initialSection);
     initialSection.addBlock(new Block());
@@ -33,19 +36,24 @@ class EditorStore extends Store {
     return Story;
   }
 
-  // --------------------------------------------------
-  // Getters
-  // --------------------------------------------------
-  getPoint() {
+  get mouse() {
+    return this._mouse;
+  }
+
+  get point() {
     return this._point;
   }
 
-  getStory() {
+  get story() {
     return this._story;
   }
 
-  getVector() {
+  get vector() {
     return this._vector;
+  }
+
+  set mouse(mouse) {
+    this._mouse = mouse;
   }
 
   // --------------------------------------------------
@@ -197,17 +205,19 @@ class EditorStore extends Store {
     this.updatePoint(point);
   }
 
+  styleHeading(which) {
+    console.log(which);
+  }
+
   updatePoint(point) {
     this._point = point;
     this._vector = null;
-    console.log("updating point");
     this.emitChange();
   }
 
   updateVector(vector) {
     this._point = null;
     this._vector = vector;
-    console.log("updating vector");
     this.emitChange();
   }
 
@@ -235,6 +245,9 @@ class EditorStore extends Store {
         break;
       case ActionConstants.editor.splitBlock:
         this.splitBlock(action.point);
+        break;
+      case ActionConstants.editor.styleHeading:
+        this.styleHeading(action.which);
         break;
       case ActionConstants.editor.updatePoint:
         this.updatePoint(action.point);
