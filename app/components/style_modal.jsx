@@ -68,10 +68,10 @@ class StyleModal extends Component {
 
   positionModal(range) {
     var rectangle = range.getBoundingClientRect();
-    var modal = React.findDOMNode(this.refs.modal);
+    var node = React.findDOMNode(this.refs.modal);
     var offset = rectangle.width / 2 - modal.offsetWidth / 2;
-    modal.style.top = rectangle.top - 42 + "px";
-    modal.style.left = rectangle.left + offset + "px";
+    node.style.top = rectangle.top - 42 + "px";
+    node.style.left = rectangle.left + offset + "px";
   }
 
   render() {
