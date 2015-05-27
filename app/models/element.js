@@ -1,5 +1,8 @@
 import Model from "app/templates/model";
+
 import ModelDirectory from "app/directories/model_directory";
+
+import TypeConstants from "app/constants/type_constants";
 
 
 class Element extends Model {
@@ -9,7 +12,7 @@ class Element extends Model {
       end: 0,
       link: "",
       start: 0,
-      type: "bold",
+      type: TypeConstants.element.bold,
     };
   }
 

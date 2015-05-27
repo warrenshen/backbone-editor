@@ -1,5 +1,8 @@
 import Model from "app/templates/model";
+
 import ModelDirectory from "app/directories/model_directory";
+
+import TypeConstants from "app/constants/type_constants";
 
 
 class Block extends Model {
@@ -10,7 +13,7 @@ class Block extends Model {
       content: "",
       image_url: "",
       index: 0,
-      type: "paragraph",
+      type: TypeConstants.block.standard,
     };
   }
 

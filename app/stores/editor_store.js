@@ -11,6 +11,7 @@ import Point from "app/helpers/point";
 import Vector from "app/helpers/vector";
 
 import ActionConstants from "app/constants/action_constants";
+import TypeConstants from "app/constants/type_constants";
 
 
 class EditorStore extends Store {
@@ -239,16 +240,18 @@ class EditorStore extends Store {
       for (var blockIndex in blockIndices) {
         var block = blocks.at(blockIndex);
         if (block.get("type") === type) {
-          block.set("type", "paragraph");
+          block.set("type", TypeConstants.block.headingOne);
         } else {
           block.set("type", type);
         }
       }
     }
+
+    this.emitChange();
   }
 
   styleHeading(vector, which) {
-    this.styleBlock(vector, "heading-one");
+    this.styleBlock(vector, TypeConstants.block.headingOne);
   }
 
   updatePoint(point) {

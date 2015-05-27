@@ -1,5 +1,8 @@
 import Model from "app/templates/model";
+
 import ModelDirectory from "app/directories/model_directory";
+
+import TypeConstants from "app/constants/type_constants";
 
 
 class Section extends Model {
@@ -10,7 +13,7 @@ class Section extends Model {
   get defaults() {
     return {
       index: 0,
-      type: "standard",
+      type: TypeConstants.section.standard,
     };
   }
 
