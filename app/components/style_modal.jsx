@@ -5,19 +5,25 @@ import Component from "app/templates/component";
 
 import StyleOption from "app/components/style_option";
 
+import EditorActor from "app/actors/editor_actor";
+
 import Selector from "app/helpers/selector";
 import Vector from "app/helpers/vector";
 
 
 class StyleModal extends Component {
 
-  componentDidMount() {
-    super.componentDidMount();
-    this.createVector(this.props.vector);
+  handleMouseDown(event) {
+    event.preventDefault();
+    event.stopPropagation();
   }
 
-  componentDidUpdate() {
-    this.createVector(this.props.vector);
+  handleMouseUp(event) {
+    event.stopPropagation();
+  }
+
+  styleHeading(event) {
+    EditorActor.styleHeading(1);
   }
 
   createVector(vector) {
@@ -76,6 +82,21 @@ class StyleModal extends Component {
     modal.style.left = rectangle.left + offset + "px";
   }
 
+  componentDidMount() {
+    super.componentDidMount();
+    var node = React.findDOMNode(this.refs.modal);
+    node.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
+    this.createVector(this.props.vector);
+  }
+
+  componentDidUpdate() {
+    var node = React.findDOMNode(this.refs.modal);
+    node.removeEventListener("mousedown", this.handleMouseDown);
+    node.removeEventListener("mouseup", this.handleMouseUp);
+    this.createVector(this.props.vector);
+  }
+
   renderOption(props, index) {
     return (
       <StyleOption
@@ -87,23 +108,23 @@ class StyleModal extends Component {
   renderOptions() {
     var templates = [
       {
-        action: null,
+        action: this.styleHeading.bind(this),
         className:"fa fa-header",
       },
       {
-        action: null,
+        action: this.styleHeading.bind(this),
         className: "fa fa-bold",
       },
       {
-        action: null,
+        action: this.styleHeading.bind(this),
         className: "fa fa-italic",
       },
       {
-        action: null,
+        action: this.styleHeading.bind(this),
         className: "fa fa-quote-right",
       },
       {
-        action: null,
+        action: this.styleHeading.bind(this),
         className: "fa fa-link",
       },
     ];

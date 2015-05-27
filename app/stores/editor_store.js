@@ -205,6 +205,10 @@ class EditorStore extends Store {
     this.updatePoint(point);
   }
 
+  styleHeading(which) {
+    console.log(which);
+  }
+
   updatePoint(point) {
     this._point = point;
     this._vector = null;
@@ -241,6 +245,9 @@ class EditorStore extends Store {
         break;
       case ActionConstants.editor.splitBlock:
         this.splitBlock(action.point);
+        break;
+      case ActionConstants.editor.styleHeading:
+        this.styleHeading(action.which);
         break;
       case ActionConstants.editor.updatePoint:
         this.updatePoint(action.point);
