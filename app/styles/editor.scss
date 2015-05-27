@@ -66,3 +66,14 @@
   border-top: 8px solid $black;
   line-height: 0;
 }
+
+.style-option {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  width: 36px;
+  height: 18px;
+  color: $white;
+  text-align: center;
+  cursor: pointer;
+}
