@@ -227,11 +227,11 @@ class EditorStore extends Store {
       var blocks = section.get("blocks");
 
       var blockIndices;
-      if (sectionIndices.first() === sectionIndices.last()) {
+      if (startSectionIndex === endSectionIndex) {
         blockIndices = _.range(startBlockIndex, endBlockIndex + 1);
-      } else if (sectionIndex === sectionIndices.first()) {
+      } else if (sectionIndex === startSectionIndex) {
         blockIndices = _.range(startBlockIndex, blocks.length);
-      } else if (sectionIndex === sectionIndices.last()) {
+      } else if (sectionIndex === endSectionIndex) {
         blockIndices = _.range(0, endBlockIndex + 1);
       } else {
         blockIndices = _.range(0, blocks.length);
@@ -300,7 +300,7 @@ class EditorStore extends Store {
       case ActionConstants.editor.updateVector:
         this.updateVector(action.vector);
         break;
-    }
+    };
   }
 }
 
