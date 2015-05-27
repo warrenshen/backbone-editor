@@ -240,7 +240,7 @@ class EditorStore extends Store {
       for (var blockIndex in blockIndices) {
         var block = blocks.at(blockIndex);
         if (block.get("type") === type) {
-          block.set("type", TypeConstants.block.headingOne);
+          block.set("type", TypeConstants.block.standard);
         } else {
           block.set("type", type);
         }

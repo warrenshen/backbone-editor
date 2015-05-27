@@ -3,22 +3,33 @@ import BlockComponent from "app/templates/block_component";
 
 import Block from "app/models/block";
 
+import TypeConstants from "app/constants/type_constants";
+
 
 class BlockHeading extends BlockComponent {
 
+  renderEditable() {
+    return (
+      <p
+        className={"block-content"}
+        contentEditable={this.props.shouldEnableEdits}
+        ref={"content"}>
+      </p>
+    );
+  }
+
   render() {
     var block = this.props.block;
-    return (
-      <div
-        className={"block-container"}
-        data-index={block.get("index")}>
-        <h1
-          className={"block-content"}
-          contentEditable={this.props.shouldEnableEdits}
-          ref={"content"}>
-        </h1>
-      </div>
-    );
+    switch (block.get("type")) {
+      case TypeConstants.block.headingOne:
+        return (
+          <h1
+            className={"block-container"}
+            data-index={block.get("index")}>
+            {this.renderEditable()}
+          </h1>
+        );
+    };
   }
 }
 
