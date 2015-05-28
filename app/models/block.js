@@ -68,6 +68,7 @@ class Block extends Model {
       if (leftElement.coincidesWith(rightElement)) {
         var startOffset = Math.min(leftElement.get("start"), rightElement.get("start"));
         var endOffset = Math.max(leftElement.get("end"), rightElement.get("end"));
+
         rightElement.setOffsets(startOffset, endOffset);
         trashElements.push(leftElement);
       }
@@ -82,9 +83,6 @@ class Block extends Model {
     var elements = this.get("elements");
     var trashElements = [];
     var treasureElements = [];
-
-    console.log(newElement.get("start"));
-    console.log(newElement.get("end"));
 
     for (var element of elements.models) {
       if (element.completelyBounds(newElement)) {

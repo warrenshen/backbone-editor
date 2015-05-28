@@ -39,10 +39,10 @@ class Element extends Model {
   }
 
   cloneSuffix(offset) {
-    var endOffset = this.get("offset");
+    var endOffset = this.get("end");
     if (endOffset > offset) {
       var clone = new Element({ type: this.get("type") });
-      clone.setOffset(offset, endOffset);
+      clone.setOffsets(offset, endOffset);
       return clone;
     } else {
       return null;
