@@ -83,6 +83,9 @@ class Block extends Model {
     var trashElements = [];
     var treasureElements = [];
 
+    console.log(newElement.get("start"));
+    console.log(newElement.get("end"));
+
     for (var element of elements.models) {
       if (element.completelyBounds(newElement)) {
         var prefixElement = element.clonePrefix(newElement.get("start"));

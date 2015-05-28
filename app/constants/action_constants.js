@@ -7,6 +7,7 @@ module.exports = {
     shiftUp: "shift-up",
     splitBlock: "split-block",
     styleBlock: "style-block",
+    styleElement: "style-element",
     updatePoint: "update-point",
     updateVector: "update-vector",
   },

@@ -74,8 +74,8 @@ class EditorPage extends ListeningComponent {
     if (EditorStore.mouse === "Move") {
       var vector = Selector.generateVector(selection);
       EditorActor.updateVector(vector);
-    } else {
-      EditorStore.mouse = "Up";
+    } else if (EditorStore.mouse === "Down") {
+      EditorStore.mouse === "Up";
       EditorActor.updateVector(null);
     }
   }
