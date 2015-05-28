@@ -47,12 +47,20 @@ class EditorActor extends Actor {
     });
   }
 
-  styleHeading(vector, which) {
+  styleBlock(vector, which) {
     this.act({
-      type: ActionConstants.editor.styleHeading,
+      type: ActionConstants.editor.styleBlock,
       vector: vector,
       which: which,
     })
+  }
+
+  styleElement(vector, which) {
+    this.act({
+      type: ActionConstants.editor.styleElement,
+      vector: vector,
+      which: which,
+    });
   }
 
   updatePoint(point) {

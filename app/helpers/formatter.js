@@ -1,3 +1,6 @@
+import TypeConstants from "app/constants/type_constants";
+
+
 class Formatter {
 
   formatBlock(block) {
@@ -5,6 +8,7 @@ class Formatter {
     var characters = block.get("content").split("");
     var openers = {};
     var closers = {};
+
     this.parseElements(elements, openers, closers);
     return this.mergeElements(characters, openers, closers);
   }
@@ -15,17 +19,24 @@ class Formatter {
       var end = element.get("end");
       var opener = "";
       var closer = "";
+
       switch (element.get("type")) {
-        case "bold":
+        case TypeConstants.element.bold:
           opener = "strong";
           closer = "strong";
           break;
+        case TypeConstants.element.italic:
+          opener = "i";
+          closer = "i";
+          break;
       }
+
       if (openers[start]) {
         openers[start].push("<" + opener + ">");
       } else {
         openers[start] = ["<" + opener + ">"]
       }
+
       if (closers[end]) {
         closers[end].push("</" + closer +">");
       } else {
@@ -37,11 +48,13 @@ class Formatter {
   mergeElements(characters, openers, closers) {
     var content = "";
     for (var i = 0; i < characters.length; i += 1) {
+      // Invocation of .join("") concatenates multiple tags together.
       if (openers[i]) {
-        content += openers[i];
+        content += openers[i].join("");
       } else if (closers[i]) {
-        content += closers[i];
+        content += closers[i].join("");
       }
+
       if ((i === 0 || i === characters.length - 1) && characters[i] === " ") {
         content += "&nbsp;";
       } else {

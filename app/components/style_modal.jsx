@@ -24,16 +24,24 @@ class StyleModal extends Component {
     event.stopPropagation();
   }
 
+  styleBold(event) {
+    EditorActor.styleElement(this.props.vector, TypeConstants.element.bold);
+  }
+
   styleHeadingOne(event) {
-    EditorActor.styleHeading(this.props.vector, TypeConstants.block.headingOne);
+    EditorActor.styleBlock(this.props.vector, TypeConstants.block.headingOne);
   }
 
   styleHeadingTwo(event) {
-    EditorActor.styleHeading(this.props.vector, TypeConstants.block.headingTwo);
+    EditorActor.styleBlock(this.props.vector, TypeConstants.block.headingTwo);
   }
 
   styleHeadingThree(event) {
-    EditorActor.styleHeading(this.props.vector, TypeConstants.block.headingThree);
+    EditorActor.styleBlock(this.props.vector, TypeConstants.block.headingThree);
+  }
+
+  styleItalic(event) {
+    EditorActor.styleElement(this.props.vector, TypeConstants.element.italic);
   }
 
   createVector(vector) {
@@ -130,11 +138,11 @@ class StyleModal extends Component {
         className:"fa fa-header",
       },
       {
-        action: this.styleHeadingThree.bind(this),
+        action: this.styleBold.bind(this),
         className: "fa fa-bold",
       },
       {
-        action: this.styleHeadingThree.bind(this),
+        action: this.styleItalic.bind(this),
         className: "fa fa-italic",
       },
       {

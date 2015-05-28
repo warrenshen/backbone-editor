@@ -23,6 +23,48 @@ class Element extends Model {
   get relations() {
     return [];
   }
+
+  // --------------------------------------------------
+  // Methods
+  // --------------------------------------------------
+  clonePrefix(offset) {
+    var startOffset = this.get("start");
+    if (startOffset < offset) {
+      var clone = new Element({ type: this.get("type") });
+      clone.setOffsets(startOffset, offset);
+      return clone;
+    } else {
+      return null;
+    }
+  }
+
+  cloneSuffix(offset) {
+    var endOffset = this.get("end");
+    if (endOffset > offset) {
+      var clone = new Element({ type: this.get("type") });
+      clone.setOffsets(offset, endOffset);
+      return clone;
+    } else {
+      return null;
+    }
+  }
+
+  coincidesWith(other) {
+    return this.get("type") === other.get("type") &&
+           this.get("start") <= other.get("end") &&
+           this.get("end") >= other.get("start");
+  }
+
+  completelyBounds(other) {
+    return this.get("type") === other.get("type") &&
+           this.get("start") <= other.get("start") &&
+           this.get("end") >= other.get("end");
+  }
+
+  setOffsets(startOffset, endOffset) {
+    this.set("start", startOffset);
+    this.set("end", endOffset);
+  }
 }
 
 

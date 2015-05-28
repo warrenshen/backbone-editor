@@ -208,7 +208,7 @@ class EditorStore extends Store {
     this.updatePoint(point);
   }
 
-  styleBlock(vector, type) {
+  styleBlock(vector, which) {
     var startPoint = vector.startPoint;
     var endPoint = vector.endPoint;
 
@@ -239,10 +239,10 @@ class EditorStore extends Store {
 
       for (var blockIndex of blockIndices) {
         var block = blocks.at(blockIndex);
-        if (block.get("type") === type) {
+        if (block.get("type") === which) {
           block.set("type", TypeConstants.block.standard);
         } else {
-          block.set("type", type);
+          block.set("type", which);
         }
       }
     }
@@ -250,8 +250,57 @@ class EditorStore extends Store {
     this.emitChange();
   }
 
-  styleHeading(vector, which) {
-    this.styleBlock(vector, which);
+  styleElement(vector, which) {
+    var startPoint = vector.startPoint;
+    var endPoint = vector.endPoint;
+
+    var startSectionIndex = startPoint.sectionIndex;
+    var endSectionIndex = endPoint.sectionIndex;
+
+    var startBlockIndex = startPoint.blockIndex;
+    var endBlockIndex = endPoint.blockIndex;
+
+    var startCaretOffset = startPoint.caretOffset;
+    var endCaretOffset = endPoint.caretOffset;
+
+    var story = this._story;
+    var sections = story.get("sections");
+
+    var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
+    for (var sectionIndex of sectionIndices) {
+      var section = sections.at(sectionIndex);
+      var blocks = section.get("blocks");
+
+      var blockIndices;
+      if (startSectionIndex === endSectionIndex) {
+        blockIndices = _.range(startBlockIndex, endBlockIndex + 1);
+      } else if (sectionIndex === startSectionIndex) {
+        blockIndices = _.range(startBlockIndex, blocks.length);
+      } else if (sectionIndex === endSectionIndex) {
+        blockIndices = _.range(0, endBlockIndex + 1);
+      } else {
+        blockIndices = _.range(0, blocks.length);
+      }
+
+      for (var blockIndex of blockIndices) {
+        var block = blocks.at(blockIndex);
+        var element = new Element({ type: which });
+
+        if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
+          element.setOffsets(startCaretOffset, endCaretOffset);
+        } else if (blockIndex === blockIndices[0]) {
+          element.setOffsets(startCaretOffset, block.length);
+        } else if (blockIndex === blockIndices[blockIndices.length - 1]) {
+          element.setOffsets(0, endCaretOffset);
+        } else {
+          element.setOffsets(0, block.length);
+        }
+
+        block.parseElement(element);
+      }
+    }
+
+    this.emitChange();
   }
 
   updatePoint(point) {
@@ -291,8 +340,11 @@ class EditorStore extends Store {
       case ActionConstants.editor.splitBlock:
         this.splitBlock(action.point);
         break;
-      case ActionConstants.editor.styleHeading:
-        this.styleHeading(action.vector, action.which);
+      case ActionConstants.editor.styleBlock:
+        this.styleBlock(action.vector, action.which);
+        break;
+      case ActionConstants.editor.styleElement:
+        this.styleElement(action.vector, action.which);
         break;
       case ActionConstants.editor.updatePoint:
         this.updatePoint(action.point);
