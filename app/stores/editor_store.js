@@ -1,3 +1,5 @@
+import _ from "lodash"
+
 import Store from "app/templates/store";
 
 import Block from "app/models/block";
@@ -9,6 +11,7 @@ import Point from "app/helpers/point";
 import Vector from "app/helpers/vector";
 
 import ActionConstants from "app/constants/action_constants";
+import TypeConstants from "app/constants/type_constants";
 
 
 class EditorStore extends Store {
@@ -205,8 +208,50 @@ class EditorStore extends Store {
     this.updatePoint(point);
   }
 
-  styleHeading(which) {
-    console.log(which);
+  styleBlock(vector, type) {
+    var startPoint = vector.startPoint;
+    var endPoint = vector.endPoint;
+
+    var startSectionIndex = startPoint.sectionIndex;
+    var endSectionIndex = endPoint.sectionIndex;
+
+    var startBlockIndex = startPoint.blockIndex;
+    var endBlockIndex = endPoint.blockIndex;
+
+    var story = this._story;
+    var sections = story.get("sections");
+
+    var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
+    for (var sectionIndex of sectionIndices) {
+      var section = sections.at(sectionIndex);
+      var blocks = section.get("blocks");
+
+      var blockIndices;
+      if (startSectionIndex === endSectionIndex) {
+        blockIndices = _.range(startBlockIndex, endBlockIndex + 1);
+      } else if (sectionIndex === startSectionIndex) {
+        blockIndices = _.range(startBlockIndex, blocks.length);
+      } else if (sectionIndex === endSectionIndex) {
+        blockIndices = _.range(0, endBlockIndex + 1);
+      } else {
+        blockIndices = _.range(0, blocks.length);
+      }
+
+      for (var blockIndex of blockIndices) {
+        var block = blocks.at(blockIndex);
+        if (block.get("type") === type) {
+          block.set("type", TypeConstants.block.standard);
+        } else {
+          block.set("type", type);
+        }
+      }
+    }
+
+    this.emitChange();
+  }
+
+  styleHeading(vector, which) {
+    this.styleBlock(vector, which);
   }
 
   updatePoint(point) {
@@ -247,7 +292,7 @@ class EditorStore extends Store {
         this.splitBlock(action.point);
         break;
       case ActionConstants.editor.styleHeading:
-        this.styleHeading(action.which);
+        this.styleHeading(action.vector, action.which);
         break;
       case ActionConstants.editor.updatePoint:
         this.updatePoint(action.point);
@@ -255,7 +300,7 @@ class EditorStore extends Store {
       case ActionConstants.editor.updateVector:
         this.updateVector(action.vector);
         break;
-    }
+    };
   }
 }
 

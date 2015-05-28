@@ -2,22 +2,32 @@ import React from "react";
 import Component from "app/templates/component";
 
 import BlockStandard from "app/components/block_standard";
+import BlockHeading from "app/components/block_heading";
 
 import Section from "app/models/section";
+
+import TypeConstants from "app/constants/type_constants";
 
 
 class SectionStandard extends Component {
 
   renderBlock(block) {
-    return (
-      <BlockStandard
-        key={block.cid}
-        block={block}
-        disableEdits={this.props.disableEdits}
-        enableEdits={this.props.enableEdits}
-        shouldEnableEdits={this.props.shouldEnableEdits}
-        shouldUpdateContent={this.props.shouldUpdateContent} />
-    );
+    var props = {
+      key: block.cid,
+      block: block,
+      disableEdits: this.props.disableEdits,
+      enableEdits: this.props.enableEdits,
+      shouldEnableEdits: this.props.shouldEnableEdits,
+      shouldUpdateContent: this.props.shouldUpdateContent,
+    };
+    switch (block.get("type")) {
+      case TypeConstants.block.standard:
+        return <BlockStandard {...props} />;
+      case TypeConstants.block.headingOne:
+      case TypeConstants.block.headingTwo:
+      case TypeConstants.block.headingThree:
+        return <BlockHeading {...props} />;
+    };
   }
 
   renderBlocks() {
