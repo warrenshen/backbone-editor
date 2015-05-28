@@ -23,6 +23,14 @@ class Element extends Model {
   get relations() {
     return [];
   }
+
+  // --------------------------------------------------
+  // Methods
+  // --------------------------------------------------
+  setOffsets(startOffset, endOffset) {
+    this.set("start", startOffset);
+    this.set("end", endOffset);
+  }
 }
 
 

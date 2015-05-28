@@ -47,6 +47,10 @@ class Block extends Model {
     // TODO: Shift up elements here.
   }
 
+  parseElement(element) {
+
+  }
+
   removeFragment(startOffset, endOffset) {
     var content = this.get("content");
     var prefix = content.substring(0, startOffset);
