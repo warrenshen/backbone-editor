@@ -47,8 +47,38 @@ class Block extends Model {
     // TODO: Shift up elements here.
   }
 
-  parseElement(element) {
+  mergeElements() {
 
+  }
+
+  parseElement(newElement) {
+    var elements = this.get("elements");
+    var trashElements = [];
+    var treasureElements = [];
+
+    for (var element of elements.models) {
+      if (element.completelyBounds(newElement)) {
+        var prefixElement = element.clonePrefix(newElement.get("start"));
+        var suffixElement = element.cloneSuffix(newElement.get("end"));
+
+        trashElements.push(element);
+        treasureElements.push(prefixElement);
+        treasureElements.push(suffixElement);
+      }
+    }
+
+    if (trashElements.length > 0) {
+      for (var trashElement of trashElements) {
+        elements.remove(trashElements);
+      }
+
+      for (var treasureElement of treasureElements) {
+        elements.push(treasureElements);
+      }
+    } else {
+      elements.push(newElement);
+      this.mergeElements();
+    }
   }
 
   removeFragment(startOffset, endOffset) {
