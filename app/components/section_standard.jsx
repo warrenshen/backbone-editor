@@ -24,6 +24,8 @@ class SectionStandard extends Component {
       case TypeConstants.block.standard:
         return <BlockStandard {...props} />;
       case TypeConstants.block.headingOne:
+      case TypeConstants.block.headingTwo:
+      case TypeConstants.block.headingThree:
         return <BlockHeading {...props} />;
     };
   }

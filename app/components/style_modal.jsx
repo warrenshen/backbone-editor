@@ -10,6 +10,8 @@ import EditorActor from "app/actors/editor_actor";
 import Selector from "app/helpers/selector";
 import Vector from "app/helpers/vector";
 
+import TypeConstants from "app/constants/type_constants";
+
 
 class StyleModal extends Component {
 
@@ -22,8 +24,16 @@ class StyleModal extends Component {
     event.stopPropagation();
   }
 
-  styleHeading(event) {
-    EditorActor.styleHeading(this.props.vector, 1);
+  styleHeadingOne(event) {
+    EditorActor.styleHeading(this.props.vector, TypeConstants.block.headingOne);
+  }
+
+  styleHeadingTwo(event) {
+    EditorActor.styleHeading(this.props.vector, TypeConstants.block.headingTwo);
+  }
+
+  styleHeadingThree(event) {
+    EditorActor.styleHeading(this.props.vector, TypeConstants.block.headingThree);
   }
 
   createVector(vector) {
@@ -108,23 +118,31 @@ class StyleModal extends Component {
   renderOptions() {
     var templates = [
       {
-        action: this.styleHeading.bind(this),
+        action: this.styleHeadingOne.bind(this),
         className:"fa fa-header",
       },
       {
-        action: this.styleHeading.bind(this),
+        action: this.styleHeadingTwo.bind(this),
+        className:"fa fa-header",
+      },
+      {
+        action: this.styleHeadingThree.bind(this),
+        className:"fa fa-header",
+      },
+      {
+        action: this.styleHeadingThree.bind(this),
         className: "fa fa-bold",
       },
       {
-        action: this.styleHeading.bind(this),
+        action: this.styleHeadingThree.bind(this),
         className: "fa fa-italic",
       },
       {
-        action: this.styleHeading.bind(this),
+        action: this.styleHeadingThree.bind(this),
         className: "fa fa-quote-right",
       },
       {
-        action: this.styleHeading.bind(this),
+        action: this.styleHeadingThree.bind(this),
         className: "fa fa-link",
       },
     ];

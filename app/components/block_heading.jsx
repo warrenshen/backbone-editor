@@ -37,6 +37,22 @@ class BlockHeading extends BlockComponent {
             {this.renderEditable()}
           </h1>
         );
+      case TypeConstants.block.headingTwo:
+        return (
+          <h2
+            className={"block-container"}
+            data-index={block.get("index")}>
+            {this.renderEditable()}
+          </h2>
+        );
+      case TypeConstants.block.headingThree:
+        return (
+          <h3
+            className={"block-container"}
+            data-index={block.get("index")}>
+            {this.renderEditable()}
+          </h3>
+        );
     };
   }
 }

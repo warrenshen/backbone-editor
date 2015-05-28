@@ -222,7 +222,7 @@ class EditorStore extends Store {
     var sections = story.get("sections");
 
     var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
-    for (var sectionIndex in sectionIndices) {
+    for (var sectionIndex of sectionIndices) {
       var section = sections.at(sectionIndex);
       var blocks = section.get("blocks");
 
@@ -237,7 +237,7 @@ class EditorStore extends Store {
         blockIndices = _.range(0, blocks.length);
       }
 
-      for (var blockIndex in blockIndices) {
+      for (var blockIndex of blockIndices) {
         var block = blocks.at(blockIndex);
         if (block.get("type") === type) {
           block.set("type", TypeConstants.block.standard);
@@ -251,7 +251,7 @@ class EditorStore extends Store {
   }
 
   styleHeading(vector, which) {
-    this.styleBlock(vector, TypeConstants.block.headingOne);
+    this.styleBlock(vector, which);
   }
 
   updatePoint(point) {
