@@ -1,3 +1,4 @@
+import ClassNames from "classnames";
 import React from "react";
 import BlockComponent from "app/templates/block_component";
 
@@ -9,9 +10,16 @@ import TypeConstants from "app/constants/type_constants";
 class BlockHeading extends BlockComponent {
 
   renderEditable() {
+    var type = this.props.block.get("type");
+    var contentClass = ClassNames(
+      { "block-content": true },
+      { "block-heading-one": type === TypeConstants.block.headingOne },
+      { "block-heading-two": type === TypeConstants.block.headingTwo },
+      { "block-heading-three": type === TypeConstants.block.headingThree }
+    );
     return (
       <p
-        className={"block-content"}
+        className={contentClass}
         contentEditable={this.props.shouldEnableEdits}
         ref={"content"}>
       </p>

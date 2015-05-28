@@ -20,7 +20,6 @@ class SectionStandard extends Component {
       shouldEnableEdits: this.props.shouldEnableEdits,
       shouldUpdateContent: this.props.shouldUpdateContent,
     };
-
     switch (block.get("type")) {
       case TypeConstants.block.standard:
         return <BlockStandard {...props} />;
