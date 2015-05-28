@@ -1,3 +1,6 @@
+import TypeConstants from "app/constants/type_constants";
+
+
 class Formatter {
 
   formatBlock(block) {
@@ -16,9 +19,13 @@ class Formatter {
       var opener = "";
       var closer = "";
       switch (element.get("type")) {
-        case "bold":
+        case TypeConstants.element.bold:
           opener = "strong";
           closer = "strong";
+          break;
+        case TypeConstants.element.italic:
+          opener = "i";
+          closer = "i";
           break;
       }
       if (openers[start]) {

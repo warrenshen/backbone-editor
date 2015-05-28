@@ -1,3 +1,5 @@
+import _ from "lodash"
+
 import Model from "app/templates/model";
 
 import ModelDirectory from "app/directories/model_directory";
@@ -47,8 +49,33 @@ class Block extends Model {
     // TODO: Shift up elements here.
   }
 
-  mergeElements() {
+  elementComparator(element) {
+    return [element.get("type"), element.get("start"), element.get("end")];
+  }
 
+  mergeElements() {
+    var elements = this.get("elements");
+    elements.comparator = this.elementComparator;
+    elements.sort();
+
+    var trashElements = [];
+    var indices = _.range(0, elements.length - 1);
+
+    for (var index of indices) {
+      var leftElement = elements.at(index);
+      var rightElement = elements.at(index + 1);
+
+      if (leftElement.coincidesWith(rightElement)) {
+        var startOffset = Math.min(leftElement.get("start"), rightElement.get("start"));
+        var endOffset = Math.max(leftElement.get("end"), rightElement.get("end"));
+        rightElement.setOffsets(startOffset, endOffset);
+        trashElements.push(leftElement);
+      }
+    }
+
+    for (var trashElement of trashElements) {
+      elements.remove(trashElements);
+    }
   }
 
   parseElement(newElement) {

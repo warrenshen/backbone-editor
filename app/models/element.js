@@ -49,6 +49,12 @@ class Element extends Model {
     }
   }
 
+  coincidesWith(other) {
+    return this.get("type") === other.get("type") &&
+           this.get("start") <= other.get("end") &&
+           this.get("end") >= other.get("start");
+  }
+
   completelyBounds(other) {
     return this.get("type") === other.get("type") &&
            this.get("start") <= other.get("start") &&
