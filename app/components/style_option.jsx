@@ -17,8 +17,12 @@ class StyleOption extends Component {
   }
 
   render() {
+    var optionClass = ClassNames(
+      { "style-option": true },
+      { "style-option-active": this.props.active }
+    );
     return (
-      <span className={"style-option"} ref="option">
+      <span className={optionClass} ref="option">
         <i className={this.props.className}></i>
       </span>
     );
@@ -27,11 +31,13 @@ class StyleOption extends Component {
 
 StyleOption.propTypes = {
   action: React.PropTypes.func.isRequired,
+  active: React.PropTypes.bool.isRequired,
   className: React.PropTypes.string.isRequired,
 };
 
 StyleOption.defaultProps = {
   action: null,
+  active: false,
   className: "fa fa-header",
 };
 

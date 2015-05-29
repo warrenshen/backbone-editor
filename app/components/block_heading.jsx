@@ -2,8 +2,6 @@ import ClassNames from "classnames";
 import React from "react";
 import BlockComponent from "app/templates/block_component";
 
-import Block from "app/models/block";
-
 import TypeConstants from "app/constants/type_constants";
 
 

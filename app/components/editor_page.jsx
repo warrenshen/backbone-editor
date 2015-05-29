@@ -11,6 +11,8 @@ import EditorActor from "app/actors/editor_actor";
 
 import Selector from "app/helpers/selector";
 
+import TypeConstants from "app/constants/type_constants";
+
 
 class EditorPage extends ListeningComponent {
 
@@ -18,7 +20,7 @@ class EditorPage extends ListeningComponent {
     return [EditorStore];
   }
 
-  // TODO: Should we just use es6 getters here?
+  // TODO: Should and can we just use es6 getters here?
   getDefaultState() {
     // TODO: Do we really need to track content and modal states?
     return _.merge(
@@ -33,6 +35,7 @@ class EditorPage extends ListeningComponent {
 
   getStoreState() {
     return {
+      activeStyles: EditorStore.activeStyles,
       point: EditorStore.point,
       story: EditorStore.story,
       vector: EditorStore.vector,
@@ -64,18 +67,16 @@ class EditorPage extends ListeningComponent {
   }
 
   handleMouseDown(event) {
-    // TODO: Maybe we should turn this into an action that
-    // does not emit any change (to not be an anti-pattern).
-    EditorStore.mouse = "Down";
+    EditorActor.updateMouseState(TypeConstants.mouse.down);
   }
 
   handleMouseUp(event) {
     var selection = window.getSelection();
-    if (EditorStore.mouse === "Move") {
+    if (EditorStore.mouseState === TypeConstants.mouse.move) {
       var vector = Selector.generateVector(selection);
       EditorActor.updateVector(vector);
-    } else if (EditorStore.mouse === "Down") {
-      EditorStore.mouse === "Up";
+    } else if (EditorStore.mouseState === TypeConstants.mouse.down) {
+      EditorActor.updateMouseState(TypeConstants.mouse.up)
       EditorActor.updateVector(null);
     }
   }
@@ -106,6 +107,7 @@ class EditorPage extends ListeningComponent {
           story={this.state.story} />
         <StyleModal
           shouldUpdateModal={this.state.shouldUpdateModal}
+          activeStyles={this.state.activeStyles}
           vector={this.state.vector} />
       </div>
     );

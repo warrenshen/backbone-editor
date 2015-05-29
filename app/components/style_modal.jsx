@@ -44,6 +44,10 @@ class StyleModal extends Component {
     EditorActor.styleElement(this.props.vector, TypeConstants.element.italic);
   }
 
+  styleQuote(event) {
+    EditorActor.styleBlock(this.props.vector, TypeConstants.block.quote);
+  }
+
   createVector(vector) {
     if (vector) {
       var startPoint = vector.startPoint;
@@ -124,36 +128,45 @@ class StyleModal extends Component {
   }
 
   renderOptions() {
+    var activeStyles = this.props.activeStyles;
     var templates = [
       {
-        action: this.styleHeadingOne.bind(this),
-        className:"fa fa-header",
-      },
-      {
-        action: this.styleHeadingTwo.bind(this),
-        className:"fa fa-header",
-      },
-      {
-        action: this.styleHeadingThree.bind(this),
-        className:"fa fa-header",
-      },
-      {
         action: this.styleBold.bind(this),
+        active: activeStyles[TypeConstants.element.bold],
         className: "fa fa-bold",
       },
       {
         action: this.styleItalic.bind(this),
+        active: activeStyles[TypeConstants.element.italic],
         className: "fa fa-italic",
       },
       {
         action: this.styleHeadingThree.bind(this),
-        className: "fa fa-quote-right",
+        active: activeStyles[TypeConstants.block.headingThree],
+        className: "fa fa-link",
+      },
+      {
+        action: this.styleHeadingOne.bind(this),
+        active: activeStyles[TypeConstants.block.headingOne],
+        className:"fa fa-header",
+      },
+      {
+        action: this.styleHeadingTwo.bind(this),
+        active: activeStyles[TypeConstants.block.headingTwo],
+        className:"fa fa-header",
       },
       {
         action: this.styleHeadingThree.bind(this),
-        className: "fa fa-link",
+        active: activeStyles[TypeConstants.block.headingThree],
+        className:"fa fa-header",
+      },
+      {
+        action: this.styleQuote.bind(this),
+        active: activeStyles[TypeConstants.block.quote],
+        className: "fa fa-quote-right",
       },
     ];
+
     return templates.map(this.renderOption, this);
   }
 
@@ -173,11 +186,13 @@ class StyleModal extends Component {
 }
 
 StyleModal.propTypes = {
+  activeStyles: React.PropTypes.object.isRequired,
   shouldUpdateModal: React.PropTypes.bool.isRequired,
   vector: React.PropTypes.instanceOf(Vector),
 };
 
 StyleModal.defaultProps = {
+  activeStyles: {},
   shouldUpdateModal: true,
 };
 

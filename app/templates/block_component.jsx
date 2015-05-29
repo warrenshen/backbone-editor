@@ -11,6 +11,7 @@ import Formatter from "app/helpers/formatter";
 import Selector from "app/helpers/selector";
 
 import KeyConstants from "app/constants/key_constants";
+import TypeConstants from "app/constants/type_constants";
 
 
 class BlockComponent extends Component {
@@ -103,22 +104,24 @@ class BlockComponent extends Component {
 
   handleMouseDown(event) {
     event.stopPropagation();
-    EditorStore.mouse = "Down";
+    EditorActor.updateMouseState(TypeConstants.mouse.down);
     if (this.props.shouldEnableEdits) {
+      // TODO: This calls a rerender, thus updating the style modal.
+      // If this style modal update is too expensive, we could limit it.
       this.props.disableEdits();
     }
   }
 
   handleMouseMove(event) {
     event.stopPropagation();
-    if (EditorStore.mouse === "Down") {
-      EditorStore.mouse = "Move";
+    if (EditorStore.mouseState === TypeConstants.mouse.down) {
+      EditorActor.updateMouseState(TypeConstants.mouse.move);
     }
   }
 
   handleMouseUp(event) {
-    if (EditorStore.mouse !== "Move") {
-      EditorStore.mouse = "Up";
+    if (EditorStore.mouseState !== TypeConstants.mouse.move) {
+      EditorActor.updateMouseState(TypeConstants.mouse.up);
       this.props.enableEdits();
 
       var selection = window.getSelection();

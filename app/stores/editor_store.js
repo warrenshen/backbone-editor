@@ -17,10 +17,10 @@ import TypeConstants from "app/constants/type_constants";
 class EditorStore extends Store {
 
   setDefaults() {
-    // TODO: Turn mouse states into constants.
-    this._mouse = "Up";
+    this._mouseState = TypeConstants.mouse.up;
     this._point = new Point();
     this._story = new Story();
+    this._activeStyles = {};
     this._vector = null;
 
     var initialSection = new Section();
@@ -39,8 +39,12 @@ class EditorStore extends Store {
     return Story;
   }
 
-  get mouse() {
-    return this._mouse;
+  get activeStyles() {
+    return this._activeStyles;
+  }
+
+  get mouseState() {
+    return this._mouseState;
   }
 
   get point() {
@@ -53,10 +57,6 @@ class EditorStore extends Store {
 
   get vector() {
     return this._vector;
-  }
-
-  set mouse(mouse) {
-    this._mouse = mouse;
   }
 
   // --------------------------------------------------
@@ -247,7 +247,7 @@ class EditorStore extends Store {
       }
     }
 
-    this.emitChange();
+    this.updateActiveStyles(vector);
   }
 
   styleElement(vector, which) {
@@ -300,7 +300,78 @@ class EditorStore extends Store {
       }
     }
 
+    this.updateActiveStyles(vector);
+  }
+
+  updateActiveStyles(vector) {
+    var startPoint = vector.startPoint;
+    var endPoint = vector.endPoint;
+
+    var startSectionIndex = startPoint.sectionIndex;
+    var endSectionIndex = endPoint.sectionIndex;
+
+    var startBlockIndex = startPoint.blockIndex;
+    var endBlockIndex = endPoint.blockIndex;
+
+    var startCaretOffset = startPoint.caretOffset;
+    var endCaretOffset = endPoint.caretOffset;
+
+    var story = this._story;
+    var sections = story.get("sections");
+
+    var stylesMaps = [];
+    var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
+    for (var sectionIndex of sectionIndices) {
+      var section = sections.at(sectionIndex);
+      var blocks = section.get("blocks");
+
+      var blockIndices;
+      if (startSectionIndex === endSectionIndex) {
+        blockIndices = _.range(startBlockIndex, endBlockIndex + 1);
+      } else if (sectionIndex === startSectionIndex) {
+        blockIndices = _.range(startBlockIndex, blocks.length);
+      } else if (sectionIndex === endSectionIndex) {
+        blockIndices = _.range(0, endBlockIndex + 1);
+      } else {
+        blockIndices = _.range(0, blocks.length);
+      }
+
+      for (var blockIndex of blockIndices) {
+        var block = blocks.at(blockIndex);
+        var stylesMap;
+
+        if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
+          stylesMap = block.filterStyles(startCaretOffset, endCaretOffset);
+        } else if (blockIndex === blockIndices[0]) {
+          stylesMap = block.filterStyles(startCaretOffset, block.length);
+        } else if (blockIndex === blockIndices[blockIndices.length - 1]) {
+          stylesMap = block.filterStyles(0, endCaretOffset);
+        } else {
+          stylesMap = block.filterStyles(0, block.length);
+        }
+
+        stylesMaps.push(stylesMap);
+      }
+    }
+
+    var styles = {};
+    for (var stylesMap of stylesMaps) {
+      for (var [type, value] of stylesMap) {
+        if (!value && styles[type])
+          styles[type] = false;
+        else if (value && styles[type] === undefined) {
+          styles[type] = true;
+        }
+      }
+    }
+
+    this._activeStyles = styles;
     this.emitChange();
+  }
+
+  updateMouseState(mouseState) {
+    // Note that this action does not emit any change.
+    this._mouseState = mouseState;
   }
 
   updatePoint(point) {
@@ -345,6 +416,9 @@ class EditorStore extends Store {
         break;
       case ActionConstants.editor.styleElement:
         this.styleElement(action.vector, action.which);
+        break;
+      case ActionConstants.editor.updateMouseState:
+        this.updateMouseState(action.mouseState);
         break;
       case ActionConstants.editor.updatePoint:
         this.updatePoint(action.point);

@@ -1,24 +1,26 @@
 import React from "react";
 import BlockComponent from "app/templates/block_component";
 
+import Block from "app/models/block";
 
-class BlockStandard extends BlockComponent {
+
+class BlockQuote extends BlockComponent {
 
   render() {
     var block = this.props.block;
     return (
-      <div
+      <blockquote
         className={"block-container"}
         data-index={block.get("index")}>
         <p
-          className={"block-content"}
+          className={"block-content block-quote"}
           contentEditable={this.props.shouldEnableEdits}
           ref={"content"}>
         </p>
-      </div>
+      </blockquote>
     );
   }
 }
 
 
-module.exports = BlockStandard;
+module.exports = BlockQuote;

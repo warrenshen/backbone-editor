@@ -15,8 +15,8 @@
   position: relative;
   width: 100%;
   // TODO: Change values below to standard, smaller values.
-  min-height: $font-size-medium;
-  font-size: $font-size-medium;
+  min-height: $font-size-smaller;
+  font-size: $font-size-smaller;
   line-height: 1.25;
   outline: none;
   word-wrap: break-word;
@@ -35,6 +35,15 @@
 .block-heading-three {
   font-size: $font-size-large;
   line-height: 1.5;
+}
+
+.block-quote {
+  width: 115%;
+  margin-left: -7.5%;
+  font-size: $font-size-medium;
+  font-style: italic;
+  line-height: 2;
+  text-align: center;
 }
 
 .editor-page {
@@ -91,4 +100,8 @@
   color: $white;
   text-align: center;
   cursor: pointer;
+}
+
+.style-option-active {
+  color: $coral;
 }
