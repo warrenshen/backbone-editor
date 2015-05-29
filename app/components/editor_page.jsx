@@ -73,13 +73,25 @@ class EditorPage extends ListeningComponent {
 
   handleKeyDown(event) {
     event.stopPropagation();
+    var selection = window.getSelection();
 
     if (EditorStore.mouseState === TypeConstants.mouse.move) {
       if (event.which === KeyConstants.backspace) {
         event.preventDefault();
-        var selection = window.getSelection();
         var vector = Selector.generateVector(selection);
         EditorActor.removeSelection(vector);
+      } else if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
+        if (!event.shiftKey) {
+          event.preventDefault();
+          var vector = Selector.generateVector(selection);
+
+          this.enableEdits();
+          if (event.which === KeyConstants.left || event.which === KeyConstants.up) {
+            EditorActor.updatePoint(vector.startPoint);
+          } else {
+            EditorActor.updatePoint(vector.endPoint);
+          }
+        }
       }
     }
   }
@@ -98,6 +110,7 @@ class EditorPage extends ListeningComponent {
   componentDidMount() {
     super.componentDidMount();
     var node = React.findDOMNode(this.refs.page);
+    document.addEventListener("keydown", this.handleKeyDown.bind(this));
     node.addEventListener("mousedown", this.handleMouseDown.bind(this));
     node.addEventListener("mouseup", this.handleMouseUp.bind(this));
   }
@@ -105,6 +118,7 @@ class EditorPage extends ListeningComponent {
   componentWillUnmount() {
     super.componentWillUnmount();
     var node = React.findDOMNode(this.refs.page);
+    document.removeEventListener("keydown", this.handleKeyDown);
     node.removeEventListener("mousedown", this.handleMouseDown);
     node.removeEventListener("mouseup", this.handleMouseUp);
   }

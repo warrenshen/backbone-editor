@@ -379,12 +379,20 @@ class EditorStore extends Store {
   }
 
   updatePoint(point) {
+    if (this._mouseState !== TypeConstants.mouse.up) {
+      this.updateMouseState(TypeConstants.mouse.up);
+    }
+
     this._point = point;
     this._vector = null;
     this.emitChange();
   }
 
   updateVector(vector) {
+    if (this._mouseState !== TypeConstants.mouse.move) {
+      this.updateMouseState(TypeConstants.mouse.move);
+    }
+
     this._point = null;
     this._vector = vector;
     this.updateActiveStyles(vector);
