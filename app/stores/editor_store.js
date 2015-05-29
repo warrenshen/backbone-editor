@@ -247,7 +247,7 @@ class EditorStore extends Store {
       }
     }
 
-    this.updateStyles(vector);
+    this.updateActiveStyles(vector);
   }
 
   styleElement(vector, which) {
@@ -300,7 +300,7 @@ class EditorStore extends Store {
       }
     }
 
-    this.updateStyles(vector);
+    this.updateActiveStyles(vector);
   }
 
   updateActiveStyles(vector) {

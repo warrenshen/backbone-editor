@@ -20,7 +20,7 @@ class EditorPage extends ListeningComponent {
     return [EditorStore];
   }
 
-  // TODO: Should we just use es6 getters here?
+  // TODO: Should and can we just use es6 getters here?
   getDefaultState() {
     // TODO: Do we really need to track content and modal states?
     return _.merge(
@@ -35,9 +35,9 @@ class EditorPage extends ListeningComponent {
 
   getStoreState() {
     return {
+      activeStyles: EditorStore.activeStyles,
       point: EditorStore.point,
       story: EditorStore.story,
-      styles: EditorStore.styles,
       vector: EditorStore.vector,
     }
   }
@@ -107,7 +107,7 @@ class EditorPage extends ListeningComponent {
           story={this.state.story} />
         <StyleModal
           shouldUpdateModal={this.state.shouldUpdateModal}
-          styles={this.state.styles}
+          activeStyles={this.state.activeStyles}
           vector={this.state.vector} />
       </div>
     );

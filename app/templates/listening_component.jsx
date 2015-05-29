@@ -32,8 +32,6 @@ class ListeningComponent extends Component {
     super.componentWillUnmount();
     var self = this;
     this.stores().map(function(store) {
-      // TODO: Something here or in the template store is wrong,
-      // these event listeners aren't actually being removed.
       store.removeChangeListener(self._onChange.bind(self));
     });
   }
