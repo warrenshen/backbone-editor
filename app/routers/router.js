@@ -2,7 +2,6 @@ import Backbone from "backbone";
 import React from "react";
 
 import EditorPage from "app/components/editor_page";
-import HomePage from "app/components/home_page";
 
 
 class Router extends Backbone.Router {
@@ -13,16 +12,9 @@ class Router extends Backbone.Router {
 
   routes() {
     return {
-      "": "home",
-      "editor": "editor",
+      "": "editor",
+      "/": "editor",
     };
-  }
-
-  home() {
-    React.render(
-      <HomePage />,
-      document.body
-    );
   }
 
   editor() {
