@@ -128,41 +128,49 @@ class StyleModal extends Component {
   }
 
   renderOptions() {
+    var styles = this.props.styles;
     var templates = [
       {
         action: this.styleBold.bind(this),
+        active: styles[TypeConstants.element.bold],
         className: "fa fa-bold",
       },
       {
         action: this.styleItalic.bind(this),
+        active: styles[TypeConstants.element.italic],
         className: "fa fa-italic",
       },
       {
         action: this.styleHeadingThree.bind(this),
+        active: styles[TypeConstants.block.headingThree],
         className: "fa fa-link",
       },
       {
         action: this.styleHeadingOne.bind(this),
+        active: styles[TypeConstants.block.headingOne],
         className:"fa fa-header",
       },
       {
         action: this.styleHeadingTwo.bind(this),
+        active: styles[TypeConstants.block.headingTwo],
         className:"fa fa-header",
       },
       {
         action: this.styleHeadingThree.bind(this),
+        active: styles[TypeConstants.block.headingThree],
         className:"fa fa-header",
       },
       {
         action: this.styleQuote.bind(this),
+        active: styles[TypeConstants.block.quote],
         className: "fa fa-quote-right",
       },
     ];
+
     return templates.map(this.renderOption, this);
   }
 
   render() {
-    console.log(this.props.styles);
     var modalClass = ClassNames(
       { "style-modal": true },
       { "general-hidden": !this.props.vector }

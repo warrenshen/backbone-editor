@@ -330,7 +330,7 @@ class EditorStore extends Store {
     var story = this._story;
     var sections = story.get("sections");
 
-    var stylesSet = [];
+    var stylesMaps = [];
     var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
     for (var sectionIndex of sectionIndices) {
       var section = sections.at(sectionIndex);
@@ -349,34 +349,34 @@ class EditorStore extends Store {
 
       for (var blockIndex of blockIndices) {
         var block = blocks.at(blockIndex);
-        var blockStyles;
+        var stylesMap;
 
         if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
-          blockStyles = block.filterStyles(startCaretOffset, endCaretOffset);
+          stylesMap = block.filterStyles(startCaretOffset, endCaretOffset);
         } else if (blockIndex === blockIndices[0]) {
-          blockStyles = block.filterStyles(startCaretOffset, block.length);
+          stylesMap = block.filterStyles(startCaretOffset, block.length);
         } else if (blockIndex === blockIndices[blockIndices.length - 1]) {
-          blockStyles = block.filterStyles(0, endCaretOffset);
+          stylesMap = block.filterStyles(0, endCaretOffset);
         } else {
-          blockStyles = block.filterStyles(0, block.length);
+          stylesMap = block.filterStyles(0, block.length);
         }
 
-        stylesSet.push(blockStyles);
+        stylesMaps.push(stylesMap);
       }
     }
 
-    var activeStyles = {};
-    for (var blockStyles of stylesSet) {
-      for (var [style, value] of blockStyles) {
-        if (!value && activeStyles[style])
-          activeStyles[style] = false;
-        else if (value && activeStyles[style] === undefined) {
-          activeStyles[style] = true;
+    var styles = {};
+    for (var stylesMap of stylesMaps) {
+      for (var [type, value] of stylesMap) {
+        if (!value && styles[type])
+          styles[type] = false;
+        else if (value && styles[type] === undefined) {
+          styles[type] = true;
         }
       }
     }
 
-    this._styles = activeStyles;
+    this._styles = styles;
     this.emitChange();
   }
 
