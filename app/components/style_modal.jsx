@@ -25,27 +25,27 @@ class StyleModal extends Component {
   }
 
   styleBold(event) {
-    EditorActor.styleElement(this.props.vector, TypeConstants.element.bold);
+    EditorActor.styleElements(this.props.vector, TypeConstants.element.bold);
   }
 
   styleHeadingOne(event) {
-    EditorActor.styleBlock(this.props.vector, TypeConstants.block.headingOne);
+    EditorActor.styleBlocks(this.props.vector, TypeConstants.block.headingOne);
   }
 
   styleHeadingTwo(event) {
-    EditorActor.styleBlock(this.props.vector, TypeConstants.block.headingTwo);
+    EditorActor.styleBlocks(this.props.vector, TypeConstants.block.headingTwo);
   }
 
   styleHeadingThree(event) {
-    EditorActor.styleBlock(this.props.vector, TypeConstants.block.headingThree);
+    EditorActor.styleBlocks(this.props.vector, TypeConstants.block.headingThree);
   }
 
   styleItalic(event) {
-    EditorActor.styleElement(this.props.vector, TypeConstants.element.italic);
+    EditorActor.styleElements(this.props.vector, TypeConstants.element.italic);
   }
 
   styleQuote(event) {
-    EditorActor.styleBlock(this.props.vector, TypeConstants.block.quote);
+    EditorActor.styleBlocks(this.props.vector, TypeConstants.block.quote);
   }
 
   createVector(vector) {

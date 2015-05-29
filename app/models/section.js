@@ -38,6 +38,14 @@ class Section extends Model {
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------
+  mergeWith(other) {
+    var blocks = other.get("blocks");
+    for (var i = 0; i < other.length; i += 1) {
+      var block = blocks.shift();
+      this.addBlock(block, blocks.length);
+    }
+  }
+
   updateBlockIndex(block, index) {
     block.set("index", index);
   }

@@ -24,6 +24,7 @@ class EditorPage extends ListeningComponent {
   // TODO: Should and can we just use es6 getters here?
   getDefaultState() {
     // TODO: Do we really need to track content and modal states?
+    // TODO: Track shouldEnableEdits from editor store's mouse state.
     return _.merge(
       {
         shouldEnableEdits: true,
@@ -79,12 +80,15 @@ class EditorPage extends ListeningComponent {
       if (event.which === KeyConstants.backspace) {
         event.preventDefault();
         var vector = Selector.generateVector(selection);
-        EditorActor.removeSelection(vector);
+        // TODO: Outdate this by tracking editor store's mouse state.
+        this.enableEdits();
+        EditorActor.removeBlocks(vector);
       } else if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
         if (!event.shiftKey) {
           event.preventDefault();
           var vector = Selector.generateVector(selection);
 
+          // TODO: Outdate this by tracking editor store's mouse state.
           this.enableEdits();
           if (event.which === KeyConstants.left || event.which === KeyConstants.up) {
             EditorActor.updatePoint(vector.startPoint);
