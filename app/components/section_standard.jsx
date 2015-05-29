@@ -1,8 +1,9 @@
 import React from "react";
 import Component from "app/templates/component";
 
-import BlockStandard from "app/components/block_standard";
 import BlockHeading from "app/components/block_heading";
+import BlockQuote from "app/components/block_quote";
+import BlockStandard from "app/components/block_standard";
 
 import Section from "app/models/section";
 
@@ -21,12 +22,14 @@ class SectionStandard extends Component {
       shouldUpdateContent: this.props.shouldUpdateContent,
     };
     switch (block.get("type")) {
-      case TypeConstants.block.standard:
-        return <BlockStandard {...props} />;
       case TypeConstants.block.headingOne:
       case TypeConstants.block.headingTwo:
       case TypeConstants.block.headingThree:
         return <BlockHeading {...props} />;
+      case TypeConstants.block.quote:
+        return <BlockQuote {...props} />;
+      case TypeConstants.block.standard:
+        return <BlockStandard {...props} />;
     };
   }
 

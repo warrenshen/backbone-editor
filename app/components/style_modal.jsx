@@ -44,6 +44,10 @@ class StyleModal extends Component {
     EditorActor.styleElement(this.props.vector, TypeConstants.element.italic);
   }
 
+  styleQuote(event) {
+    EditorActor.styleBlock(this.props.vector, TypeConstants.block.quote);
+  }
+
   createVector(vector) {
     if (vector) {
       var startPoint = vector.startPoint;
@@ -126,6 +130,18 @@ class StyleModal extends Component {
   renderOptions() {
     var templates = [
       {
+        action: this.styleBold.bind(this),
+        className: "fa fa-bold",
+      },
+      {
+        action: this.styleItalic.bind(this),
+        className: "fa fa-italic",
+      },
+      {
+        action: this.styleHeadingThree.bind(this),
+        className: "fa fa-link",
+      },
+      {
         action: this.styleHeadingOne.bind(this),
         className:"fa fa-header",
       },
@@ -138,20 +154,8 @@ class StyleModal extends Component {
         className:"fa fa-header",
       },
       {
-        action: this.styleBold.bind(this),
-        className: "fa fa-bold",
-      },
-      {
-        action: this.styleItalic.bind(this),
-        className: "fa fa-italic",
-      },
-      {
-        action: this.styleHeadingThree.bind(this),
+        action: this.styleQuote.bind(this),
         className: "fa fa-quote-right",
-      },
-      {
-        action: this.styleHeadingThree.bind(this),
-        className: "fa fa-link",
       },
     ];
     return templates.map(this.renderOption, this);
