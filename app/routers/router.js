@@ -13,6 +13,7 @@ class Router extends Backbone.Router {
   routes() {
     return {
       "": "editor",
+      "/": "editor",
     };
   }
 
