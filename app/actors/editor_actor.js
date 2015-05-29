@@ -12,6 +12,13 @@ class EditorActor extends Actor {
     });
   }
 
+  removeSelection(vector) {
+    this.act({
+      type: ActionConstants.editor.removeSelection,
+      vector: vector,
+    });
+  }
+
   shiftDown(point) {
     this.act({
       type: ActionConstants.editor.shiftDown,

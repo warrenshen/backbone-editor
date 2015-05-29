@@ -11,6 +11,7 @@ import EditorActor from "app/actors/editor_actor";
 
 import Selector from "app/helpers/selector";
 
+import KeyConstants from "app/constants/key_constants";
 import TypeConstants from "app/constants/type_constants";
 
 
@@ -68,6 +69,19 @@ class EditorPage extends ListeningComponent {
 
   handleMouseDown(event) {
     EditorActor.updateMouseState(TypeConstants.mouse.down);
+  }
+
+  handleKeyDown(event) {
+    event.stopPropagation();
+
+    if (EditorStore.mouseState === TypeConstants.mouse.move) {
+      if (event.which === KeyConstants.backspace) {
+        event.preventDefault();
+        var selection = window.getSelection();
+        var vector = Selector.generateVector(selection);
+        EditorActor.removeSelection(vector);
+      }
+    }
   }
 
   handleMouseUp(event) {

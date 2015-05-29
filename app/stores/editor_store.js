@@ -97,6 +97,10 @@ class EditorStore extends Store {
     this.updatePoint(newPoint);
   }
 
+  removeSelection(vector) {
+
+  }
+
   shiftDown(point) {
     var sectionIndex = point.sectionIndex;
     var blockIndex = point.blockIndex;
@@ -395,6 +399,9 @@ class EditorStore extends Store {
     switch (action.type) {
       case ActionConstants.editor.removeBlock:
         this.removeBlock(action.point);
+        break;
+      case ActionConstants.editor.removeSelection:
+        this.removeSelection(action.vector);
         break;
       case ActionConstants.editor.shiftDown:
         this.shiftDown(action.point);
