@@ -105,6 +105,8 @@ class BlockComponent extends Component {
     event.stopPropagation();
     EditorStore.mouse = "Down";
     if (this.props.shouldEnableEdits) {
+      // TODO: This calls a rerender, thus updating the style modal.
+      // If this style modal update is too expensive, we could limit it.
       this.props.disableEdits();
     }
   }

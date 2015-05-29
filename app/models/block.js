@@ -54,21 +54,21 @@ class Block extends Model {
   }
 
   filterStyles(startOffset, endOffset) {
-    var styles = {};
+    var styles = [];
     var elements = this.get("elements").models;
 
-    styles[TypeConstants.block.headingOne] = this.get("type") === TypeConstants.block.headingOne;
-    styles[TypeConstants.block.headingTwo] = this.get("type") === TypeConstants.block.headingTwo;
-    styles[TypeConstants.block.headingThree] = this.get("type") === TypeConstants.block.headingThree;
-    styles[TypeConstants.block.quote] = this.get("type") === TypeConstants.block.quote;
+    styles.push([TypeConstants.block.headingOne, this.get("type") === TypeConstants.block.headingOne]);
+    styles.push([TypeConstants.block.headingTwo, this.get("type") === TypeConstants.block.headingTwo]);
+    styles.push([TypeConstants.block.headingThree, this.get("type") === TypeConstants.block.headingThree]);
+    styles.push([TypeConstants.block.quote, this.get("type") === TypeConstants.block.quote]);
 
     for (var element of elements) {
       if (element.get("start") <= startOffset && element.get("end") >= endOffset) {
-        styles[element.get("type")] = true;
+        styles.push([element.get("type"), true]);
       }
     }
 
-    return styles;
+    return new Map(styles);
   }
 
   mergeElements() {

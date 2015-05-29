@@ -162,6 +162,7 @@ class StyleModal extends Component {
   }
 
   render() {
+    console.log(this.props.styles);
     var modalClass = ClassNames(
       { "style-modal": true },
       { "general-hidden": !this.props.vector }

@@ -252,7 +252,7 @@ class EditorStore extends Store {
       }
     }
 
-    this.emitChange();
+    this.updateStyles(vector);
   }
 
   styleElement(vector, which) {
@@ -305,7 +305,7 @@ class EditorStore extends Store {
       }
     }
 
-    this.emitChange();
+    this.updateStyles(vector);
   }
 
   updatePoint(point) {
@@ -349,7 +349,7 @@ class EditorStore extends Store {
 
       for (var blockIndex of blockIndices) {
         var block = blocks.at(blockIndex);
-        var blockStyles = {};
+        var blockStyles;
 
         if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
           blockStyles = block.filterStyles(startCaretOffset, endCaretOffset);
@@ -366,8 +366,8 @@ class EditorStore extends Store {
     }
 
     var activeStyles = {};
-    for (blockStyles of stylesSet) {
-      for (style, value of blockStyles) {
+    for (var blockStyles of stylesSet) {
+      for (var [style, value] of blockStyles) {
         if (!value && activeStyles[style])
           activeStyles[style] = false;
         else if (value && activeStyles[style] === undefined) {
@@ -376,7 +376,8 @@ class EditorStore extends Store {
       }
     }
 
-    return activeStyles;
+    this._styles = activeStyles;
+    this.emitChange();
   }
 
   updateVector(vector) {
