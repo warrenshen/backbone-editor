@@ -21,6 +21,7 @@ class EditorStore extends Store {
     this._mouse = "Up";
     this._point = new Point();
     this._story = new Story();
+    this._styles = {};
     this._vector = null;
 
     var initialSection = new Section();
@@ -49,6 +50,10 @@ class EditorStore extends Store {
 
   get story() {
     return this._story;
+  }
+
+  get styles() {
+    return this._styles;
   }
 
   get vector() {
@@ -307,6 +312,10 @@ class EditorStore extends Store {
     this._point = point;
     this._vector = null;
     this.emitChange();
+  }
+
+  updateStyles(vector) {
+
   }
 
   updateVector(vector) {

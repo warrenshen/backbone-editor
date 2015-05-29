@@ -178,11 +178,13 @@ class StyleModal extends Component {
 
 StyleModal.propTypes = {
   shouldUpdateModal: React.PropTypes.bool.isRequired,
+  styles: React.PropTypes.object.isRequired,
   vector: React.PropTypes.instanceOf(Vector),
 };
 
 StyleModal.defaultProps = {
   shouldUpdateModal: true,
+  styles: {},
 };
 
 

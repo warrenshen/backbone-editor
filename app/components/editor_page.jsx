@@ -35,6 +35,7 @@ class EditorPage extends ListeningComponent {
     return {
       point: EditorStore.point,
       story: EditorStore.story,
+      styles: EditorStore.styles,
       vector: EditorStore.vector,
     }
   }
@@ -106,6 +107,7 @@ class EditorPage extends ListeningComponent {
           story={this.state.story} />
         <StyleModal
           shouldUpdateModal={this.state.shouldUpdateModal}
+          styles={this.state.styles}
           vector={this.state.vector} />
       </div>
     );
