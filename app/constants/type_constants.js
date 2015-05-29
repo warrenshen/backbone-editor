@@ -14,6 +14,12 @@ module.exports = {
     link: "link",
   },
 
+  mouse: {
+    down: "down",
+    move: "move",
+    up: "up",
+  },
+
   section: {
     standard: "standard",
   },

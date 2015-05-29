@@ -17,11 +17,10 @@ import TypeConstants from "app/constants/type_constants";
 class EditorStore extends Store {
 
   setDefaults() {
-    // TODO: Turn mouse states into constants.
-    this._mouse = "Up";
+    this._mouseState = TypeConstants.mouse.up;
     this._point = new Point();
     this._story = new Story();
-    this._styles = {};
+    this._activeStyles = {};
     this._vector = null;
 
     var initialSection = new Section();
@@ -40,8 +39,12 @@ class EditorStore extends Store {
     return Story;
   }
 
-  get mouse() {
-    return this._mouse;
+  get activeStyles() {
+    return this._activeStyles;
+  }
+
+  get mouseState() {
+    return this._mouseState;
   }
 
   get point() {
@@ -52,16 +55,8 @@ class EditorStore extends Store {
     return this._story;
   }
 
-  get styles() {
-    return this._styles;
-  }
-
   get vector() {
     return this._vector;
-  }
-
-  set mouse(mouse) {
-    this._mouse = mouse;
   }
 
   // --------------------------------------------------
@@ -308,13 +303,7 @@ class EditorStore extends Store {
     this.updateStyles(vector);
   }
 
-  updatePoint(point) {
-    this._point = point;
-    this._vector = null;
-    this.emitChange();
-  }
-
-  updateStyles(vector) {
+  updateActiveStyles(vector) {
     var startPoint = vector.startPoint;
     var endPoint = vector.endPoint;
 
@@ -376,7 +365,18 @@ class EditorStore extends Store {
       }
     }
 
-    this._styles = styles;
+    this._activeStyles = styles;
+    this.emitChange();
+  }
+
+  updateMouseState(mouseState) {
+    // Note that this action does not emit any change.
+    this._mouseState = mouseState;
+  }
+
+  updatePoint(point) {
+    this._point = point;
+    this._vector = null;
     this.emitChange();
   }
 
@@ -416,6 +416,9 @@ class EditorStore extends Store {
         break;
       case ActionConstants.editor.styleElement:
         this.styleElement(action.vector, action.which);
+        break;
+      case ActionConstants.editor.updateMouseState:
+        this.updateMouseState(action.mouseState);
         break;
       case ActionConstants.editor.updatePoint:
         this.updatePoint(action.point);

@@ -11,6 +11,8 @@ import EditorActor from "app/actors/editor_actor";
 
 import Selector from "app/helpers/selector";
 
+import TypeConstants from "app/constants/type_constants";
+
 
 class EditorPage extends ListeningComponent {
 
@@ -65,18 +67,16 @@ class EditorPage extends ListeningComponent {
   }
 
   handleMouseDown(event) {
-    // TODO: Maybe we should turn this into an action that
-    // does not emit any change (to not be an anti-pattern).
-    EditorStore.mouse = "Down";
+    EditorActor.updateMouseState(TypeConstants.mouse.down);
   }
 
   handleMouseUp(event) {
     var selection = window.getSelection();
-    if (EditorStore.mouse === "Move") {
+    if (EditorStore.mouseState === TypeConstants.mouse.move) {
       var vector = Selector.generateVector(selection);
       EditorActor.updateVector(vector);
-    } else if (EditorStore.mouse === "Down") {
-      EditorStore.mouse === "Up";
+    } else if (EditorStore.mouseState === TypeConstants.mouse.down) {
+      EditorActor.updateMouseState(TypeConstants.mouse.up)
       EditorActor.updateVector(null);
     }
   }
