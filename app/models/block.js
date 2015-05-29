@@ -53,6 +53,24 @@ class Block extends Model {
     return [element.get("type"), element.get("start"), element.get("end")];
   }
 
+  filterStyles(startOffset, endOffset) {
+    var styles = {};
+    var elements = this.get("elements").models;
+
+    styles[TypeConstants.block.headingOne] = this.get("type") === TypeConstants.block.headingOne;
+    styles[TypeConstants.block.headingTwo] = this.get("type") === TypeConstants.block.headingTwo;
+    styles[TypeConstants.block.headingThree] = this.get("type") === TypeConstants.block.headingThree;
+    styles[TypeConstants.block.quote] = this.get("type") === TypeConstants.block.quote;
+
+    for (var element of elements) {
+      if (element.get("start") <= startOffset && element.get("end") >= endOffset) {
+        styles[element.get("type")] = true;
+      }
+    }
+
+    return styles;
+  }
+
   mergeElements() {
     var elements = this.get("elements");
     elements.comparator = this.elementComparator;

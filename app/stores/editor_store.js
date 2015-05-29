@@ -315,7 +315,68 @@ class EditorStore extends Store {
   }
 
   updateStyles(vector) {
+    var startPoint = vector.startPoint;
+    var endPoint = vector.endPoint;
 
+    var startSectionIndex = startPoint.sectionIndex;
+    var endSectionIndex = endPoint.sectionIndex;
+
+    var startBlockIndex = startPoint.blockIndex;
+    var endBlockIndex = endPoint.blockIndex;
+
+    var startCaretOffset = startPoint.caretOffset;
+    var endCaretOffset = endPoint.caretOffset;
+
+    var story = this._story;
+    var sections = story.get("sections");
+
+    var stylesSet = [];
+    var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
+    for (var sectionIndex of sectionIndices) {
+      var section = sections.at(sectionIndex);
+      var blocks = section.get("blocks");
+
+      var blockIndices;
+      if (startSectionIndex === endSectionIndex) {
+        blockIndices = _.range(startBlockIndex, endBlockIndex + 1);
+      } else if (sectionIndex === startSectionIndex) {
+        blockIndices = _.range(startBlockIndex, blocks.length);
+      } else if (sectionIndex === endSectionIndex) {
+        blockIndices = _.range(0, endBlockIndex + 1);
+      } else {
+        blockIndices = _.range(0, blocks.length);
+      }
+
+      for (var blockIndex of blockIndices) {
+        var block = blocks.at(blockIndex);
+        var blockStyles = {};
+
+        if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
+          blockStyles = block.filterStyles(startCaretOffset, endCaretOffset);
+        } else if (blockIndex === blockIndices[0]) {
+          blockStyles = block.filterStyles(startCaretOffset, block.length);
+        } else if (blockIndex === blockIndices[blockIndices.length - 1]) {
+          blockStyles = block.filterStyles(0, endCaretOffset);
+        } else {
+          blockStyles = block.filterStyles(0, block.length);
+        }
+
+        stylesSet.push(blockStyles);
+      }
+    }
+
+    var activeStyles = {};
+    for (blockStyles of stylesSet) {
+      for (style, value of blockStyles) {
+        if (!value && activeStyles[style])
+          activeStyles[style] = false;
+        else if (value && activeStyles[style] === undefined) {
+          activeStyles[style] = true;
+        }
+      }
+    }
+
+    return activeStyles;
   }
 
   updateVector(vector) {
