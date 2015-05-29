@@ -354,18 +354,18 @@ class EditorStore extends Store {
       }
     }
 
-    var styles = {};
+    var activeStyles = {};
     for (var stylesMap of stylesMaps) {
       for (var [type, value] of stylesMap) {
-        if (!value && styles[type])
-          styles[type] = false;
-        else if (value && styles[type] === undefined) {
-          styles[type] = true;
+        if (!value && activeStyles[type])
+          activeStyles[type] = false;
+        else if (value && activeStyles[type] === undefined) {
+          activeStyles[type] = true;
         }
       }
     }
 
-    this._activeStyles = styles;
+    this._activeStyles = activeStyles;
     this.emitChange();
   }
 
