@@ -14,6 +14,8 @@
 .block-content {
   position: relative;
   width: 100%;
+  // TODO: Change values below to standard, smaller values.
+  min-height: $font-size-medium;
   font-size: $font-size-medium;
   line-height: 1.25;
   outline: none;

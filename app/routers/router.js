@@ -11,11 +11,8 @@ class Router extends Backbone.Router {
   }
 
   routes() {
-    console.log("Router's routes method called!");
     return {
       "": "editor",
-      "/": "editor",
-      "editor": "editor",
       "editor/": "editor",
     };
   }
