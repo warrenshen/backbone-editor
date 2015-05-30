@@ -78,7 +78,7 @@ class EditorPage extends ListeningComponent {
           }
         } else {
           var character = String.fromCharCode(event.which);
-          EditorActor.splitBlocks(vector, character);
+          EditorActor.removeBlocks(vector, character);
         }
       }
     }

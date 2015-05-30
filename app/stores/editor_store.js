@@ -97,7 +97,7 @@ class EditorStore extends Store {
     this.updatePoint(point);
   }
 
-  removeBlocks(vector) {
+  removeBlocks(vector, character="") {
     var startPoint = vector.startPoint;
     var endPoint = vector.endPoint;
 
@@ -164,8 +164,15 @@ class EditorStore extends Store {
       section.remove(trashSection);
     }
 
+    if (character) {
+      var startSection = sections.at(startSectionIndex);
+      var startBlock = startSection.get("blocks").at(startBlockIndex);
+      startBlock.addFragment(startCaretOffset, character);
+      startPoint.caretOffset += 1;
+    }
+
     story.mergeSections();
-    this.updatePoint(vector.startPoint);
+    this.updatePoint(startPoint);
   }
 
   shiftDown(point) {
@@ -482,7 +489,7 @@ class EditorStore extends Store {
         this.removeBlock(action.point);
         break;
       case ActionConstants.editor.removeBlocks:
-        this.removeBlocks(action.vector);
+        this.removeBlocks(action.vector, action.character);
         break;
       case ActionConstants.editor.shiftDown:
         this.shiftDown(action.point);

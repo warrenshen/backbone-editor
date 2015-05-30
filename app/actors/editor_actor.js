@@ -12,10 +12,11 @@ class EditorActor extends Actor {
     });
   }
 
-  removeBlocks(vector) {
+  removeBlocks(vector, character) {
     this.act({
       type: ActionConstants.editor.removeBlocks,
       vector: vector,
+      character: character,
     });
   }
 
