@@ -85,6 +85,7 @@ class BlockComponent extends Component {
     if (event.which === KeyConstants.enter) {
       event.preventDefault();
       EditorActor.splitBlock(point);
+      this.props.updateStory();
     } else {
       var block = this.props.block;
       var character = String.fromCharCode(event.which);
@@ -171,6 +172,7 @@ class BlockComponent extends Component {
 BlockComponent.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
   shouldEnableEdits: React.PropTypes.bool.isRequired,
+  updateStory: React.PropTypes.func,
 };
 
 BlockComponent.defaultProps = {

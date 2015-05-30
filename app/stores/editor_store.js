@@ -527,7 +527,7 @@ class EditorStore extends Store {
         break;
       case ActionConstants.editor.updateVector:
         this.updateVector(action.vector);
-        break;
+       break;
     };
   }
 }

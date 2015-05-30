@@ -21,6 +21,17 @@ class EditorPage extends ListeningComponent {
     return [EditorStore];
   }
 
+  getDefaultState() {
+    return _.merge(
+      {},
+      {
+        shouldUpdateModal: false,
+        shouldUpdateStory: false,
+      },
+      this.getStoreState()
+    );
+  }
+
   getStoreState() {
     return {
       activeStyles: EditorStore.activeStyles,
@@ -29,6 +40,16 @@ class EditorPage extends ListeningComponent {
       story: EditorStore.story,
       vector: EditorStore.vector,
     }
+  }
+
+  updateModal() {
+    this.setState({ shouldUpdateModal: true });
+    this.setState({ shouldUpdateModal: false });
+  }
+
+  updateStory() {
+    this.setState({ shouldUpdateStory: true });
+    this.setState({ shouldUpdateStory: false });
   }
 
   handleKeyDown(event) {
@@ -40,20 +61,16 @@ class EditorPage extends ListeningComponent {
         var selection = window.getSelection();
         var vector = Selector.generateVector(selection);
         EditorActor.removeBlocks(vector);
-      } else if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
+      } else if (event.which === KeyConstants.left || event.which === KeyConstants.up) {
+        event.preventDefault();
         var selection = window.getSelection();
         var vector = Selector.generateVector(selection);
-
-        if (event.shiftKey) {
-          EditorActor.updateVector(vector);
-        } else {
-          event.preventDefault();
-          if (event.which === KeyConstants.left || event.which === KeyConstants.up) {
-            EditorActor.updatePoint(vector.startPoint);
-          } else {
-            EditorActor.updatePoint(vector.endPoint);
-          }
-        }
+        EditorActor.updatePoint(vector.startPoint);
+      } else if (event.which === KeyConstants.down || event.which === KeyConstants.right) {
+        event.preventDefault();
+        var selection = window.getSelection();
+        var vector = Selector.generateVector(selection);
+        EditorActor.updatePoint(vector.endPoint);
       }
     }
   }
@@ -84,6 +101,14 @@ class EditorPage extends ListeningComponent {
     }
   }
 
+  handleKeyUp(event) {
+    if (event.shiftKey && event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
+      var selection = window.getSelection();
+      var vector = Selector.generateVector(selection);
+      EditorActor.updateVector(vector);
+    }
+  }
+
   handleMouseDown(event) {
     EditorActor.updateMouseState(TypeConstants.mouse.down);
   }
@@ -104,6 +129,7 @@ class EditorPage extends ListeningComponent {
     var node = React.findDOMNode(this.refs.page);
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
     document.addEventListener("keypress", this.handleKeyPress.bind(this));
+    document.addEventListener("keyup", this.handleKeyUp.bind(this));
     node.addEventListener("mousedown", this.handleMouseDown.bind(this));
     node.addEventListener("mouseup", this.handleMouseUp.bind(this));
   }
@@ -113,19 +139,25 @@ class EditorPage extends ListeningComponent {
     var node = React.findDOMNode(this.refs.page);
     document.removeEventListener("keydown", this.handleKeyDown);
     document.removeEventListener("keypress", this.handleKeyPress);
+    document.removeEventListener("keyup", this.handleKeyUp);
     node.removeEventListener("mousedown", this.handleMouseDown);
     node.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   render() {
+    console.log("rerender editor page");
     return (
       <div className={"editor-page"} ref="page">
         <StoryEditable
           point={this.state.point}
           shouldEnableEdits={this.state.shouldEnableEdits}
-          story={this.state.story} />
+          shouldUpdateStory={this.state.shouldUpdateStory}
+          story={this.state.story}
+          updateModal={this.updateModal.bind(this)}
+          updateStory={this.updateStory.bind(this)} />
         <StyleModal
           activeStyles={this.state.activeStyles}
+          shouldUpdateModal={this.state.shouldUpdateModal}
           vector={this.state.vector} />
       </div>
     );
