@@ -95,19 +95,13 @@ class StoryEditable extends Component {
 }
 
 StoryEditable.propTypes = {
-  disableEdits: React.PropTypes.func.isRequired,
-  enableEdits: React.PropTypes.func.isRequired,
   point: React.PropTypes.instanceOf(Point),
   shouldEnableEdits: React.PropTypes.bool.isRequired,
-  shouldUpdateContent: React.PropTypes.bool.isRequired,
   story: React.PropTypes.instanceOf(Story).isRequired,
 };
 
 StoryEditable.defaultProps = {
-  disableEdits: null,
-  enableEdits: null,
   shouldEnableEdits: true,
-  shouldUpdateContent: true,
   story: new Story(),
 };
 

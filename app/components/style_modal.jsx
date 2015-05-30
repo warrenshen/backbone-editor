@@ -25,27 +25,31 @@ class StyleModal extends Component {
   }
 
   styleBold(event) {
-    EditorActor.styleElement(this.props.vector, TypeConstants.element.bold);
+    EditorActor.styleElements(this.props.vector, TypeConstants.element.bold);
   }
 
   styleHeadingOne(event) {
-    EditorActor.styleBlock(this.props.vector, TypeConstants.block.headingOne);
+    EditorActor.styleBlocks(this.props.vector, TypeConstants.block.headingOne);
   }
 
   styleHeadingTwo(event) {
-    EditorActor.styleBlock(this.props.vector, TypeConstants.block.headingTwo);
+    EditorActor.styleBlocks(this.props.vector, TypeConstants.block.headingTwo);
   }
 
   styleHeadingThree(event) {
-    EditorActor.styleBlock(this.props.vector, TypeConstants.block.headingThree);
+    EditorActor.styleBlocks(this.props.vector, TypeConstants.block.headingThree);
   }
 
   styleItalic(event) {
-    EditorActor.styleElement(this.props.vector, TypeConstants.element.italic);
+    EditorActor.styleElements(this.props.vector, TypeConstants.element.italic);
   }
 
   styleQuote(event) {
-    EditorActor.styleBlock(this.props.vector, TypeConstants.block.quote);
+    EditorActor.styleBlocks(this.props.vector, TypeConstants.block.quote);
+  }
+
+  styleCentered(event) {
+    EditorActor.styleBlocks(this.props.vector, TypeConstants.block.centered);
   }
 
   createVector(vector) {
@@ -165,6 +169,11 @@ class StyleModal extends Component {
         active: activeStyles[TypeConstants.block.quote],
         className: "fa fa-quote-right",
       },
+      {
+        action: this.styleCentered.bind(this),
+        active: activeStyles[TypeConstants.block.centered],
+        className: "fa fa-align-center",
+      },
     ];
 
     return templates.map(this.renderOption, this);
@@ -187,13 +196,11 @@ class StyleModal extends Component {
 
 StyleModal.propTypes = {
   activeStyles: React.PropTypes.object.isRequired,
-  shouldUpdateModal: React.PropTypes.bool.isRequired,
   vector: React.PropTypes.instanceOf(Vector),
 };
 
 StyleModal.defaultProps = {
   activeStyles: {},
-  shouldUpdateModal: true,
 };
 
 

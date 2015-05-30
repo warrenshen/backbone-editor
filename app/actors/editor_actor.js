@@ -12,6 +12,13 @@ class EditorActor extends Actor {
     });
   }
 
+  removeBlocks(vector) {
+    this.act({
+      type: ActionConstants.editor.removeBlocks,
+      vector: vector,
+    });
+  }
+
   shiftDown(point) {
     this.act({
       type: ActionConstants.editor.shiftDown,
@@ -47,17 +54,17 @@ class EditorActor extends Actor {
     });
   }
 
-  styleBlock(vector, which) {
+  styleBlocks(vector, which) {
     this.act({
-      type: ActionConstants.editor.styleBlock,
+      type: ActionConstants.editor.styleBlocks,
       vector: vector,
       which: which,
     })
   }
 
-  styleElement(vector, which) {
+  styleElements(vector, which) {
     this.act({
-      type: ActionConstants.editor.styleElement,
+      type: ActionConstants.editor.styleElements,
       vector: vector,
       which: which,
     });

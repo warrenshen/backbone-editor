@@ -8,9 +8,11 @@ import TypeConstants from "app/constants/type_constants";
 class BlockHeading extends BlockComponent {
 
   renderEditable() {
-    var type = this.props.block.get("type");
+    var block = this.props.block;
+    var type = block.get("type");
     var contentClass = ClassNames(
       { "block-content": true },
+      { "block-centered": block.get("centered") },
       { "block-heading-one": type === TypeConstants.block.headingOne },
       { "block-heading-two": type === TypeConstants.block.headingTwo },
       { "block-heading-three": type === TypeConstants.block.headingThree }

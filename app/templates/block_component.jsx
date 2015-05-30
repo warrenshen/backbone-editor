@@ -105,11 +105,6 @@ class BlockComponent extends Component {
   handleMouseDown(event) {
     event.stopPropagation();
     EditorActor.updateMouseState(TypeConstants.mouse.down);
-    if (this.props.shouldEnableEdits) {
-      // TODO: This calls a rerender, thus updating the style modal.
-      // If this style modal update is too expensive, we could limit it.
-      this.props.disableEdits();
-    }
   }
 
   handleMouseMove(event) {
@@ -122,7 +117,6 @@ class BlockComponent extends Component {
   handleMouseUp(event) {
     if (EditorStore.mouseState !== TypeConstants.mouse.move) {
       EditorActor.updateMouseState(TypeConstants.mouse.up);
-      this.props.enableEdits();
 
       var selection = window.getSelection();
       var range = document.caretRangeFromPoint(event.clientX, event.clientY);
@@ -160,10 +154,6 @@ class BlockComponent extends Component {
     node.removeEventListener("mouseup", this.handleMouseUp);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.shouldUpdateContent;
-  }
-
   renderContent(node) {
     node.innerHTML = Formatter.formatBlock(this.props.block);
   }
@@ -179,18 +169,12 @@ class BlockComponent extends Component {
 
 BlockComponent.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
-  disableEdits: React.PropTypes.func.isRequired,
-  enableEdits: React.PropTypes.func.isRequired,
   shouldEnableEdits: React.PropTypes.bool.isRequired,
-  shouldUpdateContent: React.PropTypes.bool.isRequired,
 };
 
 BlockComponent.defaultProps = {
   block: new Block(),
-  disableEdits: null,
-  enableEdits: null,
   shouldEnableEdits: true,
-  shouldUpdateContent: true,
 };
 
 
