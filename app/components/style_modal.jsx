@@ -48,6 +48,10 @@ class StyleModal extends Component {
     EditorActor.styleBlocks(this.props.vector, TypeConstants.block.quote);
   }
 
+  styleCentered(event) {
+    EditorActor.styleBlocks(this.props.vector, TypeConstants.block.centered);
+  }
+
   createVector(vector) {
     if (vector) {
       var startPoint = vector.startPoint;
@@ -164,6 +168,11 @@ class StyleModal extends Component {
         action: this.styleQuote.bind(this),
         active: activeStyles[TypeConstants.block.quote],
         className: "fa fa-quote-right",
+      },
+      {
+        action: this.styleCentered.bind(this),
+        active: activeStyles[TypeConstants.block.centered],
+        className: "fa fa-align-center",
       },
     ];
 

@@ -57,6 +57,7 @@ class Block extends Model {
     var styles = [];
     var type = this.get("type");
 
+    styles.push([TypeConstants.block.centered, this.get("centered")]);
     styles.push([TypeConstants.block.headingOne, type === TypeConstants.block.headingOne]);
     styles.push([TypeConstants.block.headingTwo, type === TypeConstants.block.headingTwo]);
     styles.push([TypeConstants.block.headingThree, type === TypeConstants.block.headingThree]);

@@ -304,10 +304,14 @@ class EditorStore extends Store {
 
       for (var blockIndex of blockIndices) {
         var block = blocks.at(blockIndex);
-        if (block.get("type") === which) {
-          block.set("type", TypeConstants.block.standard);
+        if (which === TypeConstants.block.centered) {
+          block.set("centered", !block.get("centered"));
         } else {
-          block.set("type", which);
+          if (block.get("type") === which) {
+            block.set("type", TypeConstants.block.standard);
+          } else {
+            block.set("type", which);
+          }
         }
       }
     }

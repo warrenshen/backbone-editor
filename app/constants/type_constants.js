@@ -1,5 +1,6 @@
 module.exports = {
   block: {
+    centered: "centered",
     divider: "divider",
     headingOne: "heading_one",
     headingTwo: "heading_two",
