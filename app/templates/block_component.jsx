@@ -28,6 +28,7 @@ class BlockComponent extends Component {
           event.preventDefault();
           point.caretOffset = caretOffset - floorOffset;
           EditorActor.shiftDown(point);
+          this.props.updateStory();
         }
         break;
 
@@ -35,6 +36,7 @@ class BlockComponent extends Component {
         if (point.prefixesBlock() && !point.prefixesEverything()) {
           event.preventDefault();
           EditorActor.shiftLeft(point);
+          this.props.updateStory();
         }
         break;
 
@@ -42,6 +44,7 @@ class BlockComponent extends Component {
         if (point.caretOffset === block.get("content").length) {
           event.preventDefault();
           EditorActor.shiftRight(point);
+          this.props.updateStory();
         }
         break;
 
@@ -50,6 +53,7 @@ class BlockComponent extends Component {
         if (caretOffset < ceilingOffset || caretOffset === 0 || ceilingOffset < 0) {
           event.preventDefault();
           EditorActor.shiftUp(point);
+          this.props.updateStory();
         }
         break;
     }
@@ -71,6 +75,7 @@ class BlockComponent extends Component {
       } else if (!point.prefixesEverything()) {
         event.preventDefault();
         EditorActor.removeBlock(point);
+        this.props.updateStory();
       }
     } else if (event.which === KeyConstants.tab) {
       event.preventDefault();
@@ -113,6 +118,7 @@ class BlockComponent extends Component {
     if (EditorStore.mouseState === TypeConstants.mouse.down) {
       // Force the store to emit a change so that block components update.
       EditorActor.updateMouseState(TypeConstants.mouse.move, true);
+      this.props.updateStory();
     }
   }
 
@@ -127,6 +133,7 @@ class BlockComponent extends Component {
 
       var point = Selector.generatePoint(selection);
       EditorActor.updatePoint(point);
+      this.props.updateStory();
     }
   }
 

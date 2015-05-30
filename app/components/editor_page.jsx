@@ -54,23 +54,26 @@ class EditorPage extends ListeningComponent {
 
   handleKeyDown(event) {
     event.stopPropagation();
-
     if (EditorStore.mouseState === TypeConstants.mouse.move) {
       if (event.which === KeyConstants.backspace) {
         event.preventDefault();
         var selection = window.getSelection();
         var vector = Selector.generateVector(selection);
+
         EditorActor.removeBlocks(vector);
-      } else if (event.which === KeyConstants.left || event.which === KeyConstants.up) {
+        this.updateStory();
+      } else if (!event.shiftKey && event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
         event.preventDefault();
         var selection = window.getSelection();
         var vector = Selector.generateVector(selection);
-        EditorActor.updatePoint(vector.startPoint);
-      } else if (event.which === KeyConstants.down || event.which === KeyConstants.right) {
-        event.preventDefault();
-        var selection = window.getSelection();
-        var vector = Selector.generateVector(selection);
-        EditorActor.updatePoint(vector.endPoint);
+
+        if (event.which === KeyConstants.left || event.which === KeyConstants.up) {
+          EditorActor.updatePoint(vector.startPoint);
+        } else {
+          EditorActor.updatePoint(vector.endPoint);
+        }
+
+        this.updateStory();
       }
     }
   }
@@ -83,19 +86,23 @@ class EditorPage extends ListeningComponent {
 
       if (event.which === KeyConstants.enter) {
         EditorActor.removeBlocks(vector, { enter: true });
+        this.updateStory();
       } else {
         if (event.ctrlKey || event.metaKey) {
           switch (event.which) {
             case KeyConstants.b:
               EditorActor.styleElements(vector, TypeConstants.element.bold);
+              this.updateStory();
               break;
             case KeyConstants.i:
               EditorActor.styleElements(vector, TypeConstants.element.italic);
+              this.updateStory();
               break;
           }
         } else {
           var character = String.fromCharCode(event.which);
           EditorActor.removeBlocks(vector, { character: character });
+          this.updateStory();
         }
       }
     }
@@ -106,6 +113,7 @@ class EditorPage extends ListeningComponent {
       var selection = window.getSelection();
       var vector = Selector.generateVector(selection);
       EditorActor.updateVector(vector);
+      this.updateStory();
     }
   }
 
@@ -118,9 +126,11 @@ class EditorPage extends ListeningComponent {
     if (EditorStore.mouseState === TypeConstants.mouse.move) {
       var vector = Selector.generateVector(selection);
       EditorActor.updateVector(vector);
+      this.updateStory();
     } else if (EditorStore.mouseState === TypeConstants.mouse.down) {
       EditorActor.updateMouseState(TypeConstants.mouse.up)
       EditorActor.updateVector(null);
+      this.updateStory();
     }
   }
 
