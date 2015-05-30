@@ -94,7 +94,7 @@ class EditorStore extends Store {
     point.caretOffset = beforeBlock.length;
 
     section.removeBlock(block);
-    this.updatePoint(newPoint);
+    this.updatePoint(point);
   }
 
   removeBlocks(vector) {
@@ -142,7 +142,11 @@ class EditorStore extends Store {
             block.removeFragment(startCaretOffset, block.length);
           } else if (blockIndex === blockIndices[blockIndices.length - 1]) {
             // TODO: If endCaretOffset equals length of block, should also remove block.
-            block.removeFragment(0, endCaretOffset);
+            if (endCaretOffset === block.length) {
+              trashBlocks.push(block);
+            } else {
+              block.removeFragment(0, endCaretOffset);
+            }
           } else {
             trashBlocks.push(block);
           }
@@ -151,6 +155,8 @@ class EditorStore extends Store {
         for (var trashBlock of trashBlocks) {
           blocks.remove(trashBlock);
         }
+
+        section.updateBlockIndices();
       }
     }
 

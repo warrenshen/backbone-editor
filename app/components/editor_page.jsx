@@ -31,10 +31,6 @@ class EditorPage extends ListeningComponent {
     }
   }
 
-  handleMouseDown(event) {
-    EditorActor.updateMouseState(TypeConstants.mouse.down);
-  }
-
   handleKeyDown(event) {
     event.stopPropagation();
     var selection = window.getSelection();
@@ -45,10 +41,11 @@ class EditorPage extends ListeningComponent {
         var vector = Selector.generateVector(selection);
         EditorActor.removeBlocks(vector);
       } else if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
-        if (!event.shiftKey) {
+        var vector = Selector.generateVector(selection);
+        if (event.shiftKey) {
+          EditorActor.updateVector(vector);
+        } else {
           event.preventDefault();
-          var vector = Selector.generateVector(selection);
-
           if (event.which === KeyConstants.left || event.which === KeyConstants.up) {
             EditorActor.updatePoint(vector.startPoint);
           } else {
@@ -57,6 +54,14 @@ class EditorPage extends ListeningComponent {
         }
       }
     }
+  }
+
+  handleKeyPress(event) {
+
+  }
+
+  handleMouseDown(event) {
+    EditorActor.updateMouseState(TypeConstants.mouse.down);
   }
 
   handleMouseUp(event) {
@@ -74,6 +79,7 @@ class EditorPage extends ListeningComponent {
     super.componentDidMount();
     var node = React.findDOMNode(this.refs.page);
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
+    document.addEventListener("keypress", this.handleKeyPress.bind(this));
     node.addEventListener("mousedown", this.handleMouseDown.bind(this));
     node.addEventListener("mouseup", this.handleMouseUp.bind(this));
   }
@@ -82,6 +88,7 @@ class EditorPage extends ListeningComponent {
     super.componentWillUnmount();
     var node = React.findDOMNode(this.refs.page);
     document.removeEventListener("keydown", this.handleKeyDown);
+    document.removeEventListener("keypress", this.handleKeyPress);
     node.removeEventListener("mousedown", this.handleMouseDown);
     node.removeEventListener("mouseup", this.handleMouseUp);
   }
