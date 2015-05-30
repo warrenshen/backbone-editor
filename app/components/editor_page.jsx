@@ -33,15 +33,17 @@ class EditorPage extends ListeningComponent {
 
   handleKeyDown(event) {
     event.stopPropagation();
-    var selection = window.getSelection();
 
     if (EditorStore.mouseState === TypeConstants.mouse.move) {
       if (event.which === KeyConstants.backspace) {
         event.preventDefault();
+        var selection = window.getSelection();
         var vector = Selector.generateVector(selection);
         EditorActor.removeBlocks(vector);
       } else if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
+        var selection = window.getSelection();
         var vector = Selector.generateVector(selection);
+
         if (event.shiftKey) {
           EditorActor.updateVector(vector);
         } else {
@@ -57,7 +59,29 @@ class EditorPage extends ListeningComponent {
   }
 
   handleKeyPress(event) {
+    if (EditorStore.mouseState === TypeConstants.mouse.move) {
+      event.preventDefault();
+      var selection = window.getSelection();
+      var vector = Selector.generateVector(selection);
 
+      if (event.which === KeyConstants.enter) {
+        EditorActor.splitBlocks(vector);
+      } else {
+        if (event.ctrlKey || event.metaKey) {
+          switch (event.which) {
+            case KeyConstants.b:
+              EditorActor.styleElements(vector, TypeConstants.element.bold);
+              break;
+            case KeyConstants.i:
+              EditorActor.styleElements(vector, TypeConstants.element.italic);
+              break;
+          }
+        } else {
+          var character = String.fromCharCode(event.which);
+          EditorActor.splitBlocks(vector, character);
+        }
+      }
+    }
   }
 
   handleMouseDown(event) {
