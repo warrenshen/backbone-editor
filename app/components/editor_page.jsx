@@ -65,7 +65,7 @@ class EditorPage extends ListeningComponent {
       var vector = Selector.generateVector(selection);
 
       if (event.which === KeyConstants.enter) {
-        EditorActor.splitBlocks(vector);
+        EditorActor.removeBlocks(vector, { enter: true });
       } else {
         if (event.ctrlKey || event.metaKey) {
           switch (event.which) {
@@ -78,7 +78,7 @@ class EditorPage extends ListeningComponent {
           }
         } else {
           var character = String.fromCharCode(event.which);
-          EditorActor.removeBlocks(vector, character);
+          EditorActor.removeBlocks(vector, { character: character });
         }
       }
     }

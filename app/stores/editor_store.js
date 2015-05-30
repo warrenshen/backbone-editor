@@ -89,15 +89,15 @@ class EditorStore extends Store {
       point.blockIndex -= 1;
     }
 
+    point.caretOffset = beforeBlock.length;
     var content = block.get("content");
     beforeBlock.set("content", beforeBlock.get("content") + content);
-    point.caretOffset = beforeBlock.length;
 
     section.removeBlock(block);
     this.updatePoint(point);
   }
 
-  removeBlocks(vector, character="") {
+  removeBlocks(vector, options={}) {
     var startPoint = vector.startPoint;
     var endPoint = vector.endPoint;
 
@@ -141,7 +141,6 @@ class EditorStore extends Store {
           } else if (blockIndex === blockIndices[0]) {
             block.removeFragment(startCaretOffset, block.length);
           } else if (blockIndex === blockIndices[blockIndices.length - 1]) {
-            // TODO: If endCaretOffset equals length of block, should also remove block.
             if (endCaretOffset === block.length) {
               trashBlocks.push(block);
             } else {
@@ -164,11 +163,20 @@ class EditorStore extends Store {
       section.remove(trashSection);
     }
 
-    if (character) {
+    if (options.character || options.enter) {
       var startSection = sections.at(startSectionIndex);
       var startBlock = startSection.get("blocks").at(startBlockIndex);
-      startBlock.addFragment(startCaretOffset, character);
-      startPoint.caretOffset += 1;
+
+      if (options.character) {
+        startBlock.addFragment(startCaretOffset, options.character);
+        startPoint.caretOffset += 1;
+      } else if (options.enter) {
+        var newBlock = new Block();
+        newBlock.set("content", startBlock.get("content").substring(startCaretOffset));
+        startBlock.removeFragment(startCaretOffset, startBlock.length);
+        startSection.addBlock(newBlock, startBlockIndex + 1);
+        // TODO: Don't forget about transferring elements!
+      }
     }
 
     story.mergeSections();
@@ -481,7 +489,6 @@ class EditorStore extends Store {
   // --------------------------------------------------
   // Dispatch
   // --------------------------------------------------
-  // Stores that listen for dispatches must override this method.
   handleDispatch(payload) {
     var action = payload.action;
     switch (action.type) {
@@ -489,7 +496,7 @@ class EditorStore extends Store {
         this.removeBlock(action.point);
         break;
       case ActionConstants.editor.removeBlocks:
-        this.removeBlocks(action.vector, action.character);
+        this.removeBlocks(action.vector, action.options);
         break;
       case ActionConstants.editor.shiftDown:
         this.shiftDown(action.point);
