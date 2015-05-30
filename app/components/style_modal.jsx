@@ -135,21 +135,6 @@ class StyleModal extends Component {
     var activeStyles = this.props.activeStyles;
     var templates = [
       {
-        action: this.styleBold.bind(this),
-        active: activeStyles[TypeConstants.element.bold],
-        className: "fa fa-bold",
-      },
-      {
-        action: this.styleItalic.bind(this),
-        active: activeStyles[TypeConstants.element.italic],
-        className: "fa fa-italic",
-      },
-      {
-        action: this.styleHeadingThree.bind(this),
-        active: activeStyles[TypeConstants.block.headingThree],
-        className: "fa fa-link",
-      },
-      {
         action: this.styleHeadingOne.bind(this),
         active: activeStyles[TypeConstants.block.headingOne],
         className:"fa fa-header",
@@ -173,6 +158,21 @@ class StyleModal extends Component {
         action: this.styleCentered.bind(this),
         active: activeStyles[TypeConstants.block.centered],
         className: "fa fa-align-center",
+      },
+      {
+        action: this.styleBold.bind(this),
+        active: activeStyles[TypeConstants.element.bold],
+        className: "fa fa-bold",
+      },
+      {
+        action: this.styleItalic.bind(this),
+        active: activeStyles[TypeConstants.element.italic],
+        className: "fa fa-italic",
+      },
+      {
+        action: this.styleHeadingThree.bind(this),
+        active: activeStyles[TypeConstants.block.headingThree],
+        className: "fa fa-link",
       },
     ];
 

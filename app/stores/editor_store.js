@@ -89,15 +89,15 @@ class EditorStore extends Store {
       point.blockIndex -= 1;
     }
 
+    point.caretOffset = beforeBlock.length;
     var content = block.get("content");
     beforeBlock.set("content", beforeBlock.get("content") + content);
-    point.caretOffset = beforeBlock.length;
 
     section.removeBlock(block);
-    this.updatePoint(newPoint);
+    this.updatePoint(point);
   }
 
-  removeBlocks(vector) {
+  removeBlocks(vector, options={}) {
     var startPoint = vector.startPoint;
     var endPoint = vector.endPoint;
 
@@ -141,8 +141,11 @@ class EditorStore extends Store {
           } else if (blockIndex === blockIndices[0]) {
             block.removeFragment(startCaretOffset, block.length);
           } else if (blockIndex === blockIndices[blockIndices.length - 1]) {
-            // TODO: If endCaretOffset equals length of block, should also remove block.
-            block.removeFragment(0, endCaretOffset);
+            if (endCaretOffset === block.length) {
+              trashBlocks.push(block);
+            } else {
+              block.removeFragment(0, endCaretOffset);
+            }
           } else {
             trashBlocks.push(block);
           }
@@ -151,6 +154,8 @@ class EditorStore extends Store {
         for (var trashBlock of trashBlocks) {
           blocks.remove(trashBlock);
         }
+
+        section.updateBlockIndices();
       }
     }
 
@@ -158,8 +163,24 @@ class EditorStore extends Store {
       section.remove(trashSection);
     }
 
+    if (options.character || options.enter) {
+      var startSection = sections.at(startSectionIndex);
+      var startBlock = startSection.get("blocks").at(startBlockIndex);
+
+      if (options.character) {
+        startBlock.addFragment(startCaretOffset, options.character);
+        startPoint.caretOffset += 1;
+      } else if (options.enter) {
+        var newBlock = new Block();
+        newBlock.set("content", startBlock.get("content").substring(startCaretOffset));
+        startBlock.removeFragment(startCaretOffset, startBlock.length);
+        startSection.addBlock(newBlock, startBlockIndex + 1);
+        // TODO: Don't forget about transferring elements!
+      }
+    }
+
     story.mergeSections();
-    this.updatePoint(vector.startPoint);
+    this.updatePoint(startPoint);
   }
 
   shiftDown(point) {
@@ -438,9 +459,11 @@ class EditorStore extends Store {
     this.emitChange();
   }
 
-  updateMouseState(mouseState) {
-    // Note that this action does not emit any change.
+  updateMouseState(mouseState, shouldEmit=false) {
     this._mouseState = mouseState;
+    if (shouldEmit) {
+      this.emitChange();
+    }
   }
 
   updatePoint(point) {
@@ -466,7 +489,6 @@ class EditorStore extends Store {
   // --------------------------------------------------
   // Dispatch
   // --------------------------------------------------
-  // Stores that listen for dispatches must override this method.
   handleDispatch(payload) {
     var action = payload.action;
     switch (action.type) {
@@ -474,7 +496,7 @@ class EditorStore extends Store {
         this.removeBlock(action.point);
         break;
       case ActionConstants.editor.removeBlocks:
-        this.removeBlocks(action.vector);
+        this.removeBlocks(action.vector, action.options);
         break;
       case ActionConstants.editor.shiftDown:
         this.shiftDown(action.point);
@@ -498,7 +520,7 @@ class EditorStore extends Store {
         this.styleElements(action.vector, action.which);
         break;
       case ActionConstants.editor.updateMouseState:
-        this.updateMouseState(action.mouseState);
+        this.updateMouseState(action.mouseState, action.shouldEmit);
         break;
       case ActionConstants.editor.updatePoint:
         this.updatePoint(action.point);

@@ -12,10 +12,11 @@ class EditorActor extends Actor {
     });
   }
 
-  removeBlocks(vector) {
+  removeBlocks(vector, options) {
     this.act({
       type: ActionConstants.editor.removeBlocks,
       vector: vector,
+      options: options,
     });
   }
 
@@ -70,10 +71,11 @@ class EditorActor extends Actor {
     });
   }
 
-  updateMouseState(mouseState) {
+  updateMouseState(mouseState, shouldEmit) {
     this.act({
       type: ActionConstants.editor.updateMouseState,
       mouseState: mouseState,
+      shouldEmit: shouldEmit,
     });
   }
 
