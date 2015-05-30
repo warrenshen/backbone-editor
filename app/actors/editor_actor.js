@@ -70,10 +70,11 @@ class EditorActor extends Actor {
     });
   }
 
-  updateMouseState(mouseState) {
+  updateMouseState(mouseState, shouldEmit) {
     this.act({
       type: ActionConstants.editor.updateMouseState,
       mouseState: mouseState,
+      shouldEmit: shouldEmit,
     });
   }
 

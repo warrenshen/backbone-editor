@@ -438,9 +438,11 @@ class EditorStore extends Store {
     this.emitChange();
   }
 
-  updateMouseState(mouseState) {
-    // Note that this action does not emit any change.
+  updateMouseState(mouseState, shouldEmit=false) {
     this._mouseState = mouseState;
+    if (shouldEmit) {
+      this.emitChange();
+    }
   }
 
   updatePoint(point) {
@@ -498,7 +500,7 @@ class EditorStore extends Store {
         this.styleElements(action.vector, action.which);
         break;
       case ActionConstants.editor.updateMouseState:
-        this.updateMouseState(action.mouseState);
+        this.updateMouseState(action.mouseState, action.shouldEmit);
         break;
       case ActionConstants.editor.updatePoint:
         this.updatePoint(action.point);
