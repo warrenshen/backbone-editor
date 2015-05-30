@@ -21,51 +21,14 @@ class EditorPage extends ListeningComponent {
     return [EditorStore];
   }
 
-  // TODO: Should and can we just use es6 getters here?
-  getDefaultState() {
-    // TODO: Do we really need to track content and modal states?
-    // TODO: Track shouldEnableEdits from editor store's mouse state.
-    return _.merge(
-      {
-        shouldEnableEdits: true,
-        shouldUpdateContent: true,
-        shouldUpdateModal: true,
-      },
-      super.getDefaultState()
-    );
-  }
-
   getStoreState() {
     return {
       activeStyles: EditorStore.activeStyles,
       point: EditorStore.point,
+      shouldEnableEdits: EditorStore.mouseState === TypeConstants.mouse.up,
       story: EditorStore.story,
       vector: EditorStore.vector,
     }
-  }
-
-  enableEdits() {
-    this.setState({ shouldEnableEdits: true });
-  }
-
-  disableEdits() {
-    this.setState({ shouldEnableEdits: false });
-  }
-
-  updateContent() {
-    this.setState({ shouldUpdateContent: true });
-  }
-
-  downdateContent() {
-    this.setState( { shouldUpdateContent: false });
-  }
-
-  updateModal() {
-    this.setState({ shouldUpdateModal: true });
-  }
-
-  downdateModal() {
-    this.setState({ shouldUpdateModal: false });
   }
 
   handleMouseDown(event) {
@@ -80,16 +43,12 @@ class EditorPage extends ListeningComponent {
       if (event.which === KeyConstants.backspace) {
         event.preventDefault();
         var vector = Selector.generateVector(selection);
-        // TODO: Outdate this by tracking editor store's mouse state.
-        this.enableEdits();
         EditorActor.removeBlocks(vector);
       } else if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
         if (!event.shiftKey) {
           event.preventDefault();
           var vector = Selector.generateVector(selection);
 
-          // TODO: Outdate this by tracking editor store's mouse state.
-          this.enableEdits();
           if (event.which === KeyConstants.left || event.which === KeyConstants.up) {
             EditorActor.updatePoint(vector.startPoint);
           } else {
@@ -131,14 +90,10 @@ class EditorPage extends ListeningComponent {
     return (
       <div className={"editor-page"} ref="page">
         <StoryEditable
-          disableEdits={this.disableEdits.bind(this)}
-          enableEdits={this.enableEdits.bind(this)}
           point={this.state.point}
           shouldEnableEdits={this.state.shouldEnableEdits}
-          shouldUpdateContent={this.state.shouldUpdateContent}
           story={this.state.story} />
         <StyleModal
-          shouldUpdateModal={this.state.shouldUpdateModal}
           activeStyles={this.state.activeStyles}
           vector={this.state.vector} />
       </div>

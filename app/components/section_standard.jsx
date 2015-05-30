@@ -51,19 +51,13 @@ class SectionStandard extends Component {
 }
 
 SectionStandard.propTypes = {
-  disableEdits: React.PropTypes.func.isRequired,
-  enableEdits: React.PropTypes.func.isRequired,
   section: React.PropTypes.instanceOf(Section).isRequired,
   shouldEnableEdits: React.PropTypes.bool.isRequired,
-  shouldUpdateContent: React.PropTypes.bool.isRequired,
 };
 
 SectionStandard.defaultProps = {
-  disableEdits: null,
-  enableEdits: null,
   section: new Section(),
   shouldEnableEdits: true,
-  shouldUpdateContent: true,
 };
 
 
