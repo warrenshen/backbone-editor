@@ -24,10 +24,7 @@ class EditorPage extends ListeningComponent {
   getDefaultState() {
     return _.merge(
       {},
-      {
-        shouldUpdateModal: false,
-        shouldUpdateStory: false,
-      },
+      { shouldUpdateStory: false },
       this.getStoreState()
     );
   }
@@ -42,11 +39,6 @@ class EditorPage extends ListeningComponent {
     }
   }
 
-  updateModal() {
-    this.setState({ shouldUpdateModal: true });
-    this.setState({ shouldUpdateModal: false });
-  }
-
   updateStory() {
     this.setState({ shouldUpdateStory: true });
     this.setState({ shouldUpdateStory: false });
@@ -54,28 +46,32 @@ class EditorPage extends ListeningComponent {
 
   handleKeyDown(event) {
     event.stopPropagation();
-    if (EditorStore.mouseState === TypeConstants.mouse.move) {
+    var selection = window.getSelection();
+
+    if (event.shiftKey) {
+      if (selection.type === "Range" && event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
+        var vector = Selector.generateVector(selection);
+        EditorActor.updateVector(vector);
+        this.updateStory();
+      }
+    } else if (EditorStore.mouseState === TypeConstants.mouse.move) {
       if (event.which === KeyConstants.backspace) {
         event.preventDefault();
-        var selection = window.getSelection();
         var vector = Selector.generateVector(selection);
 
         EditorActor.removeBlocks(vector);
         this.updateStory();
       } else if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
-        if (!event.shiftKey) {
-          event.preventDefault();
-          var selection = window.getSelection();
-          var vector = Selector.generateVector(selection);
+        event.preventDefault();
+        var vector = Selector.generateVector(selection);
 
-          if (event.which === KeyConstants.left || event.which === KeyConstants.up) {
-            EditorActor.updatePoint(vector.startPoint);
-          } else {
-            EditorActor.updatePoint(vector.endPoint);
-          }
-
-          this.updateStory();
+        if (event.which === KeyConstants.left || event.which === KeyConstants.up) {
+          EditorActor.updatePoint(vector.startPoint);
+        } else {
+          EditorActor.updatePoint(vector.endPoint);
         }
+
+        this.updateStory();
       }
     }
   }
@@ -110,15 +106,6 @@ class EditorPage extends ListeningComponent {
     }
   }
 
-  handleKeyUp(event) {
-    if (event.shiftKey && event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
-      var selection = window.getSelection();
-      var vector = Selector.generateVector(selection);
-      EditorActor.updateVector(vector);
-      this.updateStory();
-    }
-  }
-
   handleMouseDown(event) {
     EditorActor.updateMouseState(TypeConstants.mouse.down);
   }
@@ -141,7 +128,6 @@ class EditorPage extends ListeningComponent {
     var node = React.findDOMNode(this.refs.page);
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
     document.addEventListener("keypress", this.handleKeyPress.bind(this));
-    document.addEventListener("keyup", this.handleKeyUp.bind(this));
     node.addEventListener("mousedown", this.handleMouseDown.bind(this));
     node.addEventListener("mouseup", this.handleMouseUp.bind(this));
   }
@@ -151,13 +137,11 @@ class EditorPage extends ListeningComponent {
     var node = React.findDOMNode(this.refs.page);
     document.removeEventListener("keydown", this.handleKeyDown);
     document.removeEventListener("keypress", this.handleKeyPress);
-    document.removeEventListener("keyup", this.handleKeyUp);
     node.removeEventListener("mousedown", this.handleMouseDown);
     node.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   render() {
-    console.log("rerender editor page");
     return (
       <div className={"editor-page"} ref="page">
         <StoryEditable
@@ -165,11 +149,9 @@ class EditorPage extends ListeningComponent {
           shouldEnableEdits={this.state.shouldEnableEdits}
           shouldUpdateStory={this.state.shouldUpdateStory}
           story={this.state.story}
-          updateModal={this.updateModal.bind(this)}
           updateStory={this.updateStory.bind(this)} />
         <StyleModal
           activeStyles={this.state.activeStyles}
-          shouldUpdateModal={this.state.shouldUpdateModal}
           updateStory={this.updateStory.bind(this)}
           vector={this.state.vector} />
       </div>

@@ -483,7 +483,12 @@ class EditorStore extends Store {
 
     this._point = null;
     this._vector = vector;
-    this.updateActiveStyles(vector);
+
+    if (vector === null) {
+      this.emitChange();
+    } else {
+      this.updateActiveStyles(vector);
+    }
   }
 
   // --------------------------------------------------

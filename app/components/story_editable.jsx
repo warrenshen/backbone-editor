@@ -88,8 +88,6 @@ class StoryEditable extends Component {
   }
 
   render() {
-    console.log("rerender story component");
-    console.log("");
     return (
       <div className={"story-container"}>
         {this.renderSections()}
@@ -103,7 +101,6 @@ StoryEditable.propTypes = {
   shouldEnableEdits: React.PropTypes.bool.isRequired,
   shouldUpdateStory: React.PropTypes.bool.isRequired,
   story: React.PropTypes.instanceOf(Story).isRequired,
-  updateModal: React.PropTypes.func,
   updateStory: React.PropTypes.func,
 };
 
