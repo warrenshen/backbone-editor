@@ -53,7 +53,7 @@ class BlockHeading extends BlockComponent {
             {this.renderEditable()}
           </h3>
         );
-    };
+    }
   }
 }
 

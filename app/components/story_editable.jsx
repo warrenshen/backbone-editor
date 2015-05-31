@@ -12,15 +12,6 @@ import Selector from "app/helpers/selector";
 
 class StoryEditable extends Component {
 
-  componentDidMount() {
-    super.componentDidMount();
-    this.createCaret(this.props.point);
-  }
-
-  componentDidUpdate() {
-    this.createCaret(this.props.point);
-  }
-
   createCaret(point) {
     if (point) {
       var section = $('section[data-index="' + point.sectionIndex + '"]')[0];
@@ -68,15 +59,26 @@ class StoryEditable extends Component {
     }
   }
 
+  componentDidMount() {
+    super.componentDidMount();
+    this.createCaret(this.props.point);
+  }
+
+  componentDidUpdate() {
+    this.createCaret(this.props.point);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.shouldUpdateStory;
+  }
+
   renderSection(section) {
     return (
       <SectionStandard
         key={section.cid}
-        disableEdits={this.props.disableEdits}
-        enableEdits={this.props.enableEdits}
         section={section}
         shouldEnableEdits={this.props.shouldEnableEdits}
-        shouldUpdateContent={this.props.shouldUpdateContent} />
+        updateStory={this.props.updateStory} />
     );
   }
 
@@ -97,11 +99,14 @@ class StoryEditable extends Component {
 StoryEditable.propTypes = {
   point: React.PropTypes.instanceOf(Point),
   shouldEnableEdits: React.PropTypes.bool.isRequired,
+  shouldUpdateStory: React.PropTypes.bool.isRequired,
   story: React.PropTypes.instanceOf(Story).isRequired,
+  updateStory: React.PropTypes.func,
 };
 
 StoryEditable.defaultProps = {
   shouldEnableEdits: true,
+  shouldUpdateStory: true,
   story: new Story(),
 };
 

@@ -24,32 +24,43 @@ class StyleModal extends Component {
     event.stopPropagation();
   }
 
-  styleBold(event) {
-    EditorActor.styleElements(this.props.vector, TypeConstants.element.bold);
-  }
-
-  styleHeadingOne(event) {
-    EditorActor.styleBlocks(this.props.vector, TypeConstants.block.headingOne);
-  }
-
-  styleHeadingTwo(event) {
-    EditorActor.styleBlocks(this.props.vector, TypeConstants.block.headingTwo);
-  }
-
-  styleHeadingThree(event) {
-    EditorActor.styleBlocks(this.props.vector, TypeConstants.block.headingThree);
-  }
-
-  styleItalic(event) {
-    EditorActor.styleElements(this.props.vector, TypeConstants.element.italic);
-  }
-
-  styleQuote(event) {
-    EditorActor.styleBlocks(this.props.vector, TypeConstants.block.quote);
+  styleBlocks(type) {
+    EditorActor.styleBlocks(this.props.vector, type);
+    this.props.updateStory();
   }
 
   styleCentered(event) {
-    EditorActor.styleBlocks(this.props.vector, TypeConstants.block.centered);
+    this.styleBlocks(TypeConstants.block.centered);
+  }
+
+  styleHeadingOne(event) {
+    this.styleBlocks(TypeConstants.block.headingOne);
+  }
+
+  styleHeadingTwo(event) {
+    this.styleBlocks(TypeConstants.block.headingTwo);
+  }
+
+  styleHeadingThree(event) {
+    this.styleBlocks(TypeConstants.block.headingThree);
+  }
+
+  styleQuote(event) {
+    this.styleBlocks(TypeConstants.block.quote);
+  }
+
+  styleElements(type) {
+    EditorActor.styleElements(this.props.vector, type);
+    this.props.updateStory();
+  }
+
+  styleBold(event) {
+    this.styleElements(TypeConstants.element.bold);
+  }
+
+
+  styleItalic(event) {
+    this.styleElements(TypeConstants.element.italic);
   }
 
   createVector(vector) {
@@ -196,6 +207,7 @@ class StyleModal extends Component {
 
 StyleModal.propTypes = {
   activeStyles: React.PropTypes.object.isRequired,
+  updateStory: React.PropTypes.func,
   vector: React.PropTypes.instanceOf(Vector),
 };
 
