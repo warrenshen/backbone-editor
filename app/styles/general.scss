@@ -20,13 +20,12 @@ h6 {
   color: $ash;
   font-family: $font-family-primary;
   font-weight: $font-weight-medium;
-  letter-spacing: 1px;
 }
 
 h1 {
   font-size: $font-size-largest;
   letter-spacing: 4px;
-  line-height: 72px;
+  line-height: 64px;
 }
 
 h2 {
@@ -64,7 +63,6 @@ input {
   font-size: $font-size-smallest;
   font-weight: $font-weight-medium;
   font-family: $font-family-secondary;
-  letter-spacing: 1px;
   text-decoration: none;
   outline: none;
 }
