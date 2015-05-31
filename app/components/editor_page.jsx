@@ -62,18 +62,20 @@ class EditorPage extends ListeningComponent {
 
         EditorActor.removeBlocks(vector);
         this.updateStory();
-      } else if (!event.shiftKey && event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
-        event.preventDefault();
-        var selection = window.getSelection();
-        var vector = Selector.generateVector(selection);
+      } else if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
+        if (!event.shiftKey) {
+          event.preventDefault();
+          var selection = window.getSelection();
+          var vector = Selector.generateVector(selection);
 
-        if (event.which === KeyConstants.left || event.which === KeyConstants.up) {
-          EditorActor.updatePoint(vector.startPoint);
-        } else {
-          EditorActor.updatePoint(vector.endPoint);
+          if (event.which === KeyConstants.left || event.which === KeyConstants.up) {
+            EditorActor.updatePoint(vector.startPoint);
+          } else {
+            EditorActor.updatePoint(vector.endPoint);
+          }
+
+          this.updateStory();
         }
-
-        this.updateStory();
       }
     }
   }
@@ -168,6 +170,7 @@ class EditorPage extends ListeningComponent {
         <StyleModal
           activeStyles={this.state.activeStyles}
           shouldUpdateModal={this.state.shouldUpdateModal}
+          updateStory={this.updateStory.bind(this)}
           vector={this.state.vector} />
       </div>
     );

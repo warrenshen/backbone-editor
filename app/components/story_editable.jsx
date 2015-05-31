@@ -89,6 +89,7 @@ class StoryEditable extends Component {
 
   render() {
     console.log("rerender story component");
+    console.log("");
     return (
       <div className={"story-container"}>
         {this.renderSections()}
