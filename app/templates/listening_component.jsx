@@ -8,10 +8,6 @@ class ListeningComponent extends Component {
     return [];
   }
 
-  requestFromStore() {
-
-  }
-
   getDefaultState() {
     return this.getStoreState();
   }

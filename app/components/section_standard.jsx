@@ -16,11 +16,10 @@ class SectionStandard extends Component {
     var props = {
       key: block.cid,
       block: block,
-      disableEdits: this.props.disableEdits,
-      enableEdits: this.props.enableEdits,
       shouldEnableEdits: this.props.shouldEnableEdits,
-      shouldUpdateContent: this.props.shouldUpdateContent,
+      updateStory: this.props.updateStory,
     };
+
     switch (block.get("type")) {
       case TypeConstants.block.headingOne:
       case TypeConstants.block.headingTwo:
@@ -30,7 +29,7 @@ class SectionStandard extends Component {
         return <BlockQuote {...props} />;
       case TypeConstants.block.standard:
         return <BlockStandard {...props} />;
-    };
+    }
   }
 
   renderBlocks() {
@@ -53,6 +52,7 @@ class SectionStandard extends Component {
 SectionStandard.propTypes = {
   section: React.PropTypes.instanceOf(Section).isRequired,
   shouldEnableEdits: React.PropTypes.bool.isRequired,
+  updateStory: React.PropTypes.func,
 };
 
 SectionStandard.defaultProps = {

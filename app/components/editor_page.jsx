@@ -21,6 +21,14 @@ class EditorPage extends ListeningComponent {
     return [EditorStore];
   }
 
+  getDefaultState() {
+    return _.merge(
+      {},
+      { shouldUpdateStory: false },
+      this.getStoreState()
+    );
+  }
+
   getStoreState() {
     return {
       activeStyles: EditorStore.activeStyles,
@@ -31,29 +39,39 @@ class EditorPage extends ListeningComponent {
     }
   }
 
+  updateStory() {
+    this.setState({ shouldUpdateStory: true });
+    this.setState({ shouldUpdateStory: false });
+  }
+
   handleKeyDown(event) {
     event.stopPropagation();
+    var selection = window.getSelection();
 
-    if (EditorStore.mouseState === TypeConstants.mouse.move) {
+    if (event.shiftKey) {
+      if (selection.type === "Range" && event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
+        var vector = Selector.generateVector(selection);
+        EditorActor.updateVector(vector);
+        this.updateStory();
+      }
+    } else if (EditorStore.mouseState === TypeConstants.mouse.move) {
       if (event.which === KeyConstants.backspace) {
         event.preventDefault();
-        var selection = window.getSelection();
-        var vector = Selector.generateVector(selection);
-        EditorActor.removeBlocks(vector);
-      } else if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
-        var selection = window.getSelection();
         var vector = Selector.generateVector(selection);
 
-        if (event.shiftKey) {
-          EditorActor.updateVector(vector);
+        EditorActor.removeBlocks(vector);
+        this.updateStory();
+      } else if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
+        event.preventDefault();
+        var vector = Selector.generateVector(selection);
+
+        if (event.which === KeyConstants.left || event.which === KeyConstants.up) {
+          EditorActor.updatePoint(vector.startPoint);
         } else {
-          event.preventDefault();
-          if (event.which === KeyConstants.left || event.which === KeyConstants.up) {
-            EditorActor.updatePoint(vector.startPoint);
-          } else {
-            EditorActor.updatePoint(vector.endPoint);
-          }
+          EditorActor.updatePoint(vector.endPoint);
         }
+
+        this.updateStory();
       }
     }
   }
@@ -66,19 +84,23 @@ class EditorPage extends ListeningComponent {
 
       if (event.which === KeyConstants.enter) {
         EditorActor.removeBlocks(vector, { enter: true });
+        this.updateStory();
       } else {
         if (event.ctrlKey || event.metaKey) {
           switch (event.which) {
             case KeyConstants.b:
               EditorActor.styleElements(vector, TypeConstants.element.bold);
+              this.updateStory();
               break;
             case KeyConstants.i:
               EditorActor.styleElements(vector, TypeConstants.element.italic);
+              this.updateStory();
               break;
           }
         } else {
           var character = String.fromCharCode(event.which);
           EditorActor.removeBlocks(vector, { character: character });
+          this.updateStory();
         }
       }
     }
@@ -93,9 +115,11 @@ class EditorPage extends ListeningComponent {
     if (EditorStore.mouseState === TypeConstants.mouse.move) {
       var vector = Selector.generateVector(selection);
       EditorActor.updateVector(vector);
+      this.updateStory();
     } else if (EditorStore.mouseState === TypeConstants.mouse.down) {
       EditorActor.updateMouseState(TypeConstants.mouse.up)
       EditorActor.updateVector(null);
+      this.updateStory();
     }
   }
 
@@ -123,9 +147,12 @@ class EditorPage extends ListeningComponent {
         <StoryEditable
           point={this.state.point}
           shouldEnableEdits={this.state.shouldEnableEdits}
-          story={this.state.story} />
+          shouldUpdateStory={this.state.shouldUpdateStory}
+          story={this.state.story}
+          updateStory={this.updateStory.bind(this)} />
         <StyleModal
           activeStyles={this.state.activeStyles}
+          updateStory={this.updateStory.bind(this)}
           vector={this.state.vector} />
       </div>
     );
