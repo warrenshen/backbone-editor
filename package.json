@@ -4,8 +4,8 @@
   "description": "warren sterling's personal website",
   "main": "app/app.js",
   "scripts": {
-    "compile": "webpack --watch --config webpack.config.js",
-    "deploy": "NODE_ENV=production webpack -p --config webpack.production.config.js",
+    "compile": "webpack --watch --config development.config.js",
+    "deploy": "NODE_ENV=production webpack -p --config production.config.js",
     "serve": "webpack-dev-server --devtool eval --progress --colors --hot --content-base build"
   },
   "repository": {
