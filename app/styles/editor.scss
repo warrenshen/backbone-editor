@@ -17,6 +17,7 @@
   // TODO: Change values below to standard, smaller values.
   min-height: $font-size-smaller;
   font-size: $font-size-smaller;
+  font-family: $font-family-secondary;
   line-height: 1.25;
   outline: none;
   word-wrap: break-word;
@@ -28,17 +29,20 @@
 
 .block-heading-one {
   font-size: $font-size-largest;
-  line-height: 2;
+  font-family: $font-family-primary;
+  line-height: 72px;
 }
 
 .block-heading-two {
   font-size: $font-size-larger;
-  line-height: 1.75;
+  font-family: $font-family-primary;
+  line-height: 48px;
 }
 
 .block-heading-three {
   font-size: $font-size-large;
-  line-height: 1.5;
+  font-family: $font-family-primary;
+  line-height: 36px;
 }
 
 .block-quote {
