@@ -90,9 +90,7 @@ class EditorStore extends Store {
     }
 
     point.caretOffset = beforeBlock.length;
-    var content = block.get("content");
-    beforeBlock.set("content", beforeBlock.get("content") + content);
-
+    block.transferFragment(beforeBlock, 0);
     section.removeBlock(block);
     this.updatePoint(point);
   }
@@ -172,10 +170,8 @@ class EditorStore extends Store {
         startPoint.caretOffset += 1;
       } else if (options.enter) {
         var newBlock = new Block();
-        newBlock.set("content", startBlock.get("content").substring(startCaretOffset));
-        startBlock.removeFragment(startCaretOffset, startBlock.length);
+        startBlock.transferFragment(newBlock, startCaretOffset);
         startSection.addBlock(newBlock, startBlockIndex + 1);
-        // TODO: Don't forget about transferring elements!
       }
     }
 
@@ -282,10 +278,8 @@ class EditorStore extends Store {
 
     var newBlock = new Block();
     if (caretOffset < block.length) {
-      newBlock.set("content", block.get("content").substring(caretOffset));
       newBlock.set("type", block.get("type"));
-      // TODO: Extract "new" elements and add to new block here.
-      block.removeFragment(caretOffset, block.length);
+      block.transferFragment(newBlock, caretOffset);
     }
 
     section.addBlock(newBlock, blockIndex + 1);
