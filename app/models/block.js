@@ -46,7 +46,18 @@ class Block extends Model {
     var suffix = content.substring(offset);
 
     this.set("content", prefix + character + suffix);
-    // TODO: Shift up elements here.
+
+    var elements = this.get("elements").models;
+    for (var element of elements) {
+      var startOffset = element.get("start");
+      var endOffset = element.get("end");
+
+      if (startOffset >= offset) {
+        element.setOffsets(startOffset + 1, endOffset + 1);
+      } else if (startOffset <= offset && endOffset >= offset) {
+        element.set("end", endOffset + 1);
+      }
+    }
   }
 
   elementComparator(element) {
