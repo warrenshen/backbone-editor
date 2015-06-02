@@ -141,20 +141,15 @@ class Block extends Model {
   }
 
   transferFragment(otherBlock, offset) {
-    var content = otherBlock.get("content");
-    otherBlock.set("content", content + this.get("content").substring(offset));
-    this.removeFragment(offset, this.length);
-    // TODO: Transfer elements here as well!
-
     var saveElements = [];
     var transferElements = [];
     var elements = this.get("elements");
     for (var element of elements.models) {
       if (element.get("start") >= offset) {
-        transferElements.push(transferElements);
+        transferElements.push(element);
       } else if (element.get("end") > offset) {
         var prefixElement = element.clonePrefix(offset);
-        var suffixElement = element.clonseSuffix(offset);
+        var suffixElement = element.cloneSuffix(offset);
 
         saveElements.push(prefixElement);
         transferElements.push(suffixElement);
@@ -168,9 +163,18 @@ class Block extends Model {
     var otherElements = otherBlock.get("elements");
     for (var transferElement of transferElements) {
       elements.remove(transferElement);
-      // TODO: Adjust offset of transfer element before pushing.
+
+      var length = otherBlock.length;
+      var startOffset = transferElement.get("start") - offset + length;
+      var endOffset = transferElement.get("end") - offset + length;
+
+      transferElement.setOffsets(startOffset, endOffset);
       otherElements.push(transferElement);
     }
+
+    var content = otherBlock.get("content");
+    otherBlock.set("content", content + this.get("content").substring(offset));
+    this.removeFragment(offset, this.length);
   }
 
   removeFragment(startOffset, endOffset) {
@@ -182,9 +186,6 @@ class Block extends Model {
 
     var elements = this.get("elements").models;
     var trashElements = [];
-    for (var element of elements) {
-      var
-    }
   }
 }
 
