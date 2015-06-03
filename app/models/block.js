@@ -47,15 +47,15 @@ class Block extends Model {
 
     this.set("content", prefix + character + suffix);
 
-    var elements = this.get("elements").models;
-    for (var element of elements) {
-      var startOffset = element.get("start");
-      var endOffset = element.get("end");
+    var elements = this.get("elements");
+    for (var element of elements.models) {
+      var start = element.get("start");
+      var end = element.get("end");
 
-      if (startOffset >= offset) {
-        element.setOffsets(startOffset + 1, endOffset + 1);
-      } else if (startOffset <= offset && endOffset >= offset) {
-        element.set("end", endOffset + 1);
+      if (start >= offset) {
+        element.setOffsets(start + 1, endOffset + 1);
+      } else if (end >= offset) {
+        element.set("end", end + 1);
       }
     }
   }
@@ -74,8 +74,8 @@ class Block extends Model {
     styles.push([TypeConstants.block.headingThree, type === TypeConstants.block.headingThree]);
     styles.push([TypeConstants.block.quote, type === TypeConstants.block.quote]);
 
-    var elements = this.get("elements").models;
-    for (var element of elements) {
+    var elements = this.get("elements");
+    for (var element of elements.models) {
       if (element.get("start") <= startOffset && element.get("end") >= endOffset) {
         styles.push([element.get("type"), true]);
       }
@@ -97,10 +97,10 @@ class Block extends Model {
       var rightElement = elements.at(index + 1);
 
       if (leftElement.coincidesWith(rightElement)) {
-        var startOffset = Math.min(leftElement.get("start"), rightElement.get("start"));
-        var endOffset = Math.max(leftElement.get("end"), rightElement.get("end"));
+        var start = Math.min(leftElement.get("start"), rightElement.get("start"));
+        var end = Math.max(leftElement.get("end"), rightElement.get("end"));
 
-        rightElement.setOffsets(startOffset, endOffset);
+        rightElement.setOffsets(start, end);
         trashElements.push(leftElement);
       }
     }
@@ -141,18 +141,22 @@ class Block extends Model {
   }
 
   transferFragment(otherBlock, offset) {
-    var saveElements = [];
-    var transferElements = [];
     var elements = this.get("elements");
+    var newElements = [];
+    var saveElements = [];
+    var trashElements = [];
+
     for (var element of elements.models) {
       if (element.get("start") >= offset) {
-        transferElements.push(element);
+        trashElements.push(element);
+        newElements.push(element);
       } else if (element.get("end") > offset) {
         var prefixElement = element.clonePrefix(offset);
         var suffixElement = element.cloneSuffix(offset);
 
+        newElements.push(suffixElement);
         saveElements.push(prefixElement);
-        transferElements.push(suffixElement);
+        trashElements.push(element);
       }
     }
 
@@ -160,20 +164,24 @@ class Block extends Model {
       elements.push(saveElement);
     }
 
-    var otherElements = otherBlock.get("elements");
-    for (var transferElement of transferElements) {
-      elements.remove(transferElement);
-
-      var length = otherBlock.length;
-      var startOffset = transferElement.get("start") - offset + length;
-      var endOffset = transferElement.get("end") - offset + length;
-
-      transferElement.setOffsets(startOffset, endOffset);
-      otherElements.push(transferElement);
+    for (var trashElement of trashElements) {
+      elements.remove(trashElement);
     }
 
-    var content = otherBlock.get("content");
-    otherBlock.set("content", content + this.get("content").substring(offset));
+    var otherElements = otherBlock.get("elements");
+    for (var newElement of newElements) {
+      var anchor = otherBlock.length - offset;
+      var start = newElement.get("start") + anchor;
+      var end = newElement.get("end") + anchor;
+
+      newElement.setOffsets(start, end);
+      otherElements.push(newElement);
+    }
+
+    var content = this.get("content").substring(offset);
+    var otherContent = otherBlock.get("content");
+
+    otherBlock.set("content", otherContent + content);
     this.removeFragment(offset, this.length);
   }
 
@@ -184,8 +192,38 @@ class Block extends Model {
 
     this.set("content", prefix + suffix);
 
-    var elements = this.get("elements").models;
+    var elements = this.get("elements");
     var trashElements = [];
+
+    for (var element of elements.models) {
+      var start = element.get("start");
+      var end = element.get("end");
+      var length = endOffset - startOffset;
+
+      if (start >= startOffset && end <= endOffset) {
+        trashElements.push(element);
+      }
+
+      if (start >= startOffset) {
+        if (start <= endOffset) {
+          element.set("start", startOffset);
+        } else {
+          element.set("start", start - length);
+        }
+      }
+
+      if (end > startOffset) {
+        if (end <= endOffset) {
+          element.set("end", startOffset);
+        } else {
+          element.set("end", end - length);
+        }
+      }
+    }
+
+    for (var trashElement of trashElements) {
+      elements.remove(trashElements);
+    }
   }
 }
 
