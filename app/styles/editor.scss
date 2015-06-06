@@ -26,6 +26,13 @@
   text-align: center;
 }
 
+.block-divider {
+  position: relative;
+  width: 10%;
+  margin: auto;
+  color: $ash;
+}
+
 .block-heading-one {
   font-size: $font-size-largest;
   font-family: $font-family-primary;

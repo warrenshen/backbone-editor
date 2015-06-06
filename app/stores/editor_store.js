@@ -77,6 +77,8 @@ class EditorStore extends Store {
     var section = story.get("sections").at(sectionIndex);
 
     section.addBlock(block, blockIndex);
+    point.blockIndex += 1;
+    this.updatePoint(point);
   }
 
   removeBlock(point) {

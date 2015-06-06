@@ -1,7 +1,7 @@
 import React from "react";
 import Component from "app/templates/component";
 
-import BlockDivider from "app/component/block_divider";
+import BlockDivider from "app/components/block_divider";
 import BlockHeading from "app/components/block_heading";
 import BlockQuote from "app/components/block_quote";
 import BlockStandard from "app/components/block_standard";
@@ -24,7 +24,7 @@ class SectionStandard extends Component {
 
     switch (block.get("type")) {
       case TypeConstants.block.divider:
-        return <BlockDivider {...props}>;
+        return <BlockDivider {...props} />;
       case TypeConstants.block.headingOne:
       case TypeConstants.block.headingTwo:
       case TypeConstants.block.headingThree:
