@@ -110,9 +110,11 @@ textarea:focus {
 }
 
 .general-invisible {
-  position: relative;
+  position: absolute;
   width: 0;
   height: 0;
+  padding: 0;
+  margin: 0;
 }
 
 .vertical-anchor {

@@ -19,8 +19,35 @@ class MediaModal extends Component {
     return { shouldShowOptions: false };
   }
 
+  generatePoint() {
+    return new Point(
+      this.props.sectionIndex,
+      this.props.blockIndex,
+      0
+    );
+  }
+
   handleBlur(event) {
     this.setState({ shouldShowOptions: false });
+  }
+
+  handleChange(event) {
+    var files = event.target.files;
+    if (files && files[0]) {
+      var block = new Block({ type: TypeConstants.block.image });
+      var callback = this.props.updateStory;
+      var point = this.generatePoint();
+
+      var reader = new FileReader();
+      reader.onloadend = function(file) {
+        var source = file.target.result;
+        block.set("source", source);
+        EditorActor.addBlock(block, point);
+        callback();
+      };
+
+      reader.readAsDataURL(files[0]);
+    }
   }
 
   handleClickCode(event) {
@@ -28,14 +55,14 @@ class MediaModal extends Component {
   }
 
   handleClickDivider(event) {
-    var divider = new Block({ type: TypeConstants.block.divider });
-    var point = new Point(this.props.sectionIndex, this.props.blockIndex, 0);
-    EditorActor.addBlock(divider, point);
+    var block = new Block({ type: TypeConstants.block.divider });
+    var point = this.generatePoint();
+    EditorActor.addBlock(block, point);
     this.props.updateStory();
   }
 
   handleClickImage(event) {
-    console.log("Create image!");
+    React.findDOMNode(this.refs.uploader).click();
   }
 
   handleClickPrompt(event) {
@@ -72,6 +99,9 @@ class MediaModal extends Component {
     var prompt = React.findDOMNode(this.refs.prompt);
     prompt.addEventListener("click", this.handleClickPrompt.bind(this));
     prompt.addEventListener("mousedown", this.handleMouseDown.bind(this));
+
+    var uploader = React.findDOMNode(this.refs.uploader);
+    uploader.addEventListener("change", this.handleChange.bind(this));
   }
 
   componentWillUnmount() {
@@ -93,6 +123,9 @@ class MediaModal extends Component {
     var prompt = React.findDOMNode(this.refs.prompt);
     prompt.removeEventListener("click", this.handleClickPrompt);
     prompt.removeEventListener("mousedown", this.handleMouseDown);
+
+    var uploader = React.findDOMNode(this.refs.uploader);
+    uploader.removeEventListener("change", this.handleChange);
   }
 
   render() {
@@ -111,11 +144,6 @@ class MediaModal extends Component {
     );
     return (
       <div className={modalClass}>
-        <p
-          className={"general-invisible"}
-          contentEditable={"true"}
-          ref={"invisible"}>
-        </p>
         <span className={promptClass} ref={"prompt"}>
           <span className={"vertical-anchor"}></span>
           <i className={"fa fa-plus"}></i>
@@ -132,6 +160,17 @@ class MediaModal extends Component {
           <span className={"vertical-anchor"}></span>
           <i className={"fa fa-code"}></i>
         </span>
+        <input
+          className={"general-invisible"}
+          ref={"uploader"}
+          type={"file"}
+          accept={"image/*"}>
+        </input>
+        <p
+          className={"general-invisible"}
+          contentEditable={"true"}
+          ref={"invisible"}>
+        </p>
       </div>
     );
   }

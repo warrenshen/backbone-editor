@@ -13,8 +13,8 @@ class Block extends Model {
     return {
       centered: false,
       content: "",
-      image_url: "",
       index: 0,
+      source: "",
       type: TypeConstants.block.standard,
     };
   }
