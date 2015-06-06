@@ -3,6 +3,7 @@ import Component from "app/templates/component";
 
 import BlockDivider from "app/components/block_divider";
 import BlockHeading from "app/components/block_heading";
+import BlockImage from "app/components/block_image";
 import BlockQuote from "app/components/block_quote";
 import BlockStandard from "app/components/block_standard";
 
@@ -29,6 +30,8 @@ class SectionStandard extends Component {
       case TypeConstants.block.headingTwo:
       case TypeConstants.block.headingThree:
         return <BlockHeading {...props} />;
+      case TypeConstants.block.image:
+        return <BlockImage {...props} />;
       case TypeConstants.block.quote:
         return <BlockQuote {...props} />;
       case TypeConstants.block.standard:

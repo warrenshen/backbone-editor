@@ -33,6 +33,12 @@
   color: $ash;
 }
 
+.block-frame {
+  position: relative;
+  width: 100%;
+  line-height: 0;
+}
+
 .block-heading-one {
   font-size: $font-size-largest;
   font-family: $font-family-primary;
@@ -49,6 +55,12 @@
   font-size: $font-size-large;
   font-family: $font-family-primary;
   line-height: 36px;
+}
+
+.block-image {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
 }
 
 .block-quote {
