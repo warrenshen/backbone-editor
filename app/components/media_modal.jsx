@@ -96,6 +96,10 @@ class MediaModal extends Component {
       { "media-modal-open": this.state.shouldShowOptions },
       { "general-hidden": false }
     );
+    var promptClass = ClassNames(
+      { "media-modal-prompt": true },
+      { "media-modal-prompt-open": this.state.shouldShowOptions }
+    );
     var optionClass = ClassNames(
       { "media-modal-option": true },
       { "media-modal-option-hidden": !this.state.shouldShowOptions }
@@ -107,7 +111,7 @@ class MediaModal extends Component {
           contentEditable={"true"}
           ref={"invisible"}>
         </p>
-        <span className={"media-modal-prompt"} ref={"prompt"}>
+        <span className={promptClass} ref={"prompt"}>
           <span className={"vertical-anchor"}></span>
           <i className={"fa fa-plus"}></i>
         </span>

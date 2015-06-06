@@ -74,7 +74,7 @@
 }
 
 .media-modal-open {
-  width: 156px;
+  width: 172px;
 }
 
 .media-modal-prompt {
@@ -82,15 +82,29 @@
   vertical-align: middle;
   position: relative;
   z-index: $z-index-9;
-  width: 28px;
-  height: 28px;
-  margin-right: 8px;
+  width: 30px;
+  height: 30px;
+  margin-right: 16px;
   color: $gray;
-  border: 1px solid $gray;
-  border-radius: 14px;
+  border: 2px solid $gray;
+  border-radius: 15px;
   line-height: 0;
   text-align: center;
   cursor: pointer;
+  box-sizing: border-box;
+  transition: transform 100ms;
+  transform: rotate(0deg);
+
+  &:hover {
+    color: $ash;
+    border-color: $ash;
+  }
+}
+
+.media-modal-prompt-open {
+  color: $ash;
+  border-color: $ash;
+  transform: rotate(45deg);
 }
 
 .media-modal-option {
@@ -98,17 +112,23 @@
   vertical-align: middle;
   position: relative;
   z-index: $z-index-9;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   margin-right: 8px;
   color: $gray;
-  border: 1px solid $gray;
-  border-radius: 14px;
+  border: 2px solid $gray;
+  border-radius: 15px;
   line-height: 0;
   text-align: center;
   cursor: pointer;
+  box-sizing: border-box;
   transition: transform 100ms;
   transform: scale(1, 1);
+
+  &:hover {
+    color: $coral;
+    border-color: $coral;
+  }
 
   &:nth-child(4) {
     transition-delay: 40ms;
