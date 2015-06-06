@@ -44,6 +44,7 @@ class StoryEditable extends Component {
         }
 
         // Default to end of block if leftover caret offset present.
+        // TODO: Update editor store's point with correct offset.
         if (caretOffset > 0) {
           range.setStart(currentNode, currentNode.length);
           range.setEnd(currentNode, currentNode.length);

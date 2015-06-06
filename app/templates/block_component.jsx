@@ -182,7 +182,8 @@ class BlockComponent extends Component {
     if (!block.get("content") && point &&
         point.matchesIndices(this.props.sectionIndex, block.get("index"))) {
       return (
-        <MediaModal />
+        <MediaModal
+          updateStory={this.props.updateStory} />
       );
     }
   }

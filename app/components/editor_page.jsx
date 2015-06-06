@@ -119,7 +119,11 @@ class EditorPage extends ListeningComponent {
   }
 
   handleMouseDown(event) {
-    EditorActor.updateMouseState(TypeConstants.mouse.down);
+    // Only update mouse state if the store has a vector,
+    // because we don't want possibly hide a media modal.
+    if (EditorStore.vector != null) {
+      EditorActor.updateMouseState(TypeConstants.mouse.down);
+    }
   }
 
   handleMouseUp(event) {
