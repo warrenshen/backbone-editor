@@ -24,8 +24,8 @@ class EditorStore extends Store {
     this._vector = null;
 
     var initialSection = new Section();
-    this.addSection(initialSection);
     initialSection.addBlock(new Block());
+    this.addSection(initialSection);
   }
 
   // --------------------------------------------------
@@ -166,7 +166,7 @@ class EditorStore extends Store {
       var startBlock = startSection.get("blocks").at(startBlockIndex);
 
       if (options.character) {
-        startBlock.addFragment(startCaretOffset, options.character);
+        startBlock.addCharacter(startCaretOffset, options.character);
         startPoint.caretOffset += 1;
       } else if (options.enter) {
         var newBlock = new Block();
@@ -371,13 +371,13 @@ class EditorStore extends Store {
         var element = new Element({ type: which });
 
         if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
-          element.setOffsets(startCaretOffset, endCaretOffset);
+          element.setRange(startCaretOffset, endCaretOffset);
         } else if (blockIndex === blockIndices[0]) {
-          element.setOffsets(startCaretOffset, block.length);
+          element.setRange(startCaretOffset, block.length);
         } else if (blockIndex === blockIndices[blockIndices.length - 1]) {
-          element.setOffsets(0, endCaretOffset);
+          element.setRange(0, endCaretOffset);
         } else {
-          element.setOffsets(0, block.length);
+          element.setRange(0, block.length);
         }
 
         block.parseElement(element);

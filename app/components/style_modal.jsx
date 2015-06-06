@@ -120,7 +120,6 @@ class StyleModal extends Component {
   }
 
   componentDidMount() {
-    super.componentDidMount();
     var node = React.findDOMNode(this.refs.modal);
     node.addEventListener("mousedown", this.handleMouseDown.bind(this));
     node.addEventListener("mouseup", this.handleMouseUp.bind(this));

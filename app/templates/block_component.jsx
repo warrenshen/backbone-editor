@@ -94,7 +94,7 @@ class BlockComponent extends Component {
     } else {
       var block = this.props.block;
       var character = String.fromCharCode(event.which);
-      block.addFragment(point.caretOffset, character);
+      block.addCharacter(point.caretOffset, character);
 
       // unless text
       //   event.preventDefault()
@@ -138,7 +138,6 @@ class BlockComponent extends Component {
   }
 
   componentDidMount() {
-    super.componentDidMount();
     var node = React.findDOMNode(this.refs.content);
     node.addEventListener("keydown", this.handleKeyDown.bind(this));
     node.addEventListener("keypress", this.handleKeyPress.bind(this));
@@ -154,7 +153,6 @@ class BlockComponent extends Component {
   }
 
   componentWillUnmount() {
-    super.componentWillUnmount();
     var node = React.findDOMNode(this.refs.content);
     node.removeEventListener("keydown", this.handleKeyDown);
     node.removeEventListener("keypress", this.handleKeyPress);

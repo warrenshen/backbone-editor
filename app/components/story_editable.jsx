@@ -60,7 +60,6 @@ class StoryEditable extends Component {
   }
 
   componentDidMount() {
-    super.componentDidMount();
     this.createCaret(this.props.point);
   }
 

@@ -124,7 +124,6 @@ class EditorPage extends ListeningComponent {
   }
 
   componentDidMount() {
-    super.componentDidMount();
     var node = React.findDOMNode(this.refs.page);
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
     document.addEventListener("keypress", this.handleKeyPress.bind(this));
@@ -133,7 +132,6 @@ class EditorPage extends ListeningComponent {
   }
 
   componentWillUnmount() {
-    super.componentWillUnmount();
     var node = React.findDOMNode(this.refs.page);
     document.removeEventListener("keydown", this.handleKeyDown);
     document.removeEventListener("keypress", this.handleKeyPress);
