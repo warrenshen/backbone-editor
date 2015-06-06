@@ -12,8 +12,10 @@ class MediaModal extends Component {
     );
     return (
       <div className={modalClass} ref="modal">
-        <span className={"media-modal-icon"}>
-          <i className={"fa fa-square"}></i>
+        <span className={"vertical-anchor"}></span>
+        <span className={"media-modal-prompt"}>
+          <span className={"vertical-anchor"}></span>
+          <i className={"fa fa-plus"}></i>
         </span>
       </div>
     );

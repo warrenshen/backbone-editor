@@ -64,14 +64,29 @@
 .media-modal {
   display: inline-block;
   position: absolute;
-  z-index: $z-index-9;
-  top: 0;
+  z-index: $z-index-8;
+  top: -6px;
   left: -40px;
   width: 30px;
   height: 30px;
   background-color: $white;
   overflow: hidden;
   -webkit-user-select: none;
+}
+
+.media-modal-prompt {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  z-index: $z-index-9;
+  width: 24px;
+  height: 24px;
+  color: $gray;
+  border: 1px solid $gray;
+  border-radius: 12px;
+  line-height: 0;
+  text-align: center;
+  cursor: pointer;
 }
 
 .section-container {
