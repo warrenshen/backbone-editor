@@ -115,6 +115,7 @@ class EditorPage extends ListeningComponent {
       var vector = Selector.generateVector(selection);
       EditorActor.updateVector(vector);
       this.updateStory();
+    }
   }
 
   handleMouseDown(event) {

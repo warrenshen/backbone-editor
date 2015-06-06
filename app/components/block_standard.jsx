@@ -20,6 +20,7 @@ class BlockStandard extends BlockComponent {
           contentEditable={this.props.shouldEnableEdits}
           ref={"content"}>
         </p>
+        {this.renderModal()}
       </div>
     );
   }

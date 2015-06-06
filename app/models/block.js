@@ -179,6 +179,7 @@ class Block extends Model {
     var otherContent = otherBlock.get("content");
 
     otherBlock.set("content", otherContent + content);
+    otherBlock.mergeElements();
     this.removeFragment(offset, this.length);
   }
 

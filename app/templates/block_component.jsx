@@ -1,6 +1,8 @@
 import React from "react";
 import Component from "app/templates/component";
 
+import MediaModal from "app/components/media_modal";
+
 import Block from "app/models/block";
 
 import EditorStore from "app/stores/editor_store";
@@ -163,6 +165,12 @@ class BlockComponent extends Component {
 
   renderContent(node) {
     node.innerHTML = Formatter.formatBlock(this.props.block);
+  }
+
+  renderModal() {
+    return (
+      <MediaModal />
+    );
   }
 
   render() {

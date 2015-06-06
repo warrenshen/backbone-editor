@@ -61,6 +61,19 @@
   -webkit-user-select: none;
 }
 
+.media-modal {
+  display: inline-block;
+  position: absolute;
+  z-index: $z-index-9;
+  top: 0;
+  left: -40px;
+  width: 30px;
+  height: 30px;
+  background-color: $white;
+  overflow: hidden;
+  -webkit-user-select: none;
+}
+
 .section-container {
   position: relative;
   width: 100%;
