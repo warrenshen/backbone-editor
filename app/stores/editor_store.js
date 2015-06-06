@@ -111,7 +111,7 @@ class EditorStore extends Store {
     var story = this._story;
     var sections = story.get("sections");
 
-    var trashSections = [];
+    var oldSections = [];
     var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
     for (var sectionIndex of sectionIndices) {
       var section = sections.at(sectionIndex);
@@ -126,12 +126,12 @@ class EditorStore extends Store {
       } else if (sectionIndex === endSectionIndex) {
         blockIndices = _.range(0, endBlockIndex + 1);
       } else {
-        trashSections.push(section);
+        oldSections.push(section);
         complete = true;
       }
 
       if (!complete) {
-        var trashBlocks = [];
+        var oldBlocks = [];
         for (var blockIndex of blockIndices) {
           var block = blocks.at(blockIndex);
           if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
@@ -140,25 +140,25 @@ class EditorStore extends Store {
             block.removeFragment(startCaretOffset, block.length);
           } else if (blockIndex === blockIndices[blockIndices.length - 1]) {
             if (endCaretOffset === block.length) {
-              trashBlocks.push(block);
+              oldBlocks.push(block);
             } else {
               block.removeFragment(0, endCaretOffset);
             }
           } else {
-            trashBlocks.push(block);
+            oldBlocks.push(block);
           }
         }
 
-        for (var trashBlock of trashBlocks) {
-          blocks.remove(trashBlock);
+        for (var oldBlock of oldBlocks) {
+          blocks.remove(oldBlock);
         }
 
         section.updateBlockIndices();
       }
     }
 
-    for (var trashSection of trashSections) {
-      section.remove(trashSection);
+    for (var oldSection of oldSections) {
+      section.remove(oldSections);
     }
 
     if (options.character || options.enter) {
