@@ -109,6 +109,12 @@ textarea:focus {
   display: none;
 }
 
+.general-invisible {
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
 .vertical-anchor {
   content: '';
   display: inline-block;

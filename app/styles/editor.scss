@@ -14,7 +14,6 @@
 .block-content {
   position: relative;
   width: 100%;
-  // TODO: Change values below to standard, smaller values.
   min-height: $font-size-smaller;
   font-size: $font-size-smaller;
   font-family: $font-family-secondary;
@@ -65,12 +64,16 @@
   display: inline-block;
   position: absolute;
   z-index: $z-index-8;
-  top: -8px;
-  left: -40px;
+  top: -6px;
+  left: -48px;
+  width: 30px;
   height: 30px;
-  background-color: $white;
   overflow: hidden;
   -webkit-user-select: none;
+}
+
+.media-modal-open {
+  width: 156px;
 }
 
 .media-modal-prompt {
@@ -103,15 +106,15 @@
   line-height: 0;
   text-align: center;
   cursor: pointer;
-  transition: transform 75ms;
+  transition: transform 100ms;
   transform: scale(1, 1);
 
   &:nth-child(4) {
-    transition-delay: 30ms;
+    transition-delay: 40ms;
   }
 
   &:nth-child(5) {
-    transition-delay: 60ms;
+    transition-delay: 80ms;
   }
 }
 
@@ -142,7 +145,7 @@
   padding: 0 8px;
   border-radius: 3px;
   box-shadow: 0, 0, 3px, $black;
-  transition: top 75ms, left 75ms;
+  transition: top 100ms, left 100ms;
   background-image: linear-gradient(to bottom, $ash, $black);
 }
 

@@ -9,24 +9,23 @@ class MediaModal extends Component {
     return { shouldShowOptions: false };
   }
 
-  handleClick(event) {
-    console.log("Prompt clicked!");
+  handleBlur(event) {
+    this.setState({ shouldShowOptions: false });
+  }
+
+  handleMouseDown(event) {
+    event.preventDefault();
+  }
+
+  handlePromptClick(event) {
+    React.findDOMNode(this.refs.invisible).focus();
     this.setState({ shouldShowOptions: !this.state.shouldShowOptions });
-  }
-
-  componentDidMount() {
-    var prompt = React.findDOMNode(this.refs.prompt);
-    prompt.addEventListener("click", this.handleClick.bind(this));
-  }
-
-  componentWillUnmount() {
-    var prompt = React.findDOMNode(this.refs.prompt);
-    prompt.removeEventListener("click", this.handleClick);
   }
 
   render() {
     var modalClass = ClassNames(
       { "media-modal": true },
+      { "media-modal-open": this.state.shouldShowOptions },
       { "general-hidden": false }
     );
     var optionClass = ClassNames(
@@ -35,20 +34,28 @@ class MediaModal extends Component {
     );
     return (
       <div className={modalClass} ref="modal">
-        <span className={"vertical-anchor"}></span>
-        <span className={"media-modal-prompt"} ref="prompt">
+        <p
+          className={"general-invisible"}
+          contentEditable={"true"}
+          onBlur={this.handleBlur.bind(this)}
+          ref={"invisible"}>
+        </p>
+        <span
+          className={"media-modal-prompt"}
+          onClick={this.handlePromptClick.bind(this)}
+          onMouseDown={this.handleMouseDown.bind(this)}>
           <span className={"vertical-anchor"}></span>
           <i className={"fa fa-plus"}></i>
         </span>
-        <span className={optionClass} ref={"image"}>
+        <span className={optionClass}>
           <span className={"vertical-anchor"}></span>
           <i className={"fa fa-image"}></i>
         </span>
-        <span className={optionClass} ref={"divider"}>
+        <span className={optionClass}>
           <span className={"vertical-anchor"}></span>
           <i className={"fa fa-minus"}></i>
         </span>
-        <span className={optionClass} ref={"divider"}>
+        <span className={optionClass}>
           <span className={"vertical-anchor"}></span>
           <i className={"fa fa-code"}></i>
         </span>
