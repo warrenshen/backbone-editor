@@ -65,9 +65,8 @@
   display: inline-block;
   position: absolute;
   z-index: $z-index-8;
-  top: -6px;
+  top: -8px;
   left: -40px;
-  width: 30px;
   height: 30px;
   background-color: $white;
   overflow: hidden;
@@ -79,14 +78,45 @@
   vertical-align: middle;
   position: relative;
   z-index: $z-index-9;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
+  margin-right: 8px;
   color: $gray;
   border: 1px solid $gray;
-  border-radius: 12px;
+  border-radius: 14px;
   line-height: 0;
   text-align: center;
   cursor: pointer;
+}
+
+.media-modal-option {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  z-index: $z-index-9;
+  width: 28px;
+  height: 28px;
+  margin-right: 8px;
+  color: $gray;
+  border: 1px solid $gray;
+  border-radius: 14px;
+  line-height: 0;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 75ms;
+  transform: scale(1, 1);
+
+  &:nth-child(4) {
+    transition-delay: 30ms;
+  }
+
+  &:nth-child(5) {
+    transition-delay: 60ms;
+  }
+}
+
+.media-modal-option-hidden {
+  transform: scale(0, 0);
 }
 
 .section-container {
