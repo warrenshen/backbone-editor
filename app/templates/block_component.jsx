@@ -74,6 +74,13 @@ class BlockComponent extends Component {
         var block = this.props.block;
         var caretOffset = point.caretOffset;
         block.removeFragment(caretOffset - 1, caretOffset);
+
+        if (!block.get("content")) {
+          event.preventDefault();
+          point.caretOffset = 0;
+          EditorActor.updatePoint(point);
+          this.props.updateStory();
+        }
       } else if (!point.prefixesEverything()) {
         event.preventDefault();
         EditorActor.removeBlock(point);
@@ -95,14 +102,16 @@ class BlockComponent extends Component {
       this.props.updateStory();
     } else {
       var block = this.props.block;
+      var content = block.get("content");
       var character = String.fromCharCode(event.which);
       block.addCharacter(point.caretOffset, character);
 
-      // unless text
-      //   event.preventDefault()
-      //   pointObject = new Point(@props.sectionIndex, @props.index, 1)
-      //   EditorActionCreators.updateCaret(pointObject)
-      //   @props.truifyUpdateEdit()
+      if (!content) {
+        event.preventDefault();
+        point.caretOffset = 1;
+        EditorActor.updatePoint(point);
+        this.props.updateStory();
+      }
 
       // else if @props.block.getText().substring(0, 3) is "1. "
       //   EditorActionCreators.formatOrderedList(@props.sectionIndex, @props.index)
@@ -168,9 +177,14 @@ class BlockComponent extends Component {
   }
 
   renderModal() {
-    return (
-      <MediaModal />
-    );
+    var block = this.props.block;
+    var point = EditorStore.point;
+    if (!block.get("content") && point &&
+        point.matchesIndices(this.props.sectionIndex, block.get("index"))) {
+      return (
+        <MediaModal />
+      );
+    }
   }
 
   render() {
@@ -184,12 +198,14 @@ class BlockComponent extends Component {
 
 BlockComponent.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
+  sectionIndex: React.PropTypes.number.isRequired,
   shouldEnableEdits: React.PropTypes.bool.isRequired,
   updateStory: React.PropTypes.func,
 };
 
 BlockComponent.defaultProps = {
   block: new Block(),
+  sectionIndex: 0,
   shouldEnableEdits: true,
 };
 

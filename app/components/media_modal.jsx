@@ -15,11 +15,17 @@ class MediaModal extends Component {
 
   handleMouseDown(event) {
     event.preventDefault();
+    event.stopPropagation();
   }
 
   handlePromptClick(event) {
     React.findDOMNode(this.refs.invisible).focus();
     this.setState({ shouldShowOptions: !this.state.shouldShowOptions });
+  }
+
+  componentDidMount() {
+    var prompt = React.findDOMNode(this.refs.prompt);
+    prompt.addEventListener("mousedown", this.handleMouseDown.bind(this));
   }
 
   render() {
@@ -33,7 +39,7 @@ class MediaModal extends Component {
       { "media-modal-option-hidden": !this.state.shouldShowOptions }
     );
     return (
-      <div className={modalClass} ref="modal">
+      <div className={modalClass}>
         <p
           className={"general-invisible"}
           contentEditable={"true"}
@@ -43,7 +49,7 @@ class MediaModal extends Component {
         <span
           className={"media-modal-prompt"}
           onClick={this.handlePromptClick.bind(this)}
-          onMouseDown={this.handleMouseDown.bind(this)}>
+          ref={"prompt"}>
           <span className={"vertical-anchor"}></span>
           <i className={"fa fa-plus"}></i>
         </span>
