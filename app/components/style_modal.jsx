@@ -120,7 +120,6 @@ class StyleModal extends Component {
   }
 
   componentDidMount() {
-    super.componentDidMount();
     var node = React.findDOMNode(this.refs.modal);
     node.addEventListener("mousedown", this.handleMouseDown.bind(this));
     node.addEventListener("mouseup", this.handleMouseUp.bind(this));
@@ -144,21 +143,21 @@ class StyleModal extends Component {
 
   renderOptions() {
     var activeStyles = this.props.activeStyles;
-    var templates = [
+    var propsHashes = [
       {
         action: this.styleHeadingOne.bind(this),
         active: activeStyles[TypeConstants.block.headingOne],
-        className:"fa fa-header",
+        className: "fa fa-header",
       },
       {
         action: this.styleHeadingTwo.bind(this),
         active: activeStyles[TypeConstants.block.headingTwo],
-        className:"fa fa-header",
+        className: "fa fa-header",
       },
       {
         action: this.styleHeadingThree.bind(this),
         active: activeStyles[TypeConstants.block.headingThree],
-        className:"fa fa-header",
+        className: "fa fa-header",
       },
       {
         action: this.styleQuote.bind(this),
@@ -187,7 +186,7 @@ class StyleModal extends Component {
       },
     ];
 
-    return templates.map(this.renderOption, this);
+    return propsHashes.map(this.renderOption, this);
   }
 
   render() {

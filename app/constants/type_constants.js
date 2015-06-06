@@ -5,6 +5,7 @@ module.exports = {
     headingOne: "heading_one",
     headingTwo: "heading_two",
     headingThree: "heading_three",
+    image: "image",
     quote: "quote",
     standard: "standard",
   },

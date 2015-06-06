@@ -24,8 +24,8 @@ class EditorStore extends Store {
     this._vector = null;
 
     var initialSection = new Section();
-    this.addSection(initialSection);
     initialSection.addBlock(new Block());
+    this.addSection(initialSection);
   }
 
   // --------------------------------------------------
@@ -67,6 +67,18 @@ class EditorStore extends Store {
     story.get("sections").add(section, { at: index });
     story.updateSectionIndices();
     this.emitChange();
+  }
+
+  addBlock(block, point) {
+    var sectionIndex = point.sectionIndex;
+    var blockIndex = point.blockIndex;
+
+    var story = this._story;
+    var section = story.get("sections").at(sectionIndex);
+
+    section.addBlock(block, blockIndex);
+    point.blockIndex += 1;
+    this.updatePoint(point);
   }
 
   removeBlock(point) {
@@ -111,7 +123,7 @@ class EditorStore extends Store {
     var story = this._story;
     var sections = story.get("sections");
 
-    var trashSections = [];
+    var oldSections = [];
     var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
     for (var sectionIndex of sectionIndices) {
       var section = sections.at(sectionIndex);
@@ -126,12 +138,12 @@ class EditorStore extends Store {
       } else if (sectionIndex === endSectionIndex) {
         blockIndices = _.range(0, endBlockIndex + 1);
       } else {
-        trashSections.push(section);
+        oldSections.push(section);
         complete = true;
       }
 
       if (!complete) {
-        var trashBlocks = [];
+        var oldBlocks = [];
         for (var blockIndex of blockIndices) {
           var block = blocks.at(blockIndex);
           if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
@@ -140,25 +152,25 @@ class EditorStore extends Store {
             block.removeFragment(startCaretOffset, block.length);
           } else if (blockIndex === blockIndices[blockIndices.length - 1]) {
             if (endCaretOffset === block.length) {
-              trashBlocks.push(block);
+              oldBlocks.push(block);
             } else {
               block.removeFragment(0, endCaretOffset);
             }
           } else {
-            trashBlocks.push(block);
+            oldBlocks.push(block);
           }
         }
 
-        for (var trashBlock of trashBlocks) {
-          blocks.remove(trashBlock);
+        for (var oldBlock of oldBlocks) {
+          blocks.remove(oldBlock);
         }
 
         section.updateBlockIndices();
       }
     }
 
-    for (var trashSection of trashSections) {
-      section.remove(trashSection);
+    for (var oldSection of oldSections) {
+      section.remove(oldSections);
     }
 
     if (options.character || options.enter) {
@@ -166,7 +178,7 @@ class EditorStore extends Store {
       var startBlock = startSection.get("blocks").at(startBlockIndex);
 
       if (options.character) {
-        startBlock.addFragment(startCaretOffset, options.character);
+        startBlock.addCharacter(startCaretOffset, options.character);
         startPoint.caretOffset += 1;
       } else if (options.enter) {
         var newBlock = new Block();
@@ -371,13 +383,13 @@ class EditorStore extends Store {
         var element = new Element({ type: which });
 
         if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
-          element.setOffsets(startCaretOffset, endCaretOffset);
+          element.setRange(startCaretOffset, endCaretOffset);
         } else if (blockIndex === blockIndices[0]) {
-          element.setOffsets(startCaretOffset, block.length);
+          element.setRange(startCaretOffset, block.length);
         } else if (blockIndex === blockIndices[blockIndices.length - 1]) {
-          element.setOffsets(0, endCaretOffset);
+          element.setRange(0, endCaretOffset);
         } else {
-          element.setOffsets(0, block.length);
+          element.setRange(0, block.length);
         }
 
         block.parseElement(element);
@@ -491,6 +503,9 @@ class EditorStore extends Store {
   handleDispatch(payload) {
     var action = payload.action;
     switch (action.type) {
+      case ActionConstants.editor.addBlock:
+        this.addBlock(action.block, action.point);
+        break;
       case ActionConstants.editor.removeBlock:
         this.removeBlock(action.point);
         break;

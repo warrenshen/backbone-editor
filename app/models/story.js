@@ -28,31 +28,29 @@ class Story extends Model {
   // Methods
   // --------------------------------------------------
   mergeSections() {
-    var trashSections = [];
     var sections = this.get("sections");
 
+    var oldSections = [];
     var indices = _.range(0, sections.length - 1);
     for (var index of indices) {
       var leftSection = sections.at(index);
       var rightSection = sections.at(index + 1);
 
       if (leftSection.get("type") === rightSection.get("type")) {
-        leftSection.merge(rightSection);
-        trashSections.push(rightSection);
+        rightSection.transferBlocks(leftSection);
+        oldSections.push(rightSection);
       }
     }
 
-    for (var trashSection of trashSections) {
-      sections.remove(trashSection);
+    for (var oldSection of oldSections) {
+      sections.remove(oldSection);
     }
   }
 
-  updateSectionIndex(section, index) {
-    section.set("index", index);
-  }
-
   updateSectionIndices() {
-    this.get("sections").map(this.updateSectionIndex);
+    this.get("sections").map(function(section, index) {
+      section.set("index", index);
+    });
   }
 }
 

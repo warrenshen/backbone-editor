@@ -18,14 +18,6 @@ class Component extends React.Component {
     return {};
   }
 
-  componentDidMount() {
-
-  }
-
-  componentWillUnmount() {
-
-  }
-
   render() {
     return <div></div>;
   }

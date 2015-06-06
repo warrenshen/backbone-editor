@@ -6,7 +6,6 @@ import Component from "app/templates/component";
 class StyleOption extends Component {
 
   componentDidMount() {
-    super.componentDidMount();
     var node = React.findDOMNode(this.refs.option);
     node.addEventListener("click", this.props.action);
   }

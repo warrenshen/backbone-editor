@@ -28,10 +28,10 @@ class Element extends Model {
   // Methods
   // --------------------------------------------------
   clonePrefix(offset) {
-    var startOffset = this.get("start");
-    if (startOffset < offset) {
+    var start = this.get("start");
+    if (start < offset) {
       var clone = new Element({ type: this.get("type") });
-      clone.setOffsets(startOffset, offset);
+      clone.setRange(start, offset);
       return clone;
     } else {
       return null;
@@ -39,10 +39,10 @@ class Element extends Model {
   }
 
   cloneSuffix(offset) {
-    var endOffset = this.get("end");
-    if (endOffset > offset) {
+    var end = this.get("end");
+    if (end > offset) {
       var clone = new Element({ type: this.get("type") });
-      clone.setOffsets(offset, endOffset);
+      clone.setRange(offset, end);
       return clone;
     } else {
       return null;
@@ -61,9 +61,9 @@ class Element extends Model {
            this.get("end") >= other.get("end");
   }
 
-  setOffsets(startOffset, endOffset) {
-    this.set("start", startOffset);
-    this.set("end", endOffset);
+  setRange(start, end) {
+    this.set("start", start);
+    this.set("end", end);
   }
 }
 
