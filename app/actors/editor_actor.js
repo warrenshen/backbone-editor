@@ -5,6 +5,14 @@ import ActionConstants from "app/constants/action_constants";
 
 class EditorActor extends Actor {
 
+  addBlock(block, point) {
+    this.act({
+      type: ActionConstants.editor.addBlock,
+      block: block,
+      point: point,
+    });
+  }
+
   removeBlock(point) {
     this.act({
       type: ActionConstants.editor.removeBlock,

@@ -39,12 +39,12 @@ class Point {
     this._shouldFloor = shouldFloor;
   }
 
-  compareDeeply(other) {
-    var sectionDifference = this._sectionIndex - other.sectionIndex;
+  compareDeeply(otherPoint) {
+    var sectionDifference = this._sectionIndex - otherPoint.sectionIndex;
     if (sectionDifference === 0) {
-      var blockDifference = this._blockIndex - other.blockIndex;
+      var blockDifference = this._blockIndex - otherPoint.blockIndex;
       if (blockDifference === 0) {
-        return this._caretOffset - other.caretOffset;
+        return this._caretOffset - otherPoint.caretOffset;
       } else {
         return blockDifference;
       }
@@ -53,8 +53,15 @@ class Point {
     }
   }
 
-  equalsDeeply(other) {
-    return this.equalsShallowly(other) && this._caretOffset === other.getCaretOffset();
+  equalsDeeply(otherPoint) {
+    return this.equalsShallowly(otherPoint) &&
+           this._caretOffset === otherPoint.getCaretOffset();
+  }
+
+  matchesIndices(sectionIndex, blockIndex) {
+    return this._sectionIndex === sectionIndex &&
+           this._blockIndex == blockIndex &&
+           this.prefixesBlock();
   }
 
   prefixesBlock() {

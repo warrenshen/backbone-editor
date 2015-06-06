@@ -15,25 +15,6 @@ class Store extends Events.EventEmitter {
   }
 
   // --------------------------------------------------
-  // Defaults
-  // --------------------------------------------------
-  get name() {
-    console.log("Store definition must include store name!");
-  }
-
-  get model() {
-    console.log("Store definition must include associated model!");
-  }
-
-  // --------------------------------------------------
-  // Getters
-  // --------------------------------------------------
-
-  // --------------------------------------------------
-  // Actions
-  // --------------------------------------------------
-
-  // --------------------------------------------------
   // Dispatch
   // --------------------------------------------------
   // Stores that listen for dispatches must override this method.

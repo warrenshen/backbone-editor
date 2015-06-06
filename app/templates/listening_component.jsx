@@ -17,7 +17,6 @@ class ListeningComponent extends Component {
   }
 
   componentDidMount() {
-    super.componentDidMount();
     var self = this;
     this.stores().map(function(store) {
       store.addChangeListener(self._onChange.bind(self));
@@ -25,7 +24,6 @@ class ListeningComponent extends Component {
   }
 
   componentWillUnmount() {
-    super.componentWillUnmount();
     var self = this;
     this.stores().map(function(store) {
       store.removeChangeListener(self._onChange.bind(self));

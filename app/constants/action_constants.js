@@ -1,5 +1,6 @@
 module.exports = {
   editor: {
+    addBlock: "add-block",
     removeBlock: "remove-block",
     removeBlocks: "remove-blocks",
     shiftDown: "shift-down",

@@ -38,33 +38,27 @@ class Section extends Model {
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------
-  mergeWith(other) {
-    var blocks = other.get("blocks");
-    for (var i = 0; i < other.length; i += 1) {
-      var block = blocks.shift();
-      this.addBlock(block, blocks.length);
-    }
-  }
-
-  updateBlockIndex(block, index) {
-    block.set("index", index);
-  }
-
-  updateBlockIndices() {
-    this.get("blocks").map(this.updateBlockIndex);
-  }
-
-  // --------------------------------------------------
-  // Actions
-  // --------------------------------------------------
   addBlock(block, index=0) {
     this.get("blocks").add(block, { at: index });
     this.updateBlockIndices();
   }
 
+  transferBlocks(otherSection) {
+    var blocks = this.get("blocks").models;
+    for (var i = 0; i < this.length; i += 1) {
+      otherSection.addBlock(blocks.shift(), blocks.length);
+    }
+  }
+
   removeBlock(block) {
     this.get("blocks").remove(block);
     this.updateBlockIndices();
+  }
+
+  updateBlockIndices() {
+    this.get("blocks").map(function(block, index) {
+      block.set("index", index);
+    });
   }
 }
 

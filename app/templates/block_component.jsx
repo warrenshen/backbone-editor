@@ -1,6 +1,8 @@
 import React from "react";
 import Component from "app/templates/component";
 
+import MediaModal from "app/components/media_modal";
+
 import Block from "app/models/block";
 
 import EditorStore from "app/stores/editor_store";
@@ -72,6 +74,13 @@ class BlockComponent extends Component {
         var block = this.props.block;
         var caretOffset = point.caretOffset;
         block.removeFragment(caretOffset - 1, caretOffset);
+
+        if (!block.get("content")) {
+          event.preventDefault();
+          point.caretOffset = 0;
+          EditorActor.updatePoint(point);
+          this.props.updateStory();
+        }
       } else if (!point.prefixesEverything()) {
         event.preventDefault();
         EditorActor.removeBlock(point);
@@ -93,14 +102,16 @@ class BlockComponent extends Component {
       this.props.updateStory();
     } else {
       var block = this.props.block;
+      var content = block.get("content");
       var character = String.fromCharCode(event.which);
-      block.addFragment(point.caretOffset, character);
+      block.addCharacter(point.caretOffset, character);
 
-      // unless text
-      //   event.preventDefault()
-      //   pointObject = new Point(@props.sectionIndex, @props.index, 1)
-      //   EditorActionCreators.updateCaret(pointObject)
-      //   @props.truifyUpdateEdit()
+      if (!content) {
+        event.preventDefault();
+        point.caretOffset = 1;
+        EditorActor.updatePoint(point);
+        this.props.updateStory();
+      }
 
       // else if @props.block.getText().substring(0, 3) is "1. "
       //   EditorActionCreators.formatOrderedList(@props.sectionIndex, @props.index)
@@ -138,7 +149,6 @@ class BlockComponent extends Component {
   }
 
   componentDidMount() {
-    super.componentDidMount();
     var node = React.findDOMNode(this.refs.content);
     node.addEventListener("keydown", this.handleKeyDown.bind(this));
     node.addEventListener("keypress", this.handleKeyPress.bind(this));
@@ -154,7 +164,6 @@ class BlockComponent extends Component {
   }
 
   componentWillUnmount() {
-    super.componentWillUnmount();
     var node = React.findDOMNode(this.refs.content);
     node.removeEventListener("keydown", this.handleKeyDown);
     node.removeEventListener("keypress", this.handleKeyPress);
@@ -165,6 +174,22 @@ class BlockComponent extends Component {
 
   renderContent(node) {
     node.innerHTML = Formatter.formatBlock(this.props.block);
+  }
+
+  renderModal() {
+    var block = this.props.block;
+    var blockIndex = block.get("index");
+    var point = EditorStore.point;
+    var sectionIndex = this.props.sectionIndex;
+    if (!block.get("content") && point &&
+        point.matchesIndices(sectionIndex, blockIndex)) {
+      return (
+        <MediaModal
+          blockIndex={blockIndex}
+          sectionIndex={sectionIndex}
+          updateStory={this.props.updateStory} />
+      );
+    }
   }
 
   render() {
@@ -178,12 +203,14 @@ class BlockComponent extends Component {
 
 BlockComponent.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
+  sectionIndex: React.PropTypes.number.isRequired,
   shouldEnableEdits: React.PropTypes.bool.isRequired,
   updateStory: React.PropTypes.func,
 };
 
 BlockComponent.defaultProps = {
   block: new Block(),
+  sectionIndex: 0,
   shouldEnableEdits: true,
 };
 

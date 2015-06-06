@@ -58,6 +58,7 @@ p,
 li,
 span,
 input {
+  padding: 0;
   margin: 0;
   color: $ash;
   font-size: $font-size-smallest;
@@ -70,8 +71,7 @@ input {
 input[type=text],
 input[type=password],
 textarea {
-  border: 1px solid;
-  border-color: $gray-input;
+  border: 1px solid $gray-input;
   outline: none;
   box-sizing: border-box;
   -webkit-transition: all 0.30s ease-in-out;
@@ -94,8 +94,7 @@ textarea:focus {
   padding: 6px 12px;
   margin-right: 12px;
   color: $white;
-  border-bottom: 2px solid;
-  border-color: $gray-border;
+  border-bottom: 2px solid $gray-border;
   border-radius: 2px;
   background-color: $gray-border;
   font-size: 14px;
@@ -108,6 +107,14 @@ textarea:focus {
 
 .general-hidden {
   display: none;
+}
+
+.general-invisible {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
 }
 
 .vertical-anchor {
