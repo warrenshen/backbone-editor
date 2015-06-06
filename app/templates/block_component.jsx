@@ -178,11 +178,15 @@ class BlockComponent extends Component {
 
   renderModal() {
     var block = this.props.block;
+    var blockIndex = block.get("index");
     var point = EditorStore.point;
+    var sectionIndex = this.props.sectionIndex;
     if (!block.get("content") && point &&
-        point.matchesIndices(this.props.sectionIndex, block.get("index"))) {
+        point.matchesIndices(sectionIndex, blockIndex)) {
       return (
         <MediaModal
+          blockIndex={blockIndex}
+          sectionIndex={sectionIndex}
           updateStory={this.props.updateStory} />
       );
     }

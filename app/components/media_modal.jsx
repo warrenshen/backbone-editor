@@ -8,6 +8,8 @@ import EditorStore from "app/stores/editor_store";
 
 import EditorActor from "app/actors/editor_actor";
 
+import Point from "app/helpers/point";
+
 import TypeConstants from "app/constants/type_constants";
 
 
@@ -26,7 +28,10 @@ class MediaModal extends Component {
   }
 
   handleClickDivider(event) {
-    console.log("Create divider!");
+    var divider = new Block({ type: TypeConstants.block.divider });
+    var point = new Point(this.props.sectionIndex, this.props.blockIndex, 0);
+    EditorActor.addBlock(divider, point);
+    this.props.updateStory();
   }
 
   handleClickImage(event) {
@@ -133,7 +138,14 @@ class MediaModal extends Component {
 }
 
 MediaModal.propTypes = {
+  blockIndex: React.PropTypes.number.isRequired,
+  sectionIndex: React.PropTypes.number.isRequired,
   updateStory: React.PropTypes.func,
+};
+
+MediaModal.defaultProps = {
+  blockIndex: 0,
+  sectionIndex: 0,
 };
 
 

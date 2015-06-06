@@ -69,6 +69,16 @@ class EditorStore extends Store {
     this.emitChange();
   }
 
+  addBlock(block, point) {
+    var sectionIndex = point.sectionIndex;
+    var blockIndex = point.blockIndex;
+
+    var story = this._story;
+    var section = story.get("sections").at(sectionIndex);
+
+    section.addBlock(block, blockIndex);
+  }
+
   removeBlock(point) {
     var sectionIndex = point.sectionIndex;
     var blockIndex = point.blockIndex;
@@ -491,6 +501,9 @@ class EditorStore extends Store {
   handleDispatch(payload) {
     var action = payload.action;
     switch (action.type) {
+      case ActionConstants.editor.addBlock:
+        this.addBlock(action.block, action.point);
+        break;
       case ActionConstants.editor.removeBlock:
         this.removeBlock(action.point);
         break;
