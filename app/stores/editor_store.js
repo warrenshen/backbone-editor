@@ -467,7 +467,11 @@ class EditorStore extends Store {
 
   updateMouseState(mouseState, shouldEmit=false) {
     this._mouseState = mouseState;
+
     if (shouldEmit) {
+      if (this._point !== null) {
+        this._point = null;
+      }
       this.emitChange();
     }
   }

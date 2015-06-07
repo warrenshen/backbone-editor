@@ -1,14 +1,16 @@
 import React from "react";
-import Component from "app/templates/component";
+import BlockComponent from "app/templates/block_component";
 
 
-class BlockImage extends Component {
+class BlockImage extends BlockComponent {
 
   render() {
     var block = this.props.block;
     return (
-      <div className={"block-container"}>
-        <div className={"block-frame"}>
+      <div
+        className={"block-container"}
+        data-index={block.get("index")}>
+        <div className={"block-image-container"}>
           <img className={"block-image"} src={block.get("source")} />
           <p
             className={"general-invisible"}
@@ -16,6 +18,11 @@ class BlockImage extends Component {
             ref={"invisible"}>
           </p>
         </div>
+        <p
+          className={"block-image-caption"}
+          contentEditable={this.props.shouldEnableEdits}
+          ref={"content"}>
+        </p>
       </div>
     );
   }

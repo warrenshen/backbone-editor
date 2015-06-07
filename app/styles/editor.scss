@@ -4,7 +4,7 @@
 .block-container {
   position: relative;
   width: 100%;
-  padding: 0 0 24px 0;
+  padding-bottom: 24px;
   margin: 0 auto;
   cursor: text;
   outline: none;
@@ -33,12 +33,6 @@
   color: $ash;
 }
 
-.block-frame {
-  position: relative;
-  width: 100%;
-  line-height: 0;
-}
-
 .block-heading-one {
   font-size: $font-size-largest;
   font-family: $font-family-primary;
@@ -61,6 +55,24 @@
   position: relative;
   width: 100%;
   cursor: pointer;
+}
+
+.block-image-container {
+  position: relative;
+  width: 100%;
+  line-height: 0;
+}
+
+.block-image-caption {
+  position: relative;
+  min-height: $font-size-smallest;
+  padding-top: 6px;
+  margin: auto;
+  color: $gray;
+  font-size: $font-size-smallest;
+  font-style: italic;
+  text-align: center;
+  outline: none;
 }
 
 .block-quote {
@@ -171,7 +183,7 @@
 .story-container {
   position: relative;
   width: 712px;
-  padding: 144px 0 0;
+  padding-top: 144px;
   margin: auto;
   -webkit-user-select: none;
 }
