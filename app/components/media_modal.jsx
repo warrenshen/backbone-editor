@@ -28,7 +28,6 @@ class MediaModal extends Component {
   }
 
   handleBlur(event) {
-    // TODO: This might be causing setState issues.
     this.setState({ shouldShowOptions: false });
   }
 
@@ -64,6 +63,7 @@ class MediaModal extends Component {
 
   handleClickImage(event) {
     React.findDOMNode(this.refs.uploader).click();
+    React.findDOMNode(this.refs.invisible).blur();
   }
 
   handleClickPrompt(event) {

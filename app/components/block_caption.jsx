@@ -35,15 +35,16 @@ class BlockCaption extends Component {
     event.stopPropagation();
     var selection = window.getSelection();
     if (event.which === KeyConstants.backspace) {
+      var block = this.props.block;
       if (selection.type === TypeConstants.selection.caret) {
-        var block = this.props.block;
         var point = Selector.generatePoint(selection);
         var caretOffset = point.caretOffset;
         block.removeFragment(caretOffset - 1, caretOffset);
       } else if (selection.type === TypeConstants.selection.range) {
         var vector = Selector.generateVector(selection);
-        EditorActor.removeBlocks(vector);
-        this.props.updateStory();
+        var startPoint = vector.startPoint;
+        var endPoint = vector.endPoint;
+        block.removeFragment(startPoint.caretOffset, endPoint.caretOffset);
       }
     } else if (event.which === KeyConstants.tab) {
       event.preventDefault();
