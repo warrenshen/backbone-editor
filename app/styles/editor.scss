@@ -55,6 +55,11 @@
   position: relative;
   width: 100%;
   cursor: pointer;
+  box-sizing: border-box;
+}
+
+.block-image-bordered {
+  border: 2px solid $coral;
 }
 
 .block-image-container {
