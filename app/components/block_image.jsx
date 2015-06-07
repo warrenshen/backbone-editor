@@ -1,21 +1,20 @@
 import ClassNames from "classnames";
 import React from "react";
-import BlockComponent from "app/templates/block_component";
+import Component from "app/templates/component";
+
+import BlockCaption from "app/component/block_caption";
+
+import Block from "app/models/block";
 
 import EditorActor from "app/actors/editor_actor";
 
 import Point from "app/helpers/point";
 
-import KeyConstants from "app/constants/key_constants";
 
-
-class BlockImage extends BlockComponent {
+class BlockImage extends Component {
 
   getDefaultState() {
-    return {
-      shouldShowBorder: false,
-      shouldShowPlaceholder: true,
-    };
+    return { shouldShowBorder: false };
   }
 
   generatePoint() {
@@ -26,13 +25,7 @@ class BlockImage extends BlockComponent {
     );
   }
 
-  handleBlurCaption(event) {
-    if (!this.props.block.get("content")) {
-      this.setState({ shouldShowPlaceholder: true });
-    }
-  }
-
-  handleBlurImage(event) {
+  handleBlur(event) {
     if (this.state.shouldShowBorder) {
       this.setState({ shouldShowBorder: false });
     }
@@ -44,13 +37,7 @@ class BlockImage extends BlockComponent {
     }
   }
 
-  handleFocusCaption(event) {
-    if (this.state.shouldShowPlaceholder) {
-      this.setState({ shouldShowPlaceholder: false });
-    }
-  }
-
-  handleFocusImage(event) {
+  handleFocus(event) {
     this.setState({ shouldShowBorder: true });
   }
 
@@ -70,27 +57,17 @@ class BlockImage extends BlockComponent {
   }
 
   componentDidMount() {
-    super.componentDidMount();
-    var content = React.findDOMNode(this.refs.content);
-    content.addEventListener("blur", this.handleBlurCaption.bind(this));
-    content.addEventListener("focus", this.handleFocusCaption.bind(this));
-
     var image = React.findDOMNode(this.refs.image);
     image.addEventListener("click", this.handleClick.bind(this));
     image.addEventListener("mousedown", this.handleMouseDown.bind(this));
 
     var invisible = React.findDOMNode(this.refs.invisible);
-    invisible.addEventListener("blur", this.handleBlurImage.bind(this));
-    invisible.addEventListener("focus", this.handleFocusImage.bind(this));
+    invisible.addEventListener("blur", this.handleBlur.bind(this));
+    invisible.addEventListener("focus", this.handleFocus.bind(this));
     invisible.addEventListener("keydown", this.handleKeyDown.bind(this));
   }
 
   componentWillUnmount() {
-    super.componentWillUnmount();
-    var content = React.findDOMNode(this.refs.content);
-    content.removeEventListener("blur", this.handleBlurCaption);
-    content.removeEventListener("focus", this.handleFocusCaption);
-
     var image = React.findDOMNode(this.refs.image);
     image.removeEventListener("click", this.handleClick);
     image.removeEventListener("mousedown", this.handleMouseDown);
@@ -103,10 +80,6 @@ class BlockImage extends BlockComponent {
 
   render() {
     var block = this.props.block;
-    var captionClass = ClassNames(
-      { "block-image-caption": true },
-      { "general-placeholder": this.state.shouldShowPlaceholder }
-    );
     var imageClass = ClassNames(
       { "block-image": true },
       { "block-image-bordered": this.state.shouldShowBorder }
@@ -126,16 +99,24 @@ class BlockImage extends BlockComponent {
             ref={"invisible"}>
           </p>
         </div>
-        <p
-          className={captionClass}
-          contentEditable={this.props.shouldEnableEdits}
-          placeholder={"Write a caption here..."}
-          ref={"content"}>
-        </p>
+        <BlockCaption />
       </div>
     );
   }
 }
+
+BlockImage.propTypes = {
+  block: React.PropTypes.instanceOf(Block).isRequired,
+  sectionIndex: React.PropTypes.number.isRequired,
+  shouldEnableEdits: React.PropTypes.bool.isRequired,
+  updateStory: React.PropTypes.func,
+};
+
+BlockImage.defaultProps = {
+  block: new Block(),
+  sectionIndex: 0,
+  shouldEnableEdits: true,
+};
 
 
 module.exports = BlockImage;
