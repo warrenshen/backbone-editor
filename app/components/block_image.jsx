@@ -55,7 +55,8 @@ class BlockImage extends BlockComponent {
   }
 
   handleKeyDown(event) {
-    console.log("ho");
+    // TODO: Because this overrides the handleKeyDown
+    // in parent class, weird things are happening!
     event.preventDefault();
     if (event.which === KeyConstants.backspace) {
       var point = this.generatePoint();

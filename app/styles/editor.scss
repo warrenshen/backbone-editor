@@ -14,10 +14,10 @@
 .block-content {
   position: relative;
   width: 100%;
-  min-height: $font-size-smaller;
+  min-height: 30px;
   font-size: $font-size-smaller;
   font-family: $font-family-secondary;
-  line-height: 1.25;
+  line-height: 30px;
   outline: none;
   word-wrap: break-word;
 }
@@ -100,7 +100,7 @@
   display: inline-block;
   position: absolute;
   z-index: $z-index-8;
-  top: -6px;
+  top: 0;
   left: -48px;
   width: 30px;
   height: 30px;
