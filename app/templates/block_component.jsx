@@ -112,10 +112,6 @@ class BlockComponent extends Component {
         EditorActor.updatePoint(point);
         this.props.updateStory();
       }
-
-      // else if @props.block.getText().substring(0, 3) is "1. "
-      //   EditorActionCreators.formatOrderedList(@props.sectionIndex, @props.index)
-      //   @props.truifyUpdateEdit()
     }
   }
 

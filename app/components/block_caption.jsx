@@ -2,6 +2,8 @@ import ClassNames from "classnames";
 import React from "react";
 import BlockComponent from "app/templates/block_component";
 
+import Block from "app/models/block";
+
 import KeyConstants from "app/constants/key_constants";
 
 
@@ -52,6 +54,19 @@ class BlockCaption extends BlockComponent {
     );
   }
 }
+
+BlockCaption.propTypes = {
+  block: React.PropTypes.instanceOf(Block).isRequired,
+  sectionIndex: React.PropTypes.number.isRequired,
+  shouldEnableEdits: React.PropTypes.bool.isRequired,
+  updateStory: React.PropTypes.func,
+};
+
+BlockCaption.defaultProps = {
+  block: new Block(),
+  sectionIndex: 0,
+  shouldEnableEdits: true,
+};
 
 
 module.exports = BlockCaption;

@@ -57,7 +57,7 @@ class Formatter {
         content += closers[i].join("");
       }
 
-      if ((i === 0 || i === characters.length - 1) && characters[i] === " ") {
+      if (characters[i] === " ") {
         content += "&nbsp;";
       } else {
         content += characters[i];

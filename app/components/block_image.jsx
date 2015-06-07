@@ -2,13 +2,15 @@ import ClassNames from "classnames";
 import React from "react";
 import Component from "app/templates/component";
 
-import BlockCaption from "app/component/block_caption";
+import BlockCaption from "app/components/block_caption";
 
 import Block from "app/models/block";
 
 import EditorActor from "app/actors/editor_actor";
 
 import Point from "app/helpers/point";
+
+import KeyConstants from "app/constants/key_constants";
 
 
 class BlockImage extends Component {
@@ -42,8 +44,6 @@ class BlockImage extends Component {
   }
 
   handleKeyDown(event) {
-    // TODO: Because this overrides the handleKeyDown
-    // in parent class, weird things are happening!
     event.preventDefault();
     if (event.which === KeyConstants.backspace) {
       var point = this.generatePoint();
@@ -99,7 +99,11 @@ class BlockImage extends Component {
             ref={"invisible"}>
           </p>
         </div>
-        <BlockCaption />
+        <BlockCaption
+          block={this.props.block}
+          sectionIndex={this.props.sectionIndex}
+          shouldEnableEdits={this.props.shouldEnableEdits}
+          updateStory={this.props.updateStory} />
       </div>
     );
   }
