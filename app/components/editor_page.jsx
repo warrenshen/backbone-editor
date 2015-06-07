@@ -46,8 +46,11 @@ class EditorPage extends ListeningComponent {
 
   handleKeyDown(event) {
     var selection = window.getSelection();
+    // We use selection.type === "Range" check when
+    // checking for arrow key events because they can
+    // happen without changing the store's mouse state.
     if (event.shiftKey) {
-      if (selection.type === "Range" &&
+      if (selection.type === TypeConstants.selection.range &&
           event.which >= KeyConstants.left &&
           event.which <= KeyConstants.down) {
         var vector = Selector.generateVector(selection);
@@ -109,7 +112,7 @@ class EditorPage extends ListeningComponent {
   handleKeyUp(event) {
     var selection = window.getSelection();
     if (event.shiftKey &&
-        selection.type === "Range" &&
+        selection.type === TypeConstants.selection.range &&
         event.which >= KeyConstants.left &&
         event.which <= KeyConstants.down) {
       var vector = Selector.generateVector(selection);
@@ -141,22 +144,22 @@ class EditorPage extends ListeningComponent {
 
   componentDidMount() {
     super.componentDidMount();
-    var node = React.findDOMNode(this.refs.page);
+    var page = React.findDOMNode(this.refs.page);
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
     document.addEventListener("keypress", this.handleKeyPress.bind(this));
     document.addEventListener("keyup", this.handleKeyUp.bind(this));
-    node.addEventListener("mousedown", this.handleMouseDown.bind(this));
-    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
+    page.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    page.addEventListener("mouseup", this.handleMouseUp.bind(this));
   }
 
   componentWillUnmount() {
     super.componentWillUnmount();
-    var node = React.findDOMNode(this.refs.page);
+    var page = React.findDOMNode(this.refs.page);
     document.removeEventListener("keydown", this.handleKeyDown);
     document.removeEventListener("keypress", this.handleKeyPress);
     document.removeEventListener("keyup", this.handleKeyUp);
-    node.removeEventListener("mousedown", this.handleMouseDown);
-    node.removeEventListener("mouseup", this.handleMouseUp);
+    page.removeEventListener("mousedown", this.handleMouseDown);
+    page.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   render() {

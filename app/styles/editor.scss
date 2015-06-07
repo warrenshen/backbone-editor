@@ -4,7 +4,7 @@
 .block-container {
   position: relative;
   width: 100%;
-  padding: 0 0 24px 0;
+  padding-bottom: 24px;
   margin: 0 auto;
   cursor: text;
   outline: none;
@@ -14,10 +14,10 @@
 .block-content {
   position: relative;
   width: 100%;
-  min-height: $font-size-smaller;
+  min-height: 30px;
   font-size: $font-size-smaller;
   font-family: $font-family-secondary;
-  line-height: 1.25;
+  line-height: 30px;
   outline: none;
   word-wrap: break-word;
 }
@@ -31,12 +31,6 @@
   width: 10%;
   margin: auto;
   color: $ash;
-}
-
-.block-frame {
-  position: relative;
-  width: 100%;
-  line-height: 0;
 }
 
 .block-heading-one {
@@ -61,6 +55,31 @@
   position: relative;
   width: 100%;
   cursor: pointer;
+  box-sizing: border-box;
+}
+
+.block-image-bordered {
+  border: 2px solid $coral;
+}
+
+.block-image-container {
+  position: relative;
+  width: 100%;
+  line-height: 0;
+}
+
+.block-image-caption {
+  position: relative;
+  min-height: 18px;
+  padding-top: 6px;
+  margin: auto;
+  color: $gray;
+  font-size: $font-size-smallest;
+  font-style: italic;
+  text-align: center;
+  line-height: 18px;
+  outline: none;
+  word-wrap: break-word;
 }
 
 .block-quote {
@@ -83,7 +102,7 @@
   display: inline-block;
   position: absolute;
   z-index: $z-index-8;
-  top: -6px;
+  top: 0;
   left: -48px;
   width: 30px;
   height: 30px;
@@ -171,7 +190,7 @@
 .story-container {
   position: relative;
   width: 712px;
-  padding: 144px 0 0;
+  padding-top: 144px;
   margin: auto;
   -webkit-user-select: none;
 }

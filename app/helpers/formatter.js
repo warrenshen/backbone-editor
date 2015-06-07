@@ -3,8 +3,6 @@ import TypeConstants from "app/constants/type_constants";
 
 class Formatter {
 
-  // TODO: Try to find a format such that typing after a
-  // "styled" space does not propagate that style onwards.
   formatBlock(block) {
     var elements = block.get("elements");
     var characters = block.get("content").split("");
@@ -57,7 +55,7 @@ class Formatter {
         content += closers[i].join("");
       }
 
-      if ((i === 0 || i === characters.length - 1) && characters[i] === " ") {
+      if (characters[i] === " ") {
         content += "&nbsp;";
       } else {
         content += characters[i];

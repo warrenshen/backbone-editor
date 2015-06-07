@@ -1,4 +1,3 @@
-import $ from "jquery";
 import React from "react";
 import Component from "app/templates/component";
 
@@ -14,11 +13,20 @@ class StoryEditable extends Component {
 
   createCaret(point) {
     if (point) {
-      var section = $('section[data-index="' + point.sectionIndex + '"]')[0];
+      var story = React.findDOMNode(this.refs.story);
+      var section = story.childNodes[point.sectionIndex];
       var block = section.childNodes[point.blockIndex];
       var caretOffset = point.caretOffset;
 
-      var node = block.childNodes[0];
+      var node;
+      var children = block.childNodes;
+      var complete = false;
+      for (var i = 0; i < children.length && !complete; i += 1) {
+        if (children[i].isContentEditable) {
+          node = children[i];
+          complete = true;
+        }
+      }
       node.focus();
 
       var selection = window.getSelection();
@@ -89,7 +97,7 @@ class StoryEditable extends Component {
 
   render() {
     return (
-      <div className={"story-container"}>
+      <div className={"story-container"} ref={"story"}>
         {this.renderSections()}
       </div>
     );

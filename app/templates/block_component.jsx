@@ -20,12 +20,12 @@ class BlockComponent extends Component {
 
   handleArrowKey(event, point) {
     var block = this.props.block;
-    var node = React.findDOMNode(this.refs.content);
+    var content = React.findDOMNode(this.refs.content);
     var caretOffset = point.caretOffset;
 
     switch (event.which) {
       case KeyConstants.down:
-        var floorOffset = Selector.findFloorOffset(node);
+        var floorOffset = Selector.findFloorOffset(content);
         if (caretOffset >= floorOffset) {
           event.preventDefault();
           point.caretOffset = caretOffset - floorOffset;
@@ -51,7 +51,7 @@ class BlockComponent extends Component {
         break;
 
       case KeyConstants.up:
-        var ceilingOffset = Selector.findCeilingOffset(node);
+        var ceilingOffset = Selector.findCeilingOffset(content);
         if (caretOffset < ceilingOffset || caretOffset === 0 || ceilingOffset < 0) {
           event.preventDefault();
           EditorActor.shiftUp(point);
@@ -112,10 +112,6 @@ class BlockComponent extends Component {
         EditorActor.updatePoint(point);
         this.props.updateStory();
       }
-
-      // else if @props.block.getText().substring(0, 3) is "1. "
-      //   EditorActionCreators.formatOrderedList(@props.sectionIndex, @props.index)
-      //   @props.truifyUpdateEdit()
     }
   }
 
@@ -149,27 +145,27 @@ class BlockComponent extends Component {
   }
 
   componentDidMount() {
-    var node = React.findDOMNode(this.refs.content);
-    node.addEventListener("keydown", this.handleKeyDown.bind(this));
-    node.addEventListener("keypress", this.handleKeyPress.bind(this));
-    node.addEventListener("mousedown", this.handleMouseDown.bind(this));
-    node.addEventListener("mousemove", this.handleMouseMove.bind(this));
-    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
-    this.renderContent(node);
+    var content = React.findDOMNode(this.refs.content);
+    content.addEventListener("keydown", this.handleKeyDown.bind(this));
+    content.addEventListener("keypress", this.handleKeyPress.bind(this));
+    content.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    content.addEventListener("mousemove", this.handleMouseMove.bind(this));
+    content.addEventListener("mouseup", this.handleMouseUp.bind(this));
+    this.renderContent(content);
   }
 
   componentDidUpdate() {
-    var node = React.findDOMNode(this.refs.content);
-    this.renderContent(node);
+    var content = React.findDOMNode(this.refs.content);
+    this.renderContent(content);
   }
 
   componentWillUnmount() {
-    var node = React.findDOMNode(this.refs.content);
-    node.removeEventListener("keydown", this.handleKeyDown);
-    node.removeEventListener("keypress", this.handleKeyPress);
-    node.removeEventListener("mousedown", this.handleMouseDown);
-    node.removeEventListener("mousemove", this.handleMouseMove);
-    node.removeEventListener("mouseup", this.handleMouseUp);
+    var content = React.findDOMNode(this.refs.content);
+    content.removeEventListener("keydown", this.handleKeyDown);
+    content.removeEventListener("keypress", this.handleKeyPress);
+    content.removeEventListener("mousedown", this.handleMouseDown);
+    content.removeEventListener("mousemove", this.handleMouseMove);
+    content.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   renderContent(node) {
