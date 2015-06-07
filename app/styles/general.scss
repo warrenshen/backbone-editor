@@ -117,6 +117,13 @@ textarea:focus {
   margin: 0;
 }
 
+.general-placeholder {
+  &:empty:before {
+    content: attr(placeholder);
+    color: $gray-input;
+  }
+}
+
 .vertical-anchor {
   content: '';
   display: inline-block;

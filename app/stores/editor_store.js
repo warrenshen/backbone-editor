@@ -77,7 +77,11 @@ class EditorStore extends Store {
     var section = story.get("sections").at(sectionIndex);
 
     section.addBlock(block, blockIndex);
-    point.blockIndex += 1;
+
+    if (block.get("type") === TypeConstants.block.divider) {
+      point.blockIndex += 1;
+    }
+
     this.updatePoint(point);
   }
 
@@ -102,7 +106,11 @@ class EditorStore extends Store {
     }
 
     point.caretOffset = beforeBlock.length;
-    block.transferFragment(beforeBlock, 0);
+
+    if (block.get("type") !== TypeConstants.block.image) {
+      block.transferFragment(beforeBlock, 0);
+    }
+
     section.removeBlock(block);
     this.updatePoint(point);
   }
@@ -467,7 +475,11 @@ class EditorStore extends Store {
 
   updateMouseState(mouseState, shouldEmit=false) {
     this._mouseState = mouseState;
+
     if (shouldEmit) {
+      if (this._point !== null) {
+        this._point = null;
+      }
       this.emitChange();
     }
   }

@@ -63,6 +63,7 @@ class MediaModal extends Component {
 
   handleClickImage(event) {
     React.findDOMNode(this.refs.uploader).click();
+    React.findDOMNode(this.refs.invisible).blur();
   }
 
   handleClickPrompt(event) {

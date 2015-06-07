@@ -120,16 +120,16 @@ class StyleModal extends Component {
   }
 
   componentDidMount() {
-    var node = React.findDOMNode(this.refs.modal);
-    node.addEventListener("mousedown", this.handleMouseDown.bind(this));
-    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
+    var modal = React.findDOMNode(this.refs.modal);
+    modal.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    modal.addEventListener("mouseup", this.handleMouseUp.bind(this));
     this.createVector(this.props.vector);
   }
 
   componentDidUpdate() {
-    var node = React.findDOMNode(this.refs.modal);
-    node.removeEventListener("mousedown", this.handleMouseDown);
-    node.removeEventListener("mouseup", this.handleMouseUp);
+    var modal = React.findDOMNode(this.refs.modal);
+    modal.removeEventListener("mousedown", this.handleMouseDown);
+    modal.removeEventListener("mouseup", this.handleMouseUp);
     this.createVector(this.props.vector);
   }
 
