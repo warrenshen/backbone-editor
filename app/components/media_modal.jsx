@@ -28,6 +28,7 @@ class MediaModal extends Component {
   }
 
   handleBlur(event) {
+    // TODO: This might be causing setState issues.
     this.setState({ shouldShowOptions: false });
   }
 
