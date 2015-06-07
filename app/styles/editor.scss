@@ -70,14 +70,16 @@
 
 .block-image-caption {
   position: relative;
-  min-height: $font-size-smallest;
+  min-height: 18px;
   padding-top: 6px;
   margin: auto;
   color: $gray;
   font-size: $font-size-smallest;
   font-style: italic;
   text-align: center;
+  line-height: 18px;
   outline: none;
+  word-wrap: break-word;
 }
 
 .block-quote {

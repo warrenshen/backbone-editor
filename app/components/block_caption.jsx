@@ -10,6 +10,7 @@ import Formatter from "app/helpers/formatter";
 import Selector from "app/helpers/selector";
 
 import KeyConstants from "app/constants/key_constants";
+import TypeConstants from "app/constants/type_constants";
 
 
 class BlockCaption extends Component {
@@ -31,14 +32,18 @@ class BlockCaption extends Component {
   }
 
   handleKeyDown(event) {
+    event.stopPropagation();
     var selection = window.getSelection();
-    var point = Selector.generatePoint(selection);
-
     if (event.which === KeyConstants.backspace) {
-      if (!point.prefixesBlock()) {
+      if (selection.type === TypeConstants.selection.caret) {
         var block = this.props.block;
+        var point = Selector.generatePoint(selection);
         var caretOffset = point.caretOffset;
         block.removeFragment(caretOffset - 1, caretOffset);
+      } else if (selection.type === TypeConstants.selection.range) {
+        var vector = Selector.generateVector(selection);
+        EditorActor.removeBlocks(vector);
+        this.props.updateStory();
       }
     } else if (event.which === KeyConstants.tab) {
       event.preventDefault();
@@ -47,17 +52,26 @@ class BlockCaption extends Component {
   }
 
   handleKeyPress(event) {
+    event.stopPropagation();
     var selection = window.getSelection();
-    var point = Selector.generatePoint(selection);
-
     if (event.which === KeyConstants.enter) {
       event.preventDefault();
-    } else {
+    } else if (selection.type === TypeConstants.selection.caret) {
       var block = this.props.block;
-      var content = block.get("content");
       var character = String.fromCharCode(event.which);
+      var point = Selector.generatePoint(selection);
       block.addCharacter(point.caretOffset, character);
+    } else if (selection.type === TypeConstants.selection.range) {
+      event.preventDefault();
+      var character = String.fromCharCode(event.which);
+      var vector = Selector.generateVector(selection);
+      EditorActor.removeBlocks(vector, { character: character });
+      this.props.updateStory();
     }
+  }
+
+  handleKeyUp(event) {
+    event.stopPropagation();
   }
 
   componentDidMount() {
@@ -66,6 +80,7 @@ class BlockCaption extends Component {
     content.addEventListener("focus", this.handleFocus.bind(this));
     content.addEventListener("keydown", this.handleKeyDown.bind(this));
     content.addEventListener("keypress", this.handleKeyPress.bind(this));
+    content.addEventListener("keyup", this.handleKeyUp.bind(this));
     this.renderContent(content);
   }
 
@@ -80,6 +95,7 @@ class BlockCaption extends Component {
     content.removeEventListener("focus", this.handleFocus);
     content.removeEventListener("keydown", this.handleKeyDown);
     content.removeEventListener("keypress", this.handleKeyPress);
+    content.removeEventListener("keyup", this.handleKeyUp);
   }
 
   renderContent(node) {

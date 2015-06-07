@@ -25,4 +25,9 @@ module.exports = {
   section: {
     standard: "standard",
   },
+
+  selection: {
+    caret: "Caret",
+    range: "Range",
+  },
 }

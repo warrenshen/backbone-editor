@@ -46,8 +46,11 @@ class EditorPage extends ListeningComponent {
 
   handleKeyDown(event) {
     var selection = window.getSelection();
+    // We use selection.type === "Range" check when
+    // checking for arrow key events because they can
+    // happen without changing the store's mouse state.
     if (event.shiftKey) {
-      if (selection.type === "Range" &&
+      if (selection.type === TypeConstants.selection.range &&
           event.which >= KeyConstants.left &&
           event.which <= KeyConstants.down) {
         var vector = Selector.generateVector(selection);
@@ -109,7 +112,7 @@ class EditorPage extends ListeningComponent {
   handleKeyUp(event) {
     var selection = window.getSelection();
     if (event.shiftKey &&
-        selection.type === "Range" &&
+        selection.type === TypeConstants.selection.range &&
         event.which >= KeyConstants.left &&
         event.which <= KeyConstants.down) {
       var vector = Selector.generateVector(selection);
