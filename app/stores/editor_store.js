@@ -106,7 +106,11 @@ class EditorStore extends Store {
     }
 
     point.caretOffset = beforeBlock.length;
-    block.transferFragment(beforeBlock, 0);
+
+    if (block.get("type") !== TypeConstants.block.image) {
+      block.transferFragment(beforeBlock, 0);
+    }
+
     section.removeBlock(block);
     this.updatePoint(point);
   }
