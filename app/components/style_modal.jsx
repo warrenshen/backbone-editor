@@ -64,7 +64,6 @@ class StyleModal extends Component {
     this.styleElements(TypeConstants.element.bold);
   }
 
-
   styleItalic(event) {
     this.styleElements(TypeConstants.element.italic);
   }
@@ -200,7 +199,6 @@ class StyleModal extends Component {
         className: "fa fa-link",
       },
     ];
-
     return propsHashes.map(this.renderOption, this);
   }
 
