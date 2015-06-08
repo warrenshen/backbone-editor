@@ -5,7 +5,7 @@ import "backbone-relational";
 class Model extends Backbone.RelationalModel {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
   get defaults() {
     return {};

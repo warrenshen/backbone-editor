@@ -1,5 +1,8 @@
 class Point {
 
+  // --------------------------------------------------
+  // Setup
+  // --------------------------------------------------
   constructor(sectionIndex=0, blockIndex=0, caretOffset=0, shouldFloor=false) {
     this._sectionIndex = sectionIndex;
     this._blockIndex = blockIndex;
@@ -7,6 +10,9 @@ class Point {
     this._shouldFloor = shouldFloor;
   }
 
+  // --------------------------------------------------
+  // Getters
+  // --------------------------------------------------
   get sectionIndex() {
     return this._sectionIndex;
   }
@@ -23,6 +29,9 @@ class Point {
     return this._shouldFloor;
   }
 
+  // --------------------------------------------------
+  // Setters
+  // --------------------------------------------------
   set sectionIndex(sectionIndex) {
     this._sectionIndex = sectionIndex;
   }
@@ -39,6 +48,9 @@ class Point {
     this._shouldFloor = shouldFloor;
   }
 
+  // --------------------------------------------------
+  // Methods
+  // --------------------------------------------------
   compareDeeply(otherPoint) {
     var sectionDifference = this._sectionIndex - otherPoint.sectionIndex;
     if (sectionDifference === 0) {

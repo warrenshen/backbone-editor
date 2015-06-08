@@ -18,6 +18,13 @@ class Store extends Events.EventEmitter {
   }
 
   // --------------------------------------------------
+  // Getters
+  // --------------------------------------------------
+  get name() {
+    return "Store";
+  }
+
+  // --------------------------------------------------
   // Dispatch
   // --------------------------------------------------
   // Stores that listen for dispatches must override this method.

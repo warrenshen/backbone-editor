@@ -3,11 +3,17 @@ import Point from "app/helpers/point";
 
 class Vector {
 
+  // --------------------------------------------------
+  // Setup
+  // --------------------------------------------------
   constructor(startPoint=new Point(), endPoint=new Point()) {
     this._startPoint = startPoint;
     this._endPoint = endPoint;
   }
 
+  // --------------------------------------------------
+  // Getters
+  // --------------------------------------------------
   get startPoint() {
     return this._startPoint;
   }

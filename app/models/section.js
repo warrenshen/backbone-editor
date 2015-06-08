@@ -8,7 +8,7 @@ import TypeConstants from "app/constants/type_constants";
 class Section extends Model {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
   get defaults() {
     return {
