@@ -18,7 +18,7 @@ class BlockCaption extends Component {
   // --------------------------------------------------
   // State
   // --------------------------------------------------
-  get defaultState() {
+  getDefaultState() {
     return { shouldShowPlaceholder: true };
   }
 

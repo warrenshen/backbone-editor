@@ -14,11 +14,11 @@ class ListeningComponent extends Component {
   // --------------------------------------------------
   // State
   // --------------------------------------------------
-  get defaultState() {
-    return this.storeState();
+  getDefaultState() {
+    return this.getStoreState();
   }
 
-  get storeState() {
+  getStoreState() {
     return {};
   }
 
@@ -43,7 +43,7 @@ class ListeningComponent extends Component {
   // Events
   // --------------------------------------------------
   _onChange() {
-    this.setState(this.storeState);
+    this.setState(this.getStoreState());
   }
 }
 

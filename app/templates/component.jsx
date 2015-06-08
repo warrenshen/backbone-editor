@@ -17,13 +17,13 @@ class Component extends React.Component {
   // --------------------------------------------------
   constructor(props) {
     super(props);
-    this.state = this.defaultState;
+    this.state = this.getDefaultState();
   }
 
   // --------------------------------------------------
   // State
   // --------------------------------------------------
-  get defaultState() {
+  getDefaultState() {
     return {};
   }
 

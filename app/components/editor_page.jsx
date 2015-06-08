@@ -27,15 +27,15 @@ class EditorPage extends ListeningComponent {
   // --------------------------------------------------
   // State
   // --------------------------------------------------
-  get defaultState() {
+  getDefaultState() {
     return _.merge(
       {},
       { shouldUpdateStory: false },
-      this.storeState
+      super.getDefaultState()
     );
   }
 
-  get storeState() {
+  getStoreState() {
     return {
       activeStyles: EditorStore.activeStyles,
       point: EditorStore.point,

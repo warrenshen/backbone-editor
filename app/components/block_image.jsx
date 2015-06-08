@@ -18,7 +18,7 @@ class BlockImage extends Component {
   // --------------------------------------------------
   // State
   // --------------------------------------------------
-  get defaultState() {
+  getDefaultState() {
     return { shouldShowBorder: false };
   }
 

@@ -18,7 +18,7 @@ class MediaModal extends Component {
   // --------------------------------------------------
   // State
   // --------------------------------------------------
-  get defaultState() {
+  getDefaultState() {
     return { shouldShowOptions: false };
   }
 
