@@ -7,6 +7,9 @@ import TypeConstants from "app/constants/type_constants";
 
 class Element extends Model {
 
+  // --------------------------------------------------
+  // Getters
+  // --------------------------------------------------
   get defaults() {
     return {
       end: 0,

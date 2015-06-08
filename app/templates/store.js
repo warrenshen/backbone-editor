@@ -7,6 +7,9 @@ var CHANGE_EVENT = "change";
 
 class Store extends Events.EventEmitter {
 
+  // --------------------------------------------------
+  // Setup
+  // --------------------------------------------------
   initialize() {
     Dispatcher.register(this.handleDispatch.bind(this));
     if (this.setDefaults) {

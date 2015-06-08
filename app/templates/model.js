@@ -4,12 +4,15 @@ import "backbone-relational";
 
 class Model extends Backbone.RelationalModel {
 
+  // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
   get defaults() {
     return {};
   }
 
   get name() {
-    console.log("Model definition must include model name!")
+    return "Model";
   }
 
   get relations() {

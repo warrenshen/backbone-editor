@@ -17,6 +17,10 @@ class Section extends Model {
     };
   }
 
+  get length() {
+    return this.get("blocks").length;
+  }
+
   get name() {
     return "Section";
   }
@@ -29,10 +33,6 @@ class Section extends Model {
         relatedModel: ModelDirectory.get("Block"),
       },
     ];
-  }
-
-  get length() {
-    return this.get("blocks").length;
   }
 
   // --------------------------------------------------

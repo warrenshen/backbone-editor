@@ -4,18 +4,27 @@ import Component from "app/templates/component";
 
 class ListeningComponent extends Component {
 
+  // --------------------------------------------------
+  // State
+  // --------------------------------------------------
+  get defaultState() {
+    return this.storeState();
+  }
+
+  get storeState() {
+    return {};
+  }
+
+  // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
   stores() {
     return [];
   }
 
-  getDefaultState() {
-    return this.getStoreState();
-  }
-
-  getStoreState() {
-    return {};
-  }
-
+  // --------------------------------------------------
+  // Lifecycle
+  // --------------------------------------------------
   componentDidMount() {
     var self = this;
     this.stores().map(function(store) {
@@ -30,8 +39,11 @@ class ListeningComponent extends Component {
     });
   }
 
+  // --------------------------------------------------
+  // Events
+  // --------------------------------------------------
   _onChange() {
-    this.setState(this.getStoreState());
+    this.setState(this.storeState);
   }
 }
 
