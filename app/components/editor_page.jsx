@@ -17,19 +17,25 @@ import TypeConstants from "app/constants/type_constants";
 
 class EditorPage extends ListeningComponent {
 
+  // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
   stores() {
     return [EditorStore];
   }
 
-  getDefaultState() {
+  // --------------------------------------------------
+  // State
+  // --------------------------------------------------
+  get defaultState() {
     return _.merge(
       {},
       { shouldUpdateStory: false },
-      this.getStoreState()
+      this.storeState
     );
   }
 
-  getStoreState() {
+  get storeState() {
     return {
       activeStyles: EditorStore.activeStyles,
       point: EditorStore.point,
@@ -44,6 +50,9 @@ class EditorPage extends ListeningComponent {
     this.setState({ shouldUpdateStory: false });
   }
 
+  // --------------------------------------------------
+  // Handlers
+  // --------------------------------------------------
   handleKeyDown(event) {
     var selection = window.getSelection();
     // We use selection.type === "Range" check when
@@ -142,6 +151,9 @@ class EditorPage extends ListeningComponent {
     }
   }
 
+  // --------------------------------------------------
+  // Lifecycle
+  // --------------------------------------------------
   componentDidMount() {
     super.componentDidMount();
     var page = React.findDOMNode(this.refs.page);
@@ -162,6 +174,9 @@ class EditorPage extends ListeningComponent {
     page.removeEventListener("mouseup", this.handleMouseUp);
   }
 
+  // --------------------------------------------------
+  // Render
+  // --------------------------------------------------
   render() {
     return (
       <div className={"editor-page"} ref="page">

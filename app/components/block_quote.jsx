@@ -5,6 +5,9 @@ import BlockComponent from "app/templates/block_component";
 
 class BlockQuote extends BlockComponent {
 
+  // --------------------------------------------------
+  // Render
+  // --------------------------------------------------
   render() {
     var block = this.props.block;
     var contentClass = ClassNames(

@@ -6,6 +6,9 @@ import RouterDirectory from "app/directories/router_directory";
 
 class Clickable extends Component {
 
+  // --------------------------------------------------
+  // Handlers
+  // --------------------------------------------------
   handleClick() {
     event.preventDefault();
     event.stopPropagation();
@@ -16,6 +19,9 @@ class Clickable extends Component {
     }
   }
 
+  // --------------------------------------------------
+  // Render
+  // --------------------------------------------------
   render() {
     if (this.props.source.length === 0) {
       return (

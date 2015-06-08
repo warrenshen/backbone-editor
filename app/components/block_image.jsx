@@ -15,18 +15,16 @@ import KeyConstants from "app/constants/key_constants";
 
 class BlockImage extends Component {
 
-  getDefaultState() {
+  // --------------------------------------------------
+  // State
+  // --------------------------------------------------
+  get defaultState() {
     return { shouldShowBorder: false };
   }
 
-  generatePoint() {
-    return new Point(
-      this.props.sectionIndex,
-      this.props.block.get("index"),
-      0
-    );
-  }
-
+  // --------------------------------------------------
+  // Handlers
+  // --------------------------------------------------
   handleBlur(event) {
     if (this.state.shouldShowBorder) {
       this.setState({ shouldShowBorder: false });
@@ -46,7 +44,11 @@ class BlockImage extends Component {
   handleKeyDown(event) {
     event.preventDefault();
     if (event.which === KeyConstants.backspace) {
-      var point = this.generatePoint();
+      var point = new Point(
+        this.props.sectionIndex,
+        this.props.block.get("index"),
+        0
+      );
       EditorActor.removeBlock(point);
       this.props.updateStory();
     }
@@ -56,6 +58,9 @@ class BlockImage extends Component {
     event.preventDefault();
   }
 
+  // --------------------------------------------------
+  // Lifecycle
+  // --------------------------------------------------
   componentDidMount() {
     var image = React.findDOMNode(this.refs.image);
     image.addEventListener("click", this.handleClick.bind(this));
@@ -78,6 +83,9 @@ class BlockImage extends Component {
     invisible.removeEventListener("keydown", this.handleKeyDown);
   }
 
+  // --------------------------------------------------
+  // Render
+  // --------------------------------------------------
   render() {
     var block = this.props.block;
     var imageClass = ClassNames(

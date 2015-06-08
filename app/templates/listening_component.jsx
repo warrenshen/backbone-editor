@@ -5,6 +5,13 @@ import Component from "app/templates/component";
 class ListeningComponent extends Component {
 
   // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  stores() {
+    return [];
+  }
+
+  // --------------------------------------------------
   // State
   // --------------------------------------------------
   get defaultState() {
@@ -13,13 +20,6 @@ class ListeningComponent extends Component {
 
   get storeState() {
     return {};
-  }
-
-  // --------------------------------------------------
-  // Defaults
-  // --------------------------------------------------
-  stores() {
-    return [];
   }
 
   // --------------------------------------------------

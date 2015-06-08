@@ -15,10 +15,16 @@ import TypeConstants from "app/constants/type_constants";
 
 class MediaModal extends Component {
 
-  getDefaultState() {
+  // --------------------------------------------------
+  // State
+  // --------------------------------------------------
+  get defaultState() {
     return { shouldShowOptions: false };
   }
 
+  // --------------------------------------------------
+  // Helpers
+  // --------------------------------------------------
   generatePoint() {
     return new Point(
       this.props.sectionIndex,
@@ -27,6 +33,9 @@ class MediaModal extends Component {
     );
   }
 
+  // --------------------------------------------------
+  // Handlers
+  // --------------------------------------------------
   handleBlur(event) {
     this.setState({ shouldShowOptions: false });
   }
@@ -81,6 +90,9 @@ class MediaModal extends Component {
     event.stopPropagation();
   }
 
+  // --------------------------------------------------
+  // Lifecycle
+  // --------------------------------------------------
   componentDidMount() {
     var code = React.findDOMNode(this.refs.code);
     code.addEventListener("click", this.handleClickCode.bind(this));
@@ -129,6 +141,9 @@ class MediaModal extends Component {
     uploader.removeEventListener("change", this.handleChange);
   }
 
+  // --------------------------------------------------
+  // Render
+  // --------------------------------------------------
   render() {
     var modalClass = ClassNames(
       { "media-modal": true },

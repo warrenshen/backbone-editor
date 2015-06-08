@@ -7,6 +7,9 @@ import TypeConstants from "app/constants/type_constants";
 
 class BlockHeading extends BlockComponent {
 
+  // --------------------------------------------------
+  // Render
+  // --------------------------------------------------
   renderEditable() {
     var block = this.props.block;
     var type = block.get("type");
