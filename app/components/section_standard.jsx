@@ -1,4 +1,5 @@
 import React from "react";
+
 import Component from "app/templates/component";
 
 import BlockDivider from "app/components/block_divider";
@@ -14,6 +15,9 @@ import TypeConstants from "app/constants/type_constants";
 
 class SectionStandard extends Component {
 
+  // --------------------------------------------------
+  // Render
+  // --------------------------------------------------
   renderBlock(block) {
     var props = {
       key: block.cid,
@@ -22,7 +26,6 @@ class SectionStandard extends Component {
       shouldEnableEdits: this.props.shouldEnableEdits,
       updateStory: this.props.updateStory,
     };
-
     switch (block.get("type")) {
       case TypeConstants.block.divider:
         return <BlockDivider {...props} />;

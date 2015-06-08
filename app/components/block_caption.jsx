@@ -1,5 +1,6 @@
 import ClassNames from "classnames";
 import React from "react";
+
 import Component from "app/templates/component";
 
 import Block from "app/models/block";
@@ -15,10 +16,16 @@ import TypeConstants from "app/constants/type_constants";
 
 class BlockCaption extends Component {
 
+  // --------------------------------------------------
+  // State
+  // --------------------------------------------------
   getDefaultState() {
     return { shouldShowPlaceholder: true };
   }
 
+  // --------------------------------------------------
+  // Handlers
+  // --------------------------------------------------
   handleBlur(event) {
     if (!this.props.block.get("content")) {
       this.setState({ shouldShowPlaceholder: true });
@@ -75,6 +82,9 @@ class BlockCaption extends Component {
     event.stopPropagation();
   }
 
+  // --------------------------------------------------
+  // Lifecycle
+  // --------------------------------------------------
   componentDidMount() {
     var content = React.findDOMNode(this.refs.content);
     content.addEventListener("blur", this.handleBlur.bind(this));
@@ -99,6 +109,9 @@ class BlockCaption extends Component {
     content.removeEventListener("keyup", this.handleKeyUp);
   }
 
+  // --------------------------------------------------
+  // Render
+  // --------------------------------------------------
   renderContent(node) {
     node.innerHTML = Formatter.formatBlock(this.props.block);
   }

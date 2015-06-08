@@ -1,6 +1,9 @@
 import ClassNames from "classnames";
 import React from "react";
+
 import Component from "app/templates/component";
+
+import MediaOption from "app/components/media_option";
 
 import Block from "app/models/block";
 
@@ -15,10 +18,16 @@ import TypeConstants from "app/constants/type_constants";
 
 class MediaModal extends Component {
 
+  // --------------------------------------------------
+  // State
+  // --------------------------------------------------
   getDefaultState() {
     return { shouldShowOptions: false };
   }
 
+  // --------------------------------------------------
+  // Helpers
+  // --------------------------------------------------
   generatePoint() {
     return new Point(
       this.props.sectionIndex,
@@ -27,6 +36,9 @@ class MediaModal extends Component {
     );
   }
 
+  // --------------------------------------------------
+  // Handlers
+  // --------------------------------------------------
   handleBlur(event) {
     this.setState({ shouldShowOptions: false });
   }
@@ -50,23 +62,7 @@ class MediaModal extends Component {
     }
   }
 
-  handleClickCode(event) {
-    console.log("Create code!");
-  }
-
-  handleClickDivider(event) {
-    var block = new Block({ type: TypeConstants.block.divider });
-    var point = this.generatePoint();
-    EditorActor.addBlock(block, point);
-    this.props.updateStory();
-  }
-
-  handleClickImage(event) {
-    React.findDOMNode(this.refs.uploader).click();
-    React.findDOMNode(this.refs.invisible).blur();
-  }
-
-  handleClickPrompt(event) {
+  handleClick(event) {
     React.findDOMNode(this.refs.invisible).focus();
     if (!this.state.shouldShowOptions) {
       this.setState({ shouldShowOptions: true });
@@ -81,24 +77,34 @@ class MediaModal extends Component {
     event.stopPropagation();
   }
 
+  // --------------------------------------------------
+  // Actions
+  // --------------------------------------------------
+  styleCode(event) {
+    console.log("Create code!");
+  }
+
+  styleDivider(event) {
+    var block = new Block({ type: TypeConstants.block.divider });
+    var point = this.generatePoint();
+    EditorActor.addBlock(block, point);
+    this.props.updateStory();
+  }
+
+  styleImage(event) {
+    React.findDOMNode(this.refs.uploader).click();
+    React.findDOMNode(this.refs.invisible).blur();
+  }
+
+  // --------------------------------------------------
+  // Lifecycle
+  // --------------------------------------------------
   componentDidMount() {
-    var code = React.findDOMNode(this.refs.code);
-    code.addEventListener("click", this.handleClickCode.bind(this));
-    code.addEventListener("mousedown", this.handleMouseDown.bind(this));
-
-    var divider = React.findDOMNode(this.refs.divider);
-    divider.addEventListener("click", this.handleClickDivider.bind(this));
-    divider.addEventListener("mousedown", this.handleMouseDown.bind(this));
-
-    var image = React.findDOMNode(this.refs.image);
-    image.addEventListener("click", this.handleClickImage.bind(this));
-    image.addEventListener("mousedown", this.handleMouseDown.bind(this));
-
     var invisible = React.findDOMNode(this.refs.invisible);
     invisible.addEventListener("blur", this.handleBlur.bind(this));
 
     var prompt = React.findDOMNode(this.refs.prompt);
-    prompt.addEventListener("click", this.handleClickPrompt.bind(this));
+    prompt.addEventListener("click", this.handleClick.bind(this));
     prompt.addEventListener("mousedown", this.handleMouseDown.bind(this));
 
     var uploader = React.findDOMNode(this.refs.uploader);
@@ -106,27 +112,45 @@ class MediaModal extends Component {
   }
 
   componentWillUnmount() {
-    var code = React.findDOMNode(this.refs.code);
-    code.removeEventListener("click", this.handleClickCode);
-    code.removeEventListener("mousedown", this.handleMouseDown);
-
-    var divider = React.findDOMNode(this.refs.divider);
-    divider.removeEventListener("click", this.handleClickDivider);
-    divider.removeEventListener("mousedown", this.handleMouseDown);
-
-    var image = React.findDOMNode(this.refs.image);
-    image.removeEventListener("click", this.handleClickImage);
-    image.removeEventListener("mousedown", this.handleMouseDown);
-
     var invisible = React.findDOMNode(this.refs.invisible);
     invisible.removeEventListener("blur", this.handleBlur);
 
     var prompt = React.findDOMNode(this.refs.prompt);
-    prompt.removeEventListener("click", this.handleClickPrompt);
+    prompt.removeEventListener("click", this.handleClick);
     prompt.removeEventListener("mousedown", this.handleMouseDown);
 
     var uploader = React.findDOMNode(this.refs.uploader);
     uploader.removeEventListener("change", this.handleChange);
+  }
+
+  // --------------------------------------------------
+  // Render
+  // --------------------------------------------------
+  renderOption(props, index) {
+    return (
+      <MediaOption
+        key={index}
+        active={this.state.shouldShowOptions}
+        {...props} />
+    );
+  }
+
+  renderOptions() {
+    var propsHashes = [
+      {
+        action: this.styleImage.bind(this),
+        className: "fa fa-image",
+      },
+      {
+        action: this.styleDivider.bind(this),
+        className: "fa fa-minus",
+      },
+      {
+        action: this.styleCode.bind(this),
+        className: "fa fa-code",
+      },
+    ];
+    return propsHashes.map(this.renderOption, this);
   }
 
   render() {
@@ -139,28 +163,13 @@ class MediaModal extends Component {
       { "media-modal-prompt": true },
       { "media-modal-prompt-open": this.state.shouldShowOptions }
     );
-    var optionClass = ClassNames(
-      { "media-modal-option": true },
-      { "media-modal-option-hidden": !this.state.shouldShowOptions }
-    );
     return (
       <div className={modalClass}>
         <span className={promptClass} ref={"prompt"}>
           <span className={"vertical-anchor"}></span>
           <i className={"fa fa-plus"}></i>
         </span>
-        <span className={optionClass} ref={"image"}>
-          <span className={"vertical-anchor"}></span>
-          <i className={"fa fa-image"}></i>
-        </span>
-        <span className={optionClass} ref={"divider"}>
-          <span className={"vertical-anchor"}></span>
-          <i className={"fa fa-minus"}></i>
-        </span>
-        <span className={optionClass} ref={"code"}>
-          <span className={"vertical-anchor"}></span>
-          <i className={"fa fa-code"}></i>
-        </span>
+        {this.renderOptions()}
         <input
           className={"general-invisible"}
           ref={"uploader"}

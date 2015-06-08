@@ -1,6 +1,7 @@
 import $ from "jquery";
 import ClassNames from "classnames";
 import React from "react";
+
 import Component from "app/templates/component";
 
 import StyleOption from "app/components/style_option";
@@ -15,6 +16,9 @@ import TypeConstants from "app/constants/type_constants";
 
 class StyleModal extends Component {
 
+  // --------------------------------------------------
+  // Handlers
+  // --------------------------------------------------
   handleMouseDown(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -24,6 +28,9 @@ class StyleModal extends Component {
     event.stopPropagation();
   }
 
+  // --------------------------------------------------
+  // Actions
+  // --------------------------------------------------
   styleBlocks(type) {
     EditorActor.styleBlocks(this.props.vector, type);
     this.props.updateStory();
@@ -58,11 +65,13 @@ class StyleModal extends Component {
     this.styleElements(TypeConstants.element.bold);
   }
 
-
   styleItalic(event) {
     this.styleElements(TypeConstants.element.italic);
   }
 
+  // --------------------------------------------------
+  // Helpers
+  // --------------------------------------------------
   createVector(vector) {
     if (vector) {
       var startPoint = vector.startPoint;
@@ -119,6 +128,9 @@ class StyleModal extends Component {
     modal.style.left = rectangle.left + offset + "px";
   }
 
+  // --------------------------------------------------
+  // Lifecycle
+  // --------------------------------------------------
   componentDidMount() {
     var modal = React.findDOMNode(this.refs.modal);
     modal.addEventListener("mousedown", this.handleMouseDown.bind(this));
@@ -133,6 +145,9 @@ class StyleModal extends Component {
     this.createVector(this.props.vector);
   }
 
+  // --------------------------------------------------
+  // Render
+  // --------------------------------------------------
   renderOption(props, index) {
     return (
       <StyleOption
@@ -185,7 +200,6 @@ class StyleModal extends Component {
         className: "fa fa-link",
       },
     ];
-
     return propsHashes.map(this.renderOption, this);
   }
 

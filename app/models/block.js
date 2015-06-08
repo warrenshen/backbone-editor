@@ -9,6 +9,9 @@ import TypeConstants from "app/constants/type_constants";
 
 class Block extends Model {
 
+  // --------------------------------------------------
+  // Getters
+  // --------------------------------------------------
   get defaults() {
     return {
       centered: false,
@@ -17,6 +20,10 @@ class Block extends Model {
       source: "",
       type: TypeConstants.block.standard,
     };
+  }
+
+  get length() {
+    return this.get("content").length;
   }
 
   get name() {
@@ -31,10 +38,6 @@ class Block extends Model {
         relatedModel: ModelDirectory.get("Element"),
       },
     ];
-  }
-
-  get length() {
-    return this.get("content").length;
   }
 
   // --------------------------------------------------
