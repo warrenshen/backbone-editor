@@ -16,6 +16,9 @@ import TypeConstants from "app/constants/type_constants";
 
 class EditorStore extends Store {
 
+  // --------------------------------------------------
+  // Setup
+  // --------------------------------------------------
   setDefaults() {
     this._mouseState = TypeConstants.mouse.up;
     this._point = new Point();
@@ -29,22 +32,18 @@ class EditorStore extends Store {
   }
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  get name() {
-    return "EditorStore";
-  }
-
-  get model() {
-    return Story;
-  }
-
   get activeStyles() {
     return this._activeStyles;
   }
 
   get mouseState() {
     return this._mouseState;
+  }
+
+  get name() {
+    return "EditorStore";
   }
 
   get point() {

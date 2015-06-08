@@ -1,5 +1,6 @@
 import _ from "lodash";
 import React from "react";
+
 import ListeningComponent from "app/templates/listening_component";
 
 import StoryEditable from "app/components/story_editable";
@@ -17,15 +18,21 @@ import TypeConstants from "app/constants/type_constants";
 
 class EditorPage extends ListeningComponent {
 
+  // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
   stores() {
     return [EditorStore];
   }
 
+  // --------------------------------------------------
+  // State
+  // --------------------------------------------------
   getDefaultState() {
     return _.merge(
       {},
       { shouldUpdateStory: false },
-      this.getStoreState()
+      super.getDefaultState()
     );
   }
 
@@ -44,6 +51,9 @@ class EditorPage extends ListeningComponent {
     this.setState({ shouldUpdateStory: false });
   }
 
+  // --------------------------------------------------
+  // Handlers
+  // --------------------------------------------------
   handleKeyDown(event) {
     var selection = window.getSelection();
     // We use selection.type === "Range" check when
@@ -142,6 +152,9 @@ class EditorPage extends ListeningComponent {
     }
   }
 
+  // --------------------------------------------------
+  // Lifecycle
+  // --------------------------------------------------
   componentDidMount() {
     super.componentDidMount();
     var page = React.findDOMNode(this.refs.page);
@@ -162,6 +175,9 @@ class EditorPage extends ListeningComponent {
     page.removeEventListener("mouseup", this.handleMouseUp);
   }
 
+  // --------------------------------------------------
+  // Render
+  // --------------------------------------------------
   render() {
     return (
       <div className={"editor-page"} ref="page">

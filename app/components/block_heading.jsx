@@ -1,5 +1,6 @@
 import ClassNames from "classnames";
 import React from "react";
+
 import BlockComponent from "app/templates/block_component";
 
 import TypeConstants from "app/constants/type_constants";
@@ -7,6 +8,9 @@ import TypeConstants from "app/constants/type_constants";
 
 class BlockHeading extends BlockComponent {
 
+  // --------------------------------------------------
+  // Render
+  // --------------------------------------------------
   renderEditable() {
     var block = this.props.block;
     var type = block.get("type");

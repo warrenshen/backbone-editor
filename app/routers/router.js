@@ -6,10 +6,16 @@ import EditorPage from "app/components/editor_page";
 
 class Router extends Backbone.Router {
 
+  // --------------------------------------------------
+  // Getters
+  // --------------------------------------------------
   get name() {
     return "Router";
   }
 
+  // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
   routes() {
     return {
       "": "editor",
@@ -17,6 +23,9 @@ class Router extends Backbone.Router {
     };
   }
 
+  // --------------------------------------------------
+  // Methods
+  // --------------------------------------------------
   editor() {
     React.render(
       <EditorPage />,

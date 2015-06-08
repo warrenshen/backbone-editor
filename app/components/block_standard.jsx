@@ -1,10 +1,14 @@
 import ClassNames from "classnames";
 import React from "react";
+
 import BlockComponent from "app/templates/block_component";
 
 
 class BlockStandard extends BlockComponent {
 
+  // --------------------------------------------------
+  // Render
+  // --------------------------------------------------
   render() {
     var block = this.props.block;
     var contentClass = ClassNames(

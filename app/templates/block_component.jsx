@@ -18,6 +18,9 @@ import TypeConstants from "app/constants/type_constants";
 
 class BlockComponent extends Component {
 
+  // --------------------------------------------------
+  // Handlers
+  // --------------------------------------------------
   handleArrowKey(event, point) {
     var block = this.props.block;
     var content = React.findDOMNode(this.refs.content);
@@ -144,6 +147,9 @@ class BlockComponent extends Component {
     }
   }
 
+  // --------------------------------------------------
+  // Lifecycle
+  // --------------------------------------------------
   componentDidMount() {
     var content = React.findDOMNode(this.refs.content);
     content.addEventListener("keydown", this.handleKeyDown.bind(this));
@@ -168,6 +174,9 @@ class BlockComponent extends Component {
     content.removeEventListener("mouseup", this.handleMouseUp);
   }
 
+  // --------------------------------------------------
+  // Render
+  // --------------------------------------------------
   renderContent(node) {
     node.innerHTML = Formatter.formatBlock(this.props.block);
   }

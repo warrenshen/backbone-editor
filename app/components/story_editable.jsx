@@ -1,4 +1,5 @@
 import React from "react";
+
 import Component from "app/templates/component";
 
 import SectionStandard from "app/components/section_standard";
@@ -11,6 +12,9 @@ import Selector from "app/helpers/selector";
 
 class StoryEditable extends Component {
 
+  // --------------------------------------------------
+  // Helpers
+  // --------------------------------------------------
   createCaret(point) {
     if (point) {
       var story = React.findDOMNode(this.refs.story);
@@ -68,6 +72,9 @@ class StoryEditable extends Component {
     }
   }
 
+  // --------------------------------------------------
+  // Lifecycle
+  // --------------------------------------------------
   componentDidMount() {
     this.createCaret(this.props.point);
   }
@@ -80,6 +87,9 @@ class StoryEditable extends Component {
     return this.props.shouldUpdateStory;
   }
 
+  // --------------------------------------------------
+  // Render
+  // --------------------------------------------------
   renderSection(section) {
     return (
       <SectionStandard

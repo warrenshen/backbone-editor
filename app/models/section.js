@@ -8,13 +8,17 @@ import TypeConstants from "app/constants/type_constants";
 class Section extends Model {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
   get defaults() {
     return {
       index: 0,
       type: TypeConstants.section.standard,
     };
+  }
+
+  get length() {
+    return this.get("blocks").length;
   }
 
   get name() {
@@ -29,10 +33,6 @@ class Section extends Model {
         relatedModel: ModelDirectory.get("Block"),
       },
     ];
-  }
-
-  get length() {
-    return this.get("blocks").length;
   }
 
   // --------------------------------------------------

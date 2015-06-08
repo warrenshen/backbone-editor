@@ -1,9 +1,13 @@
 import React from "react";
+
 import Component from "app/templates/component";
 
 
 class BlockDivider extends Component {
 
+  // --------------------------------------------------
+  // Render
+  // --------------------------------------------------
   render() {
     var block = this.props.block;
     return (

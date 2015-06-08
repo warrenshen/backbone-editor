@@ -1,10 +1,14 @@
 import ClassNames from "classnames";
 import React from "react";
+
 import Component from "app/templates/component";
 
 
 class StyleOption extends Component {
 
+  // --------------------------------------------------
+  // Lifecycle
+  // --------------------------------------------------
   componentDidMount() {
     var option = React.findDOMNode(this.refs.option);
     option.addEventListener("click", this.props.action);
@@ -15,6 +19,9 @@ class StyleOption extends Component {
     option.removeEventListener("click", this.props.action);
   }
 
+  // --------------------------------------------------
+  // Render
+  // --------------------------------------------------
   render() {
     var optionClass = ClassNames(
       { "style-option": true },

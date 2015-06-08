@@ -6,6 +6,9 @@ import ModelDirectory from "app/directories/model_directory";
 
 class Story extends Model {
 
+  // --------------------------------------------------
+  // Getters
+  // --------------------------------------------------
   get defaults() {
     return {};
   }
