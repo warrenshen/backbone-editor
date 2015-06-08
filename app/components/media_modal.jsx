@@ -1,6 +1,9 @@
 import ClassNames from "classnames";
 import React from "react";
+
 import Component from "app/templates/component";
+
+import MediaOption from "app/components/media_option";
 
 import Block from "app/models/block";
 
@@ -101,7 +104,7 @@ class MediaModal extends Component {
     invisible.addEventListener("blur", this.handleBlur.bind(this));
 
     var prompt = React.findDOMNode(this.refs.prompt);
-    prompt.addEventListener("click", this.handleClickPrompt.bind(this));
+    prompt.addEventListener("click", this.handleClick.bind(this));
     prompt.addEventListener("mousedown", this.handleMouseDown.bind(this));
 
     var uploader = React.findDOMNode(this.refs.uploader);
@@ -113,7 +116,7 @@ class MediaModal extends Component {
     invisible.removeEventListener("blur", this.handleBlur);
 
     var prompt = React.findDOMNode(this.refs.prompt);
-    prompt.removeEventListener("click", this.handleClickPrompt);
+    prompt.removeEventListener("click", this.handleClick);
     prompt.removeEventListener("mousedown", this.handleMouseDown);
 
     var uploader = React.findDOMNode(this.refs.uploader);
@@ -127,6 +130,7 @@ class MediaModal extends Component {
     return (
       <MediaOption
         key={index}
+        active={this.state.shouldShowOptions}
         {...props} />
     );
   }
@@ -134,19 +138,16 @@ class MediaModal extends Component {
   renderOptions() {
     var propsHashes = [
       {
-        action: this.styleHeadingOne.bind(this),
-        active: activeStyles[TypeConstants.block.headingOne],
-        className: "fa fa-header",
+        action: this.styleImage.bind(this),
+        className: "fa fa-image",
       },
       {
-        action: this.styleHeadingTwo.bind(this),
-        active: activeStyles[TypeConstants.block.headingTwo],
-        className: "fa fa-header",
+        action: this.styleDivider.bind(this),
+        className: "fa fa-minus",
       },
       {
-        action: this.styleHeadingThree.bind(this),
-        active: activeStyles[TypeConstants.block.headingThree],
-        className: "fa fa-header",
+        action: this.styleCode.bind(this),
+        className: "fa fa-code",
       },
     ];
     return propsHashes.map(this.renderOption, this);
@@ -169,18 +170,6 @@ class MediaModal extends Component {
           <i className={"fa fa-plus"}></i>
         </span>
         {this.renderOptions()}
-        <span className={optionClass} ref={"image"}>
-          <span className={"vertical-anchor"}></span>
-          <i className={"fa fa-image"}></i>
-        </span>
-        <span className={optionClass} ref={"divider"}>
-          <span className={"vertical-anchor"}></span>
-          <i className={"fa fa-minus"}></i>
-        </span>
-        <span className={optionClass} ref={"code"}>
-          <span className={"vertical-anchor"}></span>
-          <i className={"fa fa-code"}></i>
-        </span>
         <input
           className={"general-invisible"}
           ref={"uploader"}

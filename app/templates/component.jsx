@@ -1,11 +1,13 @@
 // Imports
-// - react + super component
+// - react
+// - templates
 // - components
 // - models
 // - stores
 // - actions
 // - helpers
 // - constants
+// - directories
 
 import React from "react";
 

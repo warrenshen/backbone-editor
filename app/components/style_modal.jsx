@@ -1,6 +1,7 @@
 import $ from "jquery";
 import ClassNames from "classnames";
 import React from "react";
+
 import Component from "app/templates/component";
 
 import StyleOption from "app/components/style_option";

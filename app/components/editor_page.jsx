@@ -1,5 +1,6 @@
 import _ from "lodash";
 import React from "react";
+
 import ListeningComponent from "app/templates/listening_component";
 
 import StoryEditable from "app/components/story_editable";

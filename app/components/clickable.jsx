@@ -1,4 +1,5 @@
 import React from "react";
+
 import Component from "app/templates/component";
 
 import RouterDirectory from "app/directories/router_directory";
