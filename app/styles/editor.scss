@@ -15,11 +15,13 @@
   position: relative;
   width: 100%;
   min-height: 30px;
+  padding: 0 6px;
   font-size: $font-size-smaller;
   font-family: $font-family-secondary;
   line-height: 30px;
   outline: none;
   word-wrap: break-word;
+  box-sizing: border-box;
 }
 
 .block-centered {
@@ -31,6 +33,10 @@
   width: 10%;
   margin: auto;
   color: $ash;
+}
+
+.block-empty {
+  background-color: $gray-lighter;
 }
 
 .block-heading-one {
@@ -112,7 +118,7 @@
 }
 
 .media-modal-open {
-  width: 172px;
+  width: 110%;
 }
 
 .media-modal-prompt {

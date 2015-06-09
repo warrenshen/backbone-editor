@@ -6,6 +6,8 @@ import SectionStandard from "app/components/section_standard";
 
 import Story from "app/models/story";
 
+import EditorActor from "app/actors/editor_actor";
+
 import Point from "app/helpers/point";
 import Selector from "app/helpers/selector";
 
@@ -56,10 +58,17 @@ class StoryEditable extends Component {
         }
 
         // Default to end of block if leftover caret offset present.
-        // TODO: Update editor store's point with correct offset.
         if (caretOffset > 0) {
-          range.setStart(currentNode, currentNode.length);
-          range.setEnd(currentNode, currentNode.length);
+          if (!node.textContent) {
+            point.caretOffset = 0;
+            console.log(point);
+            EditorActor.updatePoint(point);
+            this.props.updateStory();
+            return;
+          } else {
+            range.setStart(currentNode, currentNode.length);
+            range.setEnd(currentNode, currentNode.length);
+          }
         }
       } else {
         range.setStart(node, 0);

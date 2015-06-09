@@ -125,7 +125,7 @@ class BlockCaption extends Component {
       <p
         className={captionClass}
         contentEditable={this.props.shouldEnableEdits}
-        placeholder={"Write a caption here..."}
+        placeholder={"Write caption here..."}
         ref={"content"}>
       </p>
     );

@@ -68,25 +68,6 @@ input {
   outline: none;
 }
 
-input[type=text],
-input[type=password],
-textarea {
-  border: 1px solid $gray-input;
-  outline: none;
-  box-sizing: border-box;
-  -webkit-transition: all 0.30s ease-in-out;
-  -moz-transition: all 0.30s ease-in-out;
-  -ms-transition: all 0.30s ease-in-out;
-  -o-transition: all 0.30s ease-in-out;
-}
-
-input[type=text]:focus,
-input[type=password]:focus,
-textarea:focus {
-  border: 1px solid $gray;
-  box-shadow: 0 0 2px $gray;
-}
-
 .general-button {
   display: inline-block;
   vertical-align: middle;
@@ -94,13 +75,13 @@ textarea:focus {
   padding: 6px 12px;
   margin-right: 12px;
   color: $white;
-  border-bottom: 2px solid $gray-border;
+  border-bottom: 2px solid $gray-lighter;
   border-radius: 2px;
-  background-color: $gray-border;
+  background-color: $gray-lighter;
   font-size: 14px;
 
   &:hover {
-    background-color: $gray-input;
+    background-color: $gray-light;
     cursor: pointer;
   }
 }
@@ -120,7 +101,7 @@ textarea:focus {
 .general-placeholder {
   &:empty:before {
     content: attr(placeholder);
-    color: $gray-input;
+    color: $gray-light;
   }
 }
 
