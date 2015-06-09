@@ -15,6 +15,7 @@
   position: relative;
   width: 100%;
   min-height: 30px;
+  padding: 0 6px;
   font-size: $font-size-smaller;
   font-family: $font-family-secondary;
   line-height: 30px;
@@ -116,7 +117,7 @@
 }
 
 .media-modal-open {
-  width: 172px;
+  width: 110%;
 }
 
 .media-modal-prompt {
