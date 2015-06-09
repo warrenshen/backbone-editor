@@ -13,7 +13,9 @@ class BlockStandard extends BlockComponent {
     var block = this.props.block;
     var contentClass = ClassNames(
       { "block-content": true },
-      { "block-centered": block.get("centered") }
+      { "block-centered": block.get("centered") },
+      { "block-empty": !block.get("content") },
+      { "general-placeholder": !block.get("content") }
     );
     return (
       <div
@@ -22,6 +24,7 @@ class BlockStandard extends BlockComponent {
         <p
           className={contentClass}
           contentEditable={this.props.shouldEnableEdits}
+          placeholder={"Write anything here..."}
           ref={"content"}>
         </p>
         {this.renderModal()}
