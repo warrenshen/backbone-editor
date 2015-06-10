@@ -106,12 +106,15 @@ class EditorStore extends Store {
 
     point.caretOffset = beforeBlock.length;
 
-    if (block.get("type") !== TypeConstants.block.image) {
-      block.transferFragment(beforeBlock, 0);
+    if (beforeBlock.get("type") === TypeConstants.block.divider) {
+      section.removeBlock(beforeBlock);
+    } else {
+      if (block.get("type") !== TypeConstants.block.image) {
+        block.transferFragment(beforeBlock, 0);
+      }
+      section.removeBlock(block);
+      this.updatePoint(point);
     }
-
-    section.removeBlock(block);
-    this.updatePoint(point);
   }
 
   removeBlocks(vector, options={}) {
@@ -198,14 +201,43 @@ class EditorStore extends Store {
     this.updatePoint(startPoint);
   }
 
-  shiftDown(point) {
-    var sectionIndex = point.sectionIndex;
-    var blockIndex = point.blockIndex;
+  // --------------------------------------------------
+  // Methods
+  // --------------------------------------------------
+  priorBlock(sectionIndex, blockIndex) {
 
+  }
+
+  currentBlock(sectionIndex, blockIndex) {
+    var story = this._story;
+    var section = story.get("sections").at(sectionIndex);
+    return section.get("blocks").at(blockIndex);
+  }
+
+  nextBlock(sectionIndex, blockIndex) {
     var story = this._story;
     var sections = story.get("sections");
     var section = sections.at(sectionIndex);
 
+    if (blockIndex < section.length - 1) {
+      return section.get("blocks").at(blockIndex + 1);
+    } else if (sectionIndex < sections.length - 1) {
+      return sections.at(sectionIndex + 1).get("blocks").at(0);
+    } else {
+      return null;
+    }
+  }
+
+  shiftDown(point) {
+    var sectionIndex = point.sectionIndex;
+    var blockIndex = point.blockIndex;
+
+    var currentBlock = this.currentBlock(sectionIndex, blockIndex);
+    var nextBlock = this.nextBlock(sectionIndex, blockIndex);
+
+    if (nextBlock === null) {
+      point.caretOffset = currentBlock.length;
+    }
     if (blockIndex < section.length - 1) {
       point.blockIndex += 1;
     } else if (sectionIndex === sections.length - 1) {
