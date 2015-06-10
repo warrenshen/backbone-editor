@@ -234,15 +234,14 @@ class EditorStore extends Store {
 
     var currentBlock = this.currentBlock(sectionIndex, blockIndex);
     var nextBlock = this.nextBlock(sectionIndex, blockIndex);
+    while (nextBlock.get("type") === TypeConstants.block.divider) {
+      // TODO: Configure blocks to know their parent section.
+    }
 
     if (nextBlock === null) {
       point.caretOffset = currentBlock.length;
-    }
-    if (blockIndex < section.length - 1) {
+    } else if (blockIndex < section.length - 1) {
       point.blockIndex += 1;
-    } else if (sectionIndex === sections.length - 1) {
-      var block = section.get("blocks").at(blockIndex);
-      point.caretOffset = block.length;
     } else {
       point.sectionIndex += 1;
       point.blockIndex = 0;
