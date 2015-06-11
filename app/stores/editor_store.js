@@ -61,6 +61,12 @@ class EditorStore extends Store {
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------
+  currentSection(sectionIndex) {
+    var story = this._story;
+    return story.get("sections").at(sectionIndex);
+  }
+
+  // TODO: Can we just use a point as the only parameter?
   priorBlock(sectionIndex, blockIndex) {
     var story = this._story;
     var sections = story.get("sections");
@@ -107,18 +113,14 @@ class EditorStore extends Store {
   }
 
   addBlock(block, point) {
-    var sectionIndex = point.sectionIndex;
-    var blockIndex = point.blockIndex;
-
     var story = this._story;
-    var section = story.get("sections").at(sectionIndex);
-
-    section.addBlock(block, blockIndex);
+    var section = story.get("sections").at(point.sectionIndex);
 
     if (block.get("type") === TypeConstants.block.divider) {
       point.blockIndex += 1;
     }
 
+    section.addBlock(block, point.blockIndex);
     this.updatePoint(point);
   }
 
@@ -126,33 +128,24 @@ class EditorStore extends Store {
     var sectionIndex = point.sectionIndex;
     var blockIndex = point.blockIndex;
 
-    var story = this._story;
-    var sections = story.get("sections");
-    var section = sections.at(sectionIndex);
-    var blocks = section.get("blocks");
-    var block = blocks.at(blockIndex);
+    var currentSection = this.currentSection(sectionIndex);
+    var currentBlock = this.currentBlock(sectionIndex, blockIndex);
+    var priorBlock = this.priorBlock(sectionIndex, blockIndex);
 
-    var beforeBlock;
-    if (blockIndex === 0) {
-      beforeBlock = sections.at(sectionIndex - 1).getLastBlock();
-      point.sectionIndex -= 1;
-      point.blockIndex = beforeSection.length;
+    point.sectionIndex = priorBlock.get("section_index");
+    point.blockIndex = priorBlock.get("index");
+    point.caretOffset = priorBlock.length;
+
+    if (priorBlock.get("type") === TypeConstants.block.divider) {
+      currentSection.removeBlock(priorBlock);
+    } else if (currentBlock.get("type") !== TypeConstants.block.image) {
+      currentBlock.transferFragment(priorBlock, 0);
+      currentSection.removeBlock(currentBlock);
     } else {
-      beforeBlock = blocks.at(blockIndex - 1);
-      point.blockIndex -= 1;
+      return;
     }
 
-    point.caretOffset = beforeBlock.length;
-
-    if (beforeBlock.get("type") === TypeConstants.block.divider) {
-      section.removeBlock(beforeBlock);
-    } else {
-      if (block.get("type") !== TypeConstants.block.image) {
-        block.transferFragment(beforeBlock, 0);
-      }
-      section.removeBlock(block);
-      this.updatePoint(point);
-    }
+    this.updatePoint(point);
   }
 
   removeBlocks(vector, options={}) {
