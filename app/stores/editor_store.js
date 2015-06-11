@@ -234,17 +234,15 @@ class EditorStore extends Store {
 
     var currentBlock = this.currentBlock(sectionIndex, blockIndex);
     var nextBlock = this.nextBlock(sectionIndex, blockIndex);
-    while (nextBlock.get("type") === TypeConstants.block.divider) {
-      // TODO: Configure blocks to know their parent section.
+    while (nextBlock && nextBlock.get("type") === TypeConstants.block.divider) {
+      nextBlock = this.nextBlock(nextBlock.get("section_index"), nextBlock.get("index"));
     }
 
     if (nextBlock === null) {
       point.caretOffset = currentBlock.length;
-    } else if (blockIndex < section.length - 1) {
-      point.blockIndex += 1;
     } else {
-      point.sectionIndex += 1;
-      point.blockIndex = 0;
+      point.sectionIndex = nextBlock.get("section_index");
+      point.blockIndex = nextBlock.get("index");
     }
 
     this.updatePoint(point);
@@ -296,24 +294,19 @@ class EditorStore extends Store {
   }
 
   shiftUp(point) {
-    if (!point.prefixesEverything()) {
-      var sectionIndex = point.sectionIndex;
-      var blockIndex = point.blockIndex;
-
-      var story = this._story;
-      var sections = story.get("sections");
-
-      if (blockIndex === 0) {
-        point.sectionIndex -= 1;
-        point.blockIndex = sections.at(sectionIndex).length;
-      } else {
-        point.blockIndex -= 1;
-      }
-    } else {
-      point = new Point();
+    var priorBlock = this.priorBlock(point.sectionIndex, point.blockIndex);
+    while (priorBlock && priorBlock.get("type") === TypeConstants.block.divider) {
+      priorBlock = this.priorBlock(priorBlock.get("section_index"), priorBlock.get("index"));
     }
 
-    point.shouldFloor = true;
+    if (priorBlock === null) {
+      point.caretOffset = 0;
+    } else {
+      point.sectionIndex = priorBlock.get("section_index");
+      point.blockIndex = priorBlock.get("index");
+      point.shouldFloor = true;
+    }
+
     this.updatePoint(point);
   }
 
