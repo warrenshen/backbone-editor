@@ -65,7 +65,6 @@ class BlockStandard extends BlockComponent {
     var contentClass = ClassNames(
       { "block-content": true },
       { "block-centered": block.get("centered") },
-      { "block-empty": !block.get("content") },
       { "general-placeholder": this.shouldShowPlaceholder() }
     );
     return (

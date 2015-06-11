@@ -15,7 +15,6 @@
   position: relative;
   width: 100%;
   min-height: 30px;
-  padding: 0 6px;
   font-size: $font-size-smaller;
   font-family: $font-family-secondary;
   line-height: 30px;
@@ -33,10 +32,6 @@
   width: 10%;
   margin: auto;
   color: $ash;
-}
-
-.block-empty {
-  background-color: $gray-lighter;
 }
 
 .block-heading-one {

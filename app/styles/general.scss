@@ -68,6 +68,10 @@ input {
   outline: none;
 }
 
+hr {
+  border: 1px solid $gray;
+}
+
 .general-button {
   display: inline-block;
   vertical-align: middle;
