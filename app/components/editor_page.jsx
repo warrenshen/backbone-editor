@@ -31,7 +31,10 @@ class EditorPage extends ListeningComponent {
   getDefaultState() {
     return _.merge(
       {},
-      { shouldUpdateStory: false },
+      {
+        shouldUpdateModal: false,
+        shouldUpdateStory: false,
+      },
       super.getDefaultState()
     );
   }
@@ -46,9 +49,14 @@ class EditorPage extends ListeningComponent {
     }
   }
 
+  updateModal() {
+    this.setState({ shouldUpdateModal: true });
+    this.state.shouldUpdateModal = false;
+  }
+
   updateStory() {
     this.setState({ shouldUpdateStory: true });
-    this.setState({ shouldUpdateStory: false });
+    this.state.shouldUpdateStory = false;
   }
 
   // --------------------------------------------------
@@ -152,6 +160,14 @@ class EditorPage extends ListeningComponent {
     }
   }
 
+  handleScroll(event) {
+    this.updateModal();
+  }
+
+  handleResize(event) {
+    this.updateModal();
+  }
+
   // --------------------------------------------------
   // Lifecycle
   // --------------------------------------------------
@@ -163,6 +179,8 @@ class EditorPage extends ListeningComponent {
     document.addEventListener("keyup", this.handleKeyUp.bind(this));
     page.addEventListener("mousedown", this.handleMouseDown.bind(this));
     page.addEventListener("mouseup", this.handleMouseUp.bind(this));
+    window.addEventListener("scroll", this.handleScroll.bind(this));
+    window.addEventListener("resize", this.handleResize.bind(this));
   }
 
   componentWillUnmount() {
@@ -173,6 +191,8 @@ class EditorPage extends ListeningComponent {
     document.removeEventListener("keyup", this.handleKeyUp);
     page.removeEventListener("mousedown", this.handleMouseDown);
     page.removeEventListener("mouseup", this.handleMouseUp);
+    window.removeEventListener("scroll", this.handleScroll);
+    window.removeEventListener("resize", this.handleResize);
   }
 
   // --------------------------------------------------
@@ -189,6 +209,7 @@ class EditorPage extends ListeningComponent {
           updateStory={this.updateStory.bind(this)} />
         <StyleModal
           activeStyles={this.state.activeStyles}
+          shouldUpdateModal={this.state.shouldUpdateModal}
           updateStory={this.updateStory.bind(this)}
           vector={this.state.vector} />
       </div>

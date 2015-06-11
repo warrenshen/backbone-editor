@@ -145,6 +145,10 @@ class StyleModal extends Component {
     this.createVector(this.props.vector);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.shouldUpdateModal;
+  }
+
   // --------------------------------------------------
   // Render
   // --------------------------------------------------
@@ -220,12 +224,14 @@ class StyleModal extends Component {
 
 StyleModal.propTypes = {
   activeStyles: React.PropTypes.object.isRequired,
+  shouldUpdateModal: React.PropTypes.bool.isRequired,
   updateStory: React.PropTypes.func,
   vector: React.PropTypes.instanceOf(Vector),
 };
 
 StyleModal.defaultProps = {
   activeStyles: {},
+  shouldUpdateModal: true,
 };
 
 
