@@ -38,7 +38,7 @@ class BlockComponent extends Component {
         break;
 
       case KeyConstants.left:
-        if (point.prefixesBlock() && !point.prefixesEverything()) {
+        if (point.prefixesBlock()) {
           event.preventDefault();
           EditorActor.shiftLeft(point);
           this.props.updateStory();
@@ -46,7 +46,7 @@ class BlockComponent extends Component {
         break;
 
       case KeyConstants.right:
-        if (point.caretOffset === block.get("content").length) {
+        if (point.caretOffset === block.length) {
           event.preventDefault();
           EditorActor.shiftRight(point);
           this.props.updateStory();

@@ -59,6 +59,44 @@ class EditorStore extends Store {
   }
 
   // --------------------------------------------------
+  // Methods
+  // --------------------------------------------------
+  priorBlock(sectionIndex, blockIndex) {
+    var story = this._story;
+    var sections = story.get("sections");
+    var section = sections.at(sectionIndex);
+
+    if (blockIndex > 0) {
+      return section.get("blocks").at(blockIndex - 1);
+    } else if (sectionIndex > 0) {
+      var priorSection = sections.at(sectionIndex - 1);
+      return priorSection.get("blocks").at(priorSection.length - 1);
+    } else {
+      return null;
+    }
+  }
+
+  currentBlock(sectionIndex, blockIndex) {
+    var story = this._story;
+    var section = story.get("sections").at(sectionIndex);
+    return section.get("blocks").at(blockIndex);
+  }
+
+  nextBlock(sectionIndex, blockIndex) {
+    var story = this._story;
+    var sections = story.get("sections");
+    var section = sections.at(sectionIndex);
+
+    if (blockIndex < section.length - 1) {
+      return section.get("blocks").at(blockIndex + 1);
+    } else if (sectionIndex < sections.length - 1) {
+      return sections.at(sectionIndex + 1).get("blocks").at(0);
+    } else {
+      return null;
+    }
+  }
+
+  // --------------------------------------------------
   // Actions
   // --------------------------------------------------
   addSection(section, index=0) {
@@ -201,33 +239,6 @@ class EditorStore extends Store {
     this.updatePoint(startPoint);
   }
 
-  // --------------------------------------------------
-  // Methods
-  // --------------------------------------------------
-  priorBlock(sectionIndex, blockIndex) {
-
-  }
-
-  currentBlock(sectionIndex, blockIndex) {
-    var story = this._story;
-    var section = story.get("sections").at(sectionIndex);
-    return section.get("blocks").at(blockIndex);
-  }
-
-  nextBlock(sectionIndex, blockIndex) {
-    var story = this._story;
-    var sections = story.get("sections");
-    var section = sections.at(sectionIndex);
-
-    if (blockIndex < section.length - 1) {
-      return section.get("blocks").at(blockIndex + 1);
-    } else if (sectionIndex < sections.length - 1) {
-      return sections.at(sectionIndex + 1).get("blocks").at(0);
-    } else {
-      return null;
-    }
-  }
-
   shiftDown(point) {
     var sectionIndex = point.sectionIndex;
     var blockIndex = point.blockIndex;
@@ -238,56 +249,41 @@ class EditorStore extends Store {
       nextBlock = this.nextBlock(nextBlock.get("section_index"), nextBlock.get("index"));
     }
 
-    if (nextBlock === null) {
-      point.caretOffset = currentBlock.length;
-    } else {
+    if (nextBlock) {
       point.sectionIndex = nextBlock.get("section_index");
       point.blockIndex = nextBlock.get("index");
+    } else {
+      point.caretOffset = currentBlock.length;
     }
 
     this.updatePoint(point);
   }
 
   shiftLeft(point) {
-    var sectionIndex = point.sectionIndex;
-    var blockIndex = point.blockIndex;
+    var priorBlock = this.priorBlock(point.sectionIndex, point.blockIndex);
+    while (priorBlock && priorBlock.get("type") === TypeConstants.block.divider) {
+      priorBlock = this.priorBlock(priorBlock.get("section_index"), priorBlock.get("index"));
+    }
 
-    var story = this._story;
-    var sections = story.get("sections");
-
-    if (blockIndex === 0) {
-      var beforeSection = sections.at(sectionIndex - 1);
-      var beforeBlock = beforeSection.get("blocks").at(section.length);
-      point.sectionIndex -= 1;
-      point.blockIndex = beforeSection.length;
-      point.caretOffset = beforeBlock.length;
-    } else {
-      var section = sections.at(sectionIndex);
-      var beforeBlock = section.get("blocks").at(blockIndex - 1);
-      point.blockIndex -= 1;
-      point.caretOffset = beforeBlock.length;
+    if (priorBlock) {
+      point.sectionIndex = priorBlock.get("section_index");
+      point.blockIndex = priorBlock.get("index");
+      point.caretOffset = priorBlock.length;
     }
 
     this.updatePoint(point);
   }
 
   shiftRight(point) {
-    var sectionIndex = point.sectionIndex;
-    var blockIndex = point.blockIndex;
+    var nextBlock = this.nextBlock(point.sectionIndex, point.blockIndex);
+    while (nextBlock && nextBlock.get("type") === TypeConstants.block.divider) {
+      nextBlock = this.nextBlock(nextBlock.get("section_index"), nextBlock.get("index"));
+    }
 
-    var story = this._story;
-    var sections = story.get("sections");
-    var section = sections.at(sectionIndex);
-
-    if (blockIndex < section.length - 1) {
-      point.blockIndex += 1;
+    if (nextBlock) {
+      point.sectionIndex = nextBlock.get("section_index");
+      point.blockIndex = nextBlock.get("index");
       point.caretOffset = 0;
-    } else if (sectionIndex < sections.length - 1) {
-      point.sectionIndex += 1;
-      point.blockIndex = 0;
-      point.caretOffset = 0;
-    } else {
-      return;
     }
 
     this.updatePoint(point);
@@ -299,12 +295,12 @@ class EditorStore extends Store {
       priorBlock = this.priorBlock(priorBlock.get("section_index"), priorBlock.get("index"));
     }
 
-    if (priorBlock === null) {
-      point.caretOffset = 0;
-    } else {
+    if (priorBlock) {
       point.sectionIndex = priorBlock.get("section_index");
       point.blockIndex = priorBlock.get("index");
       point.shouldFloor = true;
+    } else {
+      point.caretOffset = 0;
     }
 
     this.updatePoint(point);
