@@ -115,12 +115,12 @@ class EditorStore extends Store {
   addBlock(block, point) {
     var story = this._story;
     var section = story.get("sections").at(point.sectionIndex);
+    section.addBlock(block, point.blockIndex);
 
     if (block.get("type") === TypeConstants.block.divider) {
       point.blockIndex += 1;
     }
 
-    section.addBlock(block, point.blockIndex);
     this.updatePoint(point);
   }
 

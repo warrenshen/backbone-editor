@@ -41,7 +41,7 @@ class BlockStandard extends BlockComponent {
   }
 
   componentWillUnmount() {
-    super.componentDidMount();
+    super.componentWillUnmount();
     var content = React.findDOMNode(this.refs.content);
     content.removeEventListener("blur", this.handleBlur);
     content.removeEventListener("focus", this.handleFocus);

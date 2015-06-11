@@ -61,7 +61,6 @@ class StoryEditable extends Component {
         if (caretOffset > 0) {
           if (!node.textContent) {
             point.caretOffset = 0;
-            console.log(point);
             EditorActor.updatePoint(point);
             this.props.updateStory();
             return;
