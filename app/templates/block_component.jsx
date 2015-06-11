@@ -183,15 +183,12 @@ class BlockComponent extends Component {
 
   renderModal() {
     var block = this.props.block;
-    var blockIndex = block.get("index");
     var point = EditorStore.point;
-    var sectionIndex = this.props.sectionIndex;
     if (!block.get("content") && point &&
-        point.matchesIndices(sectionIndex, blockIndex)) {
+        point.matchesIndices(block.get("section_index"), block.get("index"))) {
       return (
         <MediaModal
-          blockIndex={blockIndex}
-          sectionIndex={sectionIndex}
+          block={this.props.block}
           updateStory={this.props.updateStory} />
       );
     }
@@ -208,14 +205,12 @@ class BlockComponent extends Component {
 
 BlockComponent.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
-  sectionIndex: React.PropTypes.number.isRequired,
   shouldEnableEdits: React.PropTypes.bool.isRequired,
   updateStory: React.PropTypes.func,
 };
 
 BlockComponent.defaultProps = {
   block: new Block(),
-  sectionIndex: 0,
   shouldEnableEdits: true,
 };
 

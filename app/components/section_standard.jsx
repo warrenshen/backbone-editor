@@ -22,7 +22,6 @@ class SectionStandard extends Component {
     var props = {
       key: block.cid,
       block: block,
-      sectionIndex: this.props.section.get("index"),
       shouldEnableEdits: this.props.shouldEnableEdits,
       updateStory: this.props.updateStory,
     };

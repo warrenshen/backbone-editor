@@ -51,8 +51,9 @@ class BlockStandard extends BlockComponent {
   // Helpers
   // --------------------------------------------------
   shouldShowPlaceholder() {
-    return this.props.sectionIndex == 0 &&
-           this.props.block.get("index") === 0 &&
+    var block = this.props.block;
+    return block.get("section_index") == 0 &&
+           block.get("index") === 0 &&
            !this.state.hasFocus;
   }
 
