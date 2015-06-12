@@ -211,7 +211,7 @@ class StyleModal extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return this.props.shouldUpdateStyler ||
+    return nextProps.shouldUpdateStyler ||
            this.state.shouldShowInput !== nextState.shouldShowInput;
   }
 

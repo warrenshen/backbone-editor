@@ -236,7 +236,7 @@ class EditorPage extends ListeningComponent {
           shouldEnableEdits={this.state.shouldEnableEdits}
           shouldUpdateStory={this.state.shouldUpdateStory}
           story={this.state.story}
-          updateLink={this.updateLinker.bind(this)}
+          updateLinker={this.updateLinker.bind(this)}
           updateStates={this.updateStates.bind(this)}
           updateStory={this.updateStory.bind(this)}
           updateStyler={this.updateStyler.bind(this)} />

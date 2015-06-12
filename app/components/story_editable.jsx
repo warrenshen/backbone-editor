@@ -9,6 +9,7 @@ import Story from "app/models/story";
 
 import EditorActor from "app/actors/editor_actor";
 
+import Link from "app/helpers/link";
 import Point from "app/helpers/point";
 import Selector from "app/helpers/selector";
 
@@ -124,7 +125,7 @@ class StoryEditable extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return this.props.shouldUpdateStory;
+    return nextProps.shouldUpdateStory;
   }
 
   // --------------------------------------------------

@@ -82,7 +82,7 @@ class EditorActor extends Actor {
 
   updateLink(link) {
     this.act({
-      type: ActionConstants.editor.link,
+      type: ActionConstants.editor.updateLink,
       link: link,
     });
   }

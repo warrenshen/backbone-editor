@@ -8,6 +8,13 @@ import Link from "app/helpers/link";
 
 class LinkModal extends Component {
 
+  positionModal(rectangle) {
+    var modal = React.findDOMNode(this.refs.modal);
+    var offset = rectangle.width / 2 - modal.offsetWidth / 2;
+    modal.style.top = rectangle.bottom + 6 + "px";
+    modal.style.left = rectangle.left + offset + "px";
+  }
+
   // --------------------------------------------------
   // Lifecycle
   // --------------------------------------------------
@@ -16,24 +23,26 @@ class LinkModal extends Component {
     if (link) {
       var content = React.findDOMNode(this.refs.content);
       content.innerHTML = link.content;
+      this.positionModal(link.rectangle);
     }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.shouldUpdateLinker;
   }
 
   // --------------------------------------------------
   // Render
   // --------------------------------------------------
   render() {
-    console.log("rendering");
     var modalClass = ClassNames(
       { "link-modal": true },
       { "general-hidden": !this.props.link }
     );
     return (
-      <div className={modalClass} ref="modal">
+      <div className={modalClass} ref={"modal"}>
         <span className={"vertical-anchor"}></span>
-        <span className={"link-modal-content"}>
-          www.google.com
-        </span>
+        <span className={"link-modal-content"} ref={"content"}></span>
         <span className={"link-modal-triangle"}></span>
       </div>
     );

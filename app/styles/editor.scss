@@ -100,8 +100,10 @@
 }
 
 .element-link {
-  font-size: $font-size-smaller;
   border-bottom: 1px solid $ash;
+  font-size: inherit;
+  font-weight: inherit;
+  font-family: inherit;
 }
 
 .link-modal {
