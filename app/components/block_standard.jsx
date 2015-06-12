@@ -41,7 +41,7 @@ class BlockStandard extends BlockComponent {
   }
 
   componentWillUnmount() {
-    super.componentDidMount();
+    super.componentWillUnmount();
     var content = React.findDOMNode(this.refs.content);
     content.removeEventListener("blur", this.handleBlur);
     content.removeEventListener("focus", this.handleFocus);
@@ -51,8 +51,9 @@ class BlockStandard extends BlockComponent {
   // Helpers
   // --------------------------------------------------
   shouldShowPlaceholder() {
-    return this.props.sectionIndex == 0 &&
-           this.props.block.get("index") === 0 &&
+    var block = this.props.block;
+    return block.get("section_index") == 0 &&
+           block.get("index") === 0 &&
            !this.state.hasFocus;
   }
 
@@ -64,7 +65,6 @@ class BlockStandard extends BlockComponent {
     var contentClass = ClassNames(
       { "block-content": true },
       { "block-centered": block.get("centered") },
-      { "block-empty": !block.get("content") },
       { "general-placeholder": this.shouldShowPlaceholder() }
     );
     return (

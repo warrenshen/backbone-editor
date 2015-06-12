@@ -1,3 +1,4 @@
+import $ from "jquery";
 import React from "react";
 
 import Component from "app/templates/component";
@@ -8,11 +9,32 @@ import Story from "app/models/story";
 
 import EditorActor from "app/actors/editor_actor";
 
+import Link from "app/helpers/link";
 import Point from "app/helpers/point";
 import Selector from "app/helpers/selector";
 
 
 class StoryEditable extends Component {
+
+  // --------------------------------------------------
+  // Handlers
+  // --------------------------------------------------
+  handleMouseEnter(event) {
+    var range = document.createRange();
+    range.setStartBefore(event.target);
+    range.setEndAfter(event.target);
+
+    var rectangle = range.getBoundingClientRect();
+    var link = new Link(rectangle, event.currentTarget.dataset.link);
+
+    EditorActor.updateLink(link)
+    this.props.updateLinker();
+  }
+
+  handleMouseLeave(event) {
+    EditorActor.updateLink(null);
+    this.props.updateLinker();
+  }
 
   // --------------------------------------------------
   // Helpers
@@ -61,7 +83,6 @@ class StoryEditable extends Component {
         if (caretOffset > 0) {
           if (!node.textContent) {
             point.caretOffset = 0;
-            console.log(point);
             EditorActor.updatePoint(point);
             this.props.updateStory();
             return;
@@ -81,19 +102,30 @@ class StoryEditable extends Component {
     }
   }
 
+  createHandlers() {
+    var links = $(".element-link");
+    for (var i = 0; i < links.length; i += 1) {
+      var link = links[i];
+      link.addEventListener("mouseenter", this.handleMouseEnter.bind(this));
+      link.addEventListener("mouseleave", this.handleMouseLeave.bind(this));
+    }
+  }
+
   // --------------------------------------------------
   // Lifecycle
   // --------------------------------------------------
   componentDidMount() {
     this.createCaret(this.props.point);
+    this.createHandlers();
   }
 
   componentDidUpdate() {
     this.createCaret(this.props.point);
+    this.createHandlers();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return this.props.shouldUpdateStory;
+    return nextProps.shouldUpdateStory;
   }
 
   // --------------------------------------------------
@@ -105,6 +137,7 @@ class StoryEditable extends Component {
         key={section.cid}
         section={section}
         shouldEnableEdits={this.props.shouldEnableEdits}
+        updateStates={this.props.updateStates}
         updateStory={this.props.updateStory} />
     );
   }
@@ -128,6 +161,8 @@ StoryEditable.propTypes = {
   shouldEnableEdits: React.PropTypes.bool.isRequired,
   shouldUpdateStory: React.PropTypes.bool.isRequired,
   story: React.PropTypes.instanceOf(Story).isRequired,
+  updateLinker: React.PropTypes.func,
+  updateStates: React.PropTypes.func,
   updateStory: React.PropTypes.func,
 };
 

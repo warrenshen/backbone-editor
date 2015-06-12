@@ -134,14 +134,12 @@ class BlockCaption extends Component {
 
 BlockCaption.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
-  sectionIndex: React.PropTypes.number.isRequired,
   shouldEnableEdits: React.PropTypes.bool.isRequired,
   updateStory: React.PropTypes.func,
 };
 
 BlockCaption.defaultProps = {
   block: new Block(),
-  sectionIndex: 0,
   shouldEnableEdits: true,
 };
 

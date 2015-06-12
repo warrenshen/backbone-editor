@@ -38,7 +38,7 @@ class BlockComponent extends Component {
         break;
 
       case KeyConstants.left:
-        if (point.prefixesBlock() && !point.prefixesEverything()) {
+        if (point.prefixesBlock()) {
           event.preventDefault();
           EditorActor.shiftLeft(point);
           this.props.updateStory();
@@ -46,7 +46,7 @@ class BlockComponent extends Component {
         break;
 
       case KeyConstants.right:
-        if (point.caretOffset === block.get("content").length) {
+        if (point.caretOffset === block.length) {
           event.preventDefault();
           EditorActor.shiftRight(point);
           this.props.updateStory();
@@ -143,7 +143,7 @@ class BlockComponent extends Component {
 
       var point = Selector.generatePoint(selection);
       EditorActor.updatePoint(point);
-      this.props.updateStory();
+      this.props.updateStates();
     }
   }
 
@@ -183,15 +183,12 @@ class BlockComponent extends Component {
 
   renderModal() {
     var block = this.props.block;
-    var blockIndex = block.get("index");
     var point = EditorStore.point;
-    var sectionIndex = this.props.sectionIndex;
     if (!block.get("content") && point &&
-        point.matchesIndices(sectionIndex, blockIndex)) {
+        point.matchesIndices(block.get("section_index"), block.get("index"))) {
       return (
         <MediaModal
-          blockIndex={blockIndex}
-          sectionIndex={sectionIndex}
+          block={this.props.block}
           updateStory={this.props.updateStory} />
       );
     }
@@ -208,14 +205,13 @@ class BlockComponent extends Component {
 
 BlockComponent.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
-  sectionIndex: React.PropTypes.number.isRequired,
   shouldEnableEdits: React.PropTypes.bool.isRequired,
+  updateStates: React.PropTypes.func,
   updateStory: React.PropTypes.func,
 };
 
 BlockComponent.defaultProps = {
   block: new Block(),
-  sectionIndex: 0,
   shouldEnableEdits: true,
 };
 

@@ -11,14 +11,53 @@ import EditorActor from "app/actors/editor_actor";
 import Selector from "app/helpers/selector";
 import Vector from "app/helpers/vector";
 
+import KeyConstants from "app/constants/key_constants";
 import TypeConstants from "app/constants/type_constants";
 
 
 class StyleModal extends Component {
 
   // --------------------------------------------------
+  // State
+  // --------------------------------------------------
+  getDefaultState() {
+    return { shouldShowInput: false };
+  }
+
+  // --------------------------------------------------
   // Handlers
   // --------------------------------------------------
+  handleBlur(event) {
+    this.setState({ shouldShowInput: false });
+  }
+
+  handleClick(event) {
+    event.stopPropagation();
+    this.setState({ shouldShowInput: true });
+  }
+
+  handleFocus(event) {
+    event.stopPropagation()
+    React.findDOMNode(this.refs.input).focus();
+  }
+
+  handleKeyDown(event) {
+    event.stopPropagation();
+  }
+
+  handleKeyPress(event) {
+    event.stopPropagation();
+    if (event.which === KeyConstants.enter) {
+      var input = React.findDOMNode(this.refs.input);
+      this.styleLink(input.value);
+      input.blur();
+    }
+  }
+
+  handleKeyUp(event) {
+    event.stopPropagation();
+  }
+
   handleMouseDown(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -33,7 +72,7 @@ class StyleModal extends Component {
   // --------------------------------------------------
   styleBlocks(type) {
     EditorActor.styleBlocks(this.props.vector, type);
-    this.props.updateStory();
+    this.props.updateStates();
   }
 
   styleCentered(event) {
@@ -56,9 +95,9 @@ class StyleModal extends Component {
     this.styleBlocks(TypeConstants.block.quote);
   }
 
-  styleElements(type) {
-    EditorActor.styleElements(this.props.vector, type);
-    this.props.updateStory();
+  styleElements(type, link="") {
+    EditorActor.styleElements(this.props.vector, type, link);
+    this.props.updateStates();
   }
 
   styleBold(event) {
@@ -67,6 +106,10 @@ class StyleModal extends Component {
 
   styleItalic(event) {
     this.styleElements(TypeConstants.element.italic);
+  }
+
+  styleLink(link) {
+    this.styleElements(TypeConstants.element.link, link);
   }
 
   // --------------------------------------------------
@@ -135,19 +178,61 @@ class StyleModal extends Component {
     var modal = React.findDOMNode(this.refs.modal);
     modal.addEventListener("mousedown", this.handleMouseDown.bind(this));
     modal.addEventListener("mouseup", this.handleMouseUp.bind(this));
+
     this.createVector(this.props.vector);
   }
 
   componentDidUpdate() {
+    var input = React.findDOMNode(this.refs.input);
+    if (input) {
+      input.addEventListener("blur", this.handleBlur.bind(this));
+      input.addEventListener("click", this.handleFocus.bind(this));
+      input.addEventListener("keydown", this.handleKeyDown.bind(this));
+      input.addEventListener("keypress", this.handleKeyPress.bind(this));
+      input.addEventListener("keyup", this.handleKeyUp.bind(this));
+    }
+
+    this.createVector(this.props.vector);
+  }
+
+  componentWillUnmount() {
+    var input = React.findDOMNode(this.refs.input);
+    if (input) {
+      input.removeEventListener("blur", this.handleBlur);
+      input.removeEventListener("click", this.handleFocus);
+      input.removeEventListener("keydown", this.handleKeyDown);
+      input.removeEventListener("keypress", this.handleKeyPress);
+      input.removeEventListener("keyup", this.handleKeyUp);
+    }
+
     var modal = React.findDOMNode(this.refs.modal);
     modal.removeEventListener("mousedown", this.handleMouseDown);
     modal.removeEventListener("mouseup", this.handleMouseUp);
-    this.createVector(this.props.vector);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.shouldUpdateStyler ||
+           this.state.shouldShowInput !== nextState.shouldShowInput;
   }
 
   // --------------------------------------------------
   // Render
   // --------------------------------------------------
+  renderInput() {
+    if (this.state.shouldShowInput) {
+      return (
+        <div className={"style-modal-overlay"}>
+          <span className={"vertical-anchor"}></span>
+          <input
+            className={"style-modal-input"}
+            ref={"input"}
+            placeholder={"Enter or paste a link..."}>
+          </input>
+        </div>
+      );
+    }
+  }
+
   renderOption(props, index) {
     return (
       <StyleOption
@@ -195,7 +280,7 @@ class StyleModal extends Component {
         className: "fa fa-italic",
       },
       {
-        action: this.styleHeadingThree.bind(this),
+        action: this.handleClick.bind(this),
         active: activeStyles[TypeConstants.block.headingThree],
         className: "fa fa-link",
       },
@@ -212,6 +297,7 @@ class StyleModal extends Component {
       <div className={modalClass} ref="modal">
         <span className={"vertical-anchor"}></span>
         {this.renderOptions()}
+        {this.renderInput()}
         <span className={"style-modal-triangle"}></span>
       </div>
     );
@@ -220,12 +306,14 @@ class StyleModal extends Component {
 
 StyleModal.propTypes = {
   activeStyles: React.PropTypes.object.isRequired,
-  updateStory: React.PropTypes.func,
+  shouldUpdateStyler: React.PropTypes.bool.isRequired,
+  updateStates: React.PropTypes.func,
   vector: React.PropTypes.instanceOf(Vector),
 };
 
 StyleModal.defaultProps = {
   activeStyles: {},
+  shouldUpdateStyler: true,
 };
 
 

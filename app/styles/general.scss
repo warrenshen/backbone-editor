@@ -20,6 +20,7 @@ h6 {
   color: $ash;
   font-family: $font-family-primary;
   font-weight: $font-weight-medium;
+  letter-spacing: -0.5px;
 }
 
 h1 {
@@ -66,6 +67,10 @@ input {
   font-family: $font-family-secondary;
   text-decoration: none;
   outline: none;
+}
+
+hr {
+  border: 1px solid $gray;
 }
 
 .general-button {

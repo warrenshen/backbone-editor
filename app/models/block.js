@@ -17,6 +17,7 @@ class Block extends Model {
       centered: false,
       content: "",
       index: 0,
+      section_index: 0,
       source: "",
       type: TypeConstants.block.standard,
     };
