@@ -125,7 +125,7 @@ class BlockCaption extends Component {
       <p
         className={captionClass}
         contentEditable={this.props.shouldEnableEdits}
-        placeholder={"Write a caption here..."}
+        placeholder={"Write caption here..."}
         ref={"content"}>
       </p>
     );
@@ -134,14 +134,12 @@ class BlockCaption extends Component {
 
 BlockCaption.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
-  sectionIndex: React.PropTypes.number.isRequired,
   shouldEnableEdits: React.PropTypes.bool.isRequired,
   updateStory: React.PropTypes.func,
 };
 
 BlockCaption.defaultProps = {
   block: new Block(),
-  sectionIndex: 0,
   shouldEnableEdits: true,
 };
 

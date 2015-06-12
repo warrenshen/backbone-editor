@@ -20,10 +20,11 @@ class EditorStore extends Store {
   // Setup
   // --------------------------------------------------
   setDefaults() {
+    this._activeStyles = {};
+    this._link = null;
     this._mouseState = TypeConstants.mouse.up;
     this._point = new Point();
     this._story = new Story();
-    this._activeStyles = {};
     this._vector = null;
 
     var initialSection = new Section();
@@ -36,6 +37,10 @@ class EditorStore extends Store {
   // --------------------------------------------------
   get activeStyles() {
     return this._activeStyles;
+  }
+
+  get link() {
+    return this._link;
   }
 
   get mouseState() {
@@ -59,6 +64,50 @@ class EditorStore extends Store {
   }
 
   // --------------------------------------------------
+  // Methods
+  // --------------------------------------------------
+  currentSection(sectionIndex) {
+    var story = this._story;
+    return story.get("sections").at(sectionIndex);
+  }
+
+  // TODO: Can we just use a point as the only parameter?
+  priorBlock(sectionIndex, blockIndex) {
+    var story = this._story;
+    var sections = story.get("sections");
+    var section = sections.at(sectionIndex);
+
+    if (blockIndex > 0) {
+      return section.get("blocks").at(blockIndex - 1);
+    } else if (sectionIndex > 0) {
+      var priorSection = sections.at(sectionIndex - 1);
+      return priorSection.get("blocks").at(priorSection.length - 1);
+    } else {
+      return null;
+    }
+  }
+
+  currentBlock(sectionIndex, blockIndex) {
+    var story = this._story;
+    var section = story.get("sections").at(sectionIndex);
+    return section.get("blocks").at(blockIndex);
+  }
+
+  nextBlock(sectionIndex, blockIndex) {
+    var story = this._story;
+    var sections = story.get("sections");
+    var section = sections.at(sectionIndex);
+
+    if (blockIndex < section.length - 1) {
+      return section.get("blocks").at(blockIndex + 1);
+    } else if (sectionIndex < sections.length - 1) {
+      return sections.at(sectionIndex + 1).get("blocks").at(0);
+    } else {
+      return null;
+    }
+  }
+
+  // --------------------------------------------------
   // Actions
   // --------------------------------------------------
   addSection(section, index=0) {
@@ -69,13 +118,9 @@ class EditorStore extends Store {
   }
 
   addBlock(block, point) {
-    var sectionIndex = point.sectionIndex;
-    var blockIndex = point.blockIndex;
-
     var story = this._story;
-    var section = story.get("sections").at(sectionIndex);
-
-    section.addBlock(block, blockIndex);
+    var section = story.get("sections").at(point.sectionIndex);
+    section.addBlock(block, point.blockIndex);
 
     if (block.get("type") === TypeConstants.block.divider) {
       point.blockIndex += 1;
@@ -88,29 +133,23 @@ class EditorStore extends Store {
     var sectionIndex = point.sectionIndex;
     var blockIndex = point.blockIndex;
 
-    var story = this._story;
-    var sections = story.get("sections");
-    var section = sections.at(sectionIndex);
-    var blocks = section.get("blocks");
-    var block = blocks.at(blockIndex);
+    var currentSection = this.currentSection(sectionIndex);
+    var currentBlock = this.currentBlock(sectionIndex, blockIndex);
+    var priorBlock = this.priorBlock(sectionIndex, blockIndex);
 
-    var beforeBlock;
-    if (blockIndex === 0) {
-      beforeBlock = sections.at(sectionIndex - 1).getLastBlock();
-      point.sectionIndex -= 1;
-      point.blockIndex = beforeSection.length;
+    point.sectionIndex = priorBlock.get("section_index");
+    point.blockIndex = priorBlock.get("index");
+    point.caretOffset = priorBlock.length;
+
+    if (priorBlock.get("type") === TypeConstants.block.divider) {
+      currentSection.removeBlock(priorBlock);
+    } else if (currentBlock.get("type") !== TypeConstants.block.image) {
+      currentBlock.transferFragment(priorBlock, 0);
+      currentSection.removeBlock(currentBlock);
     } else {
-      beforeBlock = blocks.at(blockIndex - 1);
-      point.blockIndex -= 1;
+      return;
     }
 
-    point.caretOffset = beforeBlock.length;
-
-    if (block.get("type") !== TypeConstants.block.image) {
-      block.transferFragment(beforeBlock, 0);
-    }
-
-    section.removeBlock(block);
     this.updatePoint(point);
   }
 
@@ -202,87 +241,66 @@ class EditorStore extends Store {
     var sectionIndex = point.sectionIndex;
     var blockIndex = point.blockIndex;
 
-    var story = this._story;
-    var sections = story.get("sections");
-    var section = sections.at(sectionIndex);
+    var currentBlock = this.currentBlock(sectionIndex, blockIndex);
+    var nextBlock = this.nextBlock(sectionIndex, blockIndex);
+    while (nextBlock && nextBlock.get("type") === TypeConstants.block.divider) {
+      nextBlock = this.nextBlock(nextBlock.get("section_index"), nextBlock.get("index"));
+    }
 
-    if (blockIndex < section.length - 1) {
-      point.blockIndex += 1;
-    } else if (sectionIndex === sections.length - 1) {
-      var block = section.get("blocks").at(blockIndex);
-      point.caretOffset = block.length;
+    if (nextBlock) {
+      point.sectionIndex = nextBlock.get("section_index");
+      point.blockIndex = nextBlock.get("index");
     } else {
-      point.sectionIndex += 1;
-      point.blockIndex = 0;
+      point.caretOffset = currentBlock.length;
     }
 
     this.updatePoint(point);
   }
 
   shiftLeft(point) {
-    var sectionIndex = point.sectionIndex;
-    var blockIndex = point.blockIndex;
+    var priorBlock = this.priorBlock(point.sectionIndex, point.blockIndex);
+    while (priorBlock && priorBlock.get("type") === TypeConstants.block.divider) {
+      priorBlock = this.priorBlock(priorBlock.get("section_index"), priorBlock.get("index"));
+    }
 
-    var story = this._story;
-    var sections = story.get("sections");
-
-    if (blockIndex === 0) {
-      var beforeSection = sections.at(sectionIndex - 1);
-      var beforeBlock = beforeSection.get("blocks").at(section.length);
-      point.sectionIndex -= 1;
-      point.blockIndex = beforeSection.length;
-      point.caretOffset = beforeBlock.length;
-    } else {
-      var section = sections.at(sectionIndex);
-      var beforeBlock = section.get("blocks").at(blockIndex - 1);
-      point.blockIndex -= 1;
-      point.caretOffset = beforeBlock.length;
+    if (priorBlock) {
+      point.sectionIndex = priorBlock.get("section_index");
+      point.blockIndex = priorBlock.get("index");
+      point.caretOffset = priorBlock.length;
     }
 
     this.updatePoint(point);
   }
 
   shiftRight(point) {
-    var sectionIndex = point.sectionIndex;
-    var blockIndex = point.blockIndex;
+    var nextBlock = this.nextBlock(point.sectionIndex, point.blockIndex);
+    while (nextBlock && nextBlock.get("type") === TypeConstants.block.divider) {
+      nextBlock = this.nextBlock(nextBlock.get("section_index"), nextBlock.get("index"));
+    }
 
-    var story = this._story;
-    var sections = story.get("sections");
-    var section = sections.at(sectionIndex);
-
-    if (blockIndex < section.length - 1) {
-      point.blockIndex += 1;
+    if (nextBlock) {
+      point.sectionIndex = nextBlock.get("section_index");
+      point.blockIndex = nextBlock.get("index");
       point.caretOffset = 0;
-    } else if (sectionIndex < sections.length - 1) {
-      point.sectionIndex += 1;
-      point.blockIndex = 0;
-      point.caretOffset = 0;
-    } else {
-      return;
     }
 
     this.updatePoint(point);
   }
 
   shiftUp(point) {
-    if (!point.prefixesEverything()) {
-      var sectionIndex = point.sectionIndex;
-      var blockIndex = point.blockIndex;
-
-      var story = this._story;
-      var sections = story.get("sections");
-
-      if (blockIndex === 0) {
-        point.sectionIndex -= 1;
-        point.blockIndex = sections.at(sectionIndex).length;
-      } else {
-        point.blockIndex -= 1;
-      }
-    } else {
-      point = new Point();
+    var priorBlock = this.priorBlock(point.sectionIndex, point.blockIndex);
+    while (priorBlock && priorBlock.get("type") === TypeConstants.block.divider) {
+      priorBlock = this.priorBlock(priorBlock.get("section_index"), priorBlock.get("index"));
     }
 
-    point.shouldFloor = true;
+    if (priorBlock) {
+      point.sectionIndex = priorBlock.get("section_index");
+      point.blockIndex = priorBlock.get("index");
+      point.shouldFloor = true;
+    } else {
+      point.caretOffset = 0;
+    }
+
     this.updatePoint(point);
   }
 
@@ -353,7 +371,8 @@ class EditorStore extends Store {
     this.updateActiveStyles(vector);
   }
 
-  styleElements(vector, which) {
+  // TODO: Set up better support for links.
+  styleElements(vector, which, link) {
     var startPoint = vector.startPoint;
     var endPoint = vector.endPoint;
 
@@ -387,7 +406,7 @@ class EditorStore extends Store {
 
       for (var blockIndex of blockIndices) {
         var block = blocks.at(blockIndex);
-        var element = new Element({ type: which });
+        var element = new Element({ type: which, link: link });
 
         if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
           element.setRange(startCaretOffset, endCaretOffset);
@@ -472,6 +491,11 @@ class EditorStore extends Store {
     this.emitChange();
   }
 
+  updateLink(link) {
+    this._link = link;
+    this.emitChange();
+  }
+
   updateMouseState(mouseState, shouldEmit=false) {
     this._mouseState = mouseState;
 
@@ -542,10 +566,13 @@ class EditorStore extends Store {
         this.styleBlocks(action.vector, action.which);
         break;
       case ActionConstants.editor.styleElements:
-        this.styleElements(action.vector, action.which);
+        this.styleElements(action.vector, action.which, action.link);
         break;
       case ActionConstants.editor.updateMouseState:
         this.updateMouseState(action.mouseState, action.shouldEmit);
+        break;
+      case ActionConstants.editor.updateLink:
+        this.updateLink(action.link);
         break;
       case ActionConstants.editor.updatePoint:
         this.updatePoint(action.point);

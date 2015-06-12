@@ -39,6 +39,7 @@ class Section extends Model {
   // Methods
   // --------------------------------------------------
   addBlock(block, index=0) {
+    block.set("section_index", this.get("index"));
     this.get("blocks").add(block, { at: index });
     this.updateBlockIndices();
   }

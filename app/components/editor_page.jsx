@@ -3,6 +3,7 @@ import React from "react";
 
 import ListeningComponent from "app/templates/listening_component";
 
+import LinkModal from "app/components/link_modal";
 import StoryEditable from "app/components/story_editable";
 import StyleModal from "app/components/style_modal";
 
@@ -31,7 +32,11 @@ class EditorPage extends ListeningComponent {
   getDefaultState() {
     return _.merge(
       {},
-      { shouldUpdateStory: false },
+      {
+        shouldUpdateLinker: false,
+        shouldUpdateStyler: false,
+        shouldUpdateStory: false,
+      },
       super.getDefaultState()
     );
   }
@@ -39,6 +44,7 @@ class EditorPage extends ListeningComponent {
   getStoreState() {
     return {
       activeStyles: EditorStore.activeStyles,
+      link: EditorStore.link,
       point: EditorStore.point,
       shouldEnableEdits: EditorStore.mouseState === TypeConstants.mouse.up,
       story: EditorStore.story,
@@ -46,9 +52,31 @@ class EditorPage extends ListeningComponent {
     }
   }
 
+  updateLinker() {
+    this.setState({ shouldUpdateLinker: true });
+    this.setState({ shouldUpdateLinker: false });
+  }
+
+  updateStates() {
+    this.setState({
+      shouldUpdateStory: true,
+      shouldUpdateStyler: true,
+    });
+
+    this.setState({
+      shouldUpdateStory: false,
+      shouldUpdateStyler: false,
+    });
+  }
+
   updateStory() {
     this.setState({ shouldUpdateStory: true });
     this.setState({ shouldUpdateStory: false });
+  }
+
+  updateStyler() {
+    this.setState({ shouldUpdateStyler: true });
+    this.setState({ shouldUpdateStyler: false });
   }
 
   // --------------------------------------------------
@@ -63,9 +91,14 @@ class EditorPage extends ListeningComponent {
       if (selection.type === TypeConstants.selection.range &&
           event.which >= KeyConstants.left &&
           event.which <= KeyConstants.down) {
+        var mouseState = EditorStore.mouseState;
         var vector = Selector.generateVector(selection);
         EditorActor.updateVector(vector);
-        this.updateStory();
+
+        if (mouseState !== TypeConstants.mouse.move) {
+          this.updateStory();
+        }
+        this.updateStyler();
       }
     } else if (EditorStore.mouseState === TypeConstants.mouse.move) {
       if (event.which === KeyConstants.backspace) {
@@ -73,7 +106,7 @@ class EditorPage extends ListeningComponent {
         var vector = Selector.generateVector(selection);
 
         EditorActor.removeBlocks(vector);
-        this.updateStory();
+        this.updateStates();
       } else if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
         event.preventDefault();
         var vector = Selector.generateVector(selection);
@@ -84,7 +117,7 @@ class EditorPage extends ListeningComponent {
           EditorActor.updatePoint(vector.endPoint);
         }
 
-        this.updateStory();
+        this.updateStates();
       }
     }
   }
@@ -97,23 +130,23 @@ class EditorPage extends ListeningComponent {
 
       if (event.which === KeyConstants.enter) {
         EditorActor.removeBlocks(vector, { enter: true });
-        this.updateStory();
+        this.updateStates();
       } else {
         if (event.ctrlKey || event.metaKey) {
           switch (event.which) {
             case KeyConstants.b:
               EditorActor.styleElements(vector, TypeConstants.element.bold);
-              this.updateStory();
+              this.updateStates();
               break;
             case KeyConstants.i:
               EditorActor.styleElements(vector, TypeConstants.element.italic);
-              this.updateStory();
+              this.updateStates();
               break;
           }
         } else {
           var character = String.fromCharCode(event.which);
           EditorActor.removeBlocks(vector, { character: character });
-          this.updateStory();
+          this.updateStates();
         }
       }
     }
@@ -125,9 +158,14 @@ class EditorPage extends ListeningComponent {
         selection.type === TypeConstants.selection.range &&
         event.which >= KeyConstants.left &&
         event.which <= KeyConstants.down) {
+      var mouseState = EditorStore.mouseState;
       var vector = Selector.generateVector(selection);
       EditorActor.updateVector(vector);
-      this.updateStory();
+
+      if (mouseState !== TypeConstants.mouse.move) {
+        this.updateStory();
+      }
+      this.updateStyler();
     }
   }
 
@@ -144,12 +182,20 @@ class EditorPage extends ListeningComponent {
     if (EditorStore.mouseState === TypeConstants.mouse.move) {
       var vector = Selector.generateVector(selection);
       EditorActor.updateVector(vector);
-      this.updateStory();
+      this.updateStyler();
     } else if (EditorStore.mouseState === TypeConstants.mouse.down) {
       EditorActor.updateMouseState(TypeConstants.mouse.up)
       EditorActor.updateVector(null);
-      this.updateStory();
+      this.updateStyler();
     }
+  }
+
+  handleScroll(event) {
+    this.updateStyler();
+  }
+
+  handleResize(event) {
+    this.updateStyler();
   }
 
   // --------------------------------------------------
@@ -163,6 +209,8 @@ class EditorPage extends ListeningComponent {
     document.addEventListener("keyup", this.handleKeyUp.bind(this));
     page.addEventListener("mousedown", this.handleMouseDown.bind(this));
     page.addEventListener("mouseup", this.handleMouseUp.bind(this));
+    window.addEventListener("scroll", this.handleScroll.bind(this));
+    window.addEventListener("resize", this.handleResize.bind(this));
   }
 
   componentWillUnmount() {
@@ -173,6 +221,8 @@ class EditorPage extends ListeningComponent {
     document.removeEventListener("keyup", this.handleKeyUp);
     page.removeEventListener("mousedown", this.handleMouseDown);
     page.removeEventListener("mouseup", this.handleMouseUp);
+    window.removeEventListener("scroll", this.handleScroll);
+    window.removeEventListener("resize", this.handleResize);
   }
 
   // --------------------------------------------------
@@ -180,17 +230,24 @@ class EditorPage extends ListeningComponent {
   // --------------------------------------------------
   render() {
     return (
-      <div className={"editor-page"} ref="page">
+      <div className={"editor-page"} ref={"page"}>
         <StoryEditable
           point={this.state.point}
           shouldEnableEdits={this.state.shouldEnableEdits}
           shouldUpdateStory={this.state.shouldUpdateStory}
           story={this.state.story}
-          updateStory={this.updateStory.bind(this)} />
+          updateLinker={this.updateLinker.bind(this)}
+          updateStates={this.updateStates.bind(this)}
+          updateStory={this.updateStory.bind(this)}
+          updateStyler={this.updateStyler.bind(this)} />
         <StyleModal
           activeStyles={this.state.activeStyles}
-          updateStory={this.updateStory.bind(this)}
+          shouldUpdateStyler={this.state.shouldUpdateStyler}
+          updateStates={this.updateStates.bind(this)}
           vector={this.state.vector} />
+        <LinkModal
+          link={this.state.link}
+          shouldUpdateLinker={this.state.shouldUpdateLinker} />
       </div>
     );
   }

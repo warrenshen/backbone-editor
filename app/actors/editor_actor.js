@@ -71,11 +71,19 @@ class EditorActor extends Actor {
     })
   }
 
-  styleElements(vector, which) {
+  styleElements(vector, which, link) {
     this.act({
       type: ActionConstants.editor.styleElements,
       vector: vector,
       which: which,
+      link: link,
+    });
+  }
+
+  updateLink(link) {
+    this.act({
+      type: ActionConstants.editor.updateLink,
+      link: link,
     });
   }
 

@@ -29,11 +29,8 @@ class MediaModal extends Component {
   // Helpers
   // --------------------------------------------------
   generatePoint() {
-    return new Point(
-      this.props.sectionIndex,
-      this.props.blockIndex,
-      0
-    );
+    var block = this.props.block;
+    return new Point(block.get("section_index"), block.get("index"), 0);
   }
 
   // --------------------------------------------------
@@ -187,14 +184,12 @@ class MediaModal extends Component {
 }
 
 MediaModal.propTypes = {
-  blockIndex: React.PropTypes.number.isRequired,
-  sectionIndex: React.PropTypes.number.isRequired,
+  block: React.PropTypes.instanceOf(Block).isRequired,
   updateStory: React.PropTypes.func,
 };
 
 MediaModal.defaultProps = {
-  blockIndex: 0,
-  sectionIndex: 0,
+  block: new Block(),
 };
 
 
