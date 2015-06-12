@@ -3,7 +3,7 @@ import React from "react";
 
 import ListeningComponent from "app/templates/listening_component";
 
-import LinkModa from "app/components/link_modal";
+import LinkModal from "app/components/link_modal";
 import StoryEditable from "app/components/story_editable";
 import StyleModal from "app/components/style_modal";
 
@@ -237,6 +237,7 @@ class EditorPage extends ListeningComponent {
           shouldUpdateStyler={this.state.shouldUpdateStyler}
           updateStates={this.updateStates.bind(this)}
           vector={this.state.vector} />
+        <LinkModal />
       </div>
     );
   }

@@ -13,6 +13,10 @@ class LinkModal extends Component {
     );
     return (
       <div className={modalClass} ref="modal">
+        <span className={"vertical-anchor"}></span>
+        <span className={"link-modal-content"}>
+          www.google.com
+        </span>
         <span className={"link-modal-triangle"}></span>
       </div>
     );
