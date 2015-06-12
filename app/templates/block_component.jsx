@@ -143,7 +143,7 @@ class BlockComponent extends Component {
 
       var point = Selector.generatePoint(selection);
       EditorActor.updatePoint(point);
-      this.props.updateStory();
+      this.props.updateStates();
     }
   }
 
@@ -206,6 +206,7 @@ class BlockComponent extends Component {
 BlockComponent.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
   shouldEnableEdits: React.PropTypes.bool.isRequired,
+  updateStates: React.PropTypes.func,
   updateStory: React.PropTypes.func,
 };
 
