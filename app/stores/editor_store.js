@@ -20,10 +20,11 @@ class EditorStore extends Store {
   // Setup
   // --------------------------------------------------
   setDefaults() {
+    this._activeStyles = {};
+    this._link = null;
     this._mouseState = TypeConstants.mouse.up;
     this._point = new Point();
     this._story = new Story();
-    this._activeStyles = {};
     this._vector = null;
 
     var initialSection = new Section();
@@ -36,6 +37,10 @@ class EditorStore extends Store {
   // --------------------------------------------------
   get activeStyles() {
     return this._activeStyles;
+  }
+
+  get link() {
+    return this._link;
   }
 
   get mouseState() {
@@ -486,6 +491,11 @@ class EditorStore extends Store {
     this.emitChange();
   }
 
+  updateLink(link) {
+    this._link = link;
+    this.emitChange();
+  }
+
   updateMouseState(mouseState, shouldEmit=false) {
     this._mouseState = mouseState;
 
@@ -560,6 +570,9 @@ class EditorStore extends Store {
         break;
       case ActionConstants.editor.updateMouseState:
         this.updateMouseState(action.mouseState, action.shouldEmit);
+        break;
+      case ActionConstants.editor.updateLink:
+        this.updateLink(action.link);
         break;
       case ActionConstants.editor.updatePoint:
         this.updatePoint(action.point);

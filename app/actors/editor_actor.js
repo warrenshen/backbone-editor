@@ -80,6 +80,13 @@ class EditorActor extends Actor {
     });
   }
 
+  updateLink(link) {
+    this.act({
+      type: ActionConstants.editor.link,
+      link: link,
+    });
+  }
+
   updateMouseState(mouseState, shouldEmit) {
     this.act({
       type: ActionConstants.editor.updateMouseState,

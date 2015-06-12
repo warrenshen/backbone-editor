@@ -10,6 +10,7 @@ module.exports = {
     splitBlock: "split-block",
     styleBlocks: "style-blocks",
     styleElements: "style-elements",
+    updateLink: "update-link",
     updateMouseState: "update-mouse-state",
     updatePoint: "update-point",
     updateVector: "update-vector",
