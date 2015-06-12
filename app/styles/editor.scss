@@ -104,6 +104,18 @@
   border-bottom: 1px solid $ash;
 }
 
+.link-modal {
+  position: fixed;
+  z-index: $z-index-8;
+  top: 128px;
+  left: 128px;
+  height: 30px;
+  padding: 0 8px;
+  border-radius: 3px;
+  box-shadow: 0, 0, 3px, $black;
+  background-image: linear-gradient(to bottom, $black, $ash);
+}
+
 .media-modal {
   display: inline-block;
   position: absolute;

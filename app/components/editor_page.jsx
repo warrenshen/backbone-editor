@@ -3,6 +3,7 @@ import React from "react";
 
 import ListeningComponent from "app/templates/listening_component";
 
+import LinkModa from "app/components/link_modal";
 import StoryEditable from "app/components/story_editable";
 import StyleModal from "app/components/style_modal";
 
@@ -222,7 +223,7 @@ class EditorPage extends ListeningComponent {
   // --------------------------------------------------
   render() {
     return (
-      <div className={"editor-page"} ref="page">
+      <div className={"editor-page"} ref={"page"}>
         <StoryEditable
           point={this.state.point}
           shouldEnableEdits={this.state.shouldEnableEdits}

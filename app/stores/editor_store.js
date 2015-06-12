@@ -366,6 +366,7 @@ class EditorStore extends Store {
     this.updateActiveStyles(vector);
   }
 
+  // TODO: Set up better support for links.
   styleElements(vector, which, link) {
     var startPoint = vector.startPoint;
     var endPoint = vector.endPoint;
