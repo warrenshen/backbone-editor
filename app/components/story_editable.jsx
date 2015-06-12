@@ -104,7 +104,7 @@ class StoryEditable extends Component {
         key={section.cid}
         section={section}
         shouldEnableEdits={this.props.shouldEnableEdits}
-        updateStyler={this.props.updateStyler}
+        updateStates={this.props.updateStates}
         updateStory={this.props.updateStory} />
     );
   }

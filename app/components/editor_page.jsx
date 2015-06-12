@@ -234,7 +234,7 @@ class EditorPage extends ListeningComponent {
         <StyleModal
           activeStyles={this.state.activeStyles}
           shouldUpdateStyler={this.state.shouldUpdateStyler}
-          updateStory={this.updateStory.bind(this)}
+          updateStates={this.updateStates.bind(this)}
           vector={this.state.vector} />
       </div>
     );

@@ -33,7 +33,7 @@ class StyleModal extends Component {
   // --------------------------------------------------
   styleBlocks(type) {
     EditorActor.styleBlocks(this.props.vector, type);
-    this.props.updateStory();
+    this.props.updateStates();
   }
 
   styleCentered(event) {
@@ -58,7 +58,7 @@ class StyleModal extends Component {
 
   styleElements(type) {
     EditorActor.styleElements(this.props.vector, type);
-    this.props.updateStory();
+    this.props.updateStates();
   }
 
   styleBold(event) {
@@ -226,7 +226,7 @@ class StyleModal extends Component {
 StyleModal.propTypes = {
   activeStyles: React.PropTypes.object.isRequired,
   shouldUpdateStyler: React.PropTypes.bool.isRequired,
-  updateStory: React.PropTypes.func,
+  updateStates: React.PropTypes.func,
   vector: React.PropTypes.instanceOf(Vector),
 };
 
