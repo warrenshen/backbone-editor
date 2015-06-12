@@ -17,8 +17,21 @@ import TypeConstants from "app/constants/type_constants";
 class StyleModal extends Component {
 
   // --------------------------------------------------
+  // State
+  // --------------------------------------------------
+  getDefaultState() {
+    return { shouldShowInput: false };
+  }
+
+  // --------------------------------------------------
   // Handlers
   // --------------------------------------------------
+  handleClick(event) {
+    console.log("handling click");
+    event.stopPropagation();
+    this.setState({ shouldShowInput: true });
+  }
+
   handleMouseDown(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -135,6 +148,7 @@ class StyleModal extends Component {
     var modal = React.findDOMNode(this.refs.modal);
     modal.addEventListener("mousedown", this.handleMouseDown.bind(this));
     modal.addEventListener("mouseup", this.handleMouseUp.bind(this));
+
     this.createVector(this.props.vector);
   }
 
@@ -142,17 +156,26 @@ class StyleModal extends Component {
     var modal = React.findDOMNode(this.refs.modal);
     modal.removeEventListener("mousedown", this.handleMouseDown);
     modal.removeEventListener("mouseup", this.handleMouseUp);
+
     this.createVector(this.props.vector);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log(this.props.shouldUpdateStyler);
-    return this.props.shouldUpdateStyler;
+    return this.props.shouldUpdateStyler || nextState.shouldShowInput;
   }
 
   // --------------------------------------------------
   // Render
   // --------------------------------------------------
+  renderInput() {
+    if (this.state.shouldShowInput) {
+      return (
+        <div className={"style-modal-input"}>
+        </div>
+      );
+    }
+  }
+
   renderOption(props, index) {
     return (
       <StyleOption
@@ -200,7 +223,7 @@ class StyleModal extends Component {
         className: "fa fa-italic",
       },
       {
-        action: this.styleHeadingThree.bind(this),
+        action: this.handleClick.bind(this),
         active: activeStyles[TypeConstants.block.headingThree],
         className: "fa fa-link",
       },
@@ -217,6 +240,7 @@ class StyleModal extends Component {
       <div className={modalClass} ref="modal">
         <span className={"vertical-anchor"}></span>
         {this.renderOptions()}
+        {this.renderInput()}
         <span className={"style-modal-triangle"}></span>
       </div>
     );
