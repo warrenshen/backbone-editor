@@ -220,7 +220,7 @@
   line-height: 0;
 }
 
-.style-modal-input {
+.style-modal-overlay {
   position: absolute;
   z-index: $z-index-9;
   top: 0;
@@ -230,6 +230,20 @@
   border-radius: 3px;
   background-image: linear-gradient(to bottom, $ash, $black);
   overflow: hidden;
+}
+
+.style-modal-input {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  width: 100%;
+  padding: 0 12px;
+  color: $white;
+  border: none;
+  background-color: transparent;
+  text-align: left;
+  outline: none;
+  box-sizing: border-box;
 }
 
 .style-option {

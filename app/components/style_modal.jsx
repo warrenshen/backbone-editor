@@ -11,6 +11,7 @@ import EditorActor from "app/actors/editor_actor";
 import Selector from "app/helpers/selector";
 import Vector from "app/helpers/vector";
 
+import KeyConstants from "app/constants/key_constants";
 import TypeConstants from "app/constants/type_constants";
 
 
@@ -26,10 +27,34 @@ class StyleModal extends Component {
   // --------------------------------------------------
   // Handlers
   // --------------------------------------------------
+  handleBlur(event) {
+    this.setState({ shouldShowInput: false });
+  }
+
   handleClick(event) {
-    console.log("handling click");
     event.stopPropagation();
     this.setState({ shouldShowInput: true });
+  }
+
+  handleFocus(event) {
+    event.stopPropagation()
+    React.findDOMNode(this.refs.input).focus();
+  }
+
+  handleKeyDown(event) {
+    event.stopPropagation();
+  }
+
+  handleKeyPress(event) {
+    event.stopPropagation();
+    if (event.which === KeyConstants.enter) {
+      // @props.attemptCreate(@refs.input.getDOMNode().value)
+      // @props.hideLinkModal()
+    }
+  }
+
+  handleKeyUp(event) {
+    event.stopPropagation();
   }
 
   handleMouseDown(event) {
@@ -153,11 +178,31 @@ class StyleModal extends Component {
   }
 
   componentDidUpdate() {
+    var input = React.findDOMNode(this.refs.input);
+    if (input) {
+      input.addEventListener("blur", this.handleBlur.bind(this));
+      input.addEventListener("click", this.handleFocus.bind(this));
+      input.addEventListener("keydown", this.handleKeyDown.bind(this));
+      input.addEventListener("keypress", this.handleKeyPress.bind(this));
+      input.addEventListener("keyup", this.handleKeyUp.bind(this));
+    }
+
+    this.createVector(this.props.vector);
+  }
+
+  componentWillUnmount() {
+    var input = React.findDOMNode(this.refs.input);
+    if (input) {
+      input.removeEventListener("blur", this.handleBlur);
+      input.removeEventListener("click", this.handleFocus);
+      input.removeEventListener("keydown", this.handleKeyDown);
+      input.removeEventListener("keypress", this.handleKeyPress);
+      input.removeEventListener("keyup", this.handleKeyUp);
+    }
+
     var modal = React.findDOMNode(this.refs.modal);
     modal.removeEventListener("mousedown", this.handleMouseDown);
     modal.removeEventListener("mouseup", this.handleMouseUp);
-
-    this.createVector(this.props.vector);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -170,7 +215,13 @@ class StyleModal extends Component {
   renderInput() {
     if (this.state.shouldShowInput) {
       return (
-        <div className={"style-modal-input"}>
+        <div className={"style-modal-overlay"}>
+          <span className={"vertical-anchor"}></span>
+          <input
+            className={"style-modal-input"}
+            ref={"input"}
+            placeholder={"Enter or paste a link..."}>
+          </input>
         </div>
       );
     }

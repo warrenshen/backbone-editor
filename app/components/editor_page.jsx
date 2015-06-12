@@ -75,6 +75,7 @@ class EditorPage extends ListeningComponent {
   // Handlers
   // --------------------------------------------------
   handleKeyDown(event) {
+    console.log("key down");
     var selection = window.getSelection();
     // We use selection.type === "Range" check when
     // checking for arrow key events because they can
@@ -115,6 +116,7 @@ class EditorPage extends ListeningComponent {
   }
 
   handleKeyPress(event) {
+    console.log("key press");
     if (EditorStore.mouseState === TypeConstants.mouse.move) {
       event.preventDefault();
       var selection = window.getSelection();
@@ -145,6 +147,7 @@ class EditorPage extends ListeningComponent {
   }
 
   handleKeyUp(event) {
+    console.log("key up");
     var selection = window.getSelection();
     if (event.shiftKey &&
         selection.type === TypeConstants.selection.range &&
