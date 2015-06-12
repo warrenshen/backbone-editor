@@ -33,6 +33,7 @@ class EditorPage extends ListeningComponent {
     return _.merge(
       {},
       {
+        shouldUpdateLinker: false,
         shouldUpdateStyler: false,
         shouldUpdateStory: false,
       },
@@ -43,11 +44,17 @@ class EditorPage extends ListeningComponent {
   getStoreState() {
     return {
       activeStyles: EditorStore.activeStyles,
+      link: EditorStore.link,
       point: EditorStore.point,
       shouldEnableEdits: EditorStore.mouseState === TypeConstants.mouse.up,
       story: EditorStore.story,
       vector: EditorStore.vector,
     }
+  }
+
+  updateLinker() {
+    this.setState({ shouldUpdateLinker: true });
+    this.setState({ shouldUpdateLinker: false });
   }
 
   updateStates() {
@@ -229,6 +236,7 @@ class EditorPage extends ListeningComponent {
           shouldEnableEdits={this.state.shouldEnableEdits}
           shouldUpdateStory={this.state.shouldUpdateStory}
           story={this.state.story}
+          updateLink={this.updateLinker.bind(this)}
           updateStates={this.updateStates.bind(this)}
           updateStory={this.updateStory.bind(this)}
           updateStyler={this.updateStyler.bind(this)} />
@@ -237,7 +245,9 @@ class EditorPage extends ListeningComponent {
           shouldUpdateStyler={this.state.shouldUpdateStyler}
           updateStates={this.updateStates.bind(this)}
           vector={this.state.vector} />
-        <LinkModal />
+        <LinkModal
+          link={this.state.link}
+          shouldUpdateLinker={this.state.shouldUpdateLinker} />
       </div>
     );
   }
