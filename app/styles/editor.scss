@@ -99,6 +99,11 @@
   -webkit-user-select: none;
 }
 
+.element-link {
+  font-size: $font-size-smaller;
+  border-bottom: 1px solid $ash;
+}
+
 .media-modal {
   display: inline-block;
   position: absolute;

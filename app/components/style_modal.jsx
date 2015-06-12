@@ -48,8 +48,9 @@ class StyleModal extends Component {
   handleKeyPress(event) {
     event.stopPropagation();
     if (event.which === KeyConstants.enter) {
-      // @props.attemptCreate(@refs.input.getDOMNode().value)
-      // @props.hideLinkModal()
+      var input = React.findDOMNode(this.refs.input);
+      this.styleLink(input.value);
+      input.blur();
     }
   }
 
@@ -94,8 +95,8 @@ class StyleModal extends Component {
     this.styleBlocks(TypeConstants.block.quote);
   }
 
-  styleElements(type) {
-    EditorActor.styleElements(this.props.vector, type);
+  styleElements(type, link="") {
+    EditorActor.styleElements(this.props.vector, type, link);
     this.props.updateStates();
   }
 
@@ -105,6 +106,10 @@ class StyleModal extends Component {
 
   styleItalic(event) {
     this.styleElements(TypeConstants.element.italic);
+  }
+
+  styleLink(link) {
+    this.styleElements(TypeConstants.element.link, link);
   }
 
   // --------------------------------------------------
@@ -206,7 +211,8 @@ class StyleModal extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return this.props.shouldUpdateStyler || nextState.shouldShowInput;
+    return this.props.shouldUpdateStyler ||
+           this.state.shouldShowInput !== nextState.shouldShowInput;
   }
 
   // --------------------------------------------------

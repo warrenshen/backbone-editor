@@ -366,7 +366,7 @@ class EditorStore extends Store {
     this.updateActiveStyles(vector);
   }
 
-  styleElements(vector, which) {
+  styleElements(vector, which, link) {
     var startPoint = vector.startPoint;
     var endPoint = vector.endPoint;
 
@@ -400,7 +400,7 @@ class EditorStore extends Store {
 
       for (var blockIndex of blockIndices) {
         var block = blocks.at(blockIndex);
-        var element = new Element({ type: which });
+        var element = new Element({ type: which, link: link });
 
         if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
           element.setRange(startCaretOffset, endCaretOffset);
@@ -555,7 +555,7 @@ class EditorStore extends Store {
         this.styleBlocks(action.vector, action.which);
         break;
       case ActionConstants.editor.styleElements:
-        this.styleElements(action.vector, action.which);
+        this.styleElements(action.vector, action.which, action.link);
         break;
       case ActionConstants.editor.updateMouseState:
         this.updateMouseState(action.mouseState, action.shouldEmit);
