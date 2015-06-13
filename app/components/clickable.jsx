@@ -8,11 +8,19 @@ import RouterDirectory from "app/directories/router_directory";
 class Clickable extends Component {
 
   // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "Clickable";
+  }
+
+  // --------------------------------------------------
   // Handlers
   // --------------------------------------------------
   handleClick() {
     event.preventDefault();
     event.stopPropagation();
+
     if (this.props.route !== "") {
       RouterDirectory.get("Router").navigate(this.props.route, true);
     } else if (this.props.action !== null) {
@@ -24,7 +32,14 @@ class Clickable extends Component {
   // Render
   // --------------------------------------------------
   render() {
-    if (this.props.source.length === 0) {
+    if (this.props.source) {
+      return (
+        <img
+          className={this.props.style}
+          src={this.props.source}
+          onClick={this.handleClick.bind(this)} />
+      );
+    } else {
       return (
         <a
           className={this.props.style}
@@ -33,23 +48,16 @@ class Clickable extends Component {
           {this.props.content}
         </a>
       );
-    } else {
-      return (
-        <img
-          className={this.props.style}
-          src={this.props.source}
-          onClick={this.handleClick.bind(this)} />
-      );
     }
   }
 }
 
 Clickable.propTypes = {
   action:  React.PropTypes.func,
-  route:   React.PropTypes.string,
-  style:   React.PropTypes.string.isRequired,
   content: React.PropTypes.string.isRequired,
+  route:   React.PropTypes.string,
   source:  React.PropTypes.string,
+  style:   React.PropTypes.string.isRequired,
 };
 
 Clickable.defaultProps = {

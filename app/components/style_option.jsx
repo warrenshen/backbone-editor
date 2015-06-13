@@ -7,6 +7,13 @@ import Component from "app/templates/component";
 class StyleOption extends Component {
 
   // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "StyleOption";
+  }
+
+  // --------------------------------------------------
   // Lifecycle
   // --------------------------------------------------
   componentDidMount() {
@@ -27,6 +34,7 @@ class StyleOption extends Component {
       { "style-option": true },
       { "style-option-active": this.props.active }
     );
+
     return (
       <span className={optionClass} ref="option">
         <i className={this.props.className}></i>

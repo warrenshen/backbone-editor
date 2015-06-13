@@ -6,6 +6,7 @@ class Formatter {
   formatBlock(block) {
     var elements = block.get("elements");
     var characters = block.get("content").split("");
+
     var openers = {};
     var closers = {};
 
@@ -17,6 +18,7 @@ class Formatter {
     elements.map(function(element) {
       var start = element.get("start");
       var end = element.get("end");
+
       var opener = "";
       var closer = "";
 
@@ -51,20 +53,20 @@ class Formatter {
 
   mergeElements(characters, openers, closers) {
     var content = "";
+
     for (var i = 0; i < characters.length; i += 1) {
-      // Invocation of .join("") concatenates multiple tags together.
-      if (openers[i]) {
-        content += openers[i].join("");
-      } else if (closers[i]) {
+      // .join("") concatenates multiple tags together.
+      if (closers[i]) {
         content += closers[i].join("");
       }
 
-      if (characters[i] === " ") {
-        content += "&nbsp;";
-      } else {
-        content += characters[i];
+      if (openers[i]) {
+        content += openers[i].join("");
       }
+
+      content += (characters[i] === " ") ? "&nbsp;" : characters[i];
     }
+
     return content;
   }
 }

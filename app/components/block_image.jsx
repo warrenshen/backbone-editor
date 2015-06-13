@@ -17,6 +17,13 @@ import KeyConstants from "app/constants/key_constants";
 class BlockImage extends Component {
 
   // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "BlockImage";
+  }
+
+  // --------------------------------------------------
   // State
   // --------------------------------------------------
   getDefaultState() {
@@ -44,9 +51,11 @@ class BlockImage extends Component {
 
   handleKeyDown(event) {
     event.preventDefault();
+
     if (event.which === KeyConstants.backspace) {
       var block = this.props.block;
       var point = new Point(block.get("section_index"), block.get("index"), 0);
+
       EditorActor.removeBlock(point);
       this.props.updateStory();
     }
@@ -54,6 +63,11 @@ class BlockImage extends Component {
 
   handleMouseDown(event) {
     event.preventDefault();
+    event.stopPropagation();
+  }
+
+  handleMouseUp(event) {
+    event.stopPropagation();
   }
 
   // --------------------------------------------------
@@ -63,6 +77,7 @@ class BlockImage extends Component {
     var image = React.findDOMNode(this.refs.image);
     image.addEventListener("click", this.handleClick.bind(this));
     image.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    image.addEventListener("mouseup", this.handleMouseUp.bind(this));
 
     var invisible = React.findDOMNode(this.refs.invisible);
     invisible.addEventListener("blur", this.handleBlur.bind(this));
@@ -74,6 +89,7 @@ class BlockImage extends Component {
     var image = React.findDOMNode(this.refs.image);
     image.removeEventListener("click", this.handleClick);
     image.removeEventListener("mousedown", this.handleMouseDown);
+    image.removeEventListener("mouseup", this.handleMouseUp);
 
     var invisible = React.findDOMNode(this.refs.invisible);
     invisible.removeEventListener("blur", this.handleBlurImage);
@@ -90,6 +106,7 @@ class BlockImage extends Component {
       { "block-image": true },
       { "block-image-bordered": this.state.shouldShowBorder }
     );
+
     return (
       <div
         className={"block-container"}
@@ -117,12 +134,13 @@ class BlockImage extends Component {
 BlockImage.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
   shouldEnableEdits: React.PropTypes.bool.isRequired,
-  updateStory: React.PropTypes.func,
+  updateStory: React.PropTypes.func.isRequired,
 };
 
 BlockImage.defaultProps = {
   block: new Block(),
   shouldEnableEdits: true,
+  updateStory: null,
 };
 
 

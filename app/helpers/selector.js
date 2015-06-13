@@ -4,30 +4,32 @@ import Vector from "app/helpers/vector";
 
 class Selector {
 
-  createTreeWalker(anchorNode) {
+  createTreeWalker(parentNode) {
     return document.createTreeWalker(
-      anchorNode,
+      parentNode,
       NodeFilter.SHOW_TEXT,
-      function(node) { return NodeFilter.FILTER_ACCEPT },
+      function(childNode) { return NodeFilter.FILTER_ACCEPT },
       false
     );
   }
 
-  findCeilingOffset(node) {
+  findCeilingOffset(contentNode, threshold=10) {
     var range = document.createRange();
-    var walker = this.createTreeWalker(node);
+    var walker = this.createTreeWalker(contentNode);
 
     var ceilingOffset = 0;
-    var top = node.getBoundingClientRect().top;
-
     var complete = false;
+    var top = contentNode.getBoundingClientRect().top;
+
     while (walker.nextNode() && !complete) {
       var currentNode = walker.currentNode;
       var length = currentNode.textContent.length;
+
       for (var i = 0; i < length && !complete; i += 1) {
         range.setStart(currentNode, i);
         range.setEnd(currentNode, i + 1);
-        if (range.getBoundingClientRect().top - top > 10) {
+
+        if (range.getBoundingClientRect().top - top > threshold) {
           complete = true;
         } else {
           ceilingOffset += 1;
@@ -35,21 +37,19 @@ class Selector {
       }
     }
 
-    if (complete) {
-      return ceilingOffset;
-    } else {
-      // Return -1 if node content doesn't even span one line, meaning
-      // that the caret should always move up to the preceding block.
-      return -1;
-    }
+    // Return -1 if node content doesn't even span one line, meaning
+    // that the caret should always move up to the preceding block.
+    return complete ? ceilingOffset : -1;
   }
 
-  findElementOffset(blockNode, elementNode) {
-    var walker = this.createTreeWalker(blockNode);
+  findChildOffset(childNode, parentNode) {
+    var walker = this.createTreeWalker(parentNode);
     var offset = 0;
-    while (walker.nextNode() && !walker.currentNode.isSameNode(elementNode)) {
+
+    while (walker.nextNode() && !walker.currentNode.isSameNode(childNode)) {
       offset += walker.currentNode.length;
     }
+
     return offset;
   }
 
@@ -57,16 +57,18 @@ class Selector {
     var range = document.createRange();
     var walker = this.createTreeWalker(node);
 
+    var complete = false;
     var floorOffset = 0;
     var bottom = node.getBoundingClientRect().bottom;
 
-    var complete = false;
     while (walker.nextNode() && !complete) {
       var currentNode = walker.currentNode;
       var length = currentNode.textContent.length;
+
       for (var i = 0; i < length && !complete; i += 1) {
         range.setStart(currentNode, i);
         range.setEnd(currentNode, i + 1);
+
         if (bottom - range.getBoundingClientRect().bottom < threshold) {
           complete = true;
         } else {
@@ -79,25 +81,32 @@ class Selector {
   }
 
   findParentNode(childNode) {
-    var parentNode = childNode;
+    var parentNode = childNode.parentNode;
+
     while (!parentNode.dataset || !parentNode.dataset.index) {
       parentNode = parentNode.parentNode;
     }
+
     return parentNode;
   }
 
   generatePoint(selection, type="anchor") {
-    var node = selection[type + "Node"];
-    var parentNode = this.findParentNode(node);
-    var grandparentNode = parentNode.parentNode;
+    var childNode = selection[type + "Node"];
 
-    var elementOffset = this.findElementOffset(parentNode, node);
-    var caretOffset = elementOffset + selection[type + "Offset"];
+    if (childNode) {
+      var parentNode = this.findParentNode(childNode);
+      var grandparentNode = parentNode.parentNode;
 
-    var blockIndex = parseInt(parentNode.dataset.index);
-    var sectionIndex = parseInt(grandparentNode.dataset.index);
+      var childOffset = this.findChildOffset(childNode, parentNode);
+      var caretOffset = childOffset + selection[type + "Offset"];
 
-    return new Point(sectionIndex, blockIndex, caretOffset);
+      var blockIndex = parseInt(parentNode.dataset.index);
+      var sectionIndex = parseInt(grandparentNode.dataset.index);
+
+      return new Point(sectionIndex, blockIndex, caretOffset);
+    } else {
+      return null;
+    }
   }
 
   generateVector(selection) {

@@ -23,13 +23,9 @@ class EditorStore extends Store {
     this._activeStyles = {};
     this._link = null;
     this._mouseState = TypeConstants.mouse.up;
-    this._point = new Point();
+    this._point = new Point(0, 0, 0);
     this._story = new Story();
     this._vector = null;
-
-    var initialSection = new Section();
-    initialSection.addBlock(new Block());
-    this.addSection(initialSection);
   }
 
   // --------------------------------------------------
@@ -112,9 +108,7 @@ class EditorStore extends Store {
   // --------------------------------------------------
   addSection(section, index=0) {
     var story = this._story;
-    story.get("sections").add(section, { at: index });
-    story.updateSectionIndices();
-    this.emitChange();
+    story.addSection(section, index);
   }
 
   addBlock(block, point) {
@@ -488,23 +482,18 @@ class EditorStore extends Store {
     }
 
     this._activeStyles = activeStyles;
-    this.emitChange();
   }
 
   updateLink(link) {
     this._link = link;
-    this.emitChange();
   }
 
-  updateMouseState(mouseState, shouldEmit=false) {
-    this._mouseState = mouseState;
-
-    if (shouldEmit) {
-      if (this._point !== null) {
-        this._point = null;
-      }
-      this.emitChange();
+  updateMouseState(mouseState) {
+    if (this._point !== null) {
+      this._point = null;
     }
+
+    this._mouseState = mouseState;
   }
 
   updatePoint(point) {
@@ -514,7 +503,6 @@ class EditorStore extends Store {
 
     this._point = point;
     this._vector = null;
-    this.emitChange();
   }
 
   updateVector(vector) {
@@ -525,9 +513,7 @@ class EditorStore extends Store {
     this._point = null;
     this._vector = vector;
 
-    if (vector === null) {
-      this.emitChange();
-    } else {
+    if (vector !== null) {
       this.updateActiveStyles(vector);
     }
   }
@@ -569,7 +555,7 @@ class EditorStore extends Store {
         this.styleElements(action.vector, action.which, action.link);
         break;
       case ActionConstants.editor.updateMouseState:
-        this.updateMouseState(action.mouseState, action.shouldEmit);
+        this.updateMouseState(action.mouseState);
         break;
       case ActionConstants.editor.updateLink:
         this.updateLink(action.link);

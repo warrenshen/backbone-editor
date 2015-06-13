@@ -21,71 +21,94 @@ class BlockComponent extends Component {
   // --------------------------------------------------
   // Handlers
   // --------------------------------------------------
-  handleArrowKey(event, point) {
+  handleArrowHorizontal(event, point) {
     var block = this.props.block;
+    var caretOffset = point.caretOffset;
+
+    if (event.which === KeyConstants.left) {
+      if (!caretOffset) {
+        event.preventDefault();
+
+        EditorActor.shiftLeft(point);
+        this.props.updateStory();
+      }
+    } else {
+      if (point.caretOffset === block.length) {
+        event.preventDefault();
+
+        EditorActor.shiftRight(point);
+        this.props.updateStory();
+      }
+    }
+  }
+
+  handleArrowVertical(event, point) {
     var content = React.findDOMNode(this.refs.content);
     var caretOffset = point.caretOffset;
 
-    switch (event.which) {
-      case KeyConstants.down:
-        var floorOffset = Selector.findFloorOffset(content);
-        if (caretOffset >= floorOffset) {
-          event.preventDefault();
-          point.caretOffset = caretOffset - floorOffset;
-          EditorActor.shiftDown(point);
-          this.props.updateStory();
-        }
-        break;
+    if (event.which === KeyConstants.down) {
+      var floorOffset = Selector.findFloorOffset(content);
 
-      case KeyConstants.left:
-        if (point.prefixesBlock()) {
-          event.preventDefault();
-          EditorActor.shiftLeft(point);
-          this.props.updateStory();
-        }
-        break;
+      if (caretOffset >= floorOffset) {
+        event.preventDefault();
 
-      case KeyConstants.right:
-        if (point.caretOffset === block.length) {
-          event.preventDefault();
-          EditorActor.shiftRight(point);
-          this.props.updateStory();
-        }
-        break;
+        point.caretOffset = caretOffset - floorOffset;
+        EditorActor.shiftDown(point);
+        this.props.updateStory();
+      }
+    } else {
+      var ceilingOffset = Selector.findCeilingOffset(content);
 
-      case KeyConstants.up:
-        var ceilingOffset = Selector.findCeilingOffset(content);
-        if (caretOffset < ceilingOffset || caretOffset === 0 || ceilingOffset < 0) {
-          event.preventDefault();
-          EditorActor.shiftUp(point);
-          this.props.updateStory();
-        }
-        break;
+      if (caretOffset < ceilingOffset || !caretOffset || ceilingOffset < 0) {
+        event.preventDefault();
+
+        EditorActor.shiftUp(point);
+        this.props.updateStory();
+      }
     }
   }
 
   handleKeyDown(event) {
+    if (!event.shiftKey &&
+        (event.which < KeyConstants.left ||
+        event.which > KeyConstants.down)) {
+      event.stopPropagation();
+    }
+
     var selection = window.getSelection();
     var point = Selector.generatePoint(selection);
 
-    if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
-      if (!event.shiftKey) {
-        this.handleArrowKey(event, point);
+    if (EditorStore.mouseState !== TypeConstants.mouse.move &&
+        event.which >= KeyConstants.left &&
+        event.which <= KeyConstants.down &&
+        !event.shiftKey) {
+      switch (event.which) {
+        case KeyConstants.left:
+        case KeyConstants.right:
+          this.handleArrowHorizontal(event, point);
+          break;
+        case KeyConstants.down:
+        case KeyConstants.up:
+          this.handleArrowVertical(event, point);
+          break;
       }
     } else if (event.which === KeyConstants.backspace) {
-      if (!point.prefixesBlock()) {
+      if (point.caretOffset !== 0) {
         var block = this.props.block;
         var caretOffset = point.caretOffset;
+
         block.removeFragment(caretOffset - 1, caretOffset);
 
         if (!block.get("content")) {
           event.preventDefault();
+
           point.caretOffset = 0;
           EditorActor.updatePoint(point);
           this.props.updateStory();
         }
-      } else if (!point.prefixesEverything()) {
+      } else if (!point.matchesValues(0, 0)) {
         event.preventDefault();
+
         EditorActor.removeBlock(point);
         this.props.updateStory();
       }
@@ -96,21 +119,26 @@ class BlockComponent extends Component {
   }
 
   handleKeyPress(event) {
+    event.stopPropagation();
+
     var selection = window.getSelection();
     var point = Selector.generatePoint(selection);
 
     if (event.which === KeyConstants.enter) {
       event.preventDefault();
+
       EditorActor.splitBlock(point);
       this.props.updateStory();
     } else {
       var block = this.props.block;
-      var content = block.get("content");
+      var length = block.length;
       var character = String.fromCharCode(event.which);
+
       block.addCharacter(point.caretOffset, character);
 
-      if (!content) {
+      if (!length) {
         event.preventDefault();
+
         point.caretOffset = 1;
         EditorActor.updatePoint(point);
         this.props.updateStory();
@@ -118,30 +146,28 @@ class BlockComponent extends Component {
     }
   }
 
-  handleMouseDown(event) {
-    event.stopPropagation();
-    EditorActor.updateMouseState(TypeConstants.mouse.down);
-  }
-
   handleMouseMove(event) {
-    event.stopPropagation();
     if (EditorStore.mouseState === TypeConstants.mouse.down) {
-      // Force the store to emit a change so that block components update.
-      EditorActor.updateMouseState(TypeConstants.mouse.move, true);
-      this.props.updateStory();
+      EditorActor.updateMouseState(TypeConstants.mouse.move);
+
+      if (this.props.shouldEnableEdits) {
+        this.props.updateStory();
+      }
     }
   }
 
   handleMouseUp(event) {
     if (EditorStore.mouseState !== TypeConstants.mouse.move) {
-      EditorActor.updateMouseState(TypeConstants.mouse.up);
+      event.stopPropagation();
 
       var selection = window.getSelection();
       var range = document.caretRangeFromPoint(event.clientX, event.clientY);
-      selection.removeAllRanges()
-      selection.addRange(range)
+
+      selection.removeAllRanges();
+      selection.addRange(range);
 
       var point = Selector.generatePoint(selection);
+
       EditorActor.updatePoint(point);
       this.props.updateStates();
     }
@@ -154,14 +180,15 @@ class BlockComponent extends Component {
     var content = React.findDOMNode(this.refs.content);
     content.addEventListener("keydown", this.handleKeyDown.bind(this));
     content.addEventListener("keypress", this.handleKeyPress.bind(this));
-    content.addEventListener("mousedown", this.handleMouseDown.bind(this));
     content.addEventListener("mousemove", this.handleMouseMove.bind(this));
     content.addEventListener("mouseup", this.handleMouseUp.bind(this));
+
     this.renderContent(content);
   }
 
   componentDidUpdate() {
     var content = React.findDOMNode(this.refs.content);
+
     this.renderContent(content);
   }
 
@@ -169,7 +196,6 @@ class BlockComponent extends Component {
     var content = React.findDOMNode(this.refs.content);
     content.removeEventListener("keydown", this.handleKeyDown);
     content.removeEventListener("keypress", this.handleKeyPress);
-    content.removeEventListener("mousedown", this.handleMouseDown);
     content.removeEventListener("mousemove", this.handleMouseMove);
     content.removeEventListener("mouseup", this.handleMouseUp);
   }
@@ -185,7 +211,7 @@ class BlockComponent extends Component {
     var block = this.props.block;
     var point = EditorStore.point;
     if (!block.get("content") && point &&
-        point.matchesIndices(block.get("section_index"), block.get("index"))) {
+        point.matchesValues(block.get("section_index"), block.get("index"))) {
       return (
         <MediaModal
           block={this.props.block}
@@ -206,13 +232,15 @@ class BlockComponent extends Component {
 BlockComponent.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
   shouldEnableEdits: React.PropTypes.bool.isRequired,
-  updateStates: React.PropTypes.func,
-  updateStory: React.PropTypes.func,
+  updateStates: React.PropTypes.func.isRequired,
+  updateStory: React.PropTypes.func.isRequired,
 };
 
 BlockComponent.defaultProps = {
   block: new Block(),
   shouldEnableEdits: true,
+  updateStates: null,
+  updateStory: null,
 };
 
 
