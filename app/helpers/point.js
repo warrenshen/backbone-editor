@@ -53,35 +53,20 @@ class Point {
   // --------------------------------------------------
   compareDeeply(otherPoint) {
     var sectionDifference = this._sectionIndex - otherPoint.sectionIndex;
-    if (sectionDifference === 0) {
-      var blockDifference = this._blockIndex - otherPoint.blockIndex;
-      if (blockDifference === 0) {
-        return this._caretOffset - otherPoint.caretOffset;
-      } else {
-        return blockDifference;
-      }
-    } else {
+    var blockDifference = this._blockIndex - otherPoint.blockIndex;
+    var caretDifference = this._caretOffset - otherPoint.caretOffset;
+
+    if (sectionDifference) {
       return sectionDifference;
+    } else {
+      return blockDifference ? blockDifference : caretDifference;
     }
   }
 
-  equalsDeeply(otherPoint) {
-    return this.equalsShallowly(otherPoint) &&
-           this._caretOffset === otherPoint.getCaretOffset();
-  }
-
-  matchesIndices(sectionIndex, blockIndex) {
+  matchesValues(sectionIndex, blockIndex, caretOffset=0) {
     return this._sectionIndex === sectionIndex &&
-           this._blockIndex == blockIndex &&
-           this.prefixesBlock();
-  }
-
-  prefixesBlock() {
-    return this._caretOffset === 0;
-  }
-
-  prefixesEverything() {
-    return this._sectionIndex === 0 && this._blockIndex === 0;
+           this._blockIndex === blockIndex &&
+           this._caretOffset === caretOffset;
   }
 }
 

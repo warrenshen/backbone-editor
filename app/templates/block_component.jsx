@@ -38,7 +38,7 @@ class BlockComponent extends Component {
         break;
 
       case KeyConstants.left:
-        if (point.prefixesBlock()) {
+        if (point.caretOffset === 0) {
           event.preventDefault();
           EditorActor.shiftLeft(point);
           this.props.updateStory();
@@ -73,7 +73,7 @@ class BlockComponent extends Component {
         this.handleArrowKey(event, point);
       }
     } else if (event.which === KeyConstants.backspace) {
-      if (!point.prefixesBlock()) {
+      if (point.caretOffset !== 0) {
         var block = this.props.block;
         var caretOffset = point.caretOffset;
         block.removeFragment(caretOffset - 1, caretOffset);
@@ -84,7 +84,7 @@ class BlockComponent extends Component {
           EditorActor.updatePoint(point);
           this.props.updateStory();
         }
-      } else if (!point.prefixesEverything()) {
+      } else if (!point.matchesValues(0, 0)) {
         event.preventDefault();
         EditorActor.removeBlock(point);
         this.props.updateStory();
@@ -185,7 +185,7 @@ class BlockComponent extends Component {
     var block = this.props.block;
     var point = EditorStore.point;
     if (!block.get("content") && point &&
-        point.matchesIndices(block.get("section_index"), block.get("index"))) {
+        point.matchesValues(block.get("section_index"), block.get("index"))) {
       return (
         <MediaModal
           block={this.props.block}
