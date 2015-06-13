@@ -9,6 +9,13 @@ import EditorStore from "app/stores/editor_store";
 class BlockStandard extends BlockComponent {
 
   // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "BlockStandard";
+  }
+
+  // --------------------------------------------------
   // State
   // --------------------------------------------------
   getDefaultState() {
@@ -20,6 +27,7 @@ class BlockStandard extends BlockComponent {
   // --------------------------------------------------
   handleBlur(event) {
     if (this.state.hasFocus) {
+      console.log("handling blur");
       this.setState({ hasFocus: false });
     }
   }
@@ -35,6 +43,7 @@ class BlockStandard extends BlockComponent {
   // --------------------------------------------------
   componentDidMount() {
     super.componentDidMount();
+
     var content = React.findDOMNode(this.refs.content);
     content.addEventListener("blur", this.handleBlur.bind(this));
     content.addEventListener("focus", this.handleFocus.bind(this));
@@ -42,6 +51,7 @@ class BlockStandard extends BlockComponent {
 
   componentWillUnmount() {
     super.componentWillUnmount();
+
     var content = React.findDOMNode(this.refs.content);
     content.removeEventListener("blur", this.handleBlur);
     content.removeEventListener("focus", this.handleFocus);
@@ -51,9 +61,8 @@ class BlockStandard extends BlockComponent {
   // Helpers
   // --------------------------------------------------
   shouldShowPlaceholder() {
-    var block = this.props.block;
-    return block.get("section_index") == 0 &&
-           block.get("index") === 0 &&
+    return !this.props.block.get("section_index") &&
+           !this.props.block.get("index") &&
            !this.state.hasFocus;
   }
 
@@ -67,6 +76,7 @@ class BlockStandard extends BlockComponent {
       { "block-centered": block.get("centered") },
       { "general-placeholder": this.shouldShowPlaceholder() }
     );
+
     return (
       <div
         className={"block-container"}

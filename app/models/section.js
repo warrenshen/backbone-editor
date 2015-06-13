@@ -46,6 +46,7 @@ class Section extends Model {
 
   transferBlocks(otherSection) {
     var blocks = this.get("blocks").models;
+
     for (var i = 0; i < this.length; i += 1) {
       otherSection.addBlock(blocks.shift(), blocks.length);
     }

@@ -17,6 +17,13 @@ import TypeConstants from "app/constants/type_constants";
 class BlockCaption extends Component {
 
   // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "BlockCaption";
+  }
+
+  // --------------------------------------------------
   // State
   // --------------------------------------------------
   getDefaultState() {
@@ -40,18 +47,21 @@ class BlockCaption extends Component {
 
   handleKeyDown(event) {
     event.stopPropagation();
+
     var selection = window.getSelection();
+
     if (event.which === KeyConstants.backspace) {
-      var block = this.props.block;
       if (selection.type === TypeConstants.selection.caret) {
         var point = Selector.generatePoint(selection);
         var caretOffset = point.caretOffset;
-        block.removeFragment(caretOffset - 1, caretOffset);
+
+        this.props.block.removeFragment(caretOffset - 1, caretOffset);
       } else if (selection.type === TypeConstants.selection.range) {
         var vector = Selector.generateVector(selection);
-        var startPoint = vector.startPoint;
-        var endPoint = vector.endPoint;
-        block.removeFragment(startPoint.caretOffset, endPoint.caretOffset);
+        var startOffset = vector.startPoint.caretOffset;
+        var endOffset = vector.endPoint.caretOffset;
+
+        this.props.block.removeFragment(startOffset, endOffset);
       }
     } else if (event.which === KeyConstants.tab) {
       event.preventDefault();
@@ -61,24 +71,36 @@ class BlockCaption extends Component {
 
   handleKeyPress(event) {
     event.stopPropagation();
+
     var selection = window.getSelection();
+
     if (event.which === KeyConstants.enter) {
       event.preventDefault();
     } else if (selection.type === TypeConstants.selection.caret) {
-      var block = this.props.block;
       var character = String.fromCharCode(event.which);
       var point = Selector.generatePoint(selection);
-      block.addCharacter(point.caretOffset, character);
+
+      this.props.block.addCharacter(point.caretOffset, character);
     } else if (selection.type === TypeConstants.selection.range) {
       event.preventDefault();
+
       var character = String.fromCharCode(event.which);
       var vector = Selector.generateVector(selection);
+
       EditorActor.removeBlocks(vector, { character: character });
       this.props.updateStory();
     }
   }
 
   handleKeyUp(event) {
+    event.stopPropagation();
+  }
+
+  handleMouseDown(event) {
+    event.stopPropagation();
+  }
+
+  handleMouseUp(event) {
     event.stopPropagation();
   }
 
@@ -92,11 +114,15 @@ class BlockCaption extends Component {
     content.addEventListener("keydown", this.handleKeyDown.bind(this));
     content.addEventListener("keypress", this.handleKeyPress.bind(this));
     content.addEventListener("keyup", this.handleKeyUp.bind(this));
+    content.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    content.addEventListener("mouseup", this.handleMouseUp.bind(this));
+
     this.renderContent(content);
   }
 
   componentDidUpdate() {
     var content = React.findDOMNode(this.refs.content);
+
     this.renderContent(content);
   }
 
@@ -107,6 +133,8 @@ class BlockCaption extends Component {
     content.removeEventListener("keydown", this.handleKeyDown);
     content.removeEventListener("keypress", this.handleKeyPress);
     content.removeEventListener("keyup", this.handleKeyUp);
+    content.removeEventListener("mousedown", this.handleMouseDown);
+    content.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   // --------------------------------------------------
@@ -121,6 +149,7 @@ class BlockCaption extends Component {
       { "block-image-caption": true },
       { "general-placeholder": this.state.shouldShowPlaceholder }
     );
+
     return (
       <p
         className={captionClass}
@@ -135,12 +164,13 @@ class BlockCaption extends Component {
 BlockCaption.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
   shouldEnableEdits: React.PropTypes.bool.isRequired,
-  updateStory: React.PropTypes.func,
+  updateStory: React.PropTypes.func.isRequired,
 };
 
 BlockCaption.defaultProps = {
   block: new Block(),
   shouldEnableEdits: true,
+  updateStory: null,
 };
 
 

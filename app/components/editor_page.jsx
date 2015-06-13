@@ -1,7 +1,6 @@
-import _ from "lodash";
 import React from "react";
 
-import ListeningComponent from "app/templates/listening_component";
+import Component from "app/templates/component";
 
 import LinkModal from "app/components/link_modal";
 import StoryEditable from "app/components/story_editable";
@@ -17,28 +16,24 @@ import KeyConstants from "app/constants/key_constants";
 import TypeConstants from "app/constants/type_constants";
 
 
-class EditorPage extends ListeningComponent {
+class EditorPage extends Component {
 
   // --------------------------------------------------
   // Defaults
   // --------------------------------------------------
-  stores() {
-    return [EditorStore];
+  displayName() {
+    return "EditorPage";
   }
 
   // --------------------------------------------------
   // State
   // --------------------------------------------------
   getDefaultState() {
-    return _.merge(
-      {},
-      {
-        shouldUpdateLinker: false,
-        shouldUpdateStyler: false,
-        shouldUpdateStory: false,
-      },
-      super.getDefaultState()
-    );
+    return {
+      shouldUpdateLinker: false,
+      shouldUpdateStyler: false,
+      shouldUpdateStory: false,
+    };
   }
 
   getStoreState() {
@@ -53,30 +48,35 @@ class EditorPage extends ListeningComponent {
   }
 
   updateLinker() {
-    this.setState({ shouldUpdateLinker: true });
-    this.setState({ shouldUpdateLinker: false });
-  }
-
-  updateStates() {
     this.setState({
-      shouldUpdateStory: true,
-      shouldUpdateStyler: true,
-    });
-
-    this.setState({
+      shouldUpdateLinker: true,
       shouldUpdateStory: false,
       shouldUpdateStyler: false,
     });
   }
 
+  updateStates() {
+    this.setState({
+      shouldUpdateLinker: false,
+      shouldUpdateStory: true,
+      shouldUpdateStyler: true,
+    });
+  }
+
   updateStory() {
-    this.setState({ shouldUpdateStory: true });
-    this.setState({ shouldUpdateStory: false });
+    this.setState({
+      shouldUpdateLinker: false,
+      shouldUpdateStory: true,
+      shouldUpdateStyler: false,
+    });
   }
 
   updateStyler() {
-    this.setState({ shouldUpdateStyler: true });
-    this.setState({ shouldUpdateStyler: false });
+    this.setState({
+      shouldUpdateLinker: false,
+      shouldUpdateStory: false,
+      shouldUpdateStyler: true,
+    });
   }
 
   // --------------------------------------------------
@@ -84,39 +84,35 @@ class EditorPage extends ListeningComponent {
   // --------------------------------------------------
   handleKeyDown(event) {
     var selection = window.getSelection();
-    // We use selection.type === "Range" check when
-    // checking for arrow key events because they can
-    // happen without changing the store's mouse state.
-    if (event.shiftKey) {
-      if (selection.type === TypeConstants.selection.range &&
-          event.which >= KeyConstants.left &&
-          event.which <= KeyConstants.down) {
-        var mouseState = EditorStore.mouseState;
-        var vector = Selector.generateVector(selection);
-        EditorActor.updateVector(vector);
+    var vector = Selector.generateVector(selection);
 
-        if (mouseState !== TypeConstants.mouse.move) {
-          this.updateStory();
+    if (selection.type === TypeConstants.selection.range) {
+      if (event.which >= KeyConstants.left &&
+        event.which <= KeyConstants.down) {
+        if (event.shiftKey) {
+          EditorActor.updateVector(vector);
+
+          if (EditorStore.mouseState !== TypeConstants.mouse.move) {
+            this.updateStory();
+          }
+
+          this.updateStyler();
+        } else {
+          event.preventDefault();
+
+          if (event.which === KeyConstants.left ||
+              event.which === KeyConstants.up) {
+            EditorActor.updatePoint(vector.startPoint);
+          } else {
+            EditorActor.updatePoint(vector.endPoint);
+          }
+
+          this.updateStates();
         }
-        this.updateStyler();
-      }
-    } else if (EditorStore.mouseState === TypeConstants.mouse.move) {
-      if (event.which === KeyConstants.backspace) {
+      } else if (event.which === KeyConstants.backspace) {
         event.preventDefault();
-        var vector = Selector.generateVector(selection);
 
         EditorActor.removeBlocks(vector);
-        this.updateStates();
-      } else if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
-        event.preventDefault();
-        var vector = Selector.generateVector(selection);
-
-        if (event.which === KeyConstants.left || event.which === KeyConstants.up) {
-          EditorActor.updatePoint(vector.startPoint);
-        } else {
-          EditorActor.updatePoint(vector.endPoint);
-        }
-
         this.updateStates();
       }
     }
@@ -125,6 +121,7 @@ class EditorPage extends ListeningComponent {
   handleKeyPress(event) {
     if (EditorStore.mouseState === TypeConstants.mouse.move) {
       event.preventDefault();
+
       var selection = window.getSelection();
       var vector = Selector.generateVector(selection);
 
@@ -133,18 +130,16 @@ class EditorPage extends ListeningComponent {
         this.updateStates();
       } else {
         if (event.ctrlKey || event.metaKey) {
-          switch (event.which) {
-            case KeyConstants.b:
-              EditorActor.styleElements(vector, TypeConstants.element.bold);
-              this.updateStates();
-              break;
-            case KeyConstants.i:
-              EditorActor.styleElements(vector, TypeConstants.element.italic);
-              this.updateStates();
-              break;
+          if (event.which === KeyConstants.b) {
+            EditorActor.styleElements(vector, TypeConstants.element.bold);
+            this.updateStates();
+          } else if (event.which === KeyConstants.i) {
+            EditorActor.styleElements(vector, TypeConstants.element.italic);
+            this.updateStates();
           }
         } else {
           var character = String.fromCharCode(event.which);
+
           EditorActor.removeBlocks(vector, { character: character });
           this.updateStates();
         }
@@ -152,40 +147,19 @@ class EditorPage extends ListeningComponent {
     }
   }
 
-  handleKeyUp(event) {
-    var selection = window.getSelection();
-    if (event.shiftKey &&
-        selection.type === TypeConstants.selection.range &&
-        event.which >= KeyConstants.left &&
-        event.which <= KeyConstants.down) {
-      var mouseState = EditorStore.mouseState;
-      var vector = Selector.generateVector(selection);
-      EditorActor.updateVector(vector);
-
-      if (mouseState !== TypeConstants.mouse.move) {
-        this.updateStory();
-      }
-      this.updateStyler();
-    }
-  }
-
   handleMouseDown(event) {
-    // Only update mouse state if the store has a vector,
-    // because we don't want possibly hide a media modal.
-    if (EditorStore.vector != null) {
-      EditorActor.updateMouseState(TypeConstants.mouse.down);
-    }
+    EditorActor.updateMouseState(TypeConstants.mouse.down);
   }
 
   handleMouseUp(event) {
-    var selection = window.getSelection();
     if (EditorStore.mouseState === TypeConstants.mouse.move) {
+      var selection = window.getSelection();
       var vector = Selector.generateVector(selection);
+
       EditorActor.updateVector(vector);
       this.updateStyler();
-    } else if (EditorStore.mouseState === TypeConstants.mouse.down) {
-      EditorActor.updateMouseState(TypeConstants.mouse.up)
-      EditorActor.updateVector(null);
+    } else {
+      EditorActor.updatePoint(null);
       this.updateStyler();
     }
   }
@@ -202,27 +176,27 @@ class EditorPage extends ListeningComponent {
   // Lifecycle
   // --------------------------------------------------
   componentDidMount() {
-    super.componentDidMount();
-    var page = React.findDOMNode(this.refs.page);
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
     document.addEventListener("keypress", this.handleKeyPress.bind(this));
-    document.addEventListener("keyup", this.handleKeyUp.bind(this));
-    page.addEventListener("mousedown", this.handleMouseDown.bind(this));
-    page.addEventListener("mouseup", this.handleMouseUp.bind(this));
+
     window.addEventListener("scroll", this.handleScroll.bind(this));
     window.addEventListener("resize", this.handleResize.bind(this));
+
+    var page = React.findDOMNode(this.refs.page);
+    page.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    page.addEventListener("mouseup", this.handleMouseUp.bind(this));
   }
 
   componentWillUnmount() {
-    super.componentWillUnmount();
-    var page = React.findDOMNode(this.refs.page);
     document.removeEventListener("keydown", this.handleKeyDown);
     document.removeEventListener("keypress", this.handleKeyPress);
-    document.removeEventListener("keyup", this.handleKeyUp);
-    page.removeEventListener("mousedown", this.handleMouseDown);
-    page.removeEventListener("mouseup", this.handleMouseUp);
+
     window.removeEventListener("scroll", this.handleScroll);
     window.removeEventListener("resize", this.handleResize);
+
+    var page = React.findDOMNode(this.refs.page);
+    page.removeEventListener("mousedown", this.handleMouseDown);
+    page.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   // --------------------------------------------------
@@ -242,6 +216,7 @@ class EditorPage extends ListeningComponent {
           updateStyler={this.updateStyler.bind(this)} />
         <StyleModal
           activeStyles={this.state.activeStyles}
+          point={this.state.point}
           shouldUpdateStyler={this.state.shouldUpdateStyler}
           updateStates={this.updateStates.bind(this)}
           vector={this.state.vector} />

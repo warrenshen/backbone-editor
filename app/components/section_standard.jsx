@@ -16,6 +16,13 @@ import TypeConstants from "app/constants/type_constants";
 class SectionStandard extends Component {
 
   // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "SectionStandard";
+  }
+
+  // --------------------------------------------------
   // Render
   // --------------------------------------------------
   renderBlock(block) {
@@ -26,6 +33,7 @@ class SectionStandard extends Component {
       updateStates: this.props.updateStates,
       updateStory: this.props.updateStory,
     };
+
     switch (block.get("type")) {
       case TypeConstants.block.divider:
         return <BlockDivider {...props} />;
@@ -43,16 +51,14 @@ class SectionStandard extends Component {
   }
 
   renderBlocks() {
-    var blocks = this.props.section.get("blocks");
-    return blocks.map(this.renderBlock, this);
+    return this.props.section.get("blocks").map(this.renderBlock, this);
   }
 
   render() {
-    var section = this.props.section;
     return (
       <section
         className={"section-container"}
-        data-index={section.get("index")}>
+        data-index={this.props.section.get("index")}>
         {this.renderBlocks()}
       </section>
     );
@@ -69,6 +75,8 @@ SectionStandard.propTypes = {
 SectionStandard.defaultProps = {
   section: new Section(),
   shouldEnableEdits: true,
+  updateStates: null,
+  updateStory: null,
 };
 
 

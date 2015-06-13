@@ -8,10 +8,21 @@ import Link from "app/helpers/link";
 
 class LinkModal extends Component {
 
+  // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "LinkModal";
+  }
+
+  // --------------------------------------------------
+  // Helpers
+  // --------------------------------------------------
   positionModal(rectangle) {
     var modal = React.findDOMNode(this.refs.modal);
     var offset = rectangle.width / 2 - modal.offsetWidth / 2;
-    modal.style.top = rectangle.bottom + 6 + "px";
+
+    modal.style.top = rectangle.bottom + 8 + "px";
     modal.style.left = rectangle.left + offset + "px";
   }
 
@@ -19,9 +30,15 @@ class LinkModal extends Component {
   // Lifecycle
   // --------------------------------------------------
   componentDidUpdate() {
+    if (false) {
+      console.log("Link modal component updated.");
+    }
+
     var link = this.props.link;
+
     if (link) {
       var content = React.findDOMNode(this.refs.content);
+
       content.innerHTML = link.content;
       this.positionModal(link.rectangle);
     }
@@ -39,6 +56,7 @@ class LinkModal extends Component {
       { "link-modal": true },
       { "general-hidden": !this.props.link }
     );
+
     return (
       <div className={modalClass} ref={"modal"}>
         <span className={"vertical-anchor"}></span>
@@ -55,6 +73,7 @@ LinkModal.propTypes = {
 };
 
 LinkModal.defaultProps = {
+  link: null,
   shouldUpdateLinker: false,
 };
 

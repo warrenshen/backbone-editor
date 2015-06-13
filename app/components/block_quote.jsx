@@ -7,6 +7,13 @@ import BlockComponent from "app/templates/block_component";
 class BlockQuote extends BlockComponent {
 
   // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "BlockQuote";
+  }
+
+  // --------------------------------------------------
   // Render
   // --------------------------------------------------
   render() {
@@ -16,6 +23,7 @@ class BlockQuote extends BlockComponent {
       { "block-quote": true },
       { "block-centered": block.get("centered") }
     );
+
     return (
       <blockquote
         className={"block-container"}
