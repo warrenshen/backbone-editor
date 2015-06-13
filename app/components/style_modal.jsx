@@ -183,7 +183,12 @@ class StyleModal extends Component {
   }
 
   componentDidUpdate() {
+    if (true) {
+      console.log("Style modal component updated.");
+    }
+
     var input = React.findDOMNode(this.refs.input);
+
     if (input) {
       input.addEventListener("blur", this.handleBlur.bind(this));
       input.addEventListener("click", this.handleFocus.bind(this));
@@ -197,6 +202,7 @@ class StyleModal extends Component {
 
   componentWillUnmount() {
     var input = React.findDOMNode(this.refs.input);
+
     if (input) {
       input.removeEventListener("blur", this.handleBlur);
       input.removeEventListener("click", this.handleFocus);

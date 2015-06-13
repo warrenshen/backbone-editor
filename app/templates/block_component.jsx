@@ -120,14 +120,19 @@ class BlockComponent extends Component {
 
   handleMouseDown(event) {
     event.stopPropagation();
+
     EditorActor.updateMouseState(TypeConstants.mouse.down);
   }
 
   handleMouseMove(event) {
     event.stopPropagation();
+
     if (EditorStore.mouseState === TypeConstants.mouse.down) {
       EditorActor.updateMouseState(TypeConstants.mouse.move);
-      this.props.updateStory();
+
+      if (this.props.shouldEnableEdits) {
+        this.props.updateStory();
+      }
     }
   }
 
@@ -137,10 +142,12 @@ class BlockComponent extends Component {
 
       var selection = window.getSelection();
       var range = document.caretRangeFromPoint(event.clientX, event.clientY);
+
       selection.removeAllRanges()
       selection.addRange(range)
 
       var point = Selector.generatePoint(selection);
+
       EditorActor.updatePoint(point);
       this.props.updateStates();
     }

@@ -48,30 +48,35 @@ class EditorPage extends Component {
   }
 
   updateLinker() {
-    this.setState({ shouldUpdateLinker: true });
-    this.setState({ shouldUpdateLinker: false });
-  }
-
-  updateStates() {
     this.setState({
-      shouldUpdateStory: true,
-      shouldUpdateStyler: true,
-    });
-
-    this.setState({
+      shouldUpdateLinker: true,
       shouldUpdateStory: false,
       shouldUpdateStyler: false,
     });
   }
 
+  updateStates() {
+    this.setState({
+      shouldUpdateLinker: false,
+      shouldUpdateStory: true,
+      shouldUpdateStyler: true,
+    });
+  }
+
   updateStory() {
-    this.setState({ shouldUpdateStory: true });
-    this.setState({ shouldUpdateStory: false });
+    this.setState({
+      shouldUpdateLinker: false,
+      shouldUpdateStory: true,
+      shouldUpdateStyler: false,
+    });
   }
 
   updateStyler() {
-    this.setState({ shouldUpdateStyler: true });
-    this.setState({ shouldUpdateStyler: false });
+    this.setState({
+      shouldUpdateLinker: false,
+      shouldUpdateStory: false,
+      shouldUpdateStyler: true,
+    });
   }
 
   // --------------------------------------------------

@@ -122,6 +122,10 @@ class StoryEditable extends Component {
   }
 
   componentDidUpdate() {
+    if (true) {
+      console.log("Story editable component updated.");
+    }
+
     this.createCaret(this.props.point);
     this.createHandlers();
   }

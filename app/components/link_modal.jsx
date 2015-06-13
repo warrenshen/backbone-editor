@@ -19,7 +19,12 @@ class LinkModal extends Component {
   // Lifecycle
   // --------------------------------------------------
   componentDidUpdate() {
+    if (true) {
+      console.log("Link modal component updated.");
+    }
+
     var link = this.props.link;
+
     if (link) {
       var content = React.findDOMNode(this.refs.content);
       content.innerHTML = link.content;
