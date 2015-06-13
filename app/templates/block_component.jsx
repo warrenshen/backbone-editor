@@ -26,7 +26,7 @@ class BlockComponent extends Component {
     var caretOffset = point.caretOffset;
 
     if (event.which === KeyConstants.left) {
-      if (caretOffset === 0) {
+      if (!caretOffset) {
         event.preventDefault();
 
         EditorActor.shiftLeft(point);
@@ -59,7 +59,7 @@ class BlockComponent extends Component {
     } else {
       var ceilingOffset = Selector.findCeilingOffset(content);
 
-      if (caretOffset < ceilingOffset || caretOffset === 0 || ceilingOffset < 0) {
+      if (caretOffset < ceilingOffset || !caretOffset || ceilingOffset < 0) {
         event.preventDefault();
 
         EditorActor.shiftUp(point);

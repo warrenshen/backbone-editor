@@ -26,16 +26,16 @@ class BlockStandard extends BlockComponent {
   // Handlers
   // --------------------------------------------------
   handleBlur(event) {
-    // if (this.state.hasFocus) {
-    //   console.log("handling blur");
-    //   this.setState({ hasFocus: false });
-    // }
+    if (this.state.hasFocus) {
+      console.log("handling blur");
+      this.setState({ hasFocus: false });
+    }
   }
 
   handleFocus(event) {
-    // if (!this.state.hasFocus) {
-    //   this.setState({ hasFocus: true });
-    // }
+    if (!this.state.hasFocus) {
+      this.setState({ hasFocus: true });
+    }
   }
 
   // --------------------------------------------------
@@ -61,8 +61,8 @@ class BlockStandard extends BlockComponent {
   // Helpers
   // --------------------------------------------------
   shouldShowPlaceholder() {
-    return this.props.block.get("section_index") == 0 &&
-           this.props.block.get("index") === 0 &&
+    return !this.props.block.get("section_index") &&
+           !this.props.block.get("index") &&
            !this.state.hasFocus;
   }
 
