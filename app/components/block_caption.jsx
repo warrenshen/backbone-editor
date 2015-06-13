@@ -114,6 +114,8 @@ class BlockCaption extends Component {
   }
 
   componentDidUpdate() {
+    var content = React.findDOMNode(this.refs.content);
+
     this.renderContent(content);
   }
 

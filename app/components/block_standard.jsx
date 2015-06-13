@@ -27,6 +27,7 @@ class BlockStandard extends BlockComponent {
   // --------------------------------------------------
   handleBlur(event) {
     if (this.state.hasFocus) {
+      console.log("handling blur");
       this.setState({ hasFocus: false });
     }
   }

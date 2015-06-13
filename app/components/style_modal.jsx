@@ -8,6 +8,7 @@ import StyleOption from "app/components/style_option";
 
 import EditorActor from "app/actors/editor_actor";
 
+import Point from "app/helpers/point";
 import Selector from "app/helpers/selector";
 import Vector from "app/helpers/vector";
 
@@ -126,7 +127,7 @@ class StyleModal extends Component {
   // --------------------------------------------------
   // Helpers
   // --------------------------------------------------
-  createVector(vector) {
+  createVector(vector, point) {
     if (vector) {
       var startPoint = vector.startPoint;
       var endPoint = vector.endPoint;
@@ -175,6 +176,9 @@ class StyleModal extends Component {
       selection.removeAllRanges();
       selection.addRange(range);
       this.positionModal(range);
+    } else if (!point) {
+      var selection = window.getSelection();
+      selection.removeAllRanges();
     }
   }
 
@@ -195,7 +199,7 @@ class StyleModal extends Component {
     modal.addEventListener("mousedown", this.handleMouseDown.bind(this));
     modal.addEventListener("mouseup", this.handleMouseUp.bind(this));
 
-    this.createVector(this.props.vector);
+    this.createVector(this.props.vector, this.props.point);
   }
 
   componentDidUpdate() {
@@ -213,7 +217,7 @@ class StyleModal extends Component {
       input.addEventListener("keyup", this.handleKeyUp.bind(this));
     }
 
-    this.createVector(this.props.vector);
+    this.createVector(this.props.vector, this.props.point);
   }
 
   componentWillUnmount() {
@@ -327,6 +331,7 @@ class StyleModal extends Component {
 
 StyleModal.propTypes = {
   activeStyles: React.PropTypes.object.isRequired,
+  point: React.PropTypes.instanceOf(Point),
   shouldUpdateStyler: React.PropTypes.bool.isRequired,
   updateStates: React.PropTypes.func.isRequired,
   vector: React.PropTypes.instanceOf(Vector),
@@ -334,6 +339,7 @@ StyleModal.propTypes = {
 
 StyleModal.defaultProps = {
   activeStyles: {},
+  point: null,
   shouldUpdateStyler: true,
   updateStates: null,
   vector: null,

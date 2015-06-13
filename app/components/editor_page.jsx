@@ -179,25 +179,19 @@ class EditorPage extends Component {
   }
 
   handleMouseDown(event) {
-    // Only update mouse state if the store has a vector,
-    // because we don't want possibly hide a media modal.
-    if (EditorStore.vector != null) {
-      EditorActor.updateMouseState(TypeConstants.mouse.down);
-    }
+    EditorActor.updateMouseState(TypeConstants.mouse.down);
   }
 
   handleMouseUp(event) {
-    var selection = window.getSelection();
-
     if (EditorStore.mouseState === TypeConstants.mouse.move) {
+      var selection = window.getSelection();
       var vector = Selector.generateVector(selection);
 
       EditorActor.updateVector(vector);
       this.updateStyler();
-    } else if (EditorStore.mouseState === TypeConstants.mouse.down) {
-      EditorActor.updateMouseState(TypeConstants.mouse.up)
-      EditorActor.updateVector(null);
-      this.updateStyler();
+    } else {
+      EditorActor.updatePoint(null);
+      this.updateStates();
     }
   }
 
@@ -255,6 +249,7 @@ class EditorPage extends Component {
           updateStyler={this.updateStyler.bind(this)} />
         <StyleModal
           activeStyles={this.state.activeStyles}
+          point={this.state.point}
           shouldUpdateStyler={this.state.shouldUpdateStyler}
           updateStates={this.updateStates.bind(this)}
           vector={this.state.vector} />

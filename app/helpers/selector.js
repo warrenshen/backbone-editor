@@ -92,16 +92,21 @@ class Selector {
 
   generatePoint(selection, type="anchor") {
     var childNode = selection[type + "Node"];
-    var parentNode = this.findParentNode(childNode);
-    var grandparentNode = parentNode.parentNode;
 
-    var childOffset = this.findChildOffset(childNode, parentNode);
-    var caretOffset = childOffset + selection[type + "Offset"];
+    if (childNode) {
+      var parentNode = this.findParentNode(childNode);
+      var grandparentNode = parentNode.parentNode;
 
-    var blockIndex = parseInt(parentNode.dataset.index);
-    var sectionIndex = parseInt(grandparentNode.dataset.index);
+      var childOffset = this.findChildOffset(childNode, parentNode);
+      var caretOffset = childOffset + selection[type + "Offset"];
 
-    return new Point(sectionIndex, blockIndex, caretOffset);
+      var blockIndex = parseInt(parentNode.dataset.index);
+      var sectionIndex = parseInt(grandparentNode.dataset.index);
+
+      return new Point(sectionIndex, blockIndex, caretOffset);
+    } else {
+      return null;
+    }
   }
 
   generateVector(selection) {

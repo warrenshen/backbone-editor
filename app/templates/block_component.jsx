@@ -118,15 +118,7 @@ class BlockComponent extends Component {
     }
   }
 
-  handleMouseDown(event) {
-    event.stopPropagation();
-
-    EditorActor.updateMouseState(TypeConstants.mouse.down);
-  }
-
   handleMouseMove(event) {
-    event.stopPropagation();
-
     if (EditorStore.mouseState === TypeConstants.mouse.down) {
       EditorActor.updateMouseState(TypeConstants.mouse.move);
 
@@ -138,6 +130,8 @@ class BlockComponent extends Component {
 
   handleMouseUp(event) {
     if (EditorStore.mouseState !== TypeConstants.mouse.move) {
+      event.stopPropagation();
+
       EditorActor.updateMouseState(TypeConstants.mouse.up);
 
       var selection = window.getSelection();
@@ -160,14 +154,15 @@ class BlockComponent extends Component {
     var content = React.findDOMNode(this.refs.content);
     content.addEventListener("keydown", this.handleKeyDown.bind(this));
     content.addEventListener("keypress", this.handleKeyPress.bind(this));
-    content.addEventListener("mousedown", this.handleMouseDown.bind(this));
     content.addEventListener("mousemove", this.handleMouseMove.bind(this));
     content.addEventListener("mouseup", this.handleMouseUp.bind(this));
+
     this.renderContent(content);
   }
 
   componentDidUpdate() {
     var content = React.findDOMNode(this.refs.content);
+
     this.renderContent(content);
   }
 
@@ -175,7 +170,6 @@ class BlockComponent extends Component {
     var content = React.findDOMNode(this.refs.content);
     content.removeEventListener("keydown", this.handleKeyDown);
     content.removeEventListener("keypress", this.handleKeyPress);
-    content.removeEventListener("mousedown", this.handleMouseDown);
     content.removeEventListener("mousemove", this.handleMouseMove);
     content.removeEventListener("mouseup", this.handleMouseUp);
   }
@@ -212,13 +206,15 @@ class BlockComponent extends Component {
 BlockComponent.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
   shouldEnableEdits: React.PropTypes.bool.isRequired,
-  updateStates: React.PropTypes.func,
-  updateStory: React.PropTypes.func,
+  updateStates: React.PropTypes.func.isRequired,
+  updateStory: React.PropTypes.func.isRequired,
 };
 
 BlockComponent.defaultProps = {
   block: new Block(),
   shouldEnableEdits: true,
+  updateStates: null,
+  updateStory: null,
 };
 
 

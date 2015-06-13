@@ -50,6 +50,7 @@ class StoryEditable extends Component {
   // TODO: Fix caret creation bug when styled
   // elements and selection are present.
   createCaret(point) {
+    console.log(point);
     if (point) {
       var story = React.findDOMNode(this.refs.story);
       var section = story.childNodes[point.sectionIndex];
