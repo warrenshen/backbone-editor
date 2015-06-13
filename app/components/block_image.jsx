@@ -63,6 +63,11 @@ class BlockImage extends Component {
 
   handleMouseDown(event) {
     event.preventDefault();
+    event.stopPropagation();
+  }
+
+  handleMouseUp(event) {
+    event.stopPropagation();
   }
 
   // --------------------------------------------------
@@ -72,6 +77,7 @@ class BlockImage extends Component {
     var image = React.findDOMNode(this.refs.image);
     image.addEventListener("click", this.handleClick.bind(this));
     image.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    image.addEventListener("mouseup", this.handleMouseUp.bind(this));
 
     var invisible = React.findDOMNode(this.refs.invisible);
     invisible.addEventListener("blur", this.handleBlur.bind(this));
@@ -83,6 +89,7 @@ class BlockImage extends Component {
     var image = React.findDOMNode(this.refs.image);
     image.removeEventListener("click", this.handleClick);
     image.removeEventListener("mousedown", this.handleMouseDown);
+    image.removeEventListener("mouseup", this.handleMouseUp);
 
     var invisible = React.findDOMNode(this.refs.invisible);
     invisible.removeEventListener("blur", this.handleBlurImage);

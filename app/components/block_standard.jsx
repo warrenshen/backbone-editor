@@ -26,16 +26,16 @@ class BlockStandard extends BlockComponent {
   // Handlers
   // --------------------------------------------------
   handleBlur(event) {
-    if (this.state.hasFocus) {
-      console.log("handling blur");
-      this.setState({ hasFocus: false });
-    }
+    // if (this.state.hasFocus) {
+    //   console.log("handling blur");
+    //   this.setState({ hasFocus: false });
+    // }
   }
 
   handleFocus(event) {
-    if (!this.state.hasFocus) {
-      this.setState({ hasFocus: true });
-    }
+    // if (!this.state.hasFocus) {
+    //   this.setState({ hasFocus: true });
+    // }
   }
 
   // --------------------------------------------------

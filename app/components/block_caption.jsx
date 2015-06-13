@@ -51,19 +51,17 @@ class BlockCaption extends Component {
     var selection = window.getSelection();
 
     if (event.which === KeyConstants.backspace) {
-      var block = this.props.block;
-
       if (selection.type === TypeConstants.selection.caret) {
         var point = Selector.generatePoint(selection);
         var caretOffset = point.caretOffset;
 
-        block.removeFragment(caretOffset - 1, caretOffset);
+        this.props.block.removeFragment(caretOffset - 1, caretOffset);
       } else if (selection.type === TypeConstants.selection.range) {
         var vector = Selector.generateVector(selection);
-        var startPoint = vector.startPoint;
-        var endPoint = vector.endPoint;
+        var startOffset = vector.startPoint.caretOffset;
+        var endOffset = vector.endPoint.caretOffset;
 
-        block.removeFragment(startPoint.caretOffset, endPoint.caretOffset);
+        this.props.block.removeFragment(startOffset, endOffset);
       }
     } else if (event.which === KeyConstants.tab) {
       event.preventDefault();
@@ -79,11 +77,10 @@ class BlockCaption extends Component {
     if (event.which === KeyConstants.enter) {
       event.preventDefault();
     } else if (selection.type === TypeConstants.selection.caret) {
-      var block = this.props.block;
       var character = String.fromCharCode(event.which);
       var point = Selector.generatePoint(selection);
 
-      block.addCharacter(point.caretOffset, character);
+      this.props.block.addCharacter(point.caretOffset, character);
     } else if (selection.type === TypeConstants.selection.range) {
       event.preventDefault();
 
@@ -99,6 +96,14 @@ class BlockCaption extends Component {
     event.stopPropagation();
   }
 
+  handleMouseDown(event) {
+    event.stopPropagation();
+  }
+
+  handleMouseUp(event) {
+    event.stopPropagation();
+  }
+
   // --------------------------------------------------
   // Lifecycle
   // --------------------------------------------------
@@ -109,6 +114,8 @@ class BlockCaption extends Component {
     content.addEventListener("keydown", this.handleKeyDown.bind(this));
     content.addEventListener("keypress", this.handleKeyPress.bind(this));
     content.addEventListener("keyup", this.handleKeyUp.bind(this));
+    content.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    content.addEventListener("mouseup", this.handleMouseUp.bind(this));
 
     this.renderContent(content);
   }
@@ -126,6 +133,8 @@ class BlockCaption extends Component {
     content.removeEventListener("keydown", this.handleKeyDown);
     content.removeEventListener("keypress", this.handleKeyPress);
     content.removeEventListener("keyup", this.handleKeyUp);
+    content.removeEventListener("mousedown", this.handleMouseDown);
+    content.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   // --------------------------------------------------

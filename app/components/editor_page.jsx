@@ -160,7 +160,7 @@ class EditorPage extends Component {
       this.updateStyler();
     } else {
       EditorActor.updatePoint(null);
-      this.updateStates();
+      this.updateStyler();
     }
   }
 
