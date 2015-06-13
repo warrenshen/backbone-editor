@@ -9,6 +9,7 @@
 // - constants
 // - directories
 
+import _ from "lodash";
 import React from "react";
 
 
@@ -27,6 +28,15 @@ class Component extends React.Component {
   // --------------------------------------------------
   getDefaultState() {
     return {};
+  }
+
+  getStoreState() {
+    return {};
+  }
+
+  setState(nextState) {
+    _.merge(nextState, this.getStoreState());
+    super.setState(nextState);
   }
 
   // --------------------------------------------------

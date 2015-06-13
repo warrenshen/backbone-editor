@@ -1,7 +1,6 @@
-import _ from "lodash";
 import React from "react";
 
-import ListeningComponent from "app/templates/listening_component";
+import Component from "app/templates/component";
 
 import LinkModal from "app/components/link_modal";
 import StoryEditable from "app/components/story_editable";
@@ -17,7 +16,7 @@ import KeyConstants from "app/constants/key_constants";
 import TypeConstants from "app/constants/type_constants";
 
 
-class EditorPage extends ListeningComponent {
+class EditorPage extends Component {
 
   // --------------------------------------------------
   // Defaults
@@ -30,15 +29,11 @@ class EditorPage extends ListeningComponent {
   // State
   // --------------------------------------------------
   getDefaultState() {
-    return _.merge(
-      {},
-      {
-        shouldUpdateLinker: false,
-        shouldUpdateStyler: false,
-        shouldUpdateStory: false,
-      },
-      super.getDefaultState()
-    );
+    return {
+      shouldUpdateLinker: false,
+      shouldUpdateStyler: false,
+      shouldUpdateStory: false,
+    };
   }
 
   getStoreState() {
@@ -202,27 +197,29 @@ class EditorPage extends ListeningComponent {
   // Lifecycle
   // --------------------------------------------------
   componentDidMount() {
-    super.componentDidMount();
-    var page = React.findDOMNode(this.refs.page);
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
     document.addEventListener("keypress", this.handleKeyPress.bind(this));
     document.addEventListener("keyup", this.handleKeyUp.bind(this));
-    page.addEventListener("mousedown", this.handleMouseDown.bind(this));
-    page.addEventListener("mouseup", this.handleMouseUp.bind(this));
+
     window.addEventListener("scroll", this.handleScroll.bind(this));
     window.addEventListener("resize", this.handleResize.bind(this));
+
+    var page = React.findDOMNode(this.refs.page);
+    page.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    page.addEventListener("mouseup", this.handleMouseUp.bind(this));
   }
 
   componentWillUnmount() {
-    super.componentWillUnmount();
-    var page = React.findDOMNode(this.refs.page);
     document.removeEventListener("keydown", this.handleKeyDown);
     document.removeEventListener("keypress", this.handleKeyPress);
     document.removeEventListener("keyup", this.handleKeyUp);
-    page.removeEventListener("mousedown", this.handleMouseDown);
-    page.removeEventListener("mouseup", this.handleMouseUp);
+
     window.removeEventListener("scroll", this.handleScroll);
     window.removeEventListener("resize", this.handleResize);
+
+    var page = React.findDOMNode(this.refs.page);
+    page.removeEventListener("mousedown", this.handleMouseDown);
+    page.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   // --------------------------------------------------

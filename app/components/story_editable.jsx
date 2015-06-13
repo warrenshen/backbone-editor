@@ -43,7 +43,6 @@ class StoryEditable extends Component {
   // elements and selection are present.
   createCaret(point) {
     if (point) {
-      console.log(point);
       var story = React.findDOMNode(this.refs.story);
       var section = story.childNodes[point.sectionIndex];
       var block = section.childNodes[point.blockIndex];
@@ -151,7 +150,6 @@ class StoryEditable extends Component {
   }
 
   render() {
-    console.log(this.props.story);
     return (
       <div className={"story-container"} ref={"story"}>
         {this.renderSections()}

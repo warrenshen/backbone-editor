@@ -109,7 +109,6 @@ class EditorStore extends Store {
   addSection(section, index=0) {
     var story = this._story;
     story.addSection(section, index);
-    this.emitChange();
   }
 
   addBlock(block, point) {
@@ -483,12 +482,10 @@ class EditorStore extends Store {
     }
 
     this._activeStyles = activeStyles;
-    this.emitChange();
   }
 
   updateLink(link) {
     this._link = link;
-    this.emitChange();
   }
 
   updateMouseState(mouseState, shouldEmit=false) {
@@ -498,7 +495,6 @@ class EditorStore extends Store {
       if (this._point !== null) {
         this._point = null;
       }
-      this.emitChange();
     }
   }
 
@@ -509,7 +505,6 @@ class EditorStore extends Store {
 
     this._point = point;
     this._vector = null;
-    this.emitChange();
   }
 
   updateVector(vector) {
@@ -520,9 +515,7 @@ class EditorStore extends Store {
     this._point = null;
     this._vector = vector;
 
-    if (vector === null) {
-      this.emitChange();
-    } else {
+    if (vector !== null) {
       this.updateActiveStyles(vector);
     }
   }
