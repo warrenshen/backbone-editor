@@ -114,21 +114,26 @@ class BlockComponent extends Component {
   }
 
   handleKeyPress(event) {
+    event.stopPropagation();
+
     var selection = window.getSelection();
     var point = Selector.generatePoint(selection);
 
     if (event.which === KeyConstants.enter) {
       event.preventDefault();
+
       EditorActor.splitBlock(point);
       this.props.updateStory();
     } else {
       var block = this.props.block;
-      var content = block.get("content");
+      var length = block.length;
       var character = String.fromCharCode(event.which);
+
       block.addCharacter(point.caretOffset, character);
 
-      if (!content) {
+      if (!length) {
         event.preventDefault();
+
         point.caretOffset = 1;
         EditorActor.updatePoint(point);
         this.props.updateStory();

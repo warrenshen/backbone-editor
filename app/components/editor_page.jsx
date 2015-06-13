@@ -135,15 +135,12 @@ class EditorPage extends Component {
         this.updateStates();
       } else {
         if (event.ctrlKey || event.metaKey) {
-          switch (event.which) {
-            case KeyConstants.b:
-              EditorActor.styleElements(vector, TypeConstants.element.bold);
-              this.updateStates();
-              break;
-            case KeyConstants.i:
-              EditorActor.styleElements(vector, TypeConstants.element.italic);
-              this.updateStates();
-              break;
+          if (event.which === KeyConstants.b) {
+            EditorActor.styleElements(vector, TypeConstants.element.bold);
+            this.updateStates();
+          } else if (event.which === KeyConstants.i) {
+            EditorActor.styleElements(vector, TypeConstants.element.italic);
+            this.updateStates();
           }
         } else {
           var character = String.fromCharCode(event.which);
