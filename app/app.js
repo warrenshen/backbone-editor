@@ -24,6 +24,7 @@ class App {
     models.map(function(model) {
       ModelDirectory.add(model);
     });
+
     stores.map(function(store) {
       StoreDirectory.add(store);
       // Call store's initialize method here instead of in
