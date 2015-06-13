@@ -69,12 +69,17 @@ class BlockComponent extends Component {
   }
 
   handleKeyDown(event) {
-    event.stopPropagation();
+    if (!event.shiftKey &&
+        (event.which < KeyConstants.left ||
+        event.which > KeyConstants.down)) {
+      event.stopPropagation();
+    }
 
     var selection = window.getSelection();
     var point = Selector.generatePoint(selection);
 
-    if (event.which >= KeyConstants.left &&
+    if (EditorStore.mouseState !== TypeConstants.mouse.move &&
+        event.which >= KeyConstants.left &&
         event.which <= KeyConstants.down &&
         !event.shiftKey) {
       switch (event.which) {

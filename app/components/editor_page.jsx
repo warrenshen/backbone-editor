@@ -86,38 +86,33 @@ class EditorPage extends Component {
     var selection = window.getSelection();
     var vector = Selector.generateVector(selection);
 
-    // We use a selection.type === TypeConstants.selection.range
-    // conditional for arrow key handling because arrow key events can
-    // create selections without changing the store's mouse state.
-    if (event.shiftKey) {
-      if (selection.type === TypeConstants.selection.range &&
-          event.which >= KeyConstants.left &&
-          event.which <= KeyConstants.down) {
-        EditorActor.updateVector(vector);
+    if (selection.type === TypeConstants.selection.range) {
+      if (event.which >= KeyConstants.left &&
+        event.which <= KeyConstants.down) {
+        if (event.shiftKey) {
+          EditorActor.updateVector(vector);
 
-        if (EditorStore.mouseState !== TypeConstants.mouse.move) {
-          this.updateStory();
+          if (EditorStore.mouseState !== TypeConstants.mouse.move) {
+            this.updateStory();
+          }
+
+          this.updateStyler();
+        } else {
+          event.preventDefault();
+
+          if (event.which === KeyConstants.left ||
+              event.which === KeyConstants.up) {
+            EditorActor.updatePoint(vector.startPoint);
+          } else {
+            EditorActor.updatePoint(vector.endPoint);
+          }
+
+          this.updateStates();
         }
-
-        this.updateStyler();
-      }
-    } else if (EditorStore.mouseState === TypeConstants.mouse.move) {
-      if (event.which === KeyConstants.backspace) {
+      } else if (event.which === KeyConstants.backspace) {
         event.preventDefault();
 
         EditorActor.removeBlocks(vector);
-        this.updateStates();
-      } else if (event.which >= KeyConstants.left &&
-                 event.which <= KeyConstants.down) {
-        event.preventDefault();
-
-        if (event.which === KeyConstants.left ||
-            event.which === KeyConstants.up) {
-          EditorActor.updatePoint(vector.startPoint);
-        } else {
-          EditorActor.updatePoint(vector.endPoint);
-        }
-
         this.updateStates();
       }
     }
@@ -152,26 +147,6 @@ class EditorPage extends Component {
     }
   }
 
-  handleKeyUp(event) {
-    var selection = window.getSelection();
-
-    if (event.shiftKey &&
-        selection.type === TypeConstants.selection.range &&
-        event.which >= KeyConstants.left &&
-        event.which <= KeyConstants.down) {
-      var mouseState = EditorStore.mouseState;
-      var vector = Selector.generateVector(selection);
-
-      EditorActor.updateVector(vector);
-
-      if (mouseState !== TypeConstants.mouse.move) {
-        this.updateStory();
-      }
-
-      this.updateStyler();
-    }
-  }
-
   handleMouseDown(event) {
     EditorActor.updateMouseState(TypeConstants.mouse.down);
   }
@@ -203,7 +178,6 @@ class EditorPage extends Component {
   componentDidMount() {
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
     document.addEventListener("keypress", this.handleKeyPress.bind(this));
-    document.addEventListener("keyup", this.handleKeyUp.bind(this));
 
     window.addEventListener("scroll", this.handleScroll.bind(this));
     window.addEventListener("resize", this.handleResize.bind(this));
@@ -216,7 +190,6 @@ class EditorPage extends Component {
   componentWillUnmount() {
     document.removeEventListener("keydown", this.handleKeyDown);
     document.removeEventListener("keypress", this.handleKeyPress);
-    document.removeEventListener("keyup", this.handleKeyUp);
 
     window.removeEventListener("scroll", this.handleScroll);
     window.removeEventListener("resize", this.handleResize);
