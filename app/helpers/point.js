@@ -3,7 +3,7 @@ class Point {
   // --------------------------------------------------
   // Setup
   // --------------------------------------------------
-  constructor(sectionIndex=0, blockIndex=0, caretOffset=0, shouldFloor=false) {
+  constructor(sectionIndex, blockIndex, caretOffset, shouldFloor=false) {
     this._sectionIndex = sectionIndex;
     this._blockIndex = blockIndex;
     this._caretOffset = caretOffset;

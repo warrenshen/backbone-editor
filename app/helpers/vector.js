@@ -6,7 +6,7 @@ class Vector {
   // --------------------------------------------------
   // Setup
   // --------------------------------------------------
-  constructor(startPoint=new Point(), endPoint=new Point()) {
+  constructor(startPoint, endPoint) {
     this._startPoint = startPoint;
     this._endPoint = endPoint;
   }

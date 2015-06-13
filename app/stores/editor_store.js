@@ -23,13 +23,9 @@ class EditorStore extends Store {
     this._activeStyles = {};
     this._link = null;
     this._mouseState = TypeConstants.mouse.up;
-    this._point = new Point();
+    this._point = new Point(0, 0, 0);
     this._story = new Story();
     this._vector = null;
-
-    var initialSection = new Section();
-    initialSection.addBlock(new Block());
-    this.addSection(initialSection);
   }
 
   // --------------------------------------------------
@@ -112,8 +108,7 @@ class EditorStore extends Store {
   // --------------------------------------------------
   addSection(section, index=0) {
     var story = this._story;
-    story.get("sections").add(section, { at: index });
-    story.updateSectionIndices();
+    story.addSection(section, index);
     this.emitChange();
   }
 

@@ -11,7 +11,7 @@ class LinkModal extends Component {
   positionModal(rectangle) {
     var modal = React.findDOMNode(this.refs.modal);
     var offset = rectangle.width / 2 - modal.offsetWidth / 2;
-    modal.style.top = rectangle.bottom + 6 + "px";
+    modal.style.top = rectangle.bottom + 8 + "px";
     modal.style.left = rectangle.left + offset + "px";
   }
 

@@ -1,10 +1,18 @@
 import _ from "lodash"
 
 import Model from "app/templates/model";
+
+import Block from "app/models/block";
+import Section from "app/models/section";
+
 import ModelDirectory from "app/directories/model_directory";
 
 
 class Story extends Model {
+
+  intialize() {
+    this.addSection(new Section().addBlock(new Block()));
+  }
 
   // --------------------------------------------------
   // Getters
@@ -30,6 +38,11 @@ class Story extends Model {
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------
+  addSection(section, index=0) {
+    this.get("sections").add(section, { at: index });
+    this.updateSectionIndices();
+  }
+
   mergeSections() {
     var sections = this.get("sections");
 
