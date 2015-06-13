@@ -488,14 +488,12 @@ class EditorStore extends Store {
     this._link = link;
   }
 
-  updateMouseState(mouseState, shouldEmit=false) {
-    this._mouseState = mouseState;
-
-    if (shouldEmit) {
-      if (this._point !== null) {
-        this._point = null;
-      }
+  updateMouseState(mouseState) {
+    if (this._point !== null) {
+      this._point = null;
     }
+
+    this._mouseState = mouseState;
   }
 
   updatePoint(point) {
@@ -557,7 +555,7 @@ class EditorStore extends Store {
         this.styleElements(action.vector, action.which, action.link);
         break;
       case ActionConstants.editor.updateMouseState:
-        this.updateMouseState(action.mouseState, action.shouldEmit);
+        this.updateMouseState(action.mouseState);
         break;
       case ActionConstants.editor.updateLink:
         this.updateLink(action.link);

@@ -126,8 +126,7 @@ class BlockComponent extends Component {
   handleMouseMove(event) {
     event.stopPropagation();
     if (EditorStore.mouseState === TypeConstants.mouse.down) {
-      // Force the store to emit a change so that block components update.
-      EditorActor.updateMouseState(TypeConstants.mouse.move, true);
+      EditorActor.updateMouseState(TypeConstants.mouse.move);
       this.props.updateStory();
     }
   }
