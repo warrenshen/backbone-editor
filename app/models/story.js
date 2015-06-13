@@ -10,8 +10,10 @@ import ModelDirectory from "app/directories/model_directory";
 
 class Story extends Model {
 
-  intialize() {
-    this.addSection(new Section().addBlock(new Block()));
+  initialize() {
+    var section = new Section();
+    section.addBlock(new Block());
+    this.addSection(section);
   }
 
   // --------------------------------------------------

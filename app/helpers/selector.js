@@ -43,7 +43,7 @@ class Selector {
   }
 
   findChildOffset(childNode, parentNode) {
-    var walker = this.createTreeWalker(blockNode);
+    var walker = this.createTreeWalker(parentNode);
     var offset = 0;
 
     while (walker.nextNode() && !walker.currentNode.isSameNode(childNode)) {
