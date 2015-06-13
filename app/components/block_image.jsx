@@ -17,6 +17,13 @@ import KeyConstants from "app/constants/key_constants";
 class BlockImage extends Component {
 
   // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "BlockImage";
+  }
+
+  // --------------------------------------------------
   // State
   // --------------------------------------------------
   getDefaultState() {

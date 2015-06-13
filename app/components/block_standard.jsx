@@ -9,6 +9,13 @@ import EditorStore from "app/stores/editor_store";
 class BlockStandard extends BlockComponent {
 
   // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "BlockStandard";
+  }
+
+  // --------------------------------------------------
   // State
   // --------------------------------------------------
   getDefaultState() {

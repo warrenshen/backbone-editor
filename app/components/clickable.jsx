@@ -8,6 +8,13 @@ import RouterDirectory from "app/directories/router_directory";
 class Clickable extends Component {
 
   // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "Clickable";
+  }
+
+  // --------------------------------------------------
   // Handlers
   // --------------------------------------------------
   handleClick() {

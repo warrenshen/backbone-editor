@@ -7,6 +7,13 @@ import BlockComponent from "app/templates/block_component";
 class BlockQuote extends BlockComponent {
 
   // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "BlockQuote";
+  }
+
+  // --------------------------------------------------
   // Render
   // --------------------------------------------------
   render() {

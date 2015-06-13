@@ -17,6 +17,13 @@ import TypeConstants from "app/constants/type_constants";
 class BlockCaption extends Component {
 
   // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "BlockCaption";
+  }
+
+  // --------------------------------------------------
   // State
   // --------------------------------------------------
   getDefaultState() {

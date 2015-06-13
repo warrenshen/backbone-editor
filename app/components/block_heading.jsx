@@ -9,6 +9,13 @@ import TypeConstants from "app/constants/type_constants";
 class BlockHeading extends BlockComponent {
 
   // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "BlockHeading";
+  }
+
+  // --------------------------------------------------
   // Render
   // --------------------------------------------------
   renderEditable(block, type) {

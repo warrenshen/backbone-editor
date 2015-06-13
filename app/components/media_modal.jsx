@@ -19,6 +19,13 @@ import TypeConstants from "app/constants/type_constants";
 class MediaModal extends Component {
 
   // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "MediaModal";
+  }
+
+  // --------------------------------------------------
   // State
   // --------------------------------------------------
   getDefaultState() {

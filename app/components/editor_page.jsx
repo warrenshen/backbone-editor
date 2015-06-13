@@ -21,8 +21,8 @@ class EditorPage extends Component {
   // --------------------------------------------------
   // Defaults
   // --------------------------------------------------
-  stores() {
-    return [EditorStore];
+  displayName() {
+    return "EditorPage";
   }
 
   // --------------------------------------------------

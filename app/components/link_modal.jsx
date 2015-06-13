@@ -8,6 +8,16 @@ import Link from "app/helpers/link";
 
 class LinkModal extends Component {
 
+  // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "LinkModal";
+  }
+
+  // --------------------------------------------------
+  // Helpers
+  // --------------------------------------------------
   positionModal(rectangle) {
     var modal = React.findDOMNode(this.refs.modal);
     var offset = rectangle.width / 2 - modal.offsetWidth / 2;

@@ -35,6 +35,7 @@ class Component extends React.Component {
   }
 
   setState(nextState) {
+    console.log(this.displayName());
     _.merge(nextState, this.getStoreState());
     super.setState(nextState);
   }

@@ -17,6 +17,13 @@ import Selector from "app/helpers/selector";
 class StoryEditable extends Component {
 
   // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "StoryEditable";
+  }
+
+  // --------------------------------------------------
   // Handlers
   // --------------------------------------------------
   handleMouseEnter(event) {

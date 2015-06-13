@@ -7,6 +7,13 @@ import Component from "app/templates/component";
 class MediaOption extends Component {
 
   // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "MediaOption";
+  }
+
+  // --------------------------------------------------
   // Handlers
   // --------------------------------------------------
   handleClick(event) {

@@ -18,6 +18,13 @@ import TypeConstants from "app/constants/type_constants";
 class StyleModal extends Component {
 
   // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "StyleModal";
+  }
+
+  // --------------------------------------------------
   // State
   // --------------------------------------------------
   getDefaultState() {

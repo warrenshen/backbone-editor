@@ -16,6 +16,13 @@ import TypeConstants from "app/constants/type_constants";
 class SectionStandard extends Component {
 
   // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "SectionStandard";
+  }
+
+  // --------------------------------------------------
   // Render
   // --------------------------------------------------
   renderBlock(block) {
