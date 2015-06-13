@@ -21,6 +21,7 @@ class StoryEditable extends Component {
   // --------------------------------------------------
   handleMouseEnter(event) {
     var range = document.createRange();
+
     range.setStartBefore(event.target);
     range.setEndAfter(event.target);
 
@@ -51,12 +52,14 @@ class StoryEditable extends Component {
       var node;
       var children = block.childNodes;
       var complete = false;
+
       for (var i = 0; i < children.length && !complete; i += 1) {
         if (children[i].isContentEditable) {
           node = children[i];
           complete = true;
         }
       }
+
       node.focus();
 
       var selection = window.getSelection();
@@ -64,6 +67,7 @@ class StoryEditable extends Component {
 
       if (point.shouldFloor) {
         var floorOffset = Selector.findFloorOffset(node, 30);
+
         caretOffset += floorOffset;
       }
 
@@ -71,13 +75,16 @@ class StoryEditable extends Component {
         var complete = false;
         var currentNode = node;
         var walker = Selector.createTreeWalker(node);
+
         while (walker.nextNode() && !complete) {
           currentNode = walker.currentNode;
+
           if (caretOffset - currentNode.length <= 0) {
             range.setStart(currentNode, caretOffset);
             range.setEnd(currentNode, caretOffset);
             complete = true;
           }
+
           caretOffset -= currentNode.length;
         }
 
@@ -106,8 +113,10 @@ class StoryEditable extends Component {
 
   createHandlers() {
     var links = $(".element-link");
+
     for (var i = 0; i < links.length; i += 1) {
       var link = links[i];
+
       link.addEventListener("mouseenter", this.handleMouseEnter.bind(this));
       link.addEventListener("mouseleave", this.handleMouseLeave.bind(this));
     }
@@ -149,8 +158,7 @@ class StoryEditable extends Component {
   }
 
   renderSections() {
-    var sections = this.props.story.get("sections");
-    return sections.map(this.renderSection, this);
+    return this.props.story.get("sections").map(this.renderSection, this);
   }
 
   render() {
@@ -167,15 +175,18 @@ StoryEditable.propTypes = {
   shouldEnableEdits: React.PropTypes.bool.isRequired,
   shouldUpdateStory: React.PropTypes.bool.isRequired,
   story: React.PropTypes.instanceOf(Story).isRequired,
-  updateLinker: React.PropTypes.func,
-  updateStates: React.PropTypes.func,
-  updateStory: React.PropTypes.func,
+  updateLinker: React.PropTypes.func.isRequired,
+  updateStates: React.PropTypes.func.isRequired,
+  updateStory: React.PropTypes.func.isRequired,
 };
 
 StoryEditable.defaultProps = {
   shouldEnableEdits: true,
   shouldUpdateStory: true,
   story: new Story(),
+  updateLinker: null,
+  updateStates: null,
+  updateStory: null,
 };
 
 

@@ -33,11 +33,13 @@ class StyleModal extends Component {
 
   handleClick(event) {
     event.stopPropagation();
+
     this.setState({ shouldShowInput: true });
   }
 
   handleFocus(event) {
-    event.stopPropagation()
+    event.stopPropagation();
+
     React.findDOMNode(this.refs.input).focus();
   }
 
@@ -47,8 +49,10 @@ class StyleModal extends Component {
 
   handleKeyPress(event) {
     event.stopPropagation();
+
     if (event.which === KeyConstants.enter) {
       var input = React.findDOMNode(this.refs.input);
+
       this.styleLink(input.value);
       input.blur();
     }
@@ -135,8 +139,10 @@ class StyleModal extends Component {
       var currentNode;
       var complete = false;
       var walker = Selector.createTreeWalker(startBlock);
+
       while (walker.nextNode() && !complete) {
         currentNode = walker.currentNode;
+
         if (startCaretOffset - currentNode.length < 0) {
           range.setStart(currentNode, startCaretOffset);
           complete = true;
@@ -147,8 +153,10 @@ class StyleModal extends Component {
 
       complete = false;
       walker = Selector.createTreeWalker(endBlock);
+
       while (walker.nextNode() && !complete) {
         currentNode = walker.currentNode;
+
         if (endCaretOffset - currentNode.length <= 0) {
           range.setEnd(currentNode, endCaretOffset);
           complete = true;
@@ -167,6 +175,7 @@ class StyleModal extends Component {
     var rectangle = range.getBoundingClientRect();
     var modal = React.findDOMNode(this.refs.modal);
     var offset = rectangle.width / 2 - modal.offsetWidth / 2;
+
     modal.style.top = rectangle.top - 44 + "px";
     modal.style.left = rectangle.left + offset + "px";
   }
@@ -248,50 +257,48 @@ class StyleModal extends Component {
   }
 
   renderOptions() {
-    var activeStyles = this.props.activeStyles;
-    var propsHashes = [
+    return [
       {
         action: this.styleHeadingOne.bind(this),
-        active: activeStyles[TypeConstants.block.headingOne],
+        active: this.props.activeStyles[TypeConstants.block.headingOne],
         className: "fa fa-header",
       },
       {
         action: this.styleHeadingTwo.bind(this),
-        active: activeStyles[TypeConstants.block.headingTwo],
+        active: this.props.activeStyles[TypeConstants.block.headingTwo],
         className: "fa fa-header",
       },
       {
         action: this.styleHeadingThree.bind(this),
-        active: activeStyles[TypeConstants.block.headingThree],
+        active: this.props.activeStyles[TypeConstants.block.headingThree],
         className: "fa fa-header",
       },
       {
         action: this.styleQuote.bind(this),
-        active: activeStyles[TypeConstants.block.quote],
+        active: this.props.activeStyles[TypeConstants.block.quote],
         className: "fa fa-quote-right",
       },
       {
         action: this.styleCentered.bind(this),
-        active: activeStyles[TypeConstants.block.centered],
+        active: this.props.activeStyles[TypeConstants.block.centered],
         className: "fa fa-align-center",
       },
       {
         action: this.styleBold.bind(this),
-        active: activeStyles[TypeConstants.element.bold],
+        active: this.props.activeStyles[TypeConstants.element.bold],
         className: "fa fa-bold",
       },
       {
         action: this.styleItalic.bind(this),
-        active: activeStyles[TypeConstants.element.italic],
+        active: this.props.activeStyles[TypeConstants.element.italic],
         className: "fa fa-italic",
       },
       {
         action: this.handleClick.bind(this),
-        active: activeStyles[TypeConstants.block.headingThree],
+        active: this.props.activeStyles[TypeConstants.block.headingThree],
         className: "fa fa-link",
       },
-    ];
-    return propsHashes.map(this.renderOption, this);
+    ].map(this.renderOption, this);
   }
 
   render() {
@@ -299,6 +306,7 @@ class StyleModal extends Component {
       { "style-modal": true },
       { "general-hidden": !this.props.vector }
     );
+
     return (
       <div className={modalClass} ref="modal">
         <span className={"vertical-anchor"}></span>
@@ -313,13 +321,15 @@ class StyleModal extends Component {
 StyleModal.propTypes = {
   activeStyles: React.PropTypes.object.isRequired,
   shouldUpdateStyler: React.PropTypes.bool.isRequired,
-  updateStates: React.PropTypes.func,
+  updateStates: React.PropTypes.func.isRequired,
   vector: React.PropTypes.instanceOf(Vector),
 };
 
 StyleModal.defaultProps = {
   activeStyles: {},
   shouldUpdateStyler: true,
+  updateStates: null,
+  vector: null,
 };
 
 

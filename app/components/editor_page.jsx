@@ -93,22 +93,26 @@ class EditorPage extends Component {
           event.which <= KeyConstants.down) {
         var mouseState = EditorStore.mouseState;
         var vector = Selector.generateVector(selection);
+
         EditorActor.updateVector(vector);
 
         if (mouseState !== TypeConstants.mouse.move) {
           this.updateStory();
         }
+
         this.updateStyler();
       }
     } else if (EditorStore.mouseState === TypeConstants.mouse.move) {
       if (event.which === KeyConstants.backspace) {
         event.preventDefault();
+
         var vector = Selector.generateVector(selection);
 
         EditorActor.removeBlocks(vector);
         this.updateStates();
       } else if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
         event.preventDefault();
+
         var vector = Selector.generateVector(selection);
 
         if (event.which === KeyConstants.left || event.which === KeyConstants.up) {
@@ -125,6 +129,7 @@ class EditorPage extends Component {
   handleKeyPress(event) {
     if (EditorStore.mouseState === TypeConstants.mouse.move) {
       event.preventDefault();
+
       var selection = window.getSelection();
       var vector = Selector.generateVector(selection);
 
@@ -145,6 +150,7 @@ class EditorPage extends Component {
           }
         } else {
           var character = String.fromCharCode(event.which);
+
           EditorActor.removeBlocks(vector, { character: character });
           this.updateStates();
         }
@@ -154,17 +160,20 @@ class EditorPage extends Component {
 
   handleKeyUp(event) {
     var selection = window.getSelection();
+
     if (event.shiftKey &&
         selection.type === TypeConstants.selection.range &&
         event.which >= KeyConstants.left &&
         event.which <= KeyConstants.down) {
       var mouseState = EditorStore.mouseState;
       var vector = Selector.generateVector(selection);
+
       EditorActor.updateVector(vector);
 
       if (mouseState !== TypeConstants.mouse.move) {
         this.updateStory();
       }
+
       this.updateStyler();
     }
   }
@@ -179,8 +188,10 @@ class EditorPage extends Component {
 
   handleMouseUp(event) {
     var selection = window.getSelection();
+
     if (EditorStore.mouseState === TypeConstants.mouse.move) {
       var vector = Selector.generateVector(selection);
+
       EditorActor.updateVector(vector);
       this.updateStyler();
     } else if (EditorStore.mouseState === TypeConstants.mouse.down) {

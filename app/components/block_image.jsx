@@ -44,9 +44,11 @@ class BlockImage extends Component {
 
   handleKeyDown(event) {
     event.preventDefault();
+
     if (event.which === KeyConstants.backspace) {
       var block = this.props.block;
       var point = new Point(block.get("section_index"), block.get("index"), 0);
+
       EditorActor.removeBlock(point);
       this.props.updateStory();
     }
@@ -90,6 +92,7 @@ class BlockImage extends Component {
       { "block-image": true },
       { "block-image-bordered": this.state.shouldShowBorder }
     );
+
     return (
       <div
         className={"block-container"}
@@ -117,12 +120,13 @@ class BlockImage extends Component {
 BlockImage.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
   shouldEnableEdits: React.PropTypes.bool.isRequired,
-  updateStory: React.PropTypes.func,
+  updateStory: React.PropTypes.func.isRequired,
 };
 
 BlockImage.defaultProps = {
   block: new Block(),
   shouldEnableEdits: true,
+  updateStory: null,
 };
 
 

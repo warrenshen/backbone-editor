@@ -11,9 +11,7 @@ class BlockHeading extends BlockComponent {
   // --------------------------------------------------
   // Render
   // --------------------------------------------------
-  renderEditable() {
-    var block = this.props.block;
-    var type = block.get("type");
+  renderEditable(block, type) {
     var contentClass = ClassNames(
       { "block-content": true },
       { "block-centered": block.get("centered") },
@@ -21,6 +19,7 @@ class BlockHeading extends BlockComponent {
       { "block-heading-two": type === TypeConstants.block.headingTwo },
       { "block-heading-three": type === TypeConstants.block.headingThree }
     );
+
     return (
       <p
         className={contentClass}
@@ -32,13 +31,15 @@ class BlockHeading extends BlockComponent {
 
   render() {
     var block = this.props.block;
+    var type = block.get("type");
+
     switch (block.get("type")) {
       case TypeConstants.block.headingOne:
         return (
           <h1
             className={"block-container"}
             data-index={block.get("index")}>
-            {this.renderEditable()}
+            {this.renderEditable(block, type)}
           </h1>
         );
       case TypeConstants.block.headingTwo:
@@ -46,7 +47,7 @@ class BlockHeading extends BlockComponent {
           <h2
             className={"block-container"}
             data-index={block.get("index")}>
-            {this.renderEditable()}
+            {this.renderEditable(block, type)}
           </h2>
         );
       case TypeConstants.block.headingThree:
@@ -54,7 +55,7 @@ class BlockHeading extends BlockComponent {
           <h3
             className={"block-container"}
             data-index={block.get("index")}>
-            {this.renderEditable()}
+            {this.renderEditable(block, type)}
           </h3>
         );
     }

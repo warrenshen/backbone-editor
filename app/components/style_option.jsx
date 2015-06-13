@@ -27,6 +27,7 @@ class StyleOption extends Component {
       { "style-option": true },
       { "style-option-active": this.props.active }
     );
+
     return (
       <span className={optionClass} ref="option">
         <i className={this.props.className}></i>

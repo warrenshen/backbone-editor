@@ -30,6 +30,7 @@ class MediaModal extends Component {
   // --------------------------------------------------
   generatePoint() {
     var block = this.props.block;
+
     return new Point(block.get("section_index"), block.get("index"), 0);
   }
 
@@ -42,6 +43,7 @@ class MediaModal extends Component {
 
   handleChange(event) {
     var files = event.target.files;
+
     if (files && files[0]) {
       var block = new Block({ type: TypeConstants.block.image });
       var callback = this.props.updateStory;
@@ -61,6 +63,7 @@ class MediaModal extends Component {
 
   handleClick(event) {
     React.findDOMNode(this.refs.invisible).focus();
+
     if (!this.state.shouldShowOptions) {
       this.setState({ shouldShowOptions: true });
     } else {
@@ -84,6 +87,7 @@ class MediaModal extends Component {
   styleDivider(event) {
     var block = new Block({ type: TypeConstants.block.divider });
     var point = this.generatePoint();
+
     EditorActor.addBlock(block, point);
     this.props.updateStory();
   }
@@ -133,7 +137,7 @@ class MediaModal extends Component {
   }
 
   renderOptions() {
-    var propsHashes = [
+    return [
       {
         action: this.styleImage.bind(this),
         className: "fa fa-image",
@@ -146,8 +150,7 @@ class MediaModal extends Component {
         action: this.styleCode.bind(this),
         className: "fa fa-code",
       },
-    ];
-    return propsHashes.map(this.renderOption, this);
+    ].map(this.renderOption, this);
   }
 
   render() {
@@ -160,6 +163,7 @@ class MediaModal extends Component {
       { "media-modal-prompt": true },
       { "media-modal-prompt-open": this.state.shouldShowOptions }
     );
+
     return (
       <div className={modalClass}>
         <span className={promptClass} ref={"prompt"}>
@@ -185,11 +189,12 @@ class MediaModal extends Component {
 
 MediaModal.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
-  updateStory: React.PropTypes.func,
+  updateStory: React.PropTypes.func.isRequired,
 };
 
 MediaModal.defaultProps = {
   block: new Block(),
+  updateStory: null,
 };
 
 

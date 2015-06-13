@@ -41,6 +41,7 @@ class MediaOption extends Component {
       { "media-modal-option": true },
       { "media-modal-option-hidden": !this.props.active }
     );
+
     return (
       <span className={optionClass} ref={"option"}>
         <span className={"vertical-anchor"}></span>

@@ -9,7 +9,6 @@ class BlockDivider extends Component {
   // Render
   // --------------------------------------------------
   render() {
-    var block = this.props.block;
     return (
       <div className={"block-container"}>
         <hr className={"block-divider"}/>

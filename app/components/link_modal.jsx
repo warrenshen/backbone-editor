@@ -11,6 +11,7 @@ class LinkModal extends Component {
   positionModal(rectangle) {
     var modal = React.findDOMNode(this.refs.modal);
     var offset = rectangle.width / 2 - modal.offsetWidth / 2;
+
     modal.style.top = rectangle.bottom + 8 + "px";
     modal.style.left = rectangle.left + offset + "px";
   }
@@ -27,6 +28,7 @@ class LinkModal extends Component {
 
     if (link) {
       var content = React.findDOMNode(this.refs.content);
+
       content.innerHTML = link.content;
       this.positionModal(link.rectangle);
     }
@@ -44,6 +46,7 @@ class LinkModal extends Component {
       { "link-modal": true },
       { "general-hidden": !this.props.link }
     );
+
     return (
       <div className={modalClass} ref={"modal"}>
         <span className={"vertical-anchor"}></span>
@@ -60,6 +63,7 @@ LinkModal.propTypes = {
 };
 
 LinkModal.defaultProps = {
+  link: null,
   shouldUpdateLinker: false,
 };
 
