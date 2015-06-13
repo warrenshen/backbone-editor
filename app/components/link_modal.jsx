@@ -30,7 +30,7 @@ class LinkModal extends Component {
   // Lifecycle
   // --------------------------------------------------
   componentDidUpdate() {
-    if (true) {
+    if (false) {
       console.log("Link modal component updated.");
     }
 

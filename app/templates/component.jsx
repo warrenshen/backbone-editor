@@ -35,7 +35,10 @@ class Component extends React.Component {
   }
 
   setState(nextState) {
-    console.log("Setting state on: " + this.displayName());
+    if (false) {
+      console.log("Setting state on: " + this.displayName());
+    }
+
     _.merge(nextState, this.getStoreState());
     super.setState(nextState);
   }

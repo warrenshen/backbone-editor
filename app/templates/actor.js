@@ -6,7 +6,7 @@ class Actor {
   // Tell the dispatcher to dispatch given action.
   // @param action - hash with `type` and other params.
   act(action) {
-    if (true) {
+    if (false) {
       console.log("Dispatching action: " + action.type);
     }
 

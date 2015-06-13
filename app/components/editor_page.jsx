@@ -84,19 +84,18 @@ class EditorPage extends Component {
   // --------------------------------------------------
   handleKeyDown(event) {
     var selection = window.getSelection();
-    // We use selection.type === "Range" check when
-    // checking for arrow key events because they can
-    // happen without changing the store's mouse state.
+    var vector = Selector.generateVector(selection);
+
+    // We use a selection.type === TypeConstants.selection.range
+    // conditional for arrow key handling because arrow key events can
+    // create selections without changing the store's mouse state.
     if (event.shiftKey) {
       if (selection.type === TypeConstants.selection.range &&
           event.which >= KeyConstants.left &&
           event.which <= KeyConstants.down) {
-        var mouseState = EditorStore.mouseState;
-        var vector = Selector.generateVector(selection);
-
         EditorActor.updateVector(vector);
 
-        if (mouseState !== TypeConstants.mouse.move) {
+        if (EditorStore.mouseState !== TypeConstants.mouse.move) {
           this.updateStory();
         }
 
@@ -106,16 +105,14 @@ class EditorPage extends Component {
       if (event.which === KeyConstants.backspace) {
         event.preventDefault();
 
-        var vector = Selector.generateVector(selection);
-
         EditorActor.removeBlocks(vector);
         this.updateStates();
-      } else if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
+      } else if (event.which >= KeyConstants.left &&
+                 event.which <= KeyConstants.down) {
         event.preventDefault();
 
-        var vector = Selector.generateVector(selection);
-
-        if (event.which === KeyConstants.left || event.which === KeyConstants.up) {
+        if (event.which === KeyConstants.left ||
+            event.which === KeyConstants.up) {
           EditorActor.updatePoint(vector.startPoint);
         } else {
           EditorActor.updatePoint(vector.endPoint);

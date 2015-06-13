@@ -21,71 +21,89 @@ class BlockComponent extends Component {
   // --------------------------------------------------
   // Handlers
   // --------------------------------------------------
-  handleArrowKey(event, point) {
+  handleArrowHorizontal(event, point) {
     var block = this.props.block;
+    var caretOffset = point.caretOffset;
+
+    if (event.which === KeyConstants.left) {
+      if (caretOffset === 0) {
+        event.preventDefault();
+
+        EditorActor.shiftLeft(point);
+        this.props.updateStory();
+      }
+    } else {
+      if (point.caretOffset === block.length) {
+        event.preventDefault();
+
+        EditorActor.shiftRight(point);
+        this.props.updateStory();
+      }
+    }
+  }
+
+  handleArrowVertical(event, point) {
     var content = React.findDOMNode(this.refs.content);
     var caretOffset = point.caretOffset;
 
-    switch (event.which) {
-      case KeyConstants.down:
-        var floorOffset = Selector.findFloorOffset(content);
-        if (caretOffset >= floorOffset) {
-          event.preventDefault();
-          point.caretOffset = caretOffset - floorOffset;
-          EditorActor.shiftDown(point);
-          this.props.updateStory();
-        }
-        break;
+    if (event.which === KeyConstants.down) {
+      var floorOffset = Selector.findFloorOffset(content);
 
-      case KeyConstants.left:
-        if (point.caretOffset === 0) {
-          event.preventDefault();
-          EditorActor.shiftLeft(point);
-          this.props.updateStory();
-        }
-        break;
+      if (caretOffset >= floorOffset) {
+        event.preventDefault();
 
-      case KeyConstants.right:
-        if (point.caretOffset === block.length) {
-          event.preventDefault();
-          EditorActor.shiftRight(point);
-          this.props.updateStory();
-        }
-        break;
+        point.caretOffset = caretOffset - floorOffset;
+        EditorActor.shiftDown(point);
+        this.props.updateStory();
+      }
+    } else {
+      var ceilingOffset = Selector.findCeilingOffset(content);
 
-      case KeyConstants.up:
-        var ceilingOffset = Selector.findCeilingOffset(content);
-        if (caretOffset < ceilingOffset || caretOffset === 0 || ceilingOffset < 0) {
-          event.preventDefault();
-          EditorActor.shiftUp(point);
-          this.props.updateStory();
-        }
-        break;
+      if (caretOffset < ceilingOffset || caretOffset === 0 || ceilingOffset < 0) {
+        event.preventDefault();
+
+        EditorActor.shiftUp(point);
+        this.props.updateStory();
+      }
     }
   }
 
   handleKeyDown(event) {
+    event.stopPropagation();
+
     var selection = window.getSelection();
     var point = Selector.generatePoint(selection);
 
-    if (event.which >= KeyConstants.left && event.which <= KeyConstants.down) {
-      if (!event.shiftKey) {
-        this.handleArrowKey(event, point);
+    if (event.which >= KeyConstants.left &&
+        event.which <= KeyConstants.down &&
+        !event.shiftKey) {
+      switch (event.which) {
+        case KeyConstants.left:
+        case KeyConstants.right:
+          this.handleArrowHorizontal(event, point);
+          break;
+        case KeyConstants.down:
+        case KeyConstants.up:
+          this.handleArrowVertical(event, point);
+          break;
       }
     } else if (event.which === KeyConstants.backspace) {
       if (point.caretOffset !== 0) {
         var block = this.props.block;
         var caretOffset = point.caretOffset;
+
         block.removeFragment(caretOffset - 1, caretOffset);
 
         if (!block.get("content")) {
           event.preventDefault();
+
           point.caretOffset = 0;
           EditorActor.updatePoint(point);
           this.props.updateStory();
         }
       } else if (!point.matchesValues(0, 0)) {
         event.preventDefault();
+
         EditorActor.removeBlock(point);
         this.props.updateStory();
       }
@@ -132,13 +150,11 @@ class BlockComponent extends Component {
     if (EditorStore.mouseState !== TypeConstants.mouse.move) {
       event.stopPropagation();
 
-      EditorActor.updateMouseState(TypeConstants.mouse.up);
-
       var selection = window.getSelection();
       var range = document.caretRangeFromPoint(event.clientX, event.clientY);
 
-      selection.removeAllRanges()
-      selection.addRange(range)
+      selection.removeAllRanges();
+      selection.addRange(range);
 
       var point = Selector.generatePoint(selection);
 

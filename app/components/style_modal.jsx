@@ -203,7 +203,7 @@ class StyleModal extends Component {
   }
 
   componentDidUpdate() {
-    if (true) {
+    if (false) {
       console.log("Style modal component updated.");
     }
 
