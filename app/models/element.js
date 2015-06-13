@@ -32,24 +32,18 @@ class Element extends Model {
   // --------------------------------------------------
   clonePrefix(offset) {
     var start = this.get("start");
-    if (start < offset) {
-      var clone = new Element({ type: this.get("type") });
-      clone.setRange(start, offset);
-      return clone;
-    } else {
-      return null;
-    }
+    var clone = new Element({ type: this.get("type") });
+
+    clone.setRange(start, offset);
+    return (start < offset) ? clone : null;
   }
 
   cloneSuffix(offset) {
     var end = this.get("end");
-    if (end > offset) {
-      var clone = new Element({ type: this.get("type") });
-      clone.setRange(offset, end);
-      return clone;
-    } else {
-      return null;
-    }
+    var clone = new Element({ type: this.get("type") });
+
+    clone.setRange(offset, end);
+    return (end > offset) ? clone : null;
   }
 
   coincidesWith(other) {

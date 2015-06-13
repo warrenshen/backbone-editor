@@ -46,20 +46,21 @@ class Story extends Model {
   mergeSections() {
     var sections = this.get("sections");
 
-    var oldSections = [];
+    var removeBucket = [];
     var indices = _.range(0, sections.length - 1);
-    for (var index of indices) {
-      var leftSection = sections.at(index);
-      var rightSection = sections.at(index + 1);
 
-      if (leftSection.get("type") === rightSection.get("type")) {
-        rightSection.transferBlocks(leftSection);
-        oldSections.push(rightSection);
+    for (var index of indices) {
+      var beforeSection = sections.at(index);
+      var afterSection = sections.at(index + 1);
+
+      if (beforeSection.get("type") === afterSection.get("type")) {
+        afterSection.transferBlocks(beforeSection);
+        removeBucket.push(afterSection);
       }
     }
 
-    for (var oldSection of oldSections) {
-      sections.remove(oldSection);
+    for (var section of removeBucket) {
+      sections.remove(section);
     }
   }
 
