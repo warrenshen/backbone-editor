@@ -1,4 +1,5 @@
 import ClassNames from "classnames";
+import React from "react";
 
 import BlockComponent from "app/templates/block_component";
 

@@ -194,7 +194,6 @@ class Block extends Model {
 
     otherBlock.set("content", otherContent + content);
     otherBlock.mergeElements();
-    this.removeFragment(startOffset, this.length);
   }
 
   removeFragment(startOffset, endOffset) {

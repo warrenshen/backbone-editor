@@ -123,6 +123,16 @@ class EditorStore extends Store {
     this.updatePoint(point);
   }
 
+  mergeBlock(transferBlock, point) {
+    var story = this._story;
+    var section = story.get("sections").at(point.sectionIndex);
+    var blocks = section.get("blocks");
+    var block = blocks.at(point.blockIndex);
+
+    transferBlock.transferFragment(block, 0);
+    blocks.remove(transferBlock);
+  }
+
   removeBlock(point) {
     var sectionIndex = point.sectionIndex;
     var blockIndex = point.blockIndex;
@@ -526,6 +536,9 @@ class EditorStore extends Store {
     switch (action.type) {
       case ActionConstants.editor.addBlock:
         this.addBlock(action.block, action.point);
+        break;
+      case ActionConstants.editor.mergeBlock:
+        this.mergeBlock(action.block, action.point);
         break;
       case ActionConstants.editor.removeBlock:
         this.removeBlock(action.point);

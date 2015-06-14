@@ -38,43 +38,6 @@ class Paster {
     }
   }
 
-  parseContainer(container, point) {
-    var sectionIndex = point.sectionIndex;
-    var blockIndex = point.blockIndex;
-
-    var currentBlock = EditorStore.currentBlock(sectionIndex, blockIndex);
-    var length = currentBlock.length;
-    var nodes = $("p, h1, h2, h3, h4, h5, blockquote, img, hr", container);
-
-    if (nodes.length) {
-      if (length) {
-        $.fn.shift = [].shift;
-        var node = nodes.shift();
-        var block = this.createBlock(node);
-
-        EditorActor.addBlock(block, point.clone());
-        point.blockIndex += 1;
-      }
-
-      for (var i = 0; i < nodes.length; i += 1) {
-        var node = nodes[i];
-        var block = this.createBlock(node);
-
-        EditorActor.addBlock(block, point.clone());
-        point.blockIndex += 1;
-      }
-    } else {
-      var elements = container.childNodes;
-      var fragment = container.textContent;
-
-      block.addFragment(length, fragment);
-      this.createElements(block, elements, length);
-
-      point.caretOffset = length + fragment.length;
-      EditorActor.updatePoint(point);
-    }
-  }
-
   createElements(block, elements, offset=0) {
     for (var i = 0; i < elements.length; i += 1) {
       var node = elements[i];
@@ -117,6 +80,43 @@ class Paster {
         return TypeConstants.block.headingThree;
       default:
         return TypeConstants.block.standard;
+    }
+  }
+
+  parseContainer(container, point) {
+    var sectionIndex = point.sectionIndex;
+    var blockIndex = point.blockIndex;
+
+    var currentBlock = EditorStore.currentBlock(sectionIndex, blockIndex);
+    var length = currentBlock.length;
+    var nodes = $("p, h1, h2, h3, h4, h5, blockquote, img, hr", container);
+
+    if (nodes.length) {
+      if (length) {
+        $.fn.shift = [].shift;
+        var node = nodes.shift();
+        var block = this.createBlock(node);
+
+        EditorActor.mergeBlock(block, point.clone());
+        point.blockIndex += 1;
+      }
+
+      for (var i = 0; i < nodes.length; i += 1) {
+        var node = nodes[i];
+        var block = this.createBlock(node);
+
+        EditorActor.addBlock(block, point.clone());
+        point.blockIndex += 1;
+      }
+    } else {
+      var elements = container.childNodes;
+      var fragment = container.textContent;
+
+      currentBlock.addFragment(length, fragment);
+      this.createElements(block, elements, length);
+
+      point.caretOffset = length + fragment.length;
+      EditorActor.updatePoint(point);
     }
   }
 }
