@@ -7,6 +7,8 @@ import LinkModal from "app/components/link_modal";
 import StoryEditable from "app/components/story_editable";
 import StyleModal from "app/components/style_modal";
 
+import Block from "app/models/block";
+
 import EditorStore from "app/stores/editor_store";
 
 import EditorActor from "app/actors/editor_actor";
@@ -190,9 +192,64 @@ class EditorPage extends Component {
     this.updateStyler();
   }
 
+  // --------------------------------------------------
+  // Helpers
+  // --------------------------------------------------
   createModels(container, point) {
-    console.log(container);
-    console.log(point);
+    var sectionIndex = point.sectionIndex;
+    var blockIndex = point.blockIndex;
+
+    var block = EditorStore.currentBlock(sectionIndex, blockIndex);
+    var length = block.length;
+    var nodes = $("p, h1, h2, h3, h4, h5, blockquote, img, hr", container);
+
+    if (nodes.length) {
+      if (!length) {
+        for (var i = 0; i < nodes.length; i += 1) {
+          var node = nodes[i];
+          var block;
+
+          if (node.nodeName === "IMG") {
+            block = new Block({
+              type: TypeConstants.block.image,
+              source: node.src,
+            });
+          } else if (node.nodeName === "HR") {
+            block = new Block({ type: TypeConstants.block.divider });
+          } else {
+            var type = this.findNodeType(node);
+            block = new Block({
+              content: node.textContent,
+              type: type,
+            });
+
+            if (type === TypeConstants.block.standard) {
+
+            }
+
+            EditorActor.addBlock(block, point.clone());
+            point.blockIndex += 1;
+          }
+        }
+      }
+    }
+
+    this.updateStory();
+  }
+
+  findNodeType(node) {
+    switch (node.nodeName) {
+      case "H1":
+        return TypeConstants.block.headingOne;
+      case "H2":
+        return TypeConstants.block.headingTwo;
+      case "H3":
+      case "H4":
+      case "H5":
+        return TypeConstants.block.headingThree;
+      default:
+        return TypeConstants.block.standard;
+    }
   }
 
   // --------------------------------------------------
