@@ -167,24 +167,18 @@ class EditorPage extends Component {
   }
 
   handlePaste(event) {
+    // TODO: Set up support for pasting with active selection.
     var selection = window.getSelection();
-    var anchorNode = selection.anchorNode;
+    var point = Selector.generatePoint(selection);
 
-    if (anchorNode) {
-      var parentNode = Selector.findParentNode(anchorNode);
-      var blockIndex = parseInt(parentNode.dataset.index);
+    if (point) {
+      event.preventDefault();
 
-      if (blockIndex >= 0) {
-        event.preventDefault();
+      var html = event.clipboardData.getData("text/html");
+      var container = document.createElement("div");
 
-        var html = event.clipboardData.getData("text/html");
-        var container = document.createElement("div");
-
-        container.innerHTML = html;
-
-        var parents = $("p, h1, h2, h3, h4, h5, blockquote, img, hr", container);
-        console.log(parents);
-      }
+      container.innerHTML = html;
+      this.createModels(container, point);
     }
   }
 
@@ -194,6 +188,11 @@ class EditorPage extends Component {
 
   handleResize(event) {
     this.updateStyler();
+  }
+
+  createModels(container, point) {
+    console.log(container);
+    console.log(point);
   }
 
   // --------------------------------------------------
