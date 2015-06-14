@@ -57,7 +57,7 @@ class Block extends Model {
       var length = fragment.length;
 
       if (element.get("start") >= offset) {
-        element.increment(length);
+        element.incrementOffsets(length);
       } else if (end >= offset) {
         element.set("end", end + length);
       }
@@ -114,7 +114,7 @@ class Block extends Model {
 
     for (var element of otherElements.models) {
       // TODO: Create an increment range method.
-      element.increment(offset);
+      element.incrementOffsets(offset);
       elements.push(element);
     }
 

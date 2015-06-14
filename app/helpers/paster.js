@@ -60,7 +60,7 @@ class Paster {
       }
 
       if (element) {
-        element.setRange(offset, offset + length);
+        element.setOffsets(offset, offset + length);
         block.parseElement(element);
       }
 

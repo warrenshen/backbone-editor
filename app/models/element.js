@@ -30,29 +30,13 @@ class Element extends Model {
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------
-  clonePrefix(offset) {
-    var start = this.get("start");
-    var clone = new Element({ type: this.get("type") });
-
-    clone.setRange(start, offset);
-    return (start < offset) ? clone : null;
-  }
-
-  cloneSuffix(offset) {
-    var end = this.get("end");
-    var clone = new Element({ type: this.get("type") });
-
-    clone.setRange(offset, end);
-    return (end > offset) ? clone : null;
-  }
-
   completelyBounds(other) {
     return this.get("type") === other.get("type") &&
            this.get("start") <= other.get("start") &&
            this.get("end") >= other.get("end");
   }
 
-  increment(value) {
+  incrementOffsets(value) {
     this.set("start", this.get("start") + value);
     this.set("end", this.get("end") + value);
   }
@@ -61,7 +45,7 @@ class Element extends Model {
     if (this.get("type") === element.get("type") &&
         this.get("start") <= element.get("end") &&
         this.get("end") >= element.get("start")) {
-      this.setRange(
+      this.setOffsets(
         Math.min(this.get("start"), element.get("start")),
         Math.max(this.get("end"), element.get("end"))
       );
@@ -95,7 +79,7 @@ class Element extends Model {
     return clones;
   }
 
-  setRange(startOffset, endOffset) {
+  setOffsets(startOffset, endOffset) {
     this.set("start", startOffset);
     this.set("end", endOffset);
   }

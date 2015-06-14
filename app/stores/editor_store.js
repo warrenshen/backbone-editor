@@ -413,13 +413,13 @@ class EditorStore extends Store {
         var element = new Element({ type: which, link: link });
 
         if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
-          element.setRange(startCaretOffset, endCaretOffset);
+          element.setOffsets(startCaretOffset, endCaretOffset);
         } else if (blockIndex === blockIndices[0]) {
-          element.setRange(startCaretOffset, block.length);
+          element.setOffsets(startCaretOffset, block.length);
         } else if (blockIndex === blockIndices[blockIndices.length - 1]) {
-          element.setRange(0, endCaretOffset);
+          element.setOffsets(0, endCaretOffset);
         } else {
-          element.setRange(0, block.length);
+          element.setOffsets(0, block.length);
         }
 
         block.parseElement(element);
