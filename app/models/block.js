@@ -45,8 +45,8 @@ class Block extends Model {
   // Methods
   // --------------------------------------------------
   addFragment(fragment, offset) {
-    var elements = this.get("elements");
     var content = this.get("content");
+    var elements = this.get("elements");
 
     this.set("content", content.substring(0, offset) +
                         fragment +
@@ -96,6 +96,7 @@ class Block extends Model {
 
   mergeElements() {
     var elements = this.get("elements");
+
     elements.comparator = this.elementComparator;
     elements.sort();
 
@@ -107,20 +108,40 @@ class Block extends Model {
     }
   }
 
-  // TODO: Fix and refactor this method.
   mergeBlock(block, offset) {
+    var content = this.get("content");
     var elements = this.get("elements");
-    var otherElements = otherBlock.get("elements");
+
+    var otherContent = block.get("content");
+    var otherElements = block.get("elements");
 
     for (var element of otherElements.models) {
-      // TODO: Create an increment range method.
       element.incrementOffsets(offset);
       elements.push(element);
     }
 
-    // TODO: This add fragment will result in incorrect element ranges.
-    this.addFragment(otherBlock.get("content"), offset);
-    this.mergeElements();
+    this.set("content", content.substring(0, offset) +
+                        otherContent +
+                        content.substring(offset));
+
+    var bucket = [];
+
+    for (var i = 0; i < elements.length; i += 1) {
+      var element = elements.at(i);
+
+      if (element.get("start") > offset && element.get("end") < offset) {
+        var clones = element.partialClones(offset, offset);
+
+        clones[1].incrementOffsets(otherContent.length);
+        bucket.concat(clones);
+        elements.remove(element);
+        i -= 1;
+      }
+    }
+
+    for (var element of bucket) {
+      elements.push(element);
+    }
   }
 
   parseElement(target) {
@@ -152,19 +173,10 @@ class Block extends Model {
     this.mergeElements();
   }
 
-  // TODO: Fix and refactor this method.
-  partialClone(offset) {
-    var clone = new Block({
-      content: content.substring(offset),
-      type: this.get("type"),
-    });
+  partialClones(offset) {
+    var clones = [];
+    var content = this.get("content");
     var elements = this.get("elements");
-    var cloneElements = clone.get("elements");
-
-    for (var element of elements.models) {
-
-    }
-
   }
 
   removeFragment(firstOffset, lastOffset) {

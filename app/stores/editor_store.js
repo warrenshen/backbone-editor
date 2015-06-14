@@ -114,6 +114,7 @@ class EditorStore extends Store {
   addBlock(block, point) {
     var story = this._story;
     var section = story.get("sections").at(point.sectionIndex);
+
     section.addBlock(block, point.blockIndex);
 
     if (block.get("type") === TypeConstants.block.divider) {
@@ -129,8 +130,8 @@ class EditorStore extends Store {
     var blocks = section.get("blocks");
     var block = blocks.at(point.blockIndex);
 
-    block.mergeFragment(mergeBlock, point.caretOffset);
-    blocks.remove(transferBlock);
+    block.mergeBlock(mergeBlock, point.caretOffset);
+    blocks.remove(mergeBlock);
   }
 
   removeBlock(point) {
@@ -148,7 +149,7 @@ class EditorStore extends Store {
     if (priorBlock.get("type") === TypeConstants.block.divider) {
       currentSection.removeBlock(priorBlock);
     } else if (currentBlock.get("type") !== TypeConstants.block.image) {
-      currentBlock.transferFragment(priorBlock, 0);
+      priorBlock.mergeBlock(currentBlock, priorBlock.length);
       currentSection.removeBlock(currentBlock);
     } else {
       return;
@@ -173,14 +174,16 @@ class EditorStore extends Store {
     var story = this._story;
     var sections = story.get("sections");
 
-    var oldSections = [];
+    var sectionBucket = [];
     var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
+
     for (var sectionIndex of sectionIndices) {
       var section = sections.at(sectionIndex);
       var blocks = section.get("blocks");
 
       var blockIndices;
       var complete = false;
+
       if (startSectionIndex === endSectionIndex) {
         blockIndices = _.range(startBlockIndex, endBlockIndex + 1);
       } else if (sectionIndex === startSectionIndex) {
@@ -188,50 +191,48 @@ class EditorStore extends Store {
       } else if (sectionIndex === endSectionIndex) {
         blockIndices = _.range(0, endBlockIndex + 1);
       } else {
-        oldSections.push(section);
+        sectionBucket.push(section);
         complete = true;
       }
 
       if (!complete) {
-        var oldBlocks = [];
+        var blockBucket = [];
+
         for (var blockIndex of blockIndices) {
           var block = blocks.at(blockIndex);
+
           if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
             block.removeFragment(startCaretOffset, endCaretOffset);
           } else if (blockIndex === blockIndices[0]) {
             block.removeFragment(startCaretOffset, block.length);
-          } else if (blockIndex === blockIndices[blockIndices.length - 1]) {
-            if (endCaretOffset === block.length) {
-              oldBlocks.push(block);
-            } else {
-              block.removeFragment(0, endCaretOffset);
-            }
+          } else if (blockIndex === blockIndices[blockIndices.length - 1] &&
+                     endCaretOffset !== block.length) {
+            block.removeFragment(0, endCaretOffset);
           } else {
-            oldBlocks.push(block);
+            blockBucket.push(block);
           }
         }
 
-        for (var oldBlock of oldBlocks) {
-          blocks.remove(oldBlock);
+        for (var block of blockBucket) {
+          blocks.remove(block);
         }
 
         section.updateIndices();
       }
     }
 
-    for (var oldSection of oldSections) {
-      section.remove(oldSections);
+    for (var section of sectionBucket) {
+      sections.remove(section);
     }
 
     if (options.character || options.enter) {
-      var startSection = sections.at(startSectionIndex);
-      var startBlock = startSection.get("blocks").at(startBlockIndex);
+      var startBlock = this.currentBlock(startSectionIndex, startBlockIndex);
 
       if (options.character) {
         startBlock.addFragment(options.character, startCaretOffset);
         startPoint.caretOffset += 1;
       } else if (options.enter) {
-        var newBlock = new Block();
+        // TODO: This needs fixing.
         startBlock.transferFragment(newBlock, startCaretOffset);
         startSection.addBlock(newBlock, startBlockIndex + 1);
       }
@@ -247,6 +248,7 @@ class EditorStore extends Store {
 
     var currentBlock = this.currentBlock(sectionIndex, blockIndex);
     var nextBlock = this.nextBlock(sectionIndex, blockIndex);
+
     while (nextBlock && nextBlock.get("type") === TypeConstants.block.divider) {
       nextBlock = this.nextBlock(nextBlock.get("section_index"), nextBlock.get("index"));
     }
@@ -263,6 +265,7 @@ class EditorStore extends Store {
 
   shiftLeft(point) {
     var priorBlock = this.priorBlock(point.sectionIndex, point.blockIndex);
+
     while (priorBlock && priorBlock.get("type") === TypeConstants.block.divider) {
       priorBlock = this.priorBlock(priorBlock.get("section_index"), priorBlock.get("index"));
     }
