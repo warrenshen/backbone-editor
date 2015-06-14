@@ -48,18 +48,16 @@ class Block extends Model {
     var elements = this.get("elements");
     var content = this.get("content");
 
-    var beforeContent = content.substring(0, offset);
-    var afterContent = content.substring(offset);
-
-    this.set("content", beforeContent + fragment + afterContent);
+    this.set("content", content.substring(0, offset) +
+                        fragment +
+                        content.substring(offset));
 
     for (var element of elements.models) {
-      var start = element.get("start");
       var end = element.get("end");
       var length = fragment.length;
 
-      if (start >= offset) {
-        element.setRange(start + length, end + length);
+      if (element.get("start") >= offset) {
+        element.increment(length);
       } else if (end >= offset) {
         element.set("end", end + length);
       }
@@ -74,14 +72,17 @@ class Block extends Model {
     var elements = this.get("elements");
     var type = this.get("type");
 
+    var headingOne = TypeConstants.block.headingOne;
+    var headingTwo = TypeConstants.block.headingTwo;
+    var headingThree = TypeConstants.block.headingThree;
+    var quote = TypeConstants.block.quote;
     var styleBucket = [];
-    var constants = TypeConstants.block;
 
-    styleBucket.push([constants.centered, this.get("centered")]);
-    styleBucket.push([constants.headingOne, type === constants.headingOne]);
-    styleBucket.push([constants.headingTwo, type === constants.headingTwo]);
-    styleBucket.push([constants.headingThree, type === constants.headingThree]);
-    styleBucket.push([constants.quote, type === constants.quote]);
+    styleBucket.push([TypeConstants.block.centered, this.get("centered")]);
+    styleBucket.push([headingOne, type === headingOne]);
+    styleBucket.push([headingTwo, type === headingTwo]);
+    styleBucket.push([headingThree, type === headingThree]);
+    styleBucket.push([quote, type === quote]);
 
     for (var element of elements.models) {
       if (element.get("start") <= startOffset &&
@@ -98,24 +99,10 @@ class Block extends Model {
     elements.comparator = this.elementComparator;
     elements.sort();
 
-    var removeBucket = [];
-    var indices = _.range(0, elements.length - 1);
-
-    for (var index of indices) {
-      var beforeElement = elements.at(index);
-      var afterElement = elements.at(index + 1);
-
-      if (beforeElement.coincidesWith(afterElement)) {
-        var start = Math.min(beforeElement.get("start"), afterElement.get("start"));
-        var end = Math.max(beforeElement.get("end"), afterElement.get("end"));
-
-        afterElement.setRange(start, end);
-        removeBucket.push(beforeElement);
+    for (var i = 0; i < elements.length - 1; i += 1) {
+      if (elements.at(i).mergeElement(elements.at(i + 1))) {
+        elements.remove(elements.at(i + 1));
       }
-    }
-
-    for (var element of removeBucket) {
-      elements.remove(element);
     }
   }
 
@@ -125,7 +112,7 @@ class Block extends Model {
 
     for (var element of otherElements.models) {
       // TODO: Create an increment range method.
-      element.setRange(element.get("start") + offset, element.get("end") + offset);
+      element.increment(offset);
       elements.push(element);
     }
 
