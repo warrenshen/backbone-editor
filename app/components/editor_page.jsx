@@ -180,7 +180,7 @@ class EditorPage extends Component {
       var container = document.createElement("div");
 
       container.innerHTML = html;
-      this.createModels(container, point);
+      this.createBlocks(container, point);
     }
   }
 
@@ -195,7 +195,7 @@ class EditorPage extends Component {
   // --------------------------------------------------
   // Helpers
   // --------------------------------------------------
-  createModels(container, point) {
+  createBlocks(container, point) {
     var sectionIndex = point.sectionIndex;
     var blockIndex = point.blockIndex;
 
@@ -224,7 +224,8 @@ class EditorPage extends Component {
             });
 
             if (type === TypeConstants.block.standard) {
-
+              var elements = container.childNodes;
+              this.createElements(block, elements, 0);
             }
 
             EditorActor.addBlock(block, point.clone());
@@ -232,13 +233,28 @@ class EditorPage extends Component {
           }
         }
       }
+    } else {
+      var elements = container.childNodes;
+      var fragment = container.textContent;
+
+      block.addFragment(length, fragment);
+      this.createElements(block, elements, 0);
+
+      point.caretOffset = length + fragment.length;
+      EditorActor.updatePoint(point);
     }
 
     this.updateStory();
   }
 
+  createElements(block, elements, offset=0) {
+
+  }
+
   findNodeType(node) {
     switch (node.nodeName) {
+      case "BLOCKQUOTE":
+        return TypeConstants.block.quote;
       case "H1":
         return TypeConstants.block.headingOne;
       case "H2":

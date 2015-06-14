@@ -218,7 +218,7 @@ class EditorStore extends Store {
       var startBlock = startSection.get("blocks").at(startBlockIndex);
 
       if (options.character) {
-        startBlock.addCharacter(startCaretOffset, options.character);
+        startBlock.addFragment(startCaretOffset, options.character);
         startPoint.caretOffset += 1;
       } else if (options.enter) {
         var newBlock = new Block();

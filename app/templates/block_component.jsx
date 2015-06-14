@@ -136,7 +136,7 @@ class BlockComponent extends Component {
       var length = block.length;
       var character = String.fromCharCode(event.which);
 
-      block.addCharacter(point.caretOffset, character);
+      block.addFragment(point.caretOffset, character);
 
       if (!length) {
         event.preventDefault();

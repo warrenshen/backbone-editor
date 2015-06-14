@@ -44,23 +44,24 @@ class Block extends Model {
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------
-  addCharacter(offset, character) {
+  addFragment(offset, fragment) {
     var elements = this.get("elements");
     var content = this.get("content");
 
     var beforeContent = content.substring(0, offset);
     var afterContent = content.substring(offset);
 
-    this.set("content", beforeContent + character + afterContent);
+    this.set("content", beforeContent + fragment + afterContent);
 
     for (var element of elements.models) {
       var start = element.get("start");
       var end = element.get("end");
+      var length = fragment.length;
 
       if (start >= offset) {
-        element.setRange(start + 1, end + 1);
+        element.setRange(start + length, end + length);
       } else if (end >= offset) {
-        element.set("end", end + 1);
+        element.set("end", end + length);
       }
     }
   }
