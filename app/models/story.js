@@ -10,6 +10,9 @@ import ModelDirectory from "app/directories/model_directory";
 
 class Story extends Model {
 
+  // --------------------------------------------------
+  // Setup
+  // --------------------------------------------------
   initialize() {
     var section = new Section();
     section.addBlock(new Block());
@@ -42,31 +45,22 @@ class Story extends Model {
   // --------------------------------------------------
   addSection(section, index=0) {
     this.get("sections").add(section, { at: index });
-    this.updateSectionIndices();
+    this.updateIndices();
   }
 
   mergeSections() {
     var sections = this.get("sections");
 
-    var removeBucket = [];
-    var indices = _.range(0, sections.length - 1);
-
-    for (var index of indices) {
-      var beforeSection = sections.at(index);
-      var afterSection = sections.at(index + 1);
-
-      if (beforeSection.get("type") === afterSection.get("type")) {
-        afterSection.transferBlocks(beforeSection);
-        removeBucket.push(afterSection);
+    for (var i = 0; i < sections.length - 1; i += 1) {
+      if (sections.at(i).mergeSection(sections.at(i + 1))) {
+        sections.remove(sections.at(i + 1));
       }
     }
 
-    for (var section of removeBucket) {
-      sections.remove(section);
-    }
+    this.updateIndices();
   }
 
-  updateSectionIndices() {
+  updateIndices() {
     this.get("sections").map(function(section, index) {
       section.set("index", index);
     });

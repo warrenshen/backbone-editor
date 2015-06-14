@@ -123,13 +123,13 @@ class EditorStore extends Store {
     this.updatePoint(point);
   }
 
-  mergeBlock(transferBlock, point) {
+  mergeBlock(mergeBlock, point) {
     var story = this._story;
     var section = story.get("sections").at(point.sectionIndex);
     var blocks = section.get("blocks");
     var block = blocks.at(point.blockIndex);
 
-    transferBlock.transferFragment(block, 0);
+    block.mergeFragment(mergeBlock, point.caretOffset);
     blocks.remove(transferBlock);
   }
 
@@ -228,7 +228,7 @@ class EditorStore extends Store {
       var startBlock = startSection.get("blocks").at(startBlockIndex);
 
       if (options.character) {
-        startBlock.addFragment(startCaretOffset, options.character);
+        startBlock.addFragment(options.character, startCaretOffset);
         startPoint.caretOffset += 1;
       } else if (options.enter) {
         var newBlock = new Block();

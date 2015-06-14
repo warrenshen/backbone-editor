@@ -44,7 +44,7 @@ class Block extends Model {
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------
-  addFragment(offset, fragment) {
+  addFragment(fragment, offset) {
     var elements = this.get("elements");
     var content = this.get("content");
 
@@ -119,6 +119,21 @@ class Block extends Model {
     }
   }
 
+  mergeBlock(otherBlock, offset) {
+    var elements = this.get("elements");
+    var otherElements = otherBlock.get("elements");
+
+    for (var element of otherElements.models) {
+      // TODO: Create an increment range method.
+      element.setRange(element.get("start") + offset, element.get("end") + offset);
+      elements.push(element);
+    }
+
+    // TODO: This add fragment will result in incorrect element ranges.
+    this.addFragment(otherBlock.get("content"), offset);
+    this.mergeElements();
+  }
+
   parseElement(targetElement) {
     var elements = this.get("elements");
 
@@ -150,50 +165,18 @@ class Block extends Model {
     }
   }
 
-  transferFragment(otherBlock, startOffset) {
+  partialClone(offset) {
+    var clone = new Block({
+      content: content.substring(offset),
+      type: this.get("type"),
+    });
     var elements = this.get("elements");
-    var otherElements = otherBlock.get("elements");
-
-    var changeBucket = [];
-    var pushBucket = [];
-    var removeBucket = [];
+    var cloneElements = clone.get("elements");
 
     for (var element of elements.models) {
-      if (element.get("start") >= startOffset) {
-        changeBucket.push(element);
-        removeBucket.push(element);
-      } else if (element.get("end") > startOffset) {
-        var prefixElement = element.clonePrefix(startOffset);
-        var suffixElement = element.cloneSuffix(startOffset);
 
-        pushBucket.push(prefixElement);
-        changeBucket.push(suffixElement);
-        removeBucket.push(element);
-      }
     }
 
-    for (var element of pushBucket) {
-      elements.push(element);
-    }
-
-    for (var element of removeBucket) {
-      elements.remove(element);
-    }
-
-    for (var element of changeBucket) {
-      var anchorOffset = otherBlock.length - startOffset;
-      var start = element.get("start") + anchorOffset;
-      var end = element.get("end") + anchorOffset;
-
-      element.setRange(start, end);
-      otherElements.push(element);
-    }
-
-    var content = this.get("content").substring(startOffset);
-    var otherContent = otherBlock.get("content");
-
-    otherBlock.set("content", otherContent + content);
-    otherBlock.mergeElements();
   }
 
   removeFragment(startOffset, endOffset) {

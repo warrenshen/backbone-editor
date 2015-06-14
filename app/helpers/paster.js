@@ -31,14 +31,16 @@ class Paster {
 
       if (type === TypeConstants.block.standard) {
         var elements = node.childNodes;
-        this.createElements(block, elements, 0);
+        this.createElements(block, elements);
       }
 
       return block;
     }
   }
 
-  createElements(block, elements, offset=0) {
+  createElements(block, elements) {
+    var offset = 0;
+
     for (var i = 0; i < elements.length; i += 1) {
       var node = elements[i];
       var length = node.textContent.length;
@@ -86,9 +88,8 @@ class Paster {
   parseContainer(container, point) {
     var sectionIndex = point.sectionIndex;
     var blockIndex = point.blockIndex;
+    var caretOffset = point.caretOffset;
 
-    var currentBlock = EditorStore.currentBlock(sectionIndex, blockIndex);
-    var length = currentBlock.length;
     var nodes = $("p, h1, h2, h3, h4, h5, blockquote, img, hr", container);
 
     if (nodes.length) {
@@ -112,10 +113,15 @@ class Paster {
       var elements = container.childNodes;
       var fragment = container.textContent;
 
-      currentBlock.addFragment(length, fragment);
-      this.createElements(block, elements, length);
+      var block = new Block({
+        content: fragment,
+        type: TypeConstants.block.standard,
+      });
 
-      point.caretOffset = length + fragment.length;
+      this.createElements(block, elements);
+      EditorActor.mergeBlock(block, point.clone());
+
+      point.caretOffset = caretOffset + fragment.length;
       EditorActor.updatePoint(point);
     }
   }
