@@ -196,43 +196,54 @@ class EditorPage extends Component {
   // --------------------------------------------------
   // Helpers
   // --------------------------------------------------
+  createBlock(node) {
+    if (node.nodeName === "IMG") {
+      return new Block({
+        type: TypeConstants.block.image,
+        source: node.src,
+      });
+    } else if (node.nodeName === "HR") {
+      return new Block({ type: TypeConstants.block.divider });
+    } else {
+      var type = this.findNodeType(node);
+      var block = new Block({
+        content: node.textContent,
+        type: type,
+      });
+
+      if (type === TypeConstants.block.standard) {
+        var elements = node.childNodes;
+        this.createElements(block, elements, 0);
+      }
+
+      return block;
+    }
+  }
+
   createBlocks(container, point) {
     var sectionIndex = point.sectionIndex;
     var blockIndex = point.blockIndex;
 
-    var block = EditorStore.currentBlock(sectionIndex, blockIndex);
-    var length = block.length;
+    var currentBlock = EditorStore.currentBlock(sectionIndex, blockIndex);
+    var length = currentBlock.length;
     var nodes = $("p, h1, h2, h3, h4, h5, blockquote, img, hr", container);
 
     if (nodes.length) {
-      if (!length) {
-        for (var i = 0; i < nodes.length; i += 1) {
-          var node = nodes[i];
-          var block = null;
+      if (length) {
+        $.fn.shift = [].shift;
+        var node = nodes.shift();
+        var block = this.createBlock(node);
 
-          if (node.nodeName === "IMG") {
-            block = new Block({
-              type: TypeConstants.block.image,
-              source: node.src,
-            });
-          } else if (node.nodeName === "HR") {
-            block = new Block({ type: TypeConstants.block.divider });
-          } else {
-            var type = this.findNodeType(node);
-            block = new Block({
-              content: node.textContent,
-              type: type,
-            });
+        EditorActor.addBlock(block, point.clone())
+        point.blockIndex += 1;
+      }
 
-            if (type === TypeConstants.block.standard) {
-              var elements = node.childNodes;
-              this.createElements(block, elements, 0);
-            }
+      for (var i = 0; i < nodes.length; i += 1) {
+        var node = nodes[i];
+        var block = this.createBlock(node);
 
-            EditorActor.addBlock(block, point.clone());
-            point.blockIndex += 1;
-          }
-        }
+        EditorActor.addBlock(block, point.clone());
+        point.blockIndex += 1;
       }
     } else {
       var elements = container.childNodes;
