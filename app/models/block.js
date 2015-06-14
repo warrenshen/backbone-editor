@@ -64,6 +64,33 @@ class Block extends Model {
     }
   }
 
+  destructiveClone(offset) {
+    var block = new Block({
+      content: this.get("content").substring(offset),
+      type: this.get("type"),
+    });
+    var bucket = [];
+
+    var elements = this.get("elements");
+    var otherElements = block.get("elements");
+
+    for (var i = 0; i < elements.length; i += 1) {
+      var element = elements.at(i);
+
+      if (element.get("start") < offset && element.get("end") > offset) {
+        var clones = element.partialClones(offset, offset);
+        elements.remove(element);
+        bucket.push(clones[0]);
+        otherElements.push(clones[1]);
+        i -= 1;
+      }
+    }
+
+    for (var element of bucket) {
+      elements.push(element);
+    }
+  }
+
   elementComparator(element) {
     return [element.get("type"), element.get("start"), element.get("end")];
   }
@@ -171,12 +198,6 @@ class Block extends Model {
     }
 
     this.mergeElements();
-  }
-
-  partialClones(offset) {
-    var clones = [];
-    var content = this.get("content");
-    var elements = this.get("elements");
   }
 
   removeFragment(firstOffset, lastOffset) {

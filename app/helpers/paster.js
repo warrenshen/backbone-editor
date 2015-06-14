@@ -12,8 +12,6 @@ import TypeConstants from "app/constants/type_constants";
 
 class Paster {
 
-  // TODO: Support empty blocks, that may
-  // result from nodes of type div or type p.
   createBlock(node) {
     if (node.nodeName === "IMG") {
       return new Block({
@@ -86,18 +84,17 @@ class Paster {
   }
 
   parseContainer(container, point) {
-    var sectionIndex = point.sectionIndex;
-    var blockIndex = point.blockIndex;
-    var caretOffset = point.caretOffset;
-
+    var currentBlock = EditorStore.currentBlock(point.sectionIndex, point.blockIndex);
     var nodes = $("p, h1, h2, h3, h4, h5, blockquote, img, hr", container);
 
     if (nodes.length) {
-      if (length) {
+      if (currentBlock.length) {
         $.fn.shift = [].shift;
+
         var node = nodes.shift();
         var block = this.createBlock(node);
 
+        EditorActor.splitBlock(point.clone());
         EditorActor.mergeBlock(block, point.clone());
         point.blockIndex += 1;
       }
@@ -121,7 +118,7 @@ class Paster {
       this.createElements(block, elements);
       EditorActor.mergeBlock(block, point.clone());
 
-      point.caretOffset = caretOffset + fragment.length;
+      point.caretOffset = point.caretOffset + fragment.length;
       EditorActor.updatePoint(point);
     }
   }

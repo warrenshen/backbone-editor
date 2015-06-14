@@ -312,12 +312,11 @@ class EditorStore extends Store {
   }
 
   splitBlock(point) {
-    var sectionIndex = point.sectionIndex;
     var blockIndex = point.blockIndex;
     var caretOffset = point.caretOffset;
 
     var story = this._story;
-    var section = story.get("sections").at(sectionIndex);
+    var section = story.get("sections").at(point.sectionIndex);
     var block = section.get("blocks").at(blockIndex);
 
     var newBlock = new Block();
