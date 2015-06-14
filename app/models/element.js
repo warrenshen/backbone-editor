@@ -71,9 +71,33 @@ class Element extends Model {
     }
   }
 
-  setRange(start, end) {
-    this.set("start", start);
-    this.set("end", end);
+  partialClones(firstOffset, lastOffset) {
+    var clones = [];
+    var startOffset = this.get("start");
+    var endOffset = this.get("end");
+
+    if (firstOffset > startOffset) {
+      clones.push(new Element({
+        end: firstOffset,
+        start: startOffset,
+        type: this.get("type"),
+      }));
+    }
+
+    if (lastOffset < endOffset) {
+      clones.push(new Element({
+        end: endOffset,
+        start: lastOffset,
+        type: this.get("type"),
+      }));
+    }
+
+    return clones;
+  }
+
+  setRange(startOffset, endOffset) {
+    this.set("start", startOffset);
+    this.set("end", endOffset);
   }
 }
 

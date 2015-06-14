@@ -102,11 +102,13 @@ class Block extends Model {
     for (var i = 0; i < elements.length - 1; i += 1) {
       if (elements.at(i).mergeElement(elements.at(i + 1))) {
         elements.remove(elements.at(i + 1));
+        i -= 1;
       }
     }
   }
 
-  mergeBlock(otherBlock, offset) {
+  // TODO: Fix and refactor this method.
+  mergeBlock(block, offset) {
     var elements = this.get("elements");
     var otherElements = otherBlock.get("elements");
 
@@ -121,37 +123,36 @@ class Block extends Model {
     this.mergeElements();
   }
 
-  parseElement(targetElement) {
+  parseElement(target) {
     var elements = this.get("elements");
+    var bucket = [];
+    var complete = true;
 
-    var pushBucket = [];
-    var removeBucket = [];
+    for (var i = 0; i < elements.length; i += 1) {
+      var element = elements.at(i);
 
-    for (var element of elements.models) {
-      if (element.completelyBounds(targetElement)) {
-        var prefixElement = element.clonePrefix(targetElement.get("start"));
-        var suffixElement = element.cloneSuffix(targetElement.get("end"));
-
-        pushBucket.push(prefixElement);
-        pushBucket.push(suffixElement);
-        removeBucket.push(element);
+      if (element.completelyBounds(target)) {
+        var clones = element.partialClones(target.get("start"),
+                                           target.get("end"));
+        bucket = bucket.concat(clones);
+        elements.remove(element);
+        complete = false;
+        i -= 1;
       }
     }
 
-    if (removeBucket.length > 0) {
-      for (var element of removeBucket) {
-        elements.remove(element);
-      }
-
-      for (var element of pushBucket) {
+    if (!complete) {
+      for (var element of bucket) {
         elements.push(element);
       }
     } else {
-      elements.push(targetElement);
-      this.mergeElements();
+      elements.push(target);
     }
+
+    this.mergeElements();
   }
 
+  // TODO: Fix and refactor this method.
   partialClone(offset) {
     var clone = new Block({
       content: content.substring(offset),

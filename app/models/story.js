@@ -54,6 +54,7 @@ class Story extends Model {
     for (var i = 0; i < sections.length - 1; i += 1) {
       if (sections.at(i).mergeSection(sections.at(i + 1))) {
         sections.remove(sections.at(i + 1));
+        i -= 1;
       }
     }
 
