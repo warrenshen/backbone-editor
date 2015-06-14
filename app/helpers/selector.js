@@ -81,7 +81,7 @@ class Selector {
   }
 
   findParentNode(childNode) {
-    var parentNode = childNode.parentNode;
+    var parentNode = childNode;
 
     while (!parentNode.dataset || !parentNode.dataset.index) {
       parentNode = parentNode.parentNode;

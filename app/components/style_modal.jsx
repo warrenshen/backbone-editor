@@ -247,7 +247,9 @@ class StyleModal extends Component {
   renderInput() {
     if (this.state.shouldShowInput) {
       return (
-        <div className={"style-modal-overlay"}>
+        <div
+          className={"style-modal-overlay"}
+          data-index={"-1"}>
           <span className={"vertical-anchor"}></span>
           <input
             className={"style-modal-input"}

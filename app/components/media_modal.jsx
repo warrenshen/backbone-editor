@@ -84,6 +84,11 @@ class MediaModal extends Component {
     event.stopPropagation();
   }
 
+  handleMouseUp(event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
   // --------------------------------------------------
   // Actions
   // --------------------------------------------------
@@ -113,6 +118,7 @@ class MediaModal extends Component {
 
     var prompt = React.findDOMNode(this.refs.prompt);
     prompt.addEventListener("click", this.handleClick.bind(this));
+    prompt.addEventListener("mouseup", this.handleMouseUp.bind(this));
     prompt.addEventListener("mousedown", this.handleMouseDown.bind(this));
 
     var uploader = React.findDOMNode(this.refs.uploader);
@@ -125,6 +131,7 @@ class MediaModal extends Component {
 
     var prompt = React.findDOMNode(this.refs.prompt);
     prompt.removeEventListener("click", this.handleClick);
+    prompt.removeEventListener("mouseup", this.handleMouseUp);
     prompt.removeEventListener("mousedown", this.handleMouseDown);
 
     var uploader = React.findDOMNode(this.refs.uploader);

@@ -1,3 +1,4 @@
+import $ from "jquery";
 import React from "react";
 
 import Component from "app/templates/component";
@@ -84,9 +85,10 @@ class EditorPage extends Component {
   // --------------------------------------------------
   handleKeyDown(event) {
     var selection = window.getSelection();
-    var vector = Selector.generateVector(selection);
 
     if (selection.type === TypeConstants.selection.range) {
+      var vector = Selector.generateVector(selection);
+
       if (event.which >= KeyConstants.left &&
         event.which <= KeyConstants.down) {
         if (event.shiftKey) {
@@ -164,6 +166,28 @@ class EditorPage extends Component {
     }
   }
 
+  handlePaste(event) {
+    var selection = window.getSelection();
+    var anchorNode = selection.anchorNode;
+
+    if (anchorNode) {
+      var parentNode = Selector.findParentNode(anchorNode);
+      var blockIndex = parseInt(parentNode.dataset.index);
+
+      if (blockIndex >= 0) {
+        event.preventDefault();
+
+        var html = event.clipboardData.getData("text/html");
+        var container = document.createElement("div");
+
+        container.innerHTML = html;
+
+        var parents = $("p, h1, h2, h3, h4, h5, blockquote, img, hr", container);
+        console.log(parents);
+      }
+    }
+  }
+
   handleScroll(event) {
     this.updateStyler();
   }
@@ -178,6 +202,7 @@ class EditorPage extends Component {
   componentDidMount() {
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
     document.addEventListener("keypress", this.handleKeyPress.bind(this));
+    document.addEventListener("paste", this.handlePaste.bind(this));
 
     window.addEventListener("scroll", this.handleScroll.bind(this));
     window.addEventListener("resize", this.handleResize.bind(this));
@@ -190,6 +215,7 @@ class EditorPage extends Component {
   componentWillUnmount() {
     document.removeEventListener("keydown", this.handleKeyDown);
     document.removeEventListener("keypress", this.handleKeyPress);
+    document.removeEventListener("paste", this.handlePaste);
 
     window.removeEventListener("scroll", this.handleScroll);
     window.removeEventListener("resize", this.handleResize);
