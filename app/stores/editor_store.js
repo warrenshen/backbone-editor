@@ -215,7 +215,7 @@ class EditorStore extends Store {
           blocks.remove(oldBlock);
         }
 
-        section.updateBlockIndices();
+        section.updateIndices();
       }
     }
 
