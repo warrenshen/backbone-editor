@@ -8,6 +8,7 @@ import StoryEditable from "app/components/story_editable";
 import StyleModal from "app/components/style_modal";
 
 import Block from "app/models/block";
+import Element from "app/models/element";
 
 import EditorStore from "app/stores/editor_store";
 
@@ -207,7 +208,7 @@ class EditorPage extends Component {
       if (!length) {
         for (var i = 0; i < nodes.length; i += 1) {
           var node = nodes[i];
-          var block;
+          var block = null;
 
           if (node.nodeName === "IMG") {
             block = new Block({
@@ -224,7 +225,7 @@ class EditorPage extends Component {
             });
 
             if (type === TypeConstants.block.standard) {
-              var elements = container.childNodes;
+              var elements = node.childNodes;
               this.createElements(block, elements, 0);
             }
 
@@ -248,7 +249,31 @@ class EditorPage extends Component {
   }
 
   createElements(block, elements, offset=0) {
+    for (var i = 0; i < elements.length; i += 1) {
+      var node = elements[i];
+      var length = node.textContent.length;
+      var element = null;
 
+      if (node.nodeName === "STRONG") {
+        element = new Element({ type: TypeConstants.element.bold });
+      } else if (node.nodeName === "EM") {
+        element = new Element({ type: TypeConstants.element.italic });
+      } else if (node.nodeName === "A") {
+        var dataset = node.dataset;
+        var href = dataset.link ? dataset.link : node.attributes.href.value;
+        element = new Element({
+          link: href,
+          type: TypeConstants.element.link,
+        });
+      }
+
+      if (element) {
+        element.setRange(offset, offset + length);
+        block.parseElement(element);
+      }
+
+      offset += length;
+    }
   }
 
   findNodeType(node) {
