@@ -51,6 +51,10 @@ class Point {
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------
+  clone() {
+    return new Point(this._sectionIndex, this._blockIndex, this._caretOffset);
+  }
+
   compareDeeply(otherPoint) {
     var sectionDifference = this._sectionIndex - otherPoint.sectionIndex;
     var blockDifference = this._blockIndex - otherPoint.blockIndex;

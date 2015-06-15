@@ -22,6 +22,21 @@ module.exports = {
     up: "up",
   },
 
+  node: {
+    divider: "HR",
+    headingOne: "H1",
+    headingTwo: "H2",
+    headingThree: "H3",
+    headingFour: "H4",
+    headingFive: "H5",
+    image: "IMG",
+    quote: "BLOCKQUOTE",
+
+    bold: "STRONG",
+    italic: "EM",
+    link: "A",
+  },
+
   section: {
     standard: "standard",
   },

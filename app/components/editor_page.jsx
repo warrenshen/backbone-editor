@@ -6,10 +6,13 @@ import LinkModal from "app/components/link_modal";
 import StoryEditable from "app/components/story_editable";
 import StyleModal from "app/components/style_modal";
 
+import Block from "app/models/block";
+
 import EditorStore from "app/stores/editor_store";
 
 import EditorActor from "app/actors/editor_actor";
 
+import Paster from "app/helpers/paster";
 import Selector from "app/helpers/selector";
 
 import KeyConstants from "app/constants/key_constants";
@@ -84,9 +87,10 @@ class EditorPage extends Component {
   // --------------------------------------------------
   handleKeyDown(event) {
     var selection = window.getSelection();
-    var vector = Selector.generateVector(selection);
 
     if (selection.type === TypeConstants.selection.range) {
+      var vector = Selector.generateVector(selection);
+
       if (event.which >= KeyConstants.left &&
         event.which <= KeyConstants.down) {
         if (event.shiftKey) {
@@ -164,6 +168,25 @@ class EditorPage extends Component {
     }
   }
 
+  handlePaste(event) {
+    // TODO: Set up support for pasting with active selection.
+    var selection = window.getSelection();
+    var point = Selector.generatePoint(selection);
+
+    if (point) {
+      event.preventDefault();
+
+      var html = event.clipboardData.getData("text/html");
+      var container = document.createElement("div");
+
+      container.innerHTML = html;
+
+      if (Paster.parseContainer(container, point)) {
+        this.updateStory();
+      }
+    }
+  }
+
   handleScroll(event) {
     this.updateStyler();
   }
@@ -178,6 +201,7 @@ class EditorPage extends Component {
   componentDidMount() {
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
     document.addEventListener("keypress", this.handleKeyPress.bind(this));
+    document.addEventListener("paste", this.handlePaste.bind(this));
 
     window.addEventListener("scroll", this.handleScroll.bind(this));
     window.addEventListener("resize", this.handleResize.bind(this));
@@ -190,6 +214,7 @@ class EditorPage extends Component {
   componentWillUnmount() {
     document.removeEventListener("keydown", this.handleKeyDown);
     document.removeEventListener("keypress", this.handleKeyPress);
+    document.removeEventListener("paste", this.handlePaste);
 
     window.removeEventListener("scroll", this.handleScroll);
     window.removeEventListener("resize", this.handleResize);

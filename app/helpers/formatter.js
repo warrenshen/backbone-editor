@@ -64,7 +64,7 @@ class Formatter {
         content += openers[i].join("");
       }
 
-      content += (characters[i] === " ") ? "&nbsp;" : characters[i];
+      content += characters[i];
     }
 
     return content;

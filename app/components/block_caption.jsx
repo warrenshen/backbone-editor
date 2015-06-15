@@ -80,7 +80,7 @@ class BlockCaption extends Component {
       var character = String.fromCharCode(event.which);
       var point = Selector.generatePoint(selection);
 
-      this.props.block.addCharacter(point.caretOffset, character);
+      this.props.block.addFragment(character, point.caretOffset);
     } else if (selection.type === TypeConstants.selection.range) {
       event.preventDefault();
 
