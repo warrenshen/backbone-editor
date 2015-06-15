@@ -65,23 +65,33 @@ class Block extends Model {
   }
 
   destructiveClone(offset) {
+    var content = this.get("content");
     var block = new Block({
-      content: this.get("content").substring(offset),
+      content: content.substring(offset),
       type: this.get("type"),
     });
-    var bucket = [];
 
+    var bucket = [];
     var elements = this.get("elements");
     var otherElements = block.get("elements");
 
     for (var i = 0; i < elements.length; i += 1) {
       var element = elements.at(i);
+      var startOffset = element.get("start");
 
-      if (element.get("start") < offset && element.get("end") > offset) {
+      if (startOffset < offset && element.get("end") > offset) {
         var clones = element.partialClones(offset, offset);
+        var clone = clones[1];
+
         elements.remove(element);
         bucket.push(clones[0]);
-        otherElements.push(clones[1]);
+
+        clone.decrementOffsets(clone.get("start"));
+        otherElements.push(clone);
+        i -= 1;
+      } else if (startOffset >= offset) {
+        elements.remove(element);
+        otherElements.push(element.decrementOffsets(offset));
         i -= 1;
       }
     }
@@ -89,6 +99,9 @@ class Block extends Model {
     for (var element of bucket) {
       elements.push(element);
     }
+
+    this.set("content", content.substring(0, offset));
+    return block;
   }
 
   elementComparator(element) {

@@ -124,14 +124,14 @@ class EditorStore extends Store {
     this.updatePoint(point);
   }
 
-  mergeBlock(mergeBlock, point) {
+  mergeBlock(target, point) {
     var story = this._story;
     var section = story.get("sections").at(point.sectionIndex);
     var blocks = section.get("blocks");
     var block = blocks.at(point.blockIndex);
 
-    block.mergeBlock(mergeBlock, point.caretOffset);
-    blocks.remove(mergeBlock);
+    block.mergeBlock(target, point.caretOffset);
+    blocks.remove(target);
   }
 
   removeBlock(point) {
@@ -312,20 +312,15 @@ class EditorStore extends Store {
   }
 
   splitBlock(point) {
-    var blockIndex = point.blockIndex;
-    var caretOffset = point.caretOffset;
-
     var story = this._story;
     var section = story.get("sections").at(point.sectionIndex);
-    var block = section.get("blocks").at(blockIndex);
+    var block = section.get("blocks").at(point.blockIndex);
 
-    var newBlock = new Block();
-    if (caretOffset < block.length) {
-      newBlock.set("type", block.get("type"));
-      block.transferFragment(newBlock, caretOffset);
-    }
+    section.addBlock(
+      block.destructiveClone(point.caretOffset),
+      block.get("index") + 1
+    );
 
-    section.addBlock(newBlock, blockIndex + 1);
     point.blockIndex += 1;
     point.caretOffset = 0;
     this.updatePoint(point);

@@ -36,9 +36,16 @@ class Element extends Model {
            this.get("end") >= other.get("end");
   }
 
+  decrementOffsets(value) {
+    this.set("start", this.get("start") - value);
+    this.set("end", this.get("end") - value);
+    return this;
+  }
+
   incrementOffsets(value) {
     this.set("start", this.get("start") + value);
     this.set("end", this.get("end") + value);
+    return this;
   }
 
   mergeElement(element) {
@@ -82,6 +89,7 @@ class Element extends Model {
   setOffsets(startOffset, endOffset) {
     this.set("start", startOffset);
     this.set("end", endOffset);
+    return this;
   }
 }
 
