@@ -180,8 +180,10 @@ class EditorPage extends Component {
       var container = document.createElement("div");
 
       container.innerHTML = html;
-      Paster.parseContainer(container, point);
-      this.updateStory();
+
+      if (Paster.parseContainer(container, point)) {
+        this.updateStory();
+      }
     }
   }
 
