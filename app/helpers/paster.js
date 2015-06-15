@@ -101,27 +101,27 @@ class Paster {
       var block = null;
       var clone = null;
 
-      $.fn.shift = [].shift;
+      if (currentBlock.length) {
+        $.fn.shift = [].shift;
 
-      var node = nodes.shift();
-      block = this.createBlock(node);
+        var node = nodes.shift();
+        block = this.createBlock(node);
 
-      if (!currentBlock.get("content")) {
-        currentBlock.set("type", block.get("type"));
+        clone = currentBlock.destructiveClone(point.caretOffset);
+        EditorActor.mergeBlock(block, point.clone());
+        block = currentBlock;
+        point.blockIndex += 1;
       }
-
-      clone = currentBlock.destructiveClone(point.caretOffset);
-      EditorActor.mergeBlock(block, point.clone());
-      block = currentBlock;
 
       for (var i = 0; i < nodes.length; i += 1) {
         var node = nodes[i];
         block = this.createBlock(node);
 
-        point.blockIndex += 1;
         EditorActor.addBlock(block, point.clone());
+        point.blockIndex += 1;
       }
 
+      point.blockIndex -= 1;
       point.caretOffset = block.length;
 
       if (clone) {
