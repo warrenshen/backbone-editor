@@ -49,6 +49,7 @@ class Paster {
   createBlock(node) {
     var type = this.classifyBlock(node);
     var block = new Block({
+      centered: node.style.textAlign === "center",
       content: node.textContent ? node.textContent : "",
       source: node.src ? node.src : "",
       type: type,
@@ -97,13 +98,14 @@ class Paster {
     if (!nodes.length) {
       return false;
     } else {
+      var block = null;
       var clone = null;
 
       if (currentBlock.length) {
         $.fn.shift = [].shift;
 
         var node = nodes.shift();
-        var block = this.createBlock(node);
+        block = this.createBlock(node);
 
         clone = currentBlock.destructiveClone(point.caretOffset);
         EditorActor.mergeBlock(block, point.clone());
@@ -112,17 +114,20 @@ class Paster {
 
       for (var i = 0; i < nodes.length; i += 1) {
         var node = nodes[i];
-        var block = this.createBlock(node);
+        block = this.createBlock(node);
 
         EditorActor.addBlock(block, point.clone());
         point.blockIndex += 1;
       }
 
+      point.blockIndex -= 1;
+      point.caretOffset = block.length;
+
       if (clone) {
-        point.blockIndex -= 1;
-        EditorActor.mergeBlock(clone, point);
+        EditorActor.mergeBlock(clone, point.clone());
       }
 
+      EditorActor.updatePoint(point);
       return true;
     }
   }
