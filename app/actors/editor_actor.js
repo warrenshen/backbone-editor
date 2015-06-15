@@ -13,6 +13,14 @@ class EditorActor extends Actor {
     });
   }
 
+  mergeBlock(block, point) {
+    this.act({
+      type: ActionConstants.editor.mergeBlock,
+      block: block,
+      point: point,
+    })
+  }
+
   removeBlock(point) {
     this.act({
       type: ActionConstants.editor.removeBlock,

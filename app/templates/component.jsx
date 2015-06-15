@@ -20,7 +20,7 @@ class Component extends React.Component {
   // --------------------------------------------------
   constructor(props) {
     super(props);
-    this.state = this.getDefaultState();
+    this.state = _.merge(this.getDefaultState(), this.getStoreState());
   }
 
   // --------------------------------------------------

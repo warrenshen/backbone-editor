@@ -44,197 +44,209 @@ class Block extends Model {
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------
-  addCharacter(offset, character) {
-    var elements = this.get("elements");
+  addFragment(fragment, offset) {
     var content = this.get("content");
+    var elements = this.get("elements");
 
-    var beforeContent = content.substring(0, offset);
-    var afterContent = content.substring(offset);
-
-    this.set("content", beforeContent + character + afterContent);
+    this.set("content", content.substring(0, offset) +
+                        fragment +
+                        content.substring(offset));
 
     for (var element of elements.models) {
-      var start = element.get("start");
       var end = element.get("end");
+      var length = fragment.length;
 
-      if (start >= offset) {
-        element.setRange(start + 1, end + 1);
+      if (element.get("start") >= offset) {
+        element.incrementOffsets(length);
       } else if (end >= offset) {
-        element.set("end", end + 1);
+        element.set("end", end + length);
       }
     }
+  }
+
+  destructiveClone(offset) {
+    var content = this.get("content");
+    var block = new Block({
+      content: content.substring(offset),
+      type: this.get("type"),
+    });
+
+    var bucket = [];
+    var elements = this.get("elements");
+    var otherElements = block.get("elements");
+
+    for (var i = 0; i < elements.length; i += 1) {
+      var element = elements.at(i);
+      var startOffset = element.get("start");
+
+      if (startOffset < offset && element.get("end") > offset) {
+        var clones = element.partialClones(offset, offset);
+        var clone = clones[1];
+
+        elements.remove(element);
+        bucket.push(clones[0]);
+
+        clone.decrementOffsets(clone.get("start"));
+        otherElements.push(clone);
+        i -= 1;
+      } else if (startOffset >= offset) {
+        elements.remove(element);
+        otherElements.push(element.decrementOffsets(offset));
+        i -= 1;
+      }
+    }
+
+    for (var element of bucket) {
+      elements.push(element);
+    }
+
+    this.set("content", content.substring(0, offset));
+    return block;
   }
 
   elementComparator(element) {
     return [element.get("type"), element.get("start"), element.get("end")];
   }
 
-  filterStyles(startOffset, endOffset) {
+  filterStyles(firstOffset, lastOffset) {
     var elements = this.get("elements");
     var type = this.get("type");
 
-    var styleBucket = [];
-    var constants = TypeConstants.block;
+    var headingOne = TypeConstants.block.headingOne;
+    var headingTwo = TypeConstants.block.headingTwo;
+    var headingThree = TypeConstants.block.headingThree;
+    var quote = TypeConstants.block.quote;
+    var bucket = [];
 
-    styleBucket.push([constants.centered, this.get("centered")]);
-    styleBucket.push([constants.headingOne, type === constants.headingOne]);
-    styleBucket.push([constants.headingTwo, type === constants.headingTwo]);
-    styleBucket.push([constants.headingThree, type === constants.headingThree]);
-    styleBucket.push([constants.quote, type === constants.quote]);
+    bucket.push([TypeConstants.block.centered, this.get("centered")]);
+    bucket.push([headingOne, type === headingOne]);
+    bucket.push([headingTwo, type === headingTwo]);
+    bucket.push([headingThree, type === headingThree]);
+    bucket.push([quote, type === quote]);
 
     for (var element of elements.models) {
-      if (element.get("start") <= startOffset &&
-          element.get("end") >= endOffset) {
-        styleBucket.push([element.get("type"), true]);
+      if (element.get("start") <= firstOffset &&
+          element.get("end") >= lastOffset) {
+        bucket.push([element.get("type"), true]);
       }
     }
 
-    return new Map(styleBucket);
+    return new Map(bucket);
   }
 
   mergeElements() {
     var elements = this.get("elements");
+
     elements.comparator = this.elementComparator;
     elements.sort();
 
-    var removeBucket = [];
-    var indices = _.range(0, elements.length - 1);
-
-    for (var index of indices) {
-      var beforeElement = elements.at(index);
-      var afterElement = elements.at(index + 1);
-
-      if (beforeElement.coincidesWith(afterElement)) {
-        var start = Math.min(beforeElement.get("start"), afterElement.get("start"));
-        var end = Math.max(beforeElement.get("end"), afterElement.get("end"));
-
-        afterElement.setRange(start, end);
-        removeBucket.push(beforeElement);
+    for (var i = 0; i < elements.length - 1; i += 1) {
+      if (elements.at(i).mergeElement(elements.at(i + 1))) {
+        elements.remove(elements.at(i + 1));
+        i -= 1;
       }
-    }
-
-    for (var element of removeBucket) {
-      elements.remove(element);
     }
   }
 
-  parseElement(targetElement) {
+  mergeBlock(block, offset) {
+    var content = this.get("content");
     var elements = this.get("elements");
 
-    var pushBucket = [];
-    var removeBucket = [];
+    var otherContent = block.get("content");
+    var otherElements = block.get("elements");
 
-    for (var element of elements.models) {
-      if (element.completelyBounds(targetElement)) {
-        var prefixElement = element.clonePrefix(targetElement.get("start"));
-        var suffixElement = element.cloneSuffix(targetElement.get("end"));
-
-        pushBucket.push(prefixElement);
-        pushBucket.push(suffixElement);
-        removeBucket.push(element);
-      }
-    }
-
-    if (removeBucket.length > 0) {
-      for (var element of removeBucket) {
-        elements.remove(element);
-      }
-
-      for (var element of pushBucket) {
-        elements.push(element);
-      }
-    } else {
-      elements.push(targetElement);
-      this.mergeElements();
-    }
-  }
-
-  transferFragment(otherBlock, startOffset) {
-    var elements = this.get("elements");
-    var otherElements = otherBlock.get("elements");
-
-    var changeBucket = [];
-    var pushBucket = [];
-    var removeBucket = [];
-
-    for (var element of elements.models) {
-      if (element.get("start") >= startOffset) {
-        changeBucket.push(element);
-        removeBucket.push(element);
-      } else if (element.get("end") > startOffset) {
-        var prefixElement = element.clonePrefix(startOffset);
-        var suffixElement = element.cloneSuffix(startOffset);
-
-        pushBucket.push(prefixElement);
-        changeBucket.push(suffixElement);
-        removeBucket.push(element);
-      }
-    }
-
-    for (var element of pushBucket) {
+    for (var element of otherElements.models) {
+      element.incrementOffsets(offset);
       elements.push(element);
     }
 
-    for (var element of removeBucket) {
-      elements.remove(element);
+    this.set("content", content.substring(0, offset) +
+                        otherContent +
+                        content.substring(offset));
+
+    var bucket = [];
+
+    for (var i = 0; i < elements.length; i += 1) {
+      var element = elements.at(i);
+
+      if (element.get("start") > offset && element.get("end") < offset) {
+        var clones = element.partialClones(offset, offset);
+
+        clones[1].incrementOffsets(otherContent.length);
+        bucket.concat(clones);
+        elements.remove(element);
+        i -= 1;
+      }
     }
 
-    for (var element of changeBucket) {
-      var anchorOffset = otherBlock.length - startOffset;
-      var start = element.get("start") + anchorOffset;
-      var end = element.get("end") + anchorOffset;
-
-      element.setRange(start, end);
-      otherElements.push(element);
+    for (var element of bucket) {
+      elements.push(element);
     }
-
-    var content = this.get("content").substring(startOffset);
-    var otherContent = otherBlock.get("content");
-
-    otherBlock.set("content", otherContent + content);
-    otherBlock.mergeElements();
-    this.removeFragment(startOffset, this.length);
   }
 
-  removeFragment(startOffset, endOffset) {
+  parseElement(target) {
+    var elements = this.get("elements");
+    var bucket = [];
+    var complete = true;
+
+    for (var i = 0; i < elements.length; i += 1) {
+      var element = elements.at(i);
+
+      if (element.completelyBounds(target)) {
+        var clones = element.partialClones(target.get("start"),
+                                           target.get("end"));
+        bucket = bucket.concat(clones);
+        elements.remove(element);
+        complete = false;
+        i -= 1;
+      }
+    }
+
+    if (!complete) {
+      for (var element of bucket) {
+        elements.push(element);
+      }
+    } else {
+      elements.push(target);
+    }
+
+    this.mergeElements();
+  }
+
+  removeFragment(firstOffset, lastOffset) {
     var elements = this.get("elements");
     var content = this.get("content");
 
-    var beforeContent = content.substring(0, startOffset);
-    var afterContent = content.substring(endOffset);
-    var removeBucket = [];
+    this.set("content", content.substring(0, firstOffset) +
+                        content.substring(lastOffset));
 
-    for (var element of elements.models) {
-      var start = element.get("start");
-      var end = element.get("end");
-      var length = endOffset - startOffset;
+    for (var i = 0; i < elements.length; i += 1) {
+      var element = elements.at(i);
+      var startOffset = element.get("start");
+      var endOffset = element.get("end");
+      var length = lastOffset - firstOffset;
 
-      if (start >= startOffset && end <= endOffset) {
-        removeBucket.push(element);
+      if (startOffset >= firstOffset && endOffset <= lastOffset) {
+        elements.remove(element);
+        i -= 1;
       } else {
-        if (start >= startOffset) {
-          if (start <= endOffset) {
-            element.set("start", startOffset);
+        if (startOffset >= firstOffset) {
+          if (startOffset <= lastOffset) {
+            element.set("start", firstOffset);
           } else {
-            element.set("start", start - length);
+            element.set("start", startOffset - length);
           }
         }
 
-        if (end > startOffset) {
-          if (end <= endOffset) {
-            element.set("end", startOffset);
+        if (endOffset > firstOffset) {
+          if (endOffset <= lastOffset) {
+            element.set("end", firstOffset);
           } else {
-            element.set("end", end - length);
+            element.set("end", endOffset - length);
           }
         }
       }
     }
-
-    for (var element of removeBucket) {
-      elements.remove(element);
-    }
-
-    this.set("content", beforeContent + afterContent);
   }
 }
 

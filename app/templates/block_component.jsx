@@ -93,6 +93,8 @@ class BlockComponent extends Component {
           break;
       }
     } else if (event.which === KeyConstants.backspace) {
+      // TODO: Backspace does not cause rerender,
+      // so link modal stays in the wrong position.
       if (point.caretOffset !== 0) {
         var block = this.props.block;
         var caretOffset = point.caretOffset;
@@ -134,7 +136,7 @@ class BlockComponent extends Component {
       var length = block.length;
       var character = String.fromCharCode(event.which);
 
-      block.addCharacter(point.caretOffset, character);
+      block.addFragment(character, point.caretOffset);
 
       if (!length) {
         event.preventDefault();

@@ -41,23 +41,30 @@ class Section extends Model {
   addBlock(block, index=0) {
     block.set("section_index", this.get("index"));
     this.get("blocks").add(block, { at: index });
-    this.updateBlockIndices();
+    this.updateIndices();
   }
 
-  transferBlocks(otherSection) {
-    var blocks = this.get("blocks").models;
+  mergeSection(section) {
+    if (this.get("type") !== section.get("type")) {
+      return false;
+    } else {
+      var index = this.length;
+      var models = section.get("blocks").models;
 
-    for (var i = 0; i < this.length; i += 1) {
-      otherSection.addBlock(blocks.shift(), blocks.length);
+      for (var i = 0; i < section.length; i += 1) {
+        this.addBlock(models.shift(), index);
+      }
+
+      return true;
     }
   }
 
   removeBlock(block) {
     this.get("blocks").remove(block);
-    this.updateBlockIndices();
+    this.updateIndices();
   }
 
-  updateBlockIndices() {
+  updateIndices() {
     this.get("blocks").map(function(block, index) {
       block.set("index", index);
     });

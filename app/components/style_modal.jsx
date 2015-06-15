@@ -43,6 +43,7 @@ class StyleModal extends Component {
     event.stopPropagation();
 
     this.setState({ shouldShowInput: true });
+    React.findDOMNode(this.refs.input).focus();
   }
 
   handleFocus(event) {
