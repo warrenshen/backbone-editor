@@ -23,7 +23,7 @@ class BlockStandard extends BlockComponent {
     var contentClass = ClassNames(
       { "block-content": true },
       { "block-centered": block.get("centered") },
-      { "block-last": block.last }
+      { "block-last": block.isLast() }
     );
 
     return (

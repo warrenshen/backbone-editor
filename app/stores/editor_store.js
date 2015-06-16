@@ -62,7 +62,7 @@ class EditorStore extends Store {
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------
-  // TODO: Can we just use a point as the only parameter?
+  // TODO: Make variation for non divider prior block;
   priorBlock(sectionIndex, blockIndex) {
     var story = this._story;
     var sections = story.get("sections");
@@ -112,7 +112,7 @@ class EditorStore extends Store {
 
     section.addBlock(block, point.blockIndex);
 
-    if (block.get("type") === TypeConstants.block.divider) {
+    if (block.isDivider()) {
       point.blockIndex += 1;
     }
 
@@ -142,10 +142,10 @@ class EditorStore extends Store {
     point.blockIndex = priorBlock.get("index");
     point.caretOffset = priorBlock.length;
 
-    if (priorBlock.get("type") === TypeConstants.block.divider) {
+    if (priorBlock.isDivider()) {
       currentSection.removeBlock(priorBlock);
     } else if (priorBlock.get("type") === TypeConstants.block.image) {
-      if (currentBlock.get("content") || currentBlock.last) {
+      if (currentBlock.get("content") || currentBlock.isLast()) {
         return;
       } else {
         currentSection.removeBlock(currentBlock);
@@ -249,7 +249,7 @@ class EditorStore extends Store {
     var currentBlock = this.currentBlock(sectionIndex, blockIndex);
     var nextBlock = this.nextBlock(sectionIndex, blockIndex);
 
-    while (nextBlock && nextBlock.get("type") === TypeConstants.block.divider) {
+    while (nextBlock && nextBlock.isDivider()) {
       nextBlock = this.nextBlock(nextBlock.get("section_index"), nextBlock.get("index"));
     }
 
@@ -266,7 +266,7 @@ class EditorStore extends Store {
   shiftLeft(point) {
     var priorBlock = this.priorBlock(point.sectionIndex, point.blockIndex);
 
-    while (priorBlock && priorBlock.get("type") === TypeConstants.block.divider) {
+    while (priorBlock && priorBlock.isDivider()) {
       priorBlock = this.priorBlock(priorBlock.get("section_index"), priorBlock.get("index"));
     }
 
@@ -281,7 +281,7 @@ class EditorStore extends Store {
 
   shiftRight(point) {
     var nextBlock = this.nextBlock(point.sectionIndex, point.blockIndex);
-    while (nextBlock && nextBlock.get("type") === TypeConstants.block.divider) {
+    while (nextBlock && nextBlock.isDivider()) {
       nextBlock = this.nextBlock(nextBlock.get("section_index"), nextBlock.get("index"));
     }
 
@@ -296,7 +296,7 @@ class EditorStore extends Store {
 
   shiftUp(point) {
     var priorBlock = this.priorBlock(point.sectionIndex, point.blockIndex);
-    while (priorBlock && priorBlock.get("type") === TypeConstants.block.divider) {
+    while (priorBlock && priorBlock.isDivider()) {
       priorBlock = this.priorBlock(priorBlock.get("section_index"), priorBlock.get("index"));
     }
 

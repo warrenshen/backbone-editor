@@ -25,7 +25,7 @@ class BlockHeading extends BlockComponent {
       { "block-heading-one": type === TypeConstants.block.headingOne },
       { "block-heading-two": type === TypeConstants.block.headingTwo },
       { "block-heading-three": type === TypeConstants.block.headingThree },
-      { "block-last": block.last }
+      { "block-last": block.isLast() }
     );
 
     return (

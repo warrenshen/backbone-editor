@@ -83,7 +83,6 @@ class Paster {
 
         element.setOffsets(offset, offset + length);
         block.parseElement(element);
-        console.log(element);
       }
 
       offset += length;

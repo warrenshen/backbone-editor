@@ -22,7 +22,7 @@ class BlockQuote extends BlockComponent {
       { "block-content": true },
       { "block-quote": true },
       { "block-centered": block.get("centered") },
-      { "block-last": block.last }
+      { "block-last": block.isLast() }
     );
 
     return (

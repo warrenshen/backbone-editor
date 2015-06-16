@@ -28,11 +28,6 @@ class Block extends Model {
     return this.get("content").length;
   }
 
-  // TODO: Better naming needed here.
-  get last() {
-    return this.get("section").get("last") && this.get("local_last");
-  }
-
   get name() {
     return "Block";
   }
@@ -50,6 +45,17 @@ class Block extends Model {
         relatedModel: ModelDirectory.get("Section"),
       }
     ];
+  }
+
+  // --------------------------------------------------
+  // Conditions
+  // --------------------------------------------------
+  isDivider() {
+    return this.get("type") === TypeConstants.block.divider;
+  }
+
+  isLast() {
+    return this.get("section").get("last") && this.get("local_last");
   }
 
   // --------------------------------------------------
