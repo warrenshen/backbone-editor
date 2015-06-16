@@ -119,6 +119,8 @@ class EditorPage extends Component {
         EditorActor.removeBlocks(vector);
         this.updateStates();
       }
+    } else if (event.which === KeyConstants.backspace) {
+      event.preventDefault();
     }
   }
 

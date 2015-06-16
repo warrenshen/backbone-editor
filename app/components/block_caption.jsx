@@ -63,9 +63,6 @@ class BlockCaption extends Component {
 
         this.props.block.removeFragment(startOffset, endOffset);
       }
-    } else if (event.which === KeyConstants.tab) {
-      event.preventDefault();
-      // handle tab
     }
   }
 

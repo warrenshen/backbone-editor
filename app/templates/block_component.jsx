@@ -114,9 +114,6 @@ class BlockComponent extends Component {
         EditorActor.removeBlock(point);
         this.props.updateStory();
       }
-    } else if (event.which === KeyConstants.tab) {
-      event.preventDefault();
-      // handle tab
     }
   }
 
