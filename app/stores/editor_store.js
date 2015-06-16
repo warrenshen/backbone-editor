@@ -315,12 +315,13 @@ class EditorStore extends Store {
     var story = this._story;
     var section = story.get("sections").at(point.sectionIndex);
     var block = section.get("blocks").at(point.blockIndex);
+    var clone = block.destructiveClone(point.caretOffset);
 
-    section.addBlock(
-      block.destructiveClone(point.caretOffset),
-      block.get("index") + 1
-    );
+    if (!clone.length) {
+      clone.set("type", TypeConstants.block.standard);
+    }
 
+    section.addBlock(clone, block.get("index") + 1);
     point.blockIndex += 1;
     point.caretOffset = 0;
     this.updatePoint(point);
