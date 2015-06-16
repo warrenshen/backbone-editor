@@ -14,6 +14,7 @@ class Section extends Model {
     return {
       index: 0,
       type: TypeConstants.section.standard,
+      last: false,
     };
   }
 
@@ -65,8 +66,16 @@ class Section extends Model {
   }
 
   updateIndices() {
+    var length = this.length;
+
     this.get("blocks").map(function(block, index) {
       block.set("index", index);
+
+      if (index === length - 1) {
+        block.set("local_last", true);
+      } else {
+        block.set("local_last", false);
+      }
     });
   }
 }

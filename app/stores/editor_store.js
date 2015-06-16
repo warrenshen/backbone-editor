@@ -148,11 +148,16 @@ class EditorStore extends Store {
 
     if (priorBlock.get("type") === TypeConstants.block.divider) {
       currentSection.removeBlock(priorBlock);
-    } else if (currentBlock.get("type") !== TypeConstants.block.image) {
+    } else if (priorBlock.get("type") === TypeConstants.block.image) {
+      if (currentBlock.get("content") ||
+          (currentSection.get("last") && currentBlock.get("local_last"))) {
+        return;
+      } else {
+        currentSection.removeBlock(currentBlock);
+      }
+    } else {
       priorBlock.mergeBlock(currentBlock, priorBlock.length);
       currentSection.removeBlock(currentBlock);
-    } else {
-      return;
     }
 
     this.updatePoint(point);

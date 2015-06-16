@@ -88,6 +88,10 @@ class EditorPage extends Component {
   handleKeyDown(event) {
     var selection = window.getSelection();
 
+    if (event.which === KeyConstants.backspace) {
+      event.preventDefault();
+    }
+
     if (selection.type === TypeConstants.selection.range) {
       var vector = Selector.generateVector(selection);
 
@@ -114,13 +118,9 @@ class EditorPage extends Component {
           this.updateStates();
         }
       } else if (event.which === KeyConstants.backspace) {
-        event.preventDefault();
-
         EditorActor.removeBlocks(vector);
         this.updateStates();
       }
-    } else if (event.which === KeyConstants.backspace) {
-      event.preventDefault();
     }
   }
 
