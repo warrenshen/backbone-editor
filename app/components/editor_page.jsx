@@ -98,9 +98,11 @@ class EditorPage extends Component {
       if (event.which >= KeyConstants.left &&
         event.which <= KeyConstants.down) {
         if (event.shiftKey) {
+          var mouseState = EditorStore.mouseState;
+
           EditorActor.updateVector(vector);
 
-          if (EditorStore.mouseState !== TypeConstants.mouse.move) {
+          if (mouseState !== TypeConstants.mouse.move) {
             this.updateStory();
           }
 

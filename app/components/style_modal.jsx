@@ -307,7 +307,7 @@ class StyleModal extends Component {
       },
       {
         action: this.handleClick.bind(this),
-        active: this.props.activeStyles[TypeConstants.block.headingThree],
+        active: this.props.activeStyles[TypeConstants.element.link],
         className: "fa fa-link",
       },
     ].map(this.renderOption, this);

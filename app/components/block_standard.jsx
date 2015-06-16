@@ -22,7 +22,8 @@ class BlockStandard extends BlockComponent {
     var block = this.props.block;
     var contentClass = ClassNames(
       { "block-content": true },
-      { "block-centered": block.get("centered") }
+      { "block-centered": block.get("centered") },
+      { "block-last": block.last }
     );
 
     return (

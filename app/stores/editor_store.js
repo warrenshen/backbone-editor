@@ -62,11 +62,6 @@ class EditorStore extends Store {
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------
-  currentSection(sectionIndex) {
-    var story = this._story;
-    return story.get("sections").at(sectionIndex);
-  }
-
   // TODO: Can we just use a point as the only parameter?
   priorBlock(sectionIndex, blockIndex) {
     var story = this._story;
@@ -138,9 +133,10 @@ class EditorStore extends Store {
     var sectionIndex = point.sectionIndex;
     var blockIndex = point.blockIndex;
 
-    var currentSection = this.currentSection(sectionIndex);
     var currentBlock = this.currentBlock(sectionIndex, blockIndex);
     var priorBlock = this.priorBlock(sectionIndex, blockIndex);
+
+    var currentSection = currentBlock.get("section");
 
     point.sectionIndex = priorBlock.get("section_index");
     point.blockIndex = priorBlock.get("index");
@@ -149,8 +145,7 @@ class EditorStore extends Store {
     if (priorBlock.get("type") === TypeConstants.block.divider) {
       currentSection.removeBlock(priorBlock);
     } else if (priorBlock.get("type") === TypeConstants.block.image) {
-      if (currentBlock.get("content") ||
-          (currentSection.get("last") && currentBlock.get("local_last"))) {
+      if (currentBlock.get("content") || currentBlock.last) {
         return;
       } else {
         currentSection.removeBlock(currentBlock);

@@ -28,6 +28,11 @@ class Block extends Model {
     return this.get("content").length;
   }
 
+  // TODO: Better naming needed here.
+  get last() {
+    return this.get("section").get("last") && this.get("local_last");
+  }
+
   get name() {
     return "Block";
   }
@@ -39,6 +44,11 @@ class Block extends Model {
         key: "elements",
         relatedModel: ModelDirectory.get("Element"),
       },
+      {
+        type: "HasOne",
+        key: "section",
+        relatedModel: ModelDirectory.get("Section"),
+      }
     ];
   }
 

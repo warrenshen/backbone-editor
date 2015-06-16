@@ -66,17 +66,15 @@ class Story extends Model {
   }
 
   updateIndices() {
-    var length = this.length;
-
     this.get("sections").map(function(section, index) {
       section.set("index", index);
 
-      if (index === length - 1) {
+      if (index === this.length - 1) {
         section.set("last", true);
       } else {
         section.set("last", false);
       }
-    });
+    }, this);
   }
 }
 
