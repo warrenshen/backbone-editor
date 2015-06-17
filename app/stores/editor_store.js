@@ -366,7 +366,7 @@ class EditorStore extends Store {
       for (var blockIndex of blockIndices) {
         var block = blocks.at(blockIndex);
         if (which === TypeConstants.block.centered) {
-          block.set("centered", !block.get("centered"));
+          block.set("is_centered", !block.get("is_centered"));
         } else {
           if (block.get("type") === which) {
             block.set("type", TypeConstants.block.standard);

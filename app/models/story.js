@@ -70,9 +70,9 @@ class Story extends Model {
       section.set("index", index);
 
       if (index === this.length - 1) {
-        section.set("last", true);
+        section.set("is_last", true);
       } else {
-        section.set("last", false);
+        section.set("is_last", false);
       }
     }, this);
   }

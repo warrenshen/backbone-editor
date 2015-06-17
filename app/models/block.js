@@ -14,10 +14,10 @@ class Block extends Model {
   // --------------------------------------------------
   get defaults() {
     return {
-      centered: false,
       content: "",
       index: 0,
-      local_last: false,
+      is_centered: false,
+      is_local_last: false,
       section_index: 0,
       source: "",
       type: TypeConstants.block.standard,
@@ -55,7 +55,7 @@ class Block extends Model {
   }
 
   isLast() {
-    return this.get("section").get("last") && this.get("local_last");
+    return this.get("section").get("is_last") && this.get("is_local_last");
   }
 
   // --------------------------------------------------
@@ -135,7 +135,7 @@ class Block extends Model {
     var quote = TypeConstants.block.quote;
     var bucket = [];
 
-    bucket.push([TypeConstants.block.centered, this.get("centered")]);
+    bucket.push([TypeConstants.block.centered, this.get("is_centered")]);
     bucket.push([headingOne, type === headingOne]);
     bucket.push([headingTwo, type === headingTwo]);
     bucket.push([headingThree, type === headingThree]);

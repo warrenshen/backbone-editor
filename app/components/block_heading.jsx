@@ -21,7 +21,7 @@ class BlockHeading extends BlockComponent {
   renderEditable(block, type) {
     var contentClass = ClassNames(
       { "block-content": true },
-      { "block-centered": block.get("centered") },
+      { "block-centered": block.get("is_centered") },
       { "block-heading-one": type === TypeConstants.block.headingOne },
       { "block-heading-two": type === TypeConstants.block.headingTwo },
       { "block-heading-three": type === TypeConstants.block.headingThree },

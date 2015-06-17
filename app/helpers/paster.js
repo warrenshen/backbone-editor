@@ -49,8 +49,8 @@ class Paster {
   createBlock(node) {
     var type = this.classifyBlock(node);
     var block = new Block({
-      centered: node.style.textAlign === "center",
       content: node.textContent ? node.textContent : "",
+      is_centered: node.style.textAlign === "center",
       source: node.src ? node.src : "",
       type: type,
     });
@@ -90,7 +90,7 @@ class Paster {
   }
 
   parseContainer(container, point) {
-    var currentBlock = EditorStore.currentBlock(point.sectionIndex, point.blockIndex);
+    var startBlock = EditorStore.getBlock(point.sectionIndex, point.blockIndex);
     var nodes = $("blockquote, h1, h2, h3, h4, h5, " +
                   "img, hr, p, span", container);
 
@@ -100,15 +100,15 @@ class Paster {
       var block = null;
       var clone = null;
 
-      if (currentBlock.length) {
+      if (startBlock.length) {
         $.fn.shift = [].shift;
 
         var node = nodes.shift();
         block = this.createBlock(node);
 
-        clone = currentBlock.destructiveClone(point.caretOffset);
+        clone = startBlock.destructiveClone(point.caretOffset);
         EditorActor.mergeBlock(block, point.clone());
-        block = currentBlock;
+        block = startBlock;
         point.blockIndex += 1;
       }
 

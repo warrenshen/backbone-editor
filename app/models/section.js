@@ -13,8 +13,8 @@ class Section extends Model {
   get defaults() {
     return {
       index: 0,
+      is_last: false,
       type: TypeConstants.section.standard,
-      last: false,
     };
   }
 
@@ -79,9 +79,9 @@ class Section extends Model {
       block.set("section", this);
 
       if (index === this.length - 1) {
-        block.set("local_last", true);
+        block.set("is_local_last", true);
       } else {
-        block.set("local_last", false);
+        block.set("is_local_last", false);
       }
     }, this);
   }
