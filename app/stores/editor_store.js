@@ -62,44 +62,58 @@ class EditorStore extends Store {
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------
-  currentSection(sectionIndex) {
-    var story = this._story;
-    return story.get("sections").at(sectionIndex);
-  }
-
-  // TODO: Can we just use a point as the only parameter?
-  priorBlock(sectionIndex, blockIndex) {
-    var story = this._story;
-    var sections = story.get("sections");
-    var section = sections.at(sectionIndex);
-
-    if (blockIndex > 0) {
-      return section.get("blocks").at(blockIndex - 1);
-    } else if (sectionIndex > 0) {
-      var priorSection = sections.at(sectionIndex - 1);
-      return priorSection.get("blocks").at(priorSection.length - 1);
-    } else {
-      return null;
-    }
-  }
-
-  currentBlock(sectionIndex, blockIndex) {
+  getBlock(sectionIndex, blockIndex) {
     var story = this._story;
     var section = story.get("sections").at(sectionIndex);
     return section.get("blocks").at(blockIndex);
   }
 
-  nextBlock(sectionIndex, blockIndex) {
+  getSection(sectionIndex) {
+    var story = this._story;
+    return story.get("sections").at(sectionIndex);
+  }
+
+  nextEditableBlock(sectionIndex, blockIndex) {
     var story = this._story;
     var sections = story.get("sections");
     var section = sections.at(sectionIndex);
 
+    var block;
+
     if (blockIndex < section.length - 1) {
-      return section.get("blocks").at(blockIndex + 1);
+      block = section.get("blocks").at(blockIndex + 1);
     } else if (sectionIndex < sections.length - 1) {
-      return sections.at(sectionIndex + 1).get("blocks").at(0);
+      block = sections.at(sectionIndex + 1).leader;
     } else {
       return null;
+    }
+
+    if (block.isEditable()) {
+      return block;
+    } else {
+      return this.nextEditableBlock(block.get("section_index"), block.get("index"));
+    }
+  }
+
+  previousEditableBlock(sectionIndex, blockIndex) {
+    var story = this._story;
+    var sections = story.get("sections");
+    var section = sections.at(sectionIndex);
+
+    var block;
+
+    if (blockIndex > 0) {
+      block = section.get("blocks").at(blockIndex - 1);
+    } else if (sectionIndex > 0) {
+      block = sections.at(sectionIndex - 1).footer;
+    } else {
+      return null;
+    }
+
+    if (block.isEditable()) {
+      return block;
+    } else {
+      return this.previousEditableBlock(block.get("section_index"), block.get("index"));
     }
   }
 
@@ -112,21 +126,19 @@ class EditorStore extends Store {
   }
 
   addBlock(block, point) {
-    var story = this._story;
-    var section = story.get("sections").at(point.sectionIndex);
-
+    var section = this.getSection(point.sectionIndex);
     section.addBlock(block, point.blockIndex);
 
-    if (block.get("type") === TypeConstants.block.divider) {
+    if (!block.isEditable()) {
       point.blockIndex += 1;
     }
 
     this.updatePoint(point);
   }
 
+  // TODO: Could refactor this action out.
   mergeBlock(target, point) {
-    var story = this._story;
-    var section = story.get("sections").at(point.sectionIndex);
+    var section = this.getSection(point.sectionIndex);
     var blocks = section.get("blocks");
     var block = blocks.at(point.blockIndex);
 
@@ -138,21 +150,31 @@ class EditorStore extends Store {
     var sectionIndex = point.sectionIndex;
     var blockIndex = point.blockIndex;
 
-    var currentSection = this.currentSection(sectionIndex);
-    var currentBlock = this.currentBlock(sectionIndex, blockIndex);
-    var priorBlock = this.priorBlock(sectionIndex, blockIndex);
+    var block = this.getBlock(sectionIndex, blockIndex);
+    var section = this.getSection(sectionIndex);
+    var previousBlock = null;
 
-    point.sectionIndex = priorBlock.get("section_index");
-    point.blockIndex = priorBlock.get("index");
-    point.caretOffset = priorBlock.length;
+    if (blockIndex > 0) {
+      previousBlock = section.get("blocks").at(blockIndex - 1);
+    } else if (sectionIndex > 0) {
+      previousBlock = this.getSection(sectionIndex - 1).footer;
+    }
 
-    if (priorBlock.get("type") === TypeConstants.block.divider) {
-      currentSection.removeBlock(priorBlock);
-    } else if (currentBlock.get("type") !== TypeConstants.block.image) {
-      priorBlock.mergeBlock(currentBlock, priorBlock.length);
-      currentSection.removeBlock(currentBlock);
+    point.sectionIndex = previousBlock.get("section_index");
+    point.blockIndex = previousBlock.get("index");
+    point.caretOffset = previousBlock.length;
+
+    if (!previousBlock.isEditable()) {
+      section.removeBlock(previousBlock);
+    } else if (previousBlock.get("type") === TypeConstants.block.image) {
+      if (block.get("content") || block.isLast()) {
+        return;
+      } else {
+        section.removeBlock(block);
+      }
     } else {
-      return;
+      previousBlock.mergeBlock(block, previousBlock.length);
+      section.removeBlock(block);
     }
 
     this.updatePoint(point);
@@ -226,7 +248,7 @@ class EditorStore extends Store {
     }
 
     if (options.character || options.enter) {
-      var startBlock = this.currentBlock(startSectionIndex, startBlockIndex);
+      var startBlock = this.getBlock(startSectionIndex, startBlockIndex);
 
       if (options.character) {
         startBlock.addFragment(options.character, startCaretOffset);
@@ -246,48 +268,37 @@ class EditorStore extends Store {
     var sectionIndex = point.sectionIndex;
     var blockIndex = point.blockIndex;
 
-    var currentBlock = this.currentBlock(sectionIndex, blockIndex);
-    var nextBlock = this.nextBlock(sectionIndex, blockIndex);
+    var block = this.getBlock(sectionIndex, blockIndex);
+    var editableBlock = this.nextEditableBlock(sectionIndex, blockIndex);
 
-    while (nextBlock && nextBlock.get("type") === TypeConstants.block.divider) {
-      nextBlock = this.nextBlock(nextBlock.get("section_index"), nextBlock.get("index"));
-    }
-
-    if (nextBlock) {
-      point.sectionIndex = nextBlock.get("section_index");
-      point.blockIndex = nextBlock.get("index");
+    if (editableBlock) {
+      point.sectionIndex = editableBlock.get("section_index");
+      point.blockIndex = editableBlock.get("index");
     } else {
-      point.caretOffset = currentBlock.length;
+      point.caretOffset = block.length;
     }
 
     this.updatePoint(point);
   }
 
   shiftLeft(point) {
-    var priorBlock = this.priorBlock(point.sectionIndex, point.blockIndex);
+    var editableBlock = this.previousEditableBlock(point.sectionIndex, point.blockIndex);
 
-    while (priorBlock && priorBlock.get("type") === TypeConstants.block.divider) {
-      priorBlock = this.priorBlock(priorBlock.get("section_index"), priorBlock.get("index"));
-    }
-
-    if (priorBlock) {
-      point.sectionIndex = priorBlock.get("section_index");
-      point.blockIndex = priorBlock.get("index");
-      point.caretOffset = priorBlock.length;
+    if (editableBlock) {
+      point.sectionIndex = editableBlock.get("section_index");
+      point.blockIndex = editableBlock.get("index");
+      point.caretOffset = editableBlock.length;
     }
 
     this.updatePoint(point);
   }
 
   shiftRight(point) {
-    var nextBlock = this.nextBlock(point.sectionIndex, point.blockIndex);
-    while (nextBlock && nextBlock.get("type") === TypeConstants.block.divider) {
-      nextBlock = this.nextBlock(nextBlock.get("section_index"), nextBlock.get("index"));
-    }
+    var editableBlock = this.nextEditableBlock(point.sectionIndex, point.blockIndex);
 
-    if (nextBlock) {
-      point.sectionIndex = nextBlock.get("section_index");
-      point.blockIndex = nextBlock.get("index");
+    if (editableBlock) {
+      point.sectionIndex = editableBlock.get("section_index");
+      point.blockIndex = editableBlock.get("index");
       point.caretOffset = 0;
     }
 
@@ -295,14 +306,11 @@ class EditorStore extends Store {
   }
 
   shiftUp(point) {
-    var priorBlock = this.priorBlock(point.sectionIndex, point.blockIndex);
-    while (priorBlock && priorBlock.get("type") === TypeConstants.block.divider) {
-      priorBlock = this.priorBlock(priorBlock.get("section_index"), priorBlock.get("index"));
-    }
+    var editableBlock = this.previousEditableBlock(point.sectionIndex, point.blockIndex);
 
-    if (priorBlock) {
-      point.sectionIndex = priorBlock.get("section_index");
-      point.blockIndex = priorBlock.get("index");
+    if (editableBlock) {
+      point.sectionIndex = editableBlock.get("section_index");
+      point.blockIndex = editableBlock.get("index");
       point.shouldFloor = true;
     } else {
       point.caretOffset = 0;
@@ -312,15 +320,15 @@ class EditorStore extends Store {
   }
 
   splitBlock(point) {
-    var story = this._story;
-    var section = story.get("sections").at(point.sectionIndex);
+    var section = this.getSection(point.sectionIndex);
     var block = section.get("blocks").at(point.blockIndex);
+    var clone = block.destructiveClone(point.caretOffset);
 
-    section.addBlock(
-      block.destructiveClone(point.caretOffset),
-      block.get("index") + 1
-    );
+    if (!clone.length) {
+      clone.set("type", TypeConstants.block.standard);
+    }
 
+    section.addBlock(clone, block.get("index") + 1);
     point.blockIndex += 1;
     point.caretOffset = 0;
     this.updatePoint(point);
@@ -358,7 +366,7 @@ class EditorStore extends Store {
       for (var blockIndex of blockIndices) {
         var block = blocks.at(blockIndex);
         if (which === TypeConstants.block.centered) {
-          block.set("centered", !block.get("centered"));
+          block.set("is_centered", !block.get("is_centered"));
         } else {
           if (block.get("type") === which) {
             block.set("type", TypeConstants.block.standard);

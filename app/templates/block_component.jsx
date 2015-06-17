@@ -1,7 +1,7 @@
 import React from "react";
 import Component from "app/templates/component";
 
-import MediaModal from "app/components/media_modal";
+import ModalMedia from "app/components/modal_media";
 
 import Block from "app/models/block";
 
@@ -30,14 +30,14 @@ class BlockComponent extends Component {
         event.preventDefault();
 
         EditorActor.shiftLeft(point);
-        this.props.updateStory();
+        this.props.updateStoryEditable();
       }
     } else {
       if (point.caretOffset === block.length) {
         event.preventDefault();
 
         EditorActor.shiftRight(point);
-        this.props.updateStory();
+        this.props.updateStoryEditable();
       }
     }
   }
@@ -54,7 +54,7 @@ class BlockComponent extends Component {
 
         point.caretOffset = caretOffset - floorOffset;
         EditorActor.shiftDown(point);
-        this.props.updateStory();
+        this.props.updateStoryEditable();
       }
     } else {
       var ceilingOffset = Selector.findCeilingOffset(content);
@@ -63,7 +63,7 @@ class BlockComponent extends Component {
         event.preventDefault();
 
         EditorActor.shiftUp(point);
-        this.props.updateStory();
+        this.props.updateStoryEditable();
       }
     }
   }
@@ -106,17 +106,20 @@ class BlockComponent extends Component {
 
           point.caretOffset = 0;
           EditorActor.updatePoint(point);
-          this.props.updateStory();
+          this.props.updateStoryEditable();
         }
       } else if (!point.matchesValues(0, 0)) {
         event.preventDefault();
 
         EditorActor.removeBlock(point);
-        this.props.updateStory();
+        this.props.updateStoryEditable();
       }
     } else if (event.which === KeyConstants.tab) {
       event.preventDefault();
-      // handle tab
+
+      point.caretOffset = 0;
+      EditorActor.shiftDown(point);
+      this.props.updateStoryEditable();
     }
   }
 
@@ -130,7 +133,7 @@ class BlockComponent extends Component {
       event.preventDefault();
 
       EditorActor.splitBlock(point);
-      this.props.updateStory();
+      this.props.updateStoryEditable();
     } else {
       var block = this.props.block;
       var length = block.length;
@@ -143,7 +146,7 @@ class BlockComponent extends Component {
 
         point.caretOffset = 1;
         EditorActor.updatePoint(point);
-        this.props.updateStory();
+        this.props.updateStoryEditable();
       }
     }
   }
@@ -152,8 +155,8 @@ class BlockComponent extends Component {
     if (EditorStore.mouseState === TypeConstants.mouse.down) {
       EditorActor.updateMouseState(TypeConstants.mouse.move);
 
-      if (this.props.shouldEnableEdits) {
-        this.props.updateStory();
+      if (this.props.isEditable) {
+        this.props.updateStoryEditable();
       }
     }
   }
@@ -171,7 +174,7 @@ class BlockComponent extends Component {
       var point = Selector.generatePoint(selection);
 
       EditorActor.updatePoint(point);
-      this.props.updateStates();
+      this.props.updateStoryStyle();
     }
   }
 
@@ -215,9 +218,9 @@ class BlockComponent extends Component {
     if (!block.get("content") && point &&
         point.matchesValues(block.get("section_index"), block.get("index"))) {
       return (
-        <MediaModal
+        <ModalMedia
           block={this.props.block}
-          updateStory={this.props.updateStory} />
+          updateStoryEditable={this.props.updateStoryEditable} />
       );
     }
   }
@@ -233,16 +236,16 @@ class BlockComponent extends Component {
 
 BlockComponent.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
-  shouldEnableEdits: React.PropTypes.bool.isRequired,
-  updateStates: React.PropTypes.func.isRequired,
-  updateStory: React.PropTypes.func.isRequired,
+  isEditable: React.PropTypes.bool.isRequired,
+  updateStoryStyle: React.PropTypes.func.isRequired,
+  updateStoryEditable: React.PropTypes.func.isRequired,
 };
 
 BlockComponent.defaultProps = {
   block: new Block(),
-  shouldEnableEdits: true,
-  updateStates: null,
-  updateStory: null,
+  isEditable: true,
+  updateStoryStyle: null,
+  updateStoryEditable: null,
 };
 
 

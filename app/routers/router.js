@@ -1,7 +1,7 @@
 import Backbone from "backbone";
 import React from "react";
 
-import EditorPage from "app/components/editor_page";
+import ViewContainer from "app/components/view_container";
 
 
 class Router extends Backbone.Router {
@@ -28,7 +28,7 @@ class Router extends Backbone.Router {
   // --------------------------------------------------
   editor() {
     React.render(
-      <EditorPage />,
+      <ViewContainer />,
       document.body
     );
   }

@@ -45,4 +45,10 @@ module.exports = {
     caret: "Caret",
     range: "Range",
   },
+
+  view: {
+    edit: "edit",
+    preview: "preview",
+    export: "export",
+  },
 }

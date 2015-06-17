@@ -3,7 +3,7 @@ import React from "react";
 
 import Component from "app/templates/component";
 
-import MediaOption from "app/components/media_option";
+import OptionMedia from "app/components/option_media";
 
 import Block from "app/models/block";
 
@@ -16,13 +16,13 @@ import Point from "app/helpers/point";
 import TypeConstants from "app/constants/type_constants";
 
 
-class MediaModal extends Component {
+class ModalMedia extends Component {
 
   // --------------------------------------------------
   // Defaults
   // --------------------------------------------------
   displayName() {
-    return "MediaModal";
+    return "ModalMedia";
   }
 
   // --------------------------------------------------
@@ -53,7 +53,7 @@ class MediaModal extends Component {
 
     if (files && files[0]) {
       var block = new Block({ type: TypeConstants.block.image });
-      var callback = this.props.updateStory;
+      var callback = this.props.updateStoryEditable;
       var point = this.generatePoint();
 
       var reader = new FileReader();
@@ -75,7 +75,7 @@ class MediaModal extends Component {
       this.setState({ shouldShowOptions: true });
     } else {
       this.setState({ shouldShowOptions: false });
-      this.props.updateStory();
+      this.props.updateStoryEditable();
     }
   }
 
@@ -101,7 +101,7 @@ class MediaModal extends Component {
     var point = this.generatePoint();
 
     EditorActor.addBlock(block, point);
-    this.props.updateStory();
+    this.props.updateStoryEditable();
   }
 
   styleImage(event) {
@@ -143,9 +143,9 @@ class MediaModal extends Component {
   // --------------------------------------------------
   renderOption(props, index) {
     return (
-      <MediaOption
+      <OptionMedia
         key={index}
-        active={this.state.shouldShowOptions}
+        isActive={this.state.shouldShowOptions}
         {...props} />
     );
   }
@@ -201,15 +201,15 @@ class MediaModal extends Component {
   }
 }
 
-MediaModal.propTypes = {
+ModalMedia.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
-  updateStory: React.PropTypes.func.isRequired,
+  updateStoryEditable: React.PropTypes.func.isRequired,
 };
 
-MediaModal.defaultProps = {
+ModalMedia.defaultProps = {
   block: new Block(),
-  updateStory: null,
+  updateStoryEditable: null,
 };
 
 
-module.exports = MediaModal;
+module.exports = ModalMedia;

@@ -21,7 +21,8 @@ class BlockQuote extends BlockComponent {
     var contentClass = ClassNames(
       { "block-content": true },
       { "block-quote": true },
-      { "block-centered": block.get("centered") }
+      { "block-centered": block.get("is_centered") },
+      { "block-last": block.isLast() }
     );
 
     return (
@@ -30,7 +31,7 @@ class BlockQuote extends BlockComponent {
         data-index={block.get("index")}>
         <p
           className={contentClass}
-          contentEditable={this.props.shouldEnableEdits}
+          contentEditable={this.props.isEditable}
           ref={"content"}>
         </p>
       </blockquote>

@@ -26,6 +26,10 @@ class Story extends Model {
     return {};
   }
 
+  get length() {
+    return this.get("sections").length;
+  }
+
   get name() {
     return "Story";
   }
@@ -64,7 +68,13 @@ class Story extends Model {
   updateIndices() {
     this.get("sections").map(function(section, index) {
       section.set("index", index);
-    });
+
+      if (index === this.length - 1) {
+        section.set("is_last", true);
+      } else {
+        section.set("is_last", false);
+      }
+    }, this);
   }
 }
 

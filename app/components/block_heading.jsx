@@ -21,16 +21,17 @@ class BlockHeading extends BlockComponent {
   renderEditable(block, type) {
     var contentClass = ClassNames(
       { "block-content": true },
-      { "block-centered": block.get("centered") },
+      { "block-centered": block.get("is_centered") },
       { "block-heading-one": type === TypeConstants.block.headingOne },
       { "block-heading-two": type === TypeConstants.block.headingTwo },
-      { "block-heading-three": type === TypeConstants.block.headingThree }
+      { "block-heading-three": type === TypeConstants.block.headingThree },
+      { "block-last": block.isLast() }
     );
 
     return (
       <p
         className={contentClass}
-        contentEditable={this.props.shouldEnableEdits}
+        contentEditable={this.props.isEditable}
         ref={"content"}>
       </p>
     );

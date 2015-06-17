@@ -1,0 +1,106 @@
+import React from "react";
+
+import Component from "app/templates/component";
+
+import Clickable from "app/components/clickable";
+import ViewEdit from "app/components/view_edit";
+import ViewExport from "app/components/view_export";
+
+import TypeConstants from "app/constants/type_constants";
+
+
+class ViewContainer extends Component {
+
+  // --------------------------------------------------
+  // Defaults
+  // --------------------------------------------------
+  displayName() {
+    return "ViewContainer";
+  }
+
+  // --------------------------------------------------
+  // State
+  // --------------------------------------------------
+  getDefaultState() {
+    return { viewType: TypeConstants.view.edit };
+  }
+
+  selectEditor() {
+    if (this.state.viewType !== TypeConstants.view.edit) {
+      this.setState({ viewType: TypeConstants.view.edit });
+    }
+  }
+
+  selectPreview() {
+    if (this.state.viewType !== TypeConstants.view.preview) {
+      this.setState({ viewType: TypeConstants.view.preview });
+    }
+  }
+
+  selectTemplate() {
+    if (this.state.viewType !== TypeConstants.view.export) {
+      this.setState({ viewType: TypeConstants.view.export });
+    }
+  }
+
+  // --------------------------------------------------
+  // Render
+  // --------------------------------------------------
+  renderButton(props, index) {
+    var className = "general-button";
+    className += (props.isSelected) ? " general-button-selected" : "";
+
+    return (
+      <Clickable
+        key={index}
+        action={props.action}
+        className={className}
+        content={props.content} />
+    );
+  }
+
+  renderButtons() {
+    return [
+      {
+        action: this.selectEditor.bind(this),
+        content: TypeConstants.view.edit,
+        isSelected: this.state.viewType === TypeConstants.view.edit,
+      },
+      {
+        action: this.selectPreview.bind(this),
+        content: TypeConstants.view.preview,
+        isSelected: this.state.viewType === TypeConstants.view.preview,
+      },
+      {
+        action: this.selectTemplate.bind(this),
+        content: TypeConstants.view.export,
+        isSelected: this.state.viewType === TypeConstants.view.export,
+      },
+    ].map(this.renderButton, this);
+  }
+
+  renderView() {
+    switch (this.state.viewType) {
+      case TypeConstants.view.edit:
+        return <ViewEdit />;
+      case TypeConstants.view.view:
+        return null;
+      case TypeConstants.view.export:
+        return <ViewExport />;
+    }
+  }
+
+  render() {
+    return (
+      <div className={"view-container"}>
+        <div className={"view-buttons"}>
+          {this.renderButtons()}
+        </div>
+        {this.renderView()}
+      </div>
+    );
+  }
+}
+
+
+module.exports = ViewContainer;

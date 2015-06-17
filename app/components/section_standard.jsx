@@ -29,9 +29,9 @@ class SectionStandard extends Component {
     var props = {
       key: block.cid,
       block: block,
-      shouldEnableEdits: this.props.shouldEnableEdits,
-      updateStates: this.props.updateStates,
-      updateStory: this.props.updateStory,
+      isEditable: this.props.isEditable,
+      updateStoryStyle: this.props.updateStoryStyle,
+      updateStoryEditable: this.props.updateStoryEditable,
     };
 
     switch (block.get("type")) {
@@ -66,17 +66,17 @@ class SectionStandard extends Component {
 }
 
 SectionStandard.propTypes = {
+  isEditable: React.PropTypes.bool.isRequired,
   section: React.PropTypes.instanceOf(Section).isRequired,
-  shouldEnableEdits: React.PropTypes.bool.isRequired,
-  updateStates: React.PropTypes.func,
-  updateStory: React.PropTypes.func,
+  updateStoryStyle: React.PropTypes.func,
+  updateStoryEditable: React.PropTypes.func,
 };
 
 SectionStandard.defaultProps = {
+  isEditable: true,
   section: new Section(),
-  shouldEnableEdits: true,
-  updateStates: null,
-  updateStory: null,
+  updateStoryStyle: null,
+  updateStoryEditable: null,
 };
 
 
