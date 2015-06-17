@@ -6,6 +6,8 @@ import Clickable from "app/components/clickable";
 import EditorView from "app/components/editor_view";
 import TemplateView from "app/components/template_view";
 
+import TypeConstants from "app/constants/type_constants";
+
 
 class ViewContainer extends Component {
 
@@ -20,24 +22,24 @@ class ViewContainer extends Component {
   // State
   // --------------------------------------------------
   getDefaultState() {
-    return { viewType: "editor" };
+    return { viewType: TypeConstants.view.edit };
   }
 
   selectEditor() {
-    if (this.state.viewType !== "editor") {
-      this.setState({ viewType: "editor" });
+    if (this.state.viewType !== TypeConstants.view.edit) {
+      this.setState({ viewType: TypeConstants.view.edit });
     }
   }
 
   selectPreview() {
-    if (this.state.viewType !== "preview") {
-      this.setState({ viewType: "preview" });
+    if (this.state.viewType !== TypeConstants.view.preview) {
+      this.setState({ viewType: TypeConstants.view.preview });
     }
   }
 
   selectTemplate() {
-    if (this.state.viewType !== "template") {
-      this.setState({ viewType: "template" });
+    if (this.state.viewType !== TypeConstants.view.export) {
+      this.setState({ viewType: TypeConstants.view.export });
     }
   }
 
@@ -61,27 +63,29 @@ class ViewContainer extends Component {
     return [
       {
         action: this.selectEditor.bind(this),
-        content: "write",
-        isSelected: this.state.viewType === "editor",
+        content: TypeConstants.view.edit,
+        isSelected: this.state.viewType === TypeConstants.view.edit,
       },
       {
         action: this.selectPreview.bind(this),
-        content: "preview",
-        isSelected: this.state.viewType === "preview",
+        content: TypeConstants.view.preview,
+        isSelected: this.state.viewType === TypeConstants.view.preview,
       },
       {
         action: this.selectTemplate.bind(this),
-        content: "export",
-        isSelected: this.state.viewType === "template",
+        content: TypeConstants.view.export,
+        isSelected: this.state.viewType === TypeConstants.view.export,
       },
     ].map(this.renderButton, this);
   }
 
   renderView() {
     switch (this.state.viewType) {
-      case "editor":
+      case TypeConstants.view.edit:
         return <EditorView />;
-      case "template":
+      case TypeConstants.view.view:
+        return null;
+      case TypeConstants.view.export:
         return <TemplateView />;
     }
   }
