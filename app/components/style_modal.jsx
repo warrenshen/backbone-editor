@@ -272,43 +272,43 @@ class StyleModal extends Component {
     return [
       {
         action: this.styleHeadingOne.bind(this),
-        active: this.props.activeStyles[TypeConstants.block.headingOne],
         className: "fa fa-header",
+        isActive: this.props.activeStyles[TypeConstants.block.headingOne],
       },
       {
         action: this.styleHeadingTwo.bind(this),
-        active: this.props.activeStyles[TypeConstants.block.headingTwo],
         className: "fa fa-header",
+        isActive: this.props.activeStyles[TypeConstants.block.headingTwo],
       },
       {
         action: this.styleHeadingThree.bind(this),
-        active: this.props.activeStyles[TypeConstants.block.headingThree],
         className: "fa fa-header",
+        isActive: this.props.activeStyles[TypeConstants.block.headingThree],
       },
       {
         action: this.styleQuote.bind(this),
-        active: this.props.activeStyles[TypeConstants.block.quote],
         className: "fa fa-quote-right",
+        isActive: this.props.activeStyles[TypeConstants.block.quote],
       },
       {
         action: this.styleCentered.bind(this),
-        active: this.props.activeStyles[TypeConstants.block.centered],
         className: "fa fa-align-center",
+        isActive: this.props.activeStyles[TypeConstants.block.centered],
       },
       {
         action: this.styleBold.bind(this),
-        active: this.props.activeStyles[TypeConstants.element.bold],
         className: "fa fa-bold",
+        isActive: this.props.activeStyles[TypeConstants.element.bold],
       },
       {
         action: this.styleItalic.bind(this),
-        active: this.props.activeStyles[TypeConstants.element.italic],
         className: "fa fa-italic",
+        isActive: this.props.activeStyles[TypeConstants.element.italic],
       },
       {
         action: this.handleClick.bind(this),
-        active: this.props.activeStyles[TypeConstants.block.headingThree],
         className: "fa fa-link",
+        isActive: this.props.activeStyles[TypeConstants.element.link],
       },
     ].map(this.renderOption, this);
   }

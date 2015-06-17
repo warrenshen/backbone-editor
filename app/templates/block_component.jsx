@@ -116,7 +116,10 @@ class BlockComponent extends Component {
       }
     } else if (event.which === KeyConstants.tab) {
       event.preventDefault();
-      // handle tab
+
+      point.caretOffset = 0;
+      EditorActor.shiftDown(point);
+      this.props.updateStory();
     }
   }
 

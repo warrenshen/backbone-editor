@@ -145,7 +145,7 @@ class MediaModal extends Component {
     return (
       <MediaOption
         key={index}
-        active={this.state.shouldShowOptions}
+        isActive={this.state.shouldShowOptions}
         {...props} />
     );
   }

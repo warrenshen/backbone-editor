@@ -65,7 +65,12 @@ class BlockCaption extends Component {
       }
     } else if (event.which === KeyConstants.tab) {
       event.preventDefault();
-      // handle tab
+
+      var point = Selector.generatePoint(selection);
+
+      point.caretOffset = 0;
+      EditorActor.shiftDown(point);
+      this.props.updateStory();
     }
   }
 

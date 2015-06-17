@@ -46,7 +46,7 @@ class MediaOption extends Component {
   render() {
     var optionClass = ClassNames(
       { "media-modal-option": true },
-      { "media-modal-option-hidden": !this.props.active }
+      { "media-modal-option-hidden": !this.props.isActive }
     );
 
     return (
@@ -60,14 +60,14 @@ class MediaOption extends Component {
 
 MediaOption.propTypes = {
   action: React.PropTypes.func.isRequired,
-  active: React.PropTypes.bool.isRequired,
   className: React.PropTypes.string.isRequired,
+  isActive: React.PropTypes.bool.isRequired,
 };
 
 MediaOption.defaultProps = {
   action: null,
-  active: false,
   className: "fa fa-image",
+  isActive: false,
 };
 
 

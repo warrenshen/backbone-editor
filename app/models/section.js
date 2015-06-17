@@ -13,8 +13,17 @@ class Section extends Model {
   get defaults() {
     return {
       index: 0,
+      is_last: false,
       type: TypeConstants.section.standard,
     };
+  }
+
+  get footer() {
+    return this.get("blocks").at(this.length - 1);
+  }
+
+  get leader() {
+    return this.get("blocks").at(0);
   }
 
   get length() {
@@ -67,7 +76,14 @@ class Section extends Model {
   updateIndices() {
     this.get("blocks").map(function(block, index) {
       block.set("index", index);
-    });
+      block.set("section", this);
+
+      if (index === this.length - 1) {
+        block.set("is_local_last", true);
+      } else {
+        block.set("is_local_last", false);
+      }
+    }, this);
   }
 }
 

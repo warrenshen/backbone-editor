@@ -32,7 +32,7 @@ class StyleOption extends Component {
   render() {
     var optionClass = ClassNames(
       { "style-option": true },
-      { "style-option-active": this.props.active }
+      { "style-option-active": this.props.isActive }
     );
 
     return (
@@ -45,14 +45,14 @@ class StyleOption extends Component {
 
 StyleOption.propTypes = {
   action: React.PropTypes.func.isRequired,
-  active: React.PropTypes.bool.isRequired,
   className: React.PropTypes.string.isRequired,
+  isActive: React.PropTypes.bool.isRequired,
 };
 
 StyleOption.defaultProps = {
   action: null,
-  active: false,
   className: "fa fa-header",
+  isActive: false,
 };
 
 

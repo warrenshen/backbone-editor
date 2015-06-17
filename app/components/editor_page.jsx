@@ -88,15 +88,21 @@ class EditorPage extends Component {
   handleKeyDown(event) {
     var selection = window.getSelection();
 
+    if (event.which === KeyConstants.backspace) {
+      event.preventDefault();
+    }
+
     if (selection.type === TypeConstants.selection.range) {
       var vector = Selector.generateVector(selection);
 
       if (event.which >= KeyConstants.left &&
         event.which <= KeyConstants.down) {
         if (event.shiftKey) {
+          var mouseState = EditorStore.mouseState;
+
           EditorActor.updateVector(vector);
 
-          if (EditorStore.mouseState !== TypeConstants.mouse.move) {
+          if (mouseState !== TypeConstants.mouse.move) {
             this.updateStory();
           }
 
@@ -114,8 +120,6 @@ class EditorPage extends Component {
           this.updateStates();
         }
       } else if (event.which === KeyConstants.backspace) {
-        event.preventDefault();
-
         EditorActor.removeBlocks(vector);
         this.updateStates();
       }
