@@ -1,7 +1,7 @@
 import React from "react";
 import Component from "app/templates/component";
 
-import MediaModal from "app/components/media_modal";
+import ModalMedia from "app/components/modal_media";
 
 import Block from "app/models/block";
 
@@ -218,7 +218,7 @@ class BlockComponent extends Component {
     if (!block.get("content") && point &&
         point.matchesValues(block.get("section_index"), block.get("index"))) {
       return (
-        <MediaModal
+        <ModalMedia
           block={this.props.block}
           updateStory={this.props.updateStory} />
       );

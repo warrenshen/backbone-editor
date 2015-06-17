@@ -3,8 +3,8 @@ import React from "react";
 import Component from "app/templates/component";
 
 import Clickable from "app/components/clickable";
-import EditorView from "app/components/editor_view";
-import TemplateView from "app/components/template_view";
+import ViewEdit from "app/components/view_edit";
+import ViewExport from "app/components/view_export";
 
 import TypeConstants from "app/constants/type_constants";
 
@@ -82,11 +82,11 @@ class ViewContainer extends Component {
   renderView() {
     switch (this.state.viewType) {
       case TypeConstants.view.edit:
-        return <EditorView />;
+        return <ViewEdit />;
       case TypeConstants.view.view:
         return null;
       case TypeConstants.view.export:
-        return <TemplateView />;
+        return <ViewExport />;
     }
   }
 

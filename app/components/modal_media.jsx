@@ -3,7 +3,7 @@ import React from "react";
 
 import Component from "app/templates/component";
 
-import MediaOption from "app/components/media_option";
+import OptionMedia from "app/components/option_media";
 
 import Block from "app/models/block";
 
@@ -16,13 +16,13 @@ import Point from "app/helpers/point";
 import TypeConstants from "app/constants/type_constants";
 
 
-class MediaModal extends Component {
+class ModalMedia extends Component {
 
   // --------------------------------------------------
   // Defaults
   // --------------------------------------------------
   displayName() {
-    return "MediaModal";
+    return "ModalMedia";
   }
 
   // --------------------------------------------------
@@ -143,7 +143,7 @@ class MediaModal extends Component {
   // --------------------------------------------------
   renderOption(props, index) {
     return (
-      <MediaOption
+      <OptionMedia
         key={index}
         isActive={this.state.shouldShowOptions}
         {...props} />
@@ -201,15 +201,15 @@ class MediaModal extends Component {
   }
 }
 
-MediaModal.propTypes = {
+ModalMedia.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
   updateStory: React.PropTypes.func.isRequired,
 };
 
-MediaModal.defaultProps = {
+ModalMedia.defaultProps = {
   block: new Block(),
   updateStory: null,
 };
 
 
-module.exports = MediaModal;
+module.exports = ModalMedia;

@@ -4,7 +4,7 @@ import React from "react";
 
 import Component from "app/templates/component";
 
-import StyleOption from "app/components/style_option";
+import OptionStyle from "app/components/option_style";
 
 import EditorActor from "app/actors/editor_actor";
 
@@ -16,13 +16,13 @@ import KeyConstants from "app/constants/key_constants";
 import TypeConstants from "app/constants/type_constants";
 
 
-class StyleModal extends Component {
+class ModalStyle extends Component {
 
   // --------------------------------------------------
   // Defaults
   // --------------------------------------------------
   displayName() {
-    return "StyleModal";
+    return "ModalStyle";
   }
 
   // --------------------------------------------------
@@ -262,7 +262,7 @@ class StyleModal extends Component {
 
   renderOption(props, index) {
     return (
-      <StyleOption
+      <OptionStyle
         key={index}
         {...props} />
     );
@@ -330,7 +330,7 @@ class StyleModal extends Component {
   }
 }
 
-StyleModal.propTypes = {
+ModalStyle.propTypes = {
   activeStyles: React.PropTypes.object.isRequired,
   point: React.PropTypes.instanceOf(Point),
   shouldUpdateStyler: React.PropTypes.bool.isRequired,
@@ -338,7 +338,7 @@ StyleModal.propTypes = {
   vector: React.PropTypes.instanceOf(Vector),
 };
 
-StyleModal.defaultProps = {
+ModalStyle.defaultProps = {
   activeStyles: {},
   point: null,
   shouldUpdateStyler: true,
@@ -347,4 +347,4 @@ StyleModal.defaultProps = {
 };
 
 
-module.exports = StyleModal;
+module.exports = ModalStyle;
