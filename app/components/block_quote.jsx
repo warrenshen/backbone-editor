@@ -31,7 +31,7 @@ class BlockQuote extends BlockComponent {
         data-index={block.get("index")}>
         <p
           className={contentClass}
-          contentEditable={this.props.shouldEnableEdits}
+          contentEditable={this.props.isEditable}
           ref={"content"}>
         </p>
       </blockquote>

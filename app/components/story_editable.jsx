@@ -36,12 +36,12 @@ class StoryEditable extends Component {
     var link = new Link(rectangle, event.currentTarget.dataset.link);
 
     EditorActor.updateLink(link)
-    this.props.updateLinker();
+    this.props.updateModalLink();
   }
 
   handleMouseLeave(event) {
     EditorActor.updateLink(null);
-    this.props.updateLinker();
+    this.props.updateModalLink();
   }
 
   // --------------------------------------------------
@@ -100,7 +100,7 @@ class StoryEditable extends Component {
           if (!node.textContent) {
             point.caretOffset = 0;
             EditorActor.updatePoint(point);
-            this.props.updateStory();
+            this.props.updateStoryEditable();
             return;
           } else {
             range.setStart(currentNode, currentNode.length);
@@ -147,7 +147,7 @@ class StoryEditable extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.shouldUpdateStory;
+    return nextProps.shouldUpdate;
   }
 
   // --------------------------------------------------
@@ -158,9 +158,9 @@ class StoryEditable extends Component {
       <SectionStandard
         key={section.cid}
         section={section}
-        shouldEnableEdits={this.props.shouldEnableEdits}
-        updateStates={this.props.updateStates}
-        updateStory={this.props.updateStory} />
+        isEditable={this.props.isEditable}
+        updateStoryStyle={this.props.updateStoryStyle}
+        updateStoryEditable={this.props.updateStoryEditable} />
     );
   }
 
@@ -178,22 +178,22 @@ class StoryEditable extends Component {
 }
 
 StoryEditable.propTypes = {
+  isEditable: React.PropTypes.bool.isRequired,
   point: React.PropTypes.instanceOf(Point),
-  shouldEnableEdits: React.PropTypes.bool.isRequired,
-  shouldUpdateStory: React.PropTypes.bool.isRequired,
+  shouldUpdate: React.PropTypes.bool.isRequired,
   story: React.PropTypes.instanceOf(Story).isRequired,
-  updateLinker: React.PropTypes.func.isRequired,
-  updateStates: React.PropTypes.func.isRequired,
-  updateStory: React.PropTypes.func.isRequired,
+  updateModalLink: React.PropTypes.func.isRequired,
+  updateStoryStyle: React.PropTypes.func.isRequired,
+  updateStoryEditable: React.PropTypes.func.isRequired,
 };
 
 StoryEditable.defaultProps = {
-  shouldEnableEdits: true,
-  shouldUpdateStory: true,
+  isEditable: true,
+  shouldUpdate: true,
   story: new Story(),
-  updateLinker: null,
-  updateStates: null,
-  updateStory: null,
+  updateModalLink: null,
+  updateStoryStyle: null,
+  updateStoryEditable: null,
 };
 
 

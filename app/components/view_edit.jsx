@@ -33,9 +33,9 @@ class ViewEdit extends Component {
   // --------------------------------------------------
   getDefaultState() {
     return {
-      shouldUpdateLinker: false,
-      shouldUpdateStyler: false,
-      shouldUpdateStory: false,
+      shouldUpdateModalLink: false,
+      shouldUpdateModalStyle: false,
+      shouldupdateStoryEditableEditable: false,
     };
   }
 
@@ -44,41 +44,41 @@ class ViewEdit extends Component {
       activeStyles: EditorStore.activeStyles,
       link: EditorStore.link,
       point: EditorStore.point,
-      shouldEnableEdits: EditorStore.mouseState === TypeConstants.mouse.up,
+      isEditable: EditorStore.mouseState === TypeConstants.mouse.up,
       story: EditorStore.story,
       vector: EditorStore.vector,
     }
   }
 
-  updateLinker() {
+  updateModalLink() {
     this.setState({
-      shouldUpdateLinker: true,
-      shouldUpdateStory: false,
-      shouldUpdateStyler: false,
+      shouldUpdateModalLink: true,
+      shouldUpdateModalStyle: false,
+      shouldupdateStoryEditableEditable: false,
     });
   }
 
-  updateStates() {
+  updateModalStyle() {
     this.setState({
-      shouldUpdateLinker: false,
-      shouldUpdateStory: true,
-      shouldUpdateStyler: true,
+      shouldUpdateModalLink: false,
+      shouldUpdateModalStyle: true,
+      shouldupdateStoryEditableEditable: false,
     });
   }
 
-  updateStory() {
+  updateStoryStyle() {
     this.setState({
-      shouldUpdateLinker: false,
-      shouldUpdateStory: true,
-      shouldUpdateStyler: false,
+      shouldUpdateModalLink: false,
+      shouldUpdateModalStyle: true,
+      shouldupdateStoryEditableEditable: true,
     });
   }
 
-  updateStyler() {
+  updateStoryEditable() {
     this.setState({
-      shouldUpdateLinker: false,
-      shouldUpdateStory: false,
-      shouldUpdateStyler: true,
+      shouldUpdateModalLink: false,
+      shouldUpdateModalStyle: false,
+      shouldupdateStoryEditableEditable: true,
     });
   }
 
@@ -103,10 +103,10 @@ class ViewEdit extends Component {
           EditorActor.updateVector(vector);
 
           if (mouseState !== TypeConstants.mouse.move) {
-            this.updateStory();
+            this.updateStoryEditable();
           }
 
-          this.updateStyler();
+          this.updateModalStyle();
         } else {
           event.preventDefault();
 
@@ -117,11 +117,11 @@ class ViewEdit extends Component {
             EditorActor.updatePoint(vector.endPoint);
           }
 
-          this.updateStates();
+          this.updateStoryStyle();
         }
       } else if (event.which === KeyConstants.backspace) {
         EditorActor.removeBlocks(vector);
-        this.updateStates();
+        this.updateStoryStyle();
       }
     }
   }
@@ -135,21 +135,21 @@ class ViewEdit extends Component {
 
       if (event.which === KeyConstants.enter) {
         EditorActor.removeBlocks(vector, { enter: true });
-        this.updateStates();
+        this.updateStoryStyle();
       } else {
         if (event.ctrlKey || event.metaKey) {
           if (event.which === KeyConstants.b) {
             EditorActor.styleElements(vector, TypeConstants.element.bold);
-            this.updateStates();
+            this.updateStoryStyle();
           } else if (event.which === KeyConstants.i) {
             EditorActor.styleElements(vector, TypeConstants.element.italic);
-            this.updateStates();
+            this.updateStoryStyle();
           }
         } else {
           var character = String.fromCharCode(event.which);
 
           EditorActor.removeBlocks(vector, { character: character });
-          this.updateStates();
+          this.updateStoryStyle();
         }
       }
     }
@@ -165,10 +165,10 @@ class ViewEdit extends Component {
       var vector = Selector.generateVector(selection);
 
       EditorActor.updateVector(vector);
-      this.updateStyler();
+      this.updateModalStyle();
     } else {
       EditorActor.updatePoint(null);
-      this.updateStyler();
+      this.updateModalStyle();
     }
   }
 
@@ -186,20 +186,20 @@ class ViewEdit extends Component {
       container.innerHTML = html;
 
       if (Paster.parseContainer(container, point)) {
-        this.updateStory();
+        this.updateStoryEditable();
       }
     }
   }
 
   handleScroll(event) {
     if (EditorStore.vector) {
-      this.updateStyler();
+      this.updateModalStyle();
     }
   }
 
   handleResize(event) {
     if (EditorStore.vector) {
-      this.updateStyler();
+      this.updateModalStyle();
     }
   }
 
@@ -239,23 +239,23 @@ class ViewEdit extends Component {
     return (
       <div className={"general-view"} ref={"view"}>
         <StoryEditable
+          isEditable={this.state.isEditable}
           point={this.state.point}
-          shouldEnableEdits={this.state.shouldEnableEdits}
-          shouldUpdateStory={this.state.shouldUpdateStory}
+          shouldUpdate={this.state.shouldupdateStoryEditableEditable}
           story={this.state.story}
-          updateLinker={this.updateLinker.bind(this)}
-          updateStates={this.updateStates.bind(this)}
-          updateStory={this.updateStory.bind(this)}
-          updateStyler={this.updateStyler.bind(this)} />
+          updateModalLink={this.updateModalLink.bind(this)}
+          updateModalStyle={this.updateModalStyle.bind(this)}
+          updateStoryStyle={this.updateStoryStyle.bind(this)}
+          updateStoryEditable={this.updateStoryEditable.bind(this)} />
         <ModalStyle
           activeStyles={this.state.activeStyles}
           point={this.state.point}
-          shouldUpdateStyler={this.state.shouldUpdateStyler}
-          updateStates={this.updateStates.bind(this)}
+          shouldUpdate={this.state.shouldUpdateModalStyle}
+          updateStoryStyle={this.updateStoryStyle.bind(this)}
           vector={this.state.vector} />
         <ModalLink
           link={this.state.link}
-          shouldUpdateLinker={this.state.shouldUpdateLinker} />
+          shouldUpdate={this.state.shouldupdateModalLink} />
       </div>
     );
   }

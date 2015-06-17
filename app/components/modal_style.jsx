@@ -85,7 +85,7 @@ class ModalStyle extends Component {
   // --------------------------------------------------
   styleBlocks(type) {
     EditorActor.styleBlocks(this.props.vector, type);
-    this.props.updateStates();
+    this.props.updateStoryStyle();
   }
 
   styleCentered(event) {
@@ -110,7 +110,7 @@ class ModalStyle extends Component {
 
   styleElements(type, link="") {
     EditorActor.styleElements(this.props.vector, type, link);
-    this.props.updateStates();
+    this.props.updateStoryStyle();
   }
 
   styleBold(event) {
@@ -238,7 +238,7 @@ class ModalStyle extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.shouldUpdateStyler ||
+    return nextProps.shouldUpdate ||
            this.state.shouldShowInput !== nextState.shouldShowInput;
   }
 
@@ -333,16 +333,16 @@ class ModalStyle extends Component {
 ModalStyle.propTypes = {
   activeStyles: React.PropTypes.object.isRequired,
   point: React.PropTypes.instanceOf(Point),
-  shouldUpdateStyler: React.PropTypes.bool.isRequired,
-  updateStates: React.PropTypes.func.isRequired,
+  shouldUpdate: React.PropTypes.bool.isRequired,
+  updateStoryStyle: React.PropTypes.func.isRequired,
   vector: React.PropTypes.instanceOf(Vector),
 };
 
 ModalStyle.defaultProps = {
   activeStyles: {},
   point: null,
-  shouldUpdateStyler: true,
-  updateStates: null,
+  shouldUpdate: true,
+  updateStoryStyle: null,
   vector: null,
 };
 

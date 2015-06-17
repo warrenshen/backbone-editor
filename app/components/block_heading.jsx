@@ -31,7 +31,7 @@ class BlockHeading extends BlockComponent {
     return (
       <p
         className={contentClass}
-        contentEditable={this.props.shouldEnableEdits}
+        contentEditable={this.props.isEditable}
         ref={"content"}>
       </p>
     );

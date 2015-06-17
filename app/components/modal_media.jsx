@@ -53,7 +53,7 @@ class ModalMedia extends Component {
 
     if (files && files[0]) {
       var block = new Block({ type: TypeConstants.block.image });
-      var callback = this.props.updateStory;
+      var callback = this.props.updateStoryEditable;
       var point = this.generatePoint();
 
       var reader = new FileReader();
@@ -75,7 +75,7 @@ class ModalMedia extends Component {
       this.setState({ shouldShowOptions: true });
     } else {
       this.setState({ shouldShowOptions: false });
-      this.props.updateStory();
+      this.props.updateStoryEditable();
     }
   }
 
@@ -101,7 +101,7 @@ class ModalMedia extends Component {
     var point = this.generatePoint();
 
     EditorActor.addBlock(block, point);
-    this.props.updateStory();
+    this.props.updateStoryEditable();
   }
 
   styleImage(event) {
@@ -203,12 +203,12 @@ class ModalMedia extends Component {
 
 ModalMedia.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
-  updateStory: React.PropTypes.func.isRequired,
+  updateStoryEditable: React.PropTypes.func.isRequired,
 };
 
 ModalMedia.defaultProps = {
   block: new Block(),
-  updateStory: null,
+  updateStoryEditable: null,
 };
 
 

@@ -45,7 +45,7 @@ class ModalLink extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.shouldUpdateLinker;
+    return nextProps.shouldUpdate;
   }
 
   // --------------------------------------------------
@@ -69,12 +69,12 @@ class ModalLink extends Component {
 
 ModalLink.propTypes = {
   link: React.PropTypes.instanceOf(Link),
-  shouldUpdateLinker: React.PropTypes.bool.isRequired,
+  shouldUpdate: React.PropTypes.bool.isRequired,
 };
 
 ModalLink.defaultProps = {
   link: null,
-  shouldUpdateLinker: false,
+  shouldUpdate: false,
 };
 
 
