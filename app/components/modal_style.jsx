@@ -4,7 +4,7 @@ import React from "react";
 
 import Component from "app/templates/component";
 
-import StyleOption from "app/components/style_option";
+import OptionStyle from "app/components/option_style";
 
 import EditorActor from "app/actors/editor_actor";
 
@@ -16,13 +16,13 @@ import KeyConstants from "app/constants/key_constants";
 import TypeConstants from "app/constants/type_constants";
 
 
-class StyleModal extends Component {
+class ModalStyle extends Component {
 
   // --------------------------------------------------
   // Defaults
   // --------------------------------------------------
   displayName() {
-    return "StyleModal";
+    return "ModalStyle";
   }
 
   // --------------------------------------------------
@@ -85,7 +85,7 @@ class StyleModal extends Component {
   // --------------------------------------------------
   styleBlocks(type) {
     EditorActor.styleBlocks(this.props.vector, type);
-    this.props.updateStates();
+    this.props.updateStoryStyle();
   }
 
   styleCentered(event) {
@@ -110,7 +110,7 @@ class StyleModal extends Component {
 
   styleElements(type, link="") {
     EditorActor.styleElements(this.props.vector, type, link);
-    this.props.updateStates();
+    this.props.updateStoryStyle();
   }
 
   styleBold(event) {
@@ -238,7 +238,7 @@ class StyleModal extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.shouldUpdateStyler ||
+    return nextProps.shouldUpdate ||
            this.state.shouldShowInput !== nextState.shouldShowInput;
   }
 
@@ -262,7 +262,7 @@ class StyleModal extends Component {
 
   renderOption(props, index) {
     return (
-      <StyleOption
+      <OptionStyle
         key={index}
         {...props} />
     );
@@ -330,21 +330,21 @@ class StyleModal extends Component {
   }
 }
 
-StyleModal.propTypes = {
+ModalStyle.propTypes = {
   activeStyles: React.PropTypes.object.isRequired,
   point: React.PropTypes.instanceOf(Point),
-  shouldUpdateStyler: React.PropTypes.bool.isRequired,
-  updateStates: React.PropTypes.func.isRequired,
+  shouldUpdate: React.PropTypes.bool.isRequired,
+  updateStoryStyle: React.PropTypes.func.isRequired,
   vector: React.PropTypes.instanceOf(Vector),
 };
 
-StyleModal.defaultProps = {
+ModalStyle.defaultProps = {
   activeStyles: {},
   point: null,
-  shouldUpdateStyler: true,
-  updateStates: null,
+  shouldUpdate: true,
+  updateStoryStyle: null,
   vector: null,
 };
 
 
-module.exports = StyleModal;
+module.exports = ModalStyle;

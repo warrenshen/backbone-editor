@@ -4,13 +4,13 @@ import React from "react";
 import Component from "app/templates/component";
 
 
-class StyleOption extends Component {
+class OptionStyle extends Component {
 
   // --------------------------------------------------
   // Defaults
   // --------------------------------------------------
   displayName() {
-    return "StyleOption";
+    return "OptionStyle";
   }
 
   // --------------------------------------------------
@@ -43,17 +43,17 @@ class StyleOption extends Component {
   }
 }
 
-StyleOption.propTypes = {
+OptionStyle.propTypes = {
   action: React.PropTypes.func.isRequired,
   className: React.PropTypes.string.isRequired,
   isActive: React.PropTypes.bool.isRequired,
 };
 
-StyleOption.defaultProps = {
+OptionStyle.defaultProps = {
   action: null,
   className: "fa fa-header",
   isActive: false,
 };
 
 
-module.exports = StyleOption;
+module.exports = OptionStyle;

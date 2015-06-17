@@ -4,13 +4,13 @@ import React from "react";
 import Component from "app/templates/component";
 
 
-class MediaOption extends Component {
+class OptionMedia extends Component {
 
   // --------------------------------------------------
   // Defaults
   // --------------------------------------------------
   displayName() {
-    return "MediaOption";
+    return "OptionMedia";
   }
 
   // --------------------------------------------------
@@ -58,17 +58,17 @@ class MediaOption extends Component {
   }
 }
 
-MediaOption.propTypes = {
+OptionMedia.propTypes = {
   action: React.PropTypes.func.isRequired,
   className: React.PropTypes.string.isRequired,
   isActive: React.PropTypes.bool.isRequired,
 };
 
-MediaOption.defaultProps = {
+OptionMedia.defaultProps = {
   action: null,
   className: "fa fa-image",
   isActive: false,
 };
 
 
-module.exports = MediaOption;
+module.exports = OptionMedia;

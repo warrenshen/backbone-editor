@@ -57,7 +57,7 @@ class BlockImage extends Component {
       var point = new Point(block.get("section_index"), block.get("index"), 0);
 
       EditorActor.removeBlock(point);
-      this.props.updateStory();
+      this.props.updateStoryEditable();
     }
   }
 
@@ -124,8 +124,8 @@ class BlockImage extends Component {
         </div>
         <BlockCaption
           block={this.props.block}
-          shouldEnableEdits={this.props.shouldEnableEdits}
-          updateStory={this.props.updateStory} />
+          isEditable={this.props.isEditable}
+          updateStoryEditable={this.props.updateStoryEditable} />
       </div>
     );
   }
@@ -133,14 +133,14 @@ class BlockImage extends Component {
 
 BlockImage.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
-  shouldEnableEdits: React.PropTypes.bool.isRequired,
-  updateStory: React.PropTypes.func.isRequired,
+  isEditable: React.PropTypes.bool.isRequired,
+  updateStoryEditable: React.PropTypes.func.isRequired,
 };
 
 BlockImage.defaultProps = {
   block: new Block(),
-  shouldEnableEdits: true,
-  updateStory: null,
+  isEditable: true,
+  updateStoryEditable: null,
 };
 
 

@@ -6,13 +6,13 @@ import Component from "app/templates/component";
 import Link from "app/helpers/link";
 
 
-class LinkModal extends Component {
+class ModalLink extends Component {
 
   // --------------------------------------------------
   // Defaults
   // --------------------------------------------------
   displayName() {
-    return "LinkModal";
+    return "ModalLink";
   }
 
   // --------------------------------------------------
@@ -45,7 +45,7 @@ class LinkModal extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.shouldUpdateLinker;
+    return nextProps.shouldUpdate;
   }
 
   // --------------------------------------------------
@@ -67,15 +67,15 @@ class LinkModal extends Component {
   }
 }
 
-LinkModal.propTypes = {
+ModalLink.propTypes = {
   link: React.PropTypes.instanceOf(Link),
-  shouldUpdateLinker: React.PropTypes.bool.isRequired,
+  shouldUpdate: React.PropTypes.bool.isRequired,
 };
 
-LinkModal.defaultProps = {
+ModalLink.defaultProps = {
   link: null,
-  shouldUpdateLinker: false,
+  shouldUpdate: false,
 };
 
 
-module.exports = LinkModal;
+module.exports = ModalLink;

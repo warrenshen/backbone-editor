@@ -18,54 +18,44 @@ class Clickable extends Component {
   // Handlers
   // --------------------------------------------------
   handleClick() {
-    event.preventDefault();
-    event.stopPropagation();
+    this.props.action();
+  }
 
-    if (this.props.route !== "") {
-      RouterDirectory.get("Router").navigate(this.props.route, true);
-    } else if (this.props.action !== null) {
-      this.props.action();
-    }
+  // --------------------------------------------------
+  // Lifecycle
+  // --------------------------------------------------
+  componentDidMount() {
+    var clickable = React.findDOMNode(this.refs.clickable);
+    clickable.addEventListener("click", this.handleClick.bind(this));
+  }
+
+  componentWillUnmount() {
+    var clickable = React.findDOMNode(this.refs.clickable);
+    clickable.removeEventListener("click", this.handleClick);
   }
 
   // --------------------------------------------------
   // Render
   // --------------------------------------------------
   render() {
-    if (this.props.source) {
-      return (
-        <img
-          className={this.props.style}
-          src={this.props.source}
-          onClick={this.handleClick.bind(this)} />
-      );
-    } else {
-      return (
-        <a
-          className={this.props.style}
-          href={this.props.route}
-          onClick={this.handleClick.bind(this)}>
-          {this.props.content}
-        </a>
-      );
-    }
+    return (
+      <span className={this.props.className} ref={"clickable"}>
+        {this.props.content}
+      </span>
+    );
   }
 }
 
 Clickable.propTypes = {
-  action:  React.PropTypes.func,
+  action: React.PropTypes.func.isRequired,
+  className: React.PropTypes.string.isRequired,
   content: React.PropTypes.string.isRequired,
-  route:   React.PropTypes.string,
-  source:  React.PropTypes.string,
-  style:   React.PropTypes.string.isRequired,
 };
 
 Clickable.defaultProps = {
   action:  null,
-  route:   "",
-  style:   "",
+  className: "general-button",
   content: "",
-  source:  "",
 };
 
 

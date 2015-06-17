@@ -70,7 +70,7 @@ class BlockCaption extends Component {
 
       point.caretOffset = 0;
       EditorActor.shiftDown(point);
-      this.props.updateStory();
+      this.props.updateStoryEditable();
     }
   }
 
@@ -93,7 +93,7 @@ class BlockCaption extends Component {
       var vector = Selector.generateVector(selection);
 
       EditorActor.removeBlocks(vector, { character: character });
-      this.props.updateStory();
+      this.props.updateStoryEditable();
     }
   }
 
@@ -158,7 +158,7 @@ class BlockCaption extends Component {
     return (
       <p
         className={captionClass}
-        contentEditable={this.props.shouldEnableEdits}
+        contentEditable={this.props.isEditable}
         placeholder={"Write caption here..."}
         ref={"content"}>
       </p>
@@ -168,14 +168,14 @@ class BlockCaption extends Component {
 
 BlockCaption.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
-  shouldEnableEdits: React.PropTypes.bool.isRequired,
-  updateStory: React.PropTypes.func.isRequired,
+  isEditable: React.PropTypes.bool.isRequired,
+  updateStoryEditable: React.PropTypes.func.isRequired,
 };
 
 BlockCaption.defaultProps = {
   block: new Block(),
-  shouldEnableEdits: true,
-  updateStory: null,
+  isEditable: true,
+  updateStoryEditable: null,
 };
 
 

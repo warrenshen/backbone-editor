@@ -2,9 +2,9 @@ import React from "react";
 
 import Component from "app/templates/component";
 
-import LinkModal from "app/components/link_modal";
 import StoryEditable from "app/components/story_editable";
-import StyleModal from "app/components/style_modal";
+import ModalLink from "app/components/modal_link";
+import ModalStyle from "app/components/modal_style";
 
 import Block from "app/models/block";
 
@@ -19,13 +19,13 @@ import KeyConstants from "app/constants/key_constants";
 import TypeConstants from "app/constants/type_constants";
 
 
-class EditorPage extends Component {
+class ViewEdit extends Component {
 
   // --------------------------------------------------
   // Defaults
   // --------------------------------------------------
   displayName() {
-    return "EditorPage";
+    return "ViewEdit";
   }
 
   // --------------------------------------------------
@@ -33,9 +33,9 @@ class EditorPage extends Component {
   // --------------------------------------------------
   getDefaultState() {
     return {
-      shouldUpdateLinker: false,
-      shouldUpdateStyler: false,
-      shouldUpdateStory: false,
+      shouldUpdateModalLink: false,
+      shouldUpdateModalStyle: false,
+      shouldupdateStoryEditableEditable: false,
     };
   }
 
@@ -44,41 +44,41 @@ class EditorPage extends Component {
       activeStyles: EditorStore.activeStyles,
       link: EditorStore.link,
       point: EditorStore.point,
-      shouldEnableEdits: EditorStore.mouseState === TypeConstants.mouse.up,
+      isEditable: EditorStore.mouseState === TypeConstants.mouse.up,
       story: EditorStore.story,
       vector: EditorStore.vector,
     }
   }
 
-  updateLinker() {
+  updateModalLink() {
     this.setState({
-      shouldUpdateLinker: true,
-      shouldUpdateStory: false,
-      shouldUpdateStyler: false,
+      shouldUpdateModalLink: true,
+      shouldUpdateModalStyle: false,
+      shouldupdateStoryEditableEditable: false,
     });
   }
 
-  updateStates() {
+  updateModalStyle() {
     this.setState({
-      shouldUpdateLinker: false,
-      shouldUpdateStory: true,
-      shouldUpdateStyler: true,
+      shouldUpdateModalLink: false,
+      shouldUpdateModalStyle: true,
+      shouldupdateStoryEditableEditable: false,
     });
   }
 
-  updateStory() {
+  updateStoryStyle() {
     this.setState({
-      shouldUpdateLinker: false,
-      shouldUpdateStory: true,
-      shouldUpdateStyler: false,
+      shouldUpdateModalLink: false,
+      shouldUpdateModalStyle: true,
+      shouldupdateStoryEditableEditable: true,
     });
   }
 
-  updateStyler() {
+  updateStoryEditable() {
     this.setState({
-      shouldUpdateLinker: false,
-      shouldUpdateStory: false,
-      shouldUpdateStyler: true,
+      shouldUpdateModalLink: false,
+      shouldUpdateModalStyle: false,
+      shouldupdateStoryEditableEditable: true,
     });
   }
 
@@ -103,10 +103,10 @@ class EditorPage extends Component {
           EditorActor.updateVector(vector);
 
           if (mouseState !== TypeConstants.mouse.move) {
-            this.updateStory();
+            this.updateStoryEditable();
           }
 
-          this.updateStyler();
+          this.updateModalStyle();
         } else {
           event.preventDefault();
 
@@ -117,11 +117,11 @@ class EditorPage extends Component {
             EditorActor.updatePoint(vector.endPoint);
           }
 
-          this.updateStates();
+          this.updateStoryStyle();
         }
       } else if (event.which === KeyConstants.backspace) {
         EditorActor.removeBlocks(vector);
-        this.updateStates();
+        this.updateStoryStyle();
       }
     }
   }
@@ -135,21 +135,21 @@ class EditorPage extends Component {
 
       if (event.which === KeyConstants.enter) {
         EditorActor.removeBlocks(vector, { enter: true });
-        this.updateStates();
+        this.updateStoryStyle();
       } else {
         if (event.ctrlKey || event.metaKey) {
           if (event.which === KeyConstants.b) {
             EditorActor.styleElements(vector, TypeConstants.element.bold);
-            this.updateStates();
+            this.updateStoryStyle();
           } else if (event.which === KeyConstants.i) {
             EditorActor.styleElements(vector, TypeConstants.element.italic);
-            this.updateStates();
+            this.updateStoryStyle();
           }
         } else {
           var character = String.fromCharCode(event.which);
 
           EditorActor.removeBlocks(vector, { character: character });
-          this.updateStates();
+          this.updateStoryStyle();
         }
       }
     }
@@ -165,10 +165,10 @@ class EditorPage extends Component {
       var vector = Selector.generateVector(selection);
 
       EditorActor.updateVector(vector);
-      this.updateStyler();
+      this.updateModalStyle();
     } else {
       EditorActor.updatePoint(null);
-      this.updateStyler();
+      this.updateModalStyle();
     }
   }
 
@@ -186,17 +186,21 @@ class EditorPage extends Component {
       container.innerHTML = html;
 
       if (Paster.parseContainer(container, point)) {
-        this.updateStory();
+        this.updateStoryEditable();
       }
     }
   }
 
   handleScroll(event) {
-    this.updateStyler();
+    if (EditorStore.vector) {
+      this.updateModalStyle();
+    }
   }
 
   handleResize(event) {
-    this.updateStyler();
+    if (EditorStore.vector) {
+      this.updateModalStyle();
+    }
   }
 
   // --------------------------------------------------
@@ -210,9 +214,9 @@ class EditorPage extends Component {
     window.addEventListener("scroll", this.handleScroll.bind(this));
     window.addEventListener("resize", this.handleResize.bind(this));
 
-    var page = React.findDOMNode(this.refs.page);
-    page.addEventListener("mousedown", this.handleMouseDown.bind(this));
-    page.addEventListener("mouseup", this.handleMouseUp.bind(this));
+    var view = React.findDOMNode(this.refs.view);
+    view.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    view.addEventListener("mouseup", this.handleMouseUp.bind(this));
   }
 
   componentWillUnmount() {
@@ -223,9 +227,9 @@ class EditorPage extends Component {
     window.removeEventListener("scroll", this.handleScroll);
     window.removeEventListener("resize", this.handleResize);
 
-    var page = React.findDOMNode(this.refs.page);
-    page.removeEventListener("mousedown", this.handleMouseDown);
-    page.removeEventListener("mouseup", this.handleMouseUp);
+    var view = React.findDOMNode(this.refs.view);
+    view.removeEventListener("mousedown", this.handleMouseDown);
+    view.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   // --------------------------------------------------
@@ -233,29 +237,29 @@ class EditorPage extends Component {
   // --------------------------------------------------
   render() {
     return (
-      <div className={"editor-page"} ref={"page"}>
+      <div className={"general-view"} ref={"view"}>
         <StoryEditable
+          isEditable={this.state.isEditable}
           point={this.state.point}
-          shouldEnableEdits={this.state.shouldEnableEdits}
-          shouldUpdateStory={this.state.shouldUpdateStory}
+          shouldUpdate={this.state.shouldupdateStoryEditableEditable}
           story={this.state.story}
-          updateLinker={this.updateLinker.bind(this)}
-          updateStates={this.updateStates.bind(this)}
-          updateStory={this.updateStory.bind(this)}
-          updateStyler={this.updateStyler.bind(this)} />
-        <StyleModal
+          updateModalLink={this.updateModalLink.bind(this)}
+          updateModalStyle={this.updateModalStyle.bind(this)}
+          updateStoryStyle={this.updateStoryStyle.bind(this)}
+          updateStoryEditable={this.updateStoryEditable.bind(this)} />
+        <ModalStyle
           activeStyles={this.state.activeStyles}
           point={this.state.point}
-          shouldUpdateStyler={this.state.shouldUpdateStyler}
-          updateStates={this.updateStates.bind(this)}
+          shouldUpdate={this.state.shouldUpdateModalStyle}
+          updateStoryStyle={this.updateStoryStyle.bind(this)}
           vector={this.state.vector} />
-        <LinkModal
+        <ModalLink
           link={this.state.link}
-          shouldUpdateLinker={this.state.shouldUpdateLinker} />
+          shouldUpdate={this.state.shouldupdateModalLink} />
       </div>
     );
   }
 }
 
 
-module.exports = EditorPage;
+module.exports = ViewEdit;
