@@ -90,18 +90,18 @@ hr {
   margin: 0;
 }
 
-.general-page {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  -webkit-user-select: none;
-}
-
 .general-placeholder {
   &:empty:before {
     content: attr(placeholder);
     color: $gray-light;
   }
+}
+
+.general-view {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  -webkit-user-select: none;
 }
 
 .vertical-anchor {
@@ -110,4 +110,11 @@ hr {
   vertical-align: middle;
   position: relative;
   height: 100%;
+}
+
+.view-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  -webkit-user-select: none;
 }

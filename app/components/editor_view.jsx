@@ -19,13 +19,13 @@ import KeyConstants from "app/constants/key_constants";
 import TypeConstants from "app/constants/type_constants";
 
 
-class EditorPage extends Component {
+class EditorView extends Component {
 
   // --------------------------------------------------
   // Defaults
   // --------------------------------------------------
   displayName() {
-    return "EditorPage";
+    return "EditorView";
   }
 
   // --------------------------------------------------
@@ -214,9 +214,9 @@ class EditorPage extends Component {
     window.addEventListener("scroll", this.handleScroll.bind(this));
     window.addEventListener("resize", this.handleResize.bind(this));
 
-    var page = React.findDOMNode(this.refs.page);
-    page.addEventListener("mousedown", this.handleMouseDown.bind(this));
-    page.addEventListener("mouseup", this.handleMouseUp.bind(this));
+    var view = React.findDOMNode(this.refs.view);
+    view.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    view.addEventListener("mouseup", this.handleMouseUp.bind(this));
   }
 
   componentWillUnmount() {
@@ -227,9 +227,9 @@ class EditorPage extends Component {
     window.removeEventListener("scroll", this.handleScroll);
     window.removeEventListener("resize", this.handleResize);
 
-    var page = React.findDOMNode(this.refs.page);
-    page.removeEventListener("mousedown", this.handleMouseDown);
-    page.removeEventListener("mouseup", this.handleMouseUp);
+    var view = React.findDOMNode(this.refs.view);
+    view.removeEventListener("mousedown", this.handleMouseDown);
+    view.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   // --------------------------------------------------
@@ -237,7 +237,7 @@ class EditorPage extends Component {
   // --------------------------------------------------
   render() {
     return (
-      <div className={"general-page"} ref={"page"}>
+      <div className={"general-view"} ref={"view"}>
         <StoryEditable
           point={this.state.point}
           shouldEnableEdits={this.state.shouldEnableEdits}
@@ -262,4 +262,4 @@ class EditorPage extends Component {
 }
 
 
-module.exports = EditorPage;
+module.exports = EditorView;

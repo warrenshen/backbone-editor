@@ -3,13 +3,13 @@ import React from "react";
 import Component from "app/templates/component";
 
 
-class TemplatePage extends Component {
+class TemplateView extends Component {
 
   // --------------------------------------------------
   // Defaults
   // --------------------------------------------------
   displayName() {
-    return "TemplatePage";
+    return "TemplateView";
   }
 
   // --------------------------------------------------
@@ -17,7 +17,7 @@ class TemplatePage extends Component {
   // --------------------------------------------------
   render() {
     return (
-      <div className={"general-page"} ref={"page"}>
+      <div className={"general-view"} ref={"view"}>
 
       </div>
     );
@@ -25,4 +25,4 @@ class TemplatePage extends Component {
 }
 
 
-module.exports = TemplatePage;
+module.exports = TemplateView;
