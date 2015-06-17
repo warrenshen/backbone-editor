@@ -140,10 +140,10 @@
   display: inline-block;
   position: absolute;
   z-index: $z-index-8;
-  top: 0;
+  top: -2px;
   left: -48px;
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   background-color: $white;
   overflow: hidden;
   -webkit-user-select: none;
@@ -158,12 +158,12 @@
   vertical-align: middle;
   position: relative;
   z-index: $z-index-9;
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   margin-right: 16px;
   color: $gray;
   border: 2px solid $gray;
-  border-radius: 15px;
+  border-radius: 17px;
   line-height: 0;
   text-align: center;
   cursor: pointer;
@@ -172,14 +172,14 @@
   transform: rotate(0deg);
 
   &:hover {
-    color: $ash;
-    border-color: $ash;
+    color: $coral;
+    border-color: $coral;
   }
 }
 
 .media-modal-prompt-open {
-  color: $ash;
-  border-color: $ash;
+  color: $coral;
+  border-color: $coral;
   transform: rotate(45deg);
 }
 
@@ -188,12 +188,12 @@
   vertical-align: middle;
   position: relative;
   z-index: $z-index-9;
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   margin-right: 8px;
   color: $gray;
   border: 2px solid $gray;
-  border-radius: 15px;
+  border-radius: 17px;
   line-height: 0;
   text-align: center;
   cursor: pointer;
@@ -228,7 +228,6 @@
 .story-container {
   position: relative;
   width: 712px;
-  padding-top: 144px;
   margin: auto;
   -webkit-user-select: none;
 }
