@@ -192,11 +192,15 @@ class EditorPage extends Component {
   }
 
   handleScroll(event) {
-    this.updateStyler();
+    if (EditorStore.vector) {
+      this.updateStyler();
+    }
   }
 
   handleResize(event) {
-    this.updateStyler();
+    if (EditorStore.vector) {
+      this.updateStyler();
+    }
   }
 
   // --------------------------------------------------
@@ -233,7 +237,7 @@ class EditorPage extends Component {
   // --------------------------------------------------
   render() {
     return (
-      <div className={"editor-page"} ref={"page"}>
+      <div className={"general-page"} ref={"page"}>
         <StoryEditable
           point={this.state.point}
           shouldEnableEdits={this.state.shouldEnableEdits}
