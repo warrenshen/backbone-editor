@@ -62,39 +62,54 @@ class EditorStore extends Store {
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------
-  // TODO: Make variation for non divider prior block;
-  priorBlock(sectionIndex, blockIndex) {
-    var story = this._story;
-    var sections = story.get("sections");
-    var section = sections.at(sectionIndex);
-
-    if (blockIndex > 0) {
-      return section.get("blocks").at(blockIndex - 1);
-    } else if (sectionIndex > 0) {
-      var priorSection = sections.at(sectionIndex - 1);
-      return priorSection.get("blocks").at(priorSection.length - 1);
-    } else {
-      return null;
-    }
-  }
-
   currentBlock(sectionIndex, blockIndex) {
     var story = this._story;
     var section = story.get("sections").at(sectionIndex);
     return section.get("blocks").at(blockIndex);
   }
 
-  nextBlock(sectionIndex, blockIndex) {
+  nextEditableBlock(sectionIndex, blockIndex) {
     var story = this._story;
     var sections = story.get("sections");
     var section = sections.at(sectionIndex);
 
+    var block;
+
     if (blockIndex < section.length - 1) {
-      return section.get("blocks").at(blockIndex + 1);
+      block = section.get("blocks").at(blockIndex + 1);
     } else if (sectionIndex < sections.length - 1) {
-      return sections.at(sectionIndex + 1).get("blocks").at(0);
+      block = sections.at(sectionIndex + 1).get("blocks").at(0);
     } else {
       return null;
+    }
+
+    if (block.isEditable()) {
+      return block;
+    } else {
+      return this.nextEditableBlock(block.get("section_index"), block.get("index"));
+    }
+  }
+
+  previousEditableBlock(sectionIndex, blockIndex) {
+    var story = this._story;
+    var sections = story.get("sections");
+    var section = sections.at(sectionIndex);
+
+    var block;
+
+    if (blockIndex > 0) {
+      block = section.get("blocks").at(blockIndex - 1);
+    } else if (sectionIndex > 0) {
+      var previousSection = sections.at(sectionIndex - 1);
+      block = previousSection.get("blocks").at(previousSection.length - 1);
+    } else {
+      return null;
+    }
+
+    if (block.isEditable()) {
+      return block;
+    } else {
+      return this.previousEditableBlock(block.get("section_index"), block.get("index"));
     }
   }
 
@@ -112,7 +127,7 @@ class EditorStore extends Store {
 
     section.addBlock(block, point.blockIndex);
 
-    if (block.isDivider()) {
+    if (!block.isEditable()) {
       point.blockIndex += 1;
     }
 
@@ -133,26 +148,36 @@ class EditorStore extends Store {
     var sectionIndex = point.sectionIndex;
     var blockIndex = point.blockIndex;
 
-    var currentBlock = this.currentBlock(sectionIndex, blockIndex);
-    var priorBlock = this.priorBlock(sectionIndex, blockIndex);
+    var story = this._story;
+    var sections = story.get("sections");
+    var section = sections.at(sectionIndex);
 
-    var currentSection = currentBlock.get("section");
+    var previousBlock;
+
+    if (blockIndex > 0) {
+      previousBlock = section.get("blocks").at(blockIndex - 1);
+    } else if (sectionIndex > 0) {
+      var previousSection = sections.at(sectionIndex - 1);
+      previousBlock = previousSection.get("blocks").at(previousSection.length - 1);
+    }
+
+    var currentBlock = this.currentBlock(sectionIndex, blockIndex);
 
     point.sectionIndex = priorBlock.get("section_index");
     point.blockIndex = priorBlock.get("index");
     point.caretOffset = priorBlock.length;
 
-    if (priorBlock.isDivider()) {
-      currentSection.removeBlock(priorBlock);
-    } else if (priorBlock.get("type") === TypeConstants.block.image) {
+    if (!previousBlock.isEditable()) {
+      section.removeBlock(previousBlock);
+    } else if (previousBlock.get("type") === TypeConstants.block.image) {
       if (currentBlock.get("content") || currentBlock.isLast()) {
         return;
       } else {
-        currentSection.removeBlock(currentBlock);
+        section.removeBlock(currentBlock);
       }
     } else {
-      priorBlock.mergeBlock(currentBlock, priorBlock.length);
-      currentSection.removeBlock(currentBlock);
+      previousBlock.mergeBlock(currentBlock, previousBlock.length);
+      section.removeBlock(currentBlock);
     }
 
     this.updatePoint(point);
@@ -247,15 +272,11 @@ class EditorStore extends Store {
     var blockIndex = point.blockIndex;
 
     var currentBlock = this.currentBlock(sectionIndex, blockIndex);
-    var nextBlock = this.nextBlock(sectionIndex, blockIndex);
+    var nextEditableBlock = this.nextEditableBlock(sectionIndex, blockIndex);
 
-    while (nextBlock && nextBlock.isDivider()) {
-      nextBlock = this.nextBlock(nextBlock.get("section_index"), nextBlock.get("index"));
-    }
-
-    if (nextBlock) {
-      point.sectionIndex = nextBlock.get("section_index");
-      point.blockIndex = nextBlock.get("index");
+    if (nextEditableBlock) {
+      point.sectionIndex = nextEditableBlock.get("section_index");
+      point.blockIndex = nextEditableBlock.get("index");
     } else {
       point.caretOffset = currentBlock.length;
     }
@@ -264,26 +285,19 @@ class EditorStore extends Store {
   }
 
   shiftLeft(point) {
-    var priorBlock = this.priorBlock(point.sectionIndex, point.blockIndex);
+    var previousEditableBlock = this.previousEditableBlock(point.sectionIndex, point.blockIndex);
 
-    while (priorBlock && priorBlock.isDivider()) {
-      priorBlock = this.priorBlock(priorBlock.get("section_index"), priorBlock.get("index"));
-    }
-
-    if (priorBlock) {
-      point.sectionIndex = priorBlock.get("section_index");
-      point.blockIndex = priorBlock.get("index");
-      point.caretOffset = priorBlock.length;
+    if (previousEditableBlock) {
+      point.sectionIndex = previousEditableBlock.get("section_index");
+      point.blockIndex = previousEditableBlock.get("index");
+      point.caretOffset = previousEditableBlock.length;
     }
 
     this.updatePoint(point);
   }
 
   shiftRight(point) {
-    var nextBlock = this.nextBlock(point.sectionIndex, point.blockIndex);
-    while (nextBlock && nextBlock.isDivider()) {
-      nextBlock = this.nextBlock(nextBlock.get("section_index"), nextBlock.get("index"));
-    }
+    var nextEditableBlock = this.nextEditableBlock(point.sectionIndex, point.blockIndex);
 
     if (nextBlock) {
       point.sectionIndex = nextBlock.get("section_index");
@@ -295,14 +309,11 @@ class EditorStore extends Store {
   }
 
   shiftUp(point) {
-    var priorBlock = this.priorBlock(point.sectionIndex, point.blockIndex);
-    while (priorBlock && priorBlock.isDivider()) {
-      priorBlock = this.priorBlock(priorBlock.get("section_index"), priorBlock.get("index"));
-    }
+    var previousEditableBlock = this.previousEditableBlock(point.sectionIndex, point.blockIndex);
 
-    if (priorBlock) {
-      point.sectionIndex = priorBlock.get("section_index");
-      point.blockIndex = priorBlock.get("index");
+    if (previousEditableBlock) {
+      point.sectionIndex = previousEditableBlock.get("section_index");
+      point.blockIndex = previousEditableBlock.get("index");
       point.shouldFloor = true;
     } else {
       point.caretOffset = 0;

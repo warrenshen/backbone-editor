@@ -50,8 +50,8 @@ class Block extends Model {
   // --------------------------------------------------
   // Conditions
   // --------------------------------------------------
-  isDivider() {
-    return this.get("type") === TypeConstants.block.divider;
+  isEditable() {
+    return this.get("type") !== TypeConstants.block.divider;
   }
 
   isLast() {
