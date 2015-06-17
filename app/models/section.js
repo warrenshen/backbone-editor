@@ -18,6 +18,14 @@ class Section extends Model {
     };
   }
 
+  get footer() {
+    return this.get("blocks").at(this.length - 1);
+  }
+
+  get leader() {
+    return this.get("blocks").at(0);
+  }
+
   get length() {
     return this.get("blocks").length;
   }
