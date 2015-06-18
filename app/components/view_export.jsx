@@ -2,6 +2,8 @@ import React from "react";
 
 import Component from "app/templates/component";
 
+import StoryCode from "app/components/export/story_code";
+
 import EditorStore from "app/stores/editor_store";
 
 
@@ -28,9 +30,7 @@ class ViewExport extends Component {
     return (
       <div className={"general-view"} ref={"view"}>
         <pre>
-          <code>
-            {this.state.story.toCode()}
-          </code>
+          <StoryCode story={this.state.story} />
         </pre>
       </div>
     );

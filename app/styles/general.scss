@@ -79,11 +79,30 @@ pre {
 
 code {
   display: block;
-  color: #555555;
+}
+
+// TODO: Constants for these guys!
+.code {
   font-size: $font-size-smallest;
   font-family: "Monaco", monospace;
   line-height: $font-size-smaller;
   white-space: pre-wrap;
+}
+
+.code-blue {
+  color: $blue;
+}
+
+.code-green {
+  color: $green;
+}
+
+.code-rose {
+  color: $rose;
+}
+
+.code-yellow {
+  color: $yellow;
 }
 
 .general-button {
@@ -127,7 +146,7 @@ code {
 .general-placeholder {
   &:empty:before {
     content: attr(placeholder);
-    color: $gray-light;
+    color: $mist;
   }
 }
 
