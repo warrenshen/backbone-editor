@@ -1,6 +1,10 @@
 @import "variables";
 
 
+.block-centered {
+  text-align: center;
+}
+
 .block-container {
   position: relative;
   width: 100%;
@@ -17,14 +21,10 @@
   min-height: 30px;
   font-size: $font-size-smaller;
   font-family: $font-family-secondary;
-  line-height: 30px;
+  line-height: $font-size-large;
   outline: none;
   word-wrap: break-word;
   box-sizing: border-box;
-}
-
-.block-centered {
-  text-align: center;
 }
 
 .block-divider {
@@ -43,13 +43,13 @@
 .block-heading-two {
   font-size: $font-size-larger;
   font-family: $font-family-primary;
-  line-height: 48px;
+  line-height: $font-size-largest;
 }
 
 .block-heading-three {
   font-size: $font-size-large;
   font-family: $font-family-primary;
-  line-height: 36px;
+  line-height: $font-size-larger;
 }
 
 .block-image {

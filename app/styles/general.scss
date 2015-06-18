@@ -18,15 +18,13 @@ h6 {
   position: relative;
   margin: 0;
   color: $ash;
-  font-family: $font-family-primary;
   font-weight: $font-weight-medium;
-  letter-spacing: -0.5px;
+  font-family: $font-family-primary;
   white-space: pre-wrap;
 }
 
 h1 {
   font-size: $font-size-largest;
-  letter-spacing: 4px;
   line-height: 64px;
 }
 
@@ -45,6 +43,7 @@ p,
 li,
 span,
 input {
+  position: relative;
   padding: 0;
   margin: 0;
   color: $ash;
@@ -52,83 +51,12 @@ input {
   font-weight: $font-weight-medium;
   font-family: $font-family-secondary;
   text-decoration: none;
-  outline: none;
   white-space: pre-wrap;
+  outline: none;
 }
 
 hr {
   border: 1px solid $gray;
-}
-
-pre {
-  position: relative;
-  width: 712px;
-  padding: 18px;
-  margin: auto;
-  background-color: #f5f2f0;
-  border: solid 1px #e1e1e1;
-  border-radius: 2px;
-  line-height: 1.2em;
-  clear: both;
-  -webkit-user-select: all;
-
-  &:hover {
-    cursor: text;
-  }
-}
-
-code {
-  display: block;
-}
-
-// TODO: Constants for these guys!
-.code {
-  font-size: $font-size-smallest;
-  font-family: "Monaco", monospace;
-  line-height: $font-size-smaller;
-  white-space: pre-wrap;
-}
-
-.code-blue {
-  color: $blue;
-}
-
-.code-green {
-  color: $green;
-}
-
-.code-rose {
-  color: $rose;
-}
-
-.code-yellow {
-  color: $yellow;
-}
-
-.general-button {
-  display: inline-block;
-  vertical-align: middle;
-  position: relative;
-  width: 72px;
-  padding: 6px 0;
-  margin-left: 12px;
-  color: $gray;
-  border: 2px solid $gray;
-  border-radius: 2px;
-  font-size: $font-size-smallest;
-  font-family: $font-family-primary;
-  text-align: center;
-
-  &:hover {
-    color: $coral;
-    border-color: $coral;
-    cursor: pointer;
-  }
-}
-
-.general-button-selected {
-  color: $coral;
-  border-color: $coral;
 }
 
 .general-hidden {
@@ -163,6 +91,32 @@ code {
   vertical-align: middle;
   position: relative;
   height: 100%;
+}
+
+.view-button {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  width: 72px;
+  padding: 6px 0;
+  margin-left: 12px;
+  color: $gray;
+  border: 2px solid $gray;
+  border-radius: 2px;
+  font-size: $font-size-smallest;
+  font-family: $font-family-primary;
+  text-align: center;
+
+  &:hover {
+    color: $coral;
+    border-color: $coral;
+    cursor: pointer;
+  }
+}
+
+.view-button-selected {
+  color: $coral;
+  border-color: $coral;
 }
 
 .view-buttons {

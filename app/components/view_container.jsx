@@ -47,8 +47,8 @@ class ViewContainer extends Component {
   // Render
   // --------------------------------------------------
   renderButton(props, index) {
-    var className = "general-button";
-    className += (props.isSelected) ? " general-button-selected" : "";
+    var className = "view-button";
+    className += (props.isSelected) ? " view-button-selected" : "";
 
     return (
       <Clickable
