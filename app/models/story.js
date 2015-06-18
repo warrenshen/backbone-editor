@@ -49,7 +49,7 @@ class Story extends Model {
   // --------------------------------------------------
   addSection(section, index=0) {
     this.get("sections").add(section, { at: index });
-    this.updateIndices();
+    this.resetIndices();
   }
 
   mergeSections() {
@@ -62,10 +62,11 @@ class Story extends Model {
       }
     }
 
-    this.updateIndices();
+    this.resetIndices();
   }
 
-  updateIndices() {
+
+  resetIndices() {
     this.get("sections").map(function(section, index) {
       section.set("index", index);
 
@@ -75,6 +76,17 @@ class Story extends Model {
         section.set("is_last", false);
       }
     }, this);
+  }
+
+  toString() {
+    var string = "";
+    var sections = this.get("sections");
+
+    for (var section of sections) {
+      string += section.toString();
+    }
+
+    return string;
   }
 }
 

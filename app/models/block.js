@@ -2,6 +2,8 @@ import _ from "lodash"
 
 import Model from "app/templates/model";
 
+import Formatter from "app/helpers/formatter";
+
 import ModelDirectory from "app/directories/model_directory";
 
 import TypeConstants from "app/constants/type_constants";
@@ -264,6 +266,14 @@ class Block extends Model {
         }
       }
     }
+  }
+
+  toContent() {
+    return Formatter.formatBlock(this);
+  }
+
+  toString() {
+    return '<p class="block-content">\n\t' + this.toContent() + '\n</p>';
   }
 }
 

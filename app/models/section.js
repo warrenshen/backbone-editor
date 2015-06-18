@@ -50,7 +50,7 @@ class Section extends Model {
   addBlock(block, index=0) {
     block.set("section_index", this.get("index"));
     this.get("blocks").add(block, { at: index });
-    this.updateIndices();
+    this.resetIndices();
   }
 
   mergeSection(section) {
@@ -70,10 +70,10 @@ class Section extends Model {
 
   removeBlock(block) {
     this.get("blocks").remove(block);
-    this.updateIndices();
+    this.resetIndices();
   }
 
-  updateIndices() {
+  resetIndices() {
     this.get("blocks").map(function(block, index) {
       block.set("index", index);
       block.set("section", this);
@@ -84,6 +84,17 @@ class Section extends Model {
         block.set("is_local_last", false);
       }
     }, this);
+  }
+
+  toString() {
+    var blocks = this.get("blocks");
+    var string = "";
+
+    for (var block of blocks) {
+      string += block.toString();
+    }
+
+    return string;
   }
 }
 

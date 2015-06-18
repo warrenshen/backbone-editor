@@ -239,7 +239,7 @@ class EditorStore extends Store {
           blocks.remove(block);
         }
 
-        section.updateIndices();
+        section.resetIndices();
       }
     }
 
