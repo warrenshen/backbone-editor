@@ -169,6 +169,7 @@ class StoryEditable extends Component {
   }
 
   render() {
+    console.log(this.props.story.toString());
     return (
       <div className={"story-container"} ref={"story"}>
         {this.renderSections()}

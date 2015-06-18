@@ -60,6 +60,25 @@ hr {
   border: 1px solid $gray;
 }
 
+pre {
+  position: relative;
+  width: 712px;
+  margin: auto;
+  background-color: #f4f4f4;
+  border: solid 1px #e1e1e1;
+  line-height: 1.2em;
+  clear: both;
+}
+
+code {
+  display: block;
+  color: #555555;
+  font-size: $font-size-smallest;
+  font-family: "Monaco", monospace;
+  line-height: $font-size-smaller;
+  white-space: pre;
+}
+
 .general-button {
   display: inline-block;
   vertical-align: middle;

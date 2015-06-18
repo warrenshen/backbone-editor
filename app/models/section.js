@@ -90,7 +90,7 @@ class Section extends Model {
     var blocks = this.get("blocks");
     var string = "";
 
-    for (var block of blocks) {
+    for (var block of blocks.models) {
       string += block.toString();
     }
 

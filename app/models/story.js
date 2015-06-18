@@ -82,7 +82,7 @@ class Story extends Model {
     var string = "";
     var sections = this.get("sections");
 
-    for (var section of sections) {
+    for (var section of sections.models) {
       string += section.toString();
     }
 

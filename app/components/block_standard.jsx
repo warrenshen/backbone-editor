@@ -26,7 +26,6 @@ class BlockStandard extends BlockComponent {
       { "block-last": block.isLast() }
     );
 
-    console.log(block.toString());
     return (
       <div
         className={"block-container"}

@@ -273,7 +273,7 @@ class Block extends Model {
   }
 
   toString() {
-    return '<p class="block-content">\n\t' + this.toContent() + '\n</p>';
+    return '<p class="block-content">\n\t' + this.toContent() + '\n</p>\n';
   }
 }
 

@@ -18,7 +18,11 @@ class ViewExport extends Component {
   render() {
     return (
       <div className={"general-view"} ref={"view"}>
-
+        <pre>
+          <code>
+            blah blah blah
+          </code>
+        </pre>
       </div>
     );
   }
