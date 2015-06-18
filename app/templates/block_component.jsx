@@ -208,7 +208,7 @@ class BlockComponent extends Component {
   // Render
   // --------------------------------------------------
   renderContent(node) {
-    node.innerHTML = this.props.block.toContent();
+    node.innerHTML = this.props.block.toString();
   }
 
   renderModal() {

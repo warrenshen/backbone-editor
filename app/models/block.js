@@ -268,12 +268,13 @@ class Block extends Model {
     }
   }
 
-  toContent() {
-    return Formatter.formatBlock(this);
+  toCode() {
+    return '<p class="block-content">\n' + this.toString() + '\n</p>\n';
   }
 
   toString() {
-    return '<p class="block-content">\n\t' + this.toContent() + '\n</p>\n';
+    // TODO: Move formatter methods into this model?
+    return Formatter.formatBlock(this);
   }
 }
 

@@ -76,7 +76,7 @@ code {
   font-size: $font-size-smallest;
   font-family: "Monaco", monospace;
   line-height: $font-size-smaller;
-  white-space: pre;
+  white-space: pre-wrap;
 }
 
 .general-button {

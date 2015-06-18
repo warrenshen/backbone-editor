@@ -2,6 +2,8 @@ import React from "react";
 
 import Component from "app/templates/component";
 
+import EditorStore from "app/stores/editor_store";
+
 
 class ViewExport extends Component {
 
@@ -13,6 +15,13 @@ class ViewExport extends Component {
   }
 
   // --------------------------------------------------
+  // State
+  // --------------------------------------------------
+  getStoreState() {
+    return { story: EditorStore.story };
+  }
+
+  // --------------------------------------------------
   // Render
   // --------------------------------------------------
   render() {
@@ -20,7 +29,7 @@ class ViewExport extends Component {
       <div className={"general-view"} ref={"view"}>
         <pre>
           <code>
-            blah blah blah
+            {this.state.story.toCode()}
           </code>
         </pre>
       </div>

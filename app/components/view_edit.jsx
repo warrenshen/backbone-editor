@@ -47,7 +47,7 @@ class ViewEdit extends Component {
       isEditable: EditorStore.mouseState === TypeConstants.mouse.up,
       story: EditorStore.story,
       vector: EditorStore.vector,
-    }
+    };
   }
 
   updateModalLink() {
