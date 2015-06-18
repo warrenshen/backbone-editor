@@ -3,7 +3,7 @@ import React from "react";
 
 import Component from "app/templates/component";
 
-import OptionMedia from "app/components/option_media";
+import OptionMedia from "app/components/edit/option_media";
 
 import Block from "app/models/block";
 

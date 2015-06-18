@@ -63,11 +63,18 @@ hr {
 pre {
   position: relative;
   width: 712px;
+  padding: 18px;
   margin: auto;
-  background-color: #f4f4f4;
+  background-color: #f5f2f0;
   border: solid 1px #e1e1e1;
+  border-radius: 2px;
   line-height: 1.2em;
   clear: both;
+  -webkit-user-select: all;
+
+  &:hover {
+    cursor: text;
+  }
 }
 
 code {

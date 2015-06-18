@@ -88,13 +88,13 @@ class Section extends Model {
 
   toCode() {
     var blocks = this.get("blocks");
-    var string = "";
+    var code = "";
 
     for (var block of blocks.models) {
-      string += block.toCode();
+      code += block.toCode();
     }
 
-    return string;
+    return code;
   }
 }
 

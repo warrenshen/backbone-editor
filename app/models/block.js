@@ -269,7 +269,29 @@ class Block extends Model {
   }
 
   toCode() {
-    return '<p class="block-content">\n' + this.toString() + '\n</p>\n';
+    var content = this.toString();
+    console.log(content);
+    if (content) {
+      content = "\n" + content + "\n";
+    }
+
+    switch (this.get("type")) {
+      case TypeConstants.block.headingOne:
+        return "<h1 class=\"block block-heading-one\">" +
+               content + "</h1>" + "\n";
+      case TypeConstants.block.headingTwo:
+        return "<h2 class=\"block block-heading-two\">" +
+               content + "</h2>" + "\n";
+      case TypeConstants.block.headingThree:
+        return "<h3 class=\"block block-heading-three\">" +
+               content + "</h3>" + "\n";
+      case TypeConstants.block.quote:
+        return "<blockquote class=\"block block-quote\">" +
+               content + "</blockquote>" + "\n";
+      case TypeConstants.block.standard:
+        return "<p class=\"block block-paragraph\">" +
+                content + "</p>" + "\n";
+    }
   }
 
   toString() {

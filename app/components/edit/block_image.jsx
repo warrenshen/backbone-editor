@@ -3,7 +3,7 @@ import React from "react";
 
 import Component from "app/templates/component";
 
-import BlockCaption from "app/components/block_caption";
+import BlockCaption from "app/components/edit/block_caption";
 
 import Block from "app/models/block";
 

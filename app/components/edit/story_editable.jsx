@@ -3,7 +3,7 @@ import React from "react";
 
 import Component from "app/templates/component";
 
-import SectionStandard from "app/components/section_standard";
+import SectionStandard from "app/components/edit/section_standard";
 
 import Story from "app/models/story";
 

@@ -79,14 +79,14 @@ class Story extends Model {
   }
 
   toCode() {
-    var string = "";
+    var code = "";
     var sections = this.get("sections");
 
     for (var section of sections.models) {
-      string += section.toCode();
+      code += section.toCode();
     }
 
-    return string;
+    return code;
   }
 }
 

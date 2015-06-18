@@ -1,7 +1,7 @@
 import React from "react";
 import Component from "app/templates/component";
 
-import ModalMedia from "app/components/modal_media";
+import ModalMedia from "app/components/edit/modal_media";
 
 import Block from "app/models/block";
 
