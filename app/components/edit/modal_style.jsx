@@ -4,7 +4,7 @@ import React from "react";
 
 import Component from "app/templates/component";
 
-import OptionStyle from "app/components/option_style";
+import OptionStyle from "app/components/edit/option_style";
 
 import EditorActor from "app/actors/editor_actor";
 

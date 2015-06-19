@@ -2,6 +2,8 @@ import _ from "lodash"
 
 import Model from "app/templates/model";
 
+import Formatter from "app/helpers/formatter";
+
 import ModelDirectory from "app/directories/model_directory";
 
 import TypeConstants from "app/constants/type_constants";
@@ -52,6 +54,10 @@ class Block extends Model {
   // --------------------------------------------------
   isEditable() {
     return this.get("type") !== TypeConstants.block.divider;
+  }
+
+  isImage() {
+    return this.get("type") === TypeConstants.block.image;
   }
 
   isLast() {
@@ -264,6 +270,11 @@ class Block extends Model {
         }
       }
     }
+  }
+
+  toString() {
+    // TODO: Move formatter methods into this model?
+    return Formatter.formatBlock(this);
   }
 }
 

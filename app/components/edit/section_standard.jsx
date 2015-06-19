@@ -2,11 +2,11 @@ import React from "react";
 
 import Component from "app/templates/component";
 
-import BlockDivider from "app/components/block_divider";
-import BlockHeading from "app/components/block_heading";
-import BlockImage from "app/components/block_image";
-import BlockQuote from "app/components/block_quote";
-import BlockStandard from "app/components/block_standard";
+import BlockDivider from "app/components/edit/block_divider";
+import BlockHeading from "app/components/edit/block_heading";
+import BlockImage from "app/components/edit/block_image";
+import BlockQuote from "app/components/edit/block_quote";
+import BlockStandard from "app/components/edit/block_standard";
 
 import Section from "app/models/section";
 

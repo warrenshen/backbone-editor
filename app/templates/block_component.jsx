@@ -1,7 +1,7 @@
 import React from "react";
 import Component from "app/templates/component";
 
-import ModalMedia from "app/components/modal_media";
+import ModalMedia from "app/components/edit/modal_media";
 
 import Block from "app/models/block";
 
@@ -9,7 +9,6 @@ import EditorStore from "app/stores/editor_store";
 
 import EditorActor from "app/actors/editor_actor";
 
-import Formatter from "app/helpers/formatter";
 import Selector from "app/helpers/selector";
 
 import KeyConstants from "app/constants/key_constants";
@@ -209,7 +208,7 @@ class BlockComponent extends Component {
   // Render
   // --------------------------------------------------
   renderContent(node) {
-    node.innerHTML = Formatter.formatBlock(this.props.block);
+    node.innerHTML = this.props.block.toString();
   }
 
   renderModal() {

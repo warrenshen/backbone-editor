@@ -1,0 +1,47 @@
+@import "variables";
+
+
+pre {
+  position: relative;
+  width: 712px;
+  padding: 18px;
+  margin: auto;
+  background-color: #f8f5f3;
+  border: solid 1px #e1e1e1;
+  border-radius: 2px;
+  clear: both;
+  -webkit-user-select: all;
+
+  &:hover {
+    cursor: text;
+  }
+}
+
+code {
+  display: block;
+}
+
+.code {
+  font-size: $font-size-smallest;
+  font-family: $font-family-tertiary;
+  line-height: $font-size-small;
+  white-space: pre-wrap;
+}
+
+.code-blue {
+  color: $blue;
+}
+
+.code-green {
+  color: $green;
+}
+
+.code-rose {
+  color: $rose;
+}
+
+.code-indented {
+  padding-left: 33px;
+  color: $ash;
+  text-indent: -33px;
+}

@@ -25,7 +25,7 @@ class ViewContainer extends Component {
     return { viewType: TypeConstants.view.edit };
   }
 
-  selectEditor() {
+  selectEdit() {
     if (this.state.viewType !== TypeConstants.view.edit) {
       this.setState({ viewType: TypeConstants.view.edit });
     }
@@ -37,7 +37,7 @@ class ViewContainer extends Component {
     }
   }
 
-  selectTemplate() {
+  selectExport() {
     if (this.state.viewType !== TypeConstants.view.export) {
       this.setState({ viewType: TypeConstants.view.export });
     }
@@ -47,8 +47,8 @@ class ViewContainer extends Component {
   // Render
   // --------------------------------------------------
   renderButton(props, index) {
-    var className = "general-button";
-    className += (props.isSelected) ? " general-button-selected" : "";
+    var className = "view-button";
+    className += (props.isSelected) ? " view-button-selected" : "";
 
     return (
       <Clickable
@@ -62,7 +62,7 @@ class ViewContainer extends Component {
   renderButtons() {
     return [
       {
-        action: this.selectEditor.bind(this),
+        action: this.selectEdit.bind(this),
         content: TypeConstants.view.edit,
         isSelected: this.state.viewType === TypeConstants.view.edit,
       },
@@ -72,7 +72,7 @@ class ViewContainer extends Component {
         isSelected: this.state.viewType === TypeConstants.view.preview,
       },
       {
-        action: this.selectTemplate.bind(this),
+        action: this.selectExport.bind(this),
         content: TypeConstants.view.export,
         isSelected: this.state.viewType === TypeConstants.view.export,
       },
