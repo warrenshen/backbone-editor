@@ -19,20 +19,28 @@ class BlockStandard extends Component {
   // --------------------------------------------------
   render() {
     return (
-      <div>
+      <code>
         <p className={"code"}>
-          <span className={"code code-rose"}>{"  <p"}</span>
-          <span className={"code code-green"}>{" class="}</span>
+          <span className={"code code-rose"}>
+            {"  <p"}
+          </span>
+          <span className={"code code-green"}>
+            {" class="}
+          </span>
           <span className={"code code-blue"}>
             {"\"block block-paragraph\""}
           </span>
-          <span className={"code code-rose"}>{">"}</span>
+          <span className={"code code-rose"}>
+            {">"}
+          </span>
         </p>
         <p className={"code code-indented"}>
           {"    " + this.props.block.toString()}
         </p>
-        <p className={"code code-rose"}>{"  </p>"}</p>
-      </div>
+        <p className={"code code-rose"}>
+          {"  </p>"}
+        </p>
+      </code>
     );
   }
 }

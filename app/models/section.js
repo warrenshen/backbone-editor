@@ -85,17 +85,6 @@ class Section extends Model {
       }
     }, this);
   }
-
-  toCode() {
-    var blocks = this.get("blocks");
-    var code = "";
-
-    for (var block of blocks.models) {
-      code += block.toCode();
-    }
-
-    return code;
-  }
 }
 
 
