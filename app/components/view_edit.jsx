@@ -255,7 +255,7 @@ class ViewEdit extends Component {
           vector={this.state.vector} />
         <ModalLink
           link={this.state.link}
-          shouldUpdate={this.state.shouldupdateModalLink} />
+          shouldUpdate={this.state.shouldUpdateModalLink} />
       </div>
     );
   }
