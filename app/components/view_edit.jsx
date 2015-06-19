@@ -2,9 +2,9 @@ import React from "react";
 
 import Component from "app/templates/component";
 
-import StoryEditable from "app/components/story_editable";
-import ModalLink from "app/components/modal_link";
-import ModalStyle from "app/components/modal_style";
+import StoryEditable from "app/components/edit/story_editable";
+import ModalLink from "app/components/edit/modal_link";
+import ModalStyle from "app/components/edit/modal_style";
 
 import Block from "app/models/block";
 
@@ -47,7 +47,7 @@ class ViewEdit extends Component {
       isEditable: EditorStore.mouseState === TypeConstants.mouse.up,
       story: EditorStore.story,
       vector: EditorStore.vector,
-    }
+    };
   }
 
   updateModalLink() {
@@ -255,7 +255,7 @@ class ViewEdit extends Component {
           vector={this.state.vector} />
         <ModalLink
           link={this.state.link}
-          shouldUpdate={this.state.shouldupdateModalLink} />
+          shouldUpdate={this.state.shouldUpdateModalLink} />
       </div>
     );
   }

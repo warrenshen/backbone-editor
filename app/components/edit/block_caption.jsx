@@ -146,7 +146,7 @@ class BlockCaption extends Component {
   // Render
   // --------------------------------------------------
   renderContent(node) {
-    node.innerHTML = Formatter.formatBlock(this.props.block);
+    node.innerHTML = this.props.block.get("content");
   }
 
   render() {

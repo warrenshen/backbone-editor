@@ -8,7 +8,8 @@ import ModelDirectory from "app/directories/model_directory";
 import RouterDirectory from "app/directories/router_directory";
 import StoreDirectory from "app/directories/store_directory";
 
-import "app/styles/editor.scss";
+import "app/styles/edit.scss";
+import "app/styles/export.scss";
 import "app/styles/general.scss";
 
 
