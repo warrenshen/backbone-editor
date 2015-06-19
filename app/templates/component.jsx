@@ -35,7 +35,7 @@ class Component extends React.Component {
   }
 
   setState(nextState) {
-    if (false) {
+    if (true) {
       console.log("Setting state on: " + this.displayName());
     }
 

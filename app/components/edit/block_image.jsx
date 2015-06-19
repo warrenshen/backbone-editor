@@ -34,7 +34,9 @@ class BlockImage extends Component {
   // Handlers
   // --------------------------------------------------
   handleBlur(event) {
-    if (this.state.shouldShowBorder) {
+    var invisible = React.findDOMNode(this.refs.invisible);
+
+    if (invisible && this.state.shouldShowBorder) {
       this.setState({ shouldShowBorder: false });
     }
   }
@@ -92,8 +94,8 @@ class BlockImage extends Component {
     image.removeEventListener("mouseup", this.handleMouseUp);
 
     var invisible = React.findDOMNode(this.refs.invisible);
-    invisible.removeEventListener("blur", this.handleBlurImage);
-    invisible.removeEventListener("focus", this.handleFocusImage);
+    invisible.removeEventListener("blur", this.handleBlur);
+    invisible.removeEventListener("focus", this.handleFocus);
     invisible.removeEventListener("keydown", this.handleKeyDown);
   }
 

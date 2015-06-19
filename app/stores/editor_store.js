@@ -164,7 +164,6 @@ class EditorStore extends Store {
       if (block.isImage()) {
         section.removeBlock(block);
         this.addBlock(new Block(), point);
-        console.log("sup homies!");
       }
     } else {
       point.sectionIndex = previousBlock.get("section_index");
