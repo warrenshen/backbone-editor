@@ -39,3 +39,8 @@ code {
 .code-rose {
   color: $rose;
 }
+
+.code-indented {
+  padding-left: 33px;
+  text-indent: -33px;
+}

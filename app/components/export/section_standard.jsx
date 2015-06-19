@@ -2,6 +2,7 @@ import React from "react";
 
 import Component from "app/templates/component";
 
+import BlockHeading from "app/components/export/block_heading";
 import BlockStandard from "app/components/export/block_standard";
 
 import Section from "app/models/section";
@@ -30,10 +31,10 @@ class SectionStandard extends Component {
     switch (block.get("type")) {
       // case TypeConstants.block.divider:
       //   return <BlockDivider {...props} />;
-      // case TypeConstants.block.headingOne:
-      // case TypeConstants.block.headingTwo:
-      // case TypeConstants.block.headingThree:
-      //   return <BlockHeading {...props} />;
+      case TypeConstants.block.headingOne:
+      case TypeConstants.block.headingTwo:
+      case TypeConstants.block.headingThree:
+        return <BlockHeading {...props} />;
       // case TypeConstants.block.image:
       //   return <BlockImage {...props} />;
       // case TypeConstants.block.quote:
