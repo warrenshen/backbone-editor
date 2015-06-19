@@ -56,6 +56,10 @@ class Block extends Model {
     return this.get("type") !== TypeConstants.block.divider;
   }
 
+  isImage() {
+    return this.get("type") === TypeConstants.block.image;
+  }
+
   isLast() {
     return this.get("section").get("is_last") && this.get("is_local_last");
   }

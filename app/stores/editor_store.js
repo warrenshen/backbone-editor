@@ -160,24 +160,35 @@ class EditorStore extends Store {
       previousBlock = this.getSection(sectionIndex - 1).footer;
     }
 
-    point.sectionIndex = previousBlock.get("section_index");
-    point.blockIndex = previousBlock.get("index");
-    point.caretOffset = previousBlock.length;
-
-    if (!previousBlock.isEditable()) {
-      section.removeBlock(previousBlock);
-    } else if (previousBlock.get("type") === TypeConstants.block.image) {
-      if (block.get("content") || block.isLast()) {
-        return;
-      } else {
+    if (previousBlock === null) {
+      if (block.isImage()) {
         section.removeBlock(block);
+        this.addBlock(new Block(), point);
+        console.log("sup homies!");
       }
     } else {
-      previousBlock.mergeBlock(block, previousBlock.length);
-      section.removeBlock(block);
-    }
+      point.sectionIndex = previousBlock.get("section_index");
+      point.blockIndex = previousBlock.get("index");
+      point.caretOffset = previousBlock.length;
 
-    this.updatePoint(point);
+      if (!previousBlock.isEditable()) {
+        section.removeBlock(previousBlock);
+      } else if (previousBlock.isImage()) {
+        if (block.get("content") || block.isLast()) {
+          return;
+        } else {
+          section.removeBlock(block);
+        }
+      } else {
+        if (!block.isImage()) {
+          previousBlock.mergeBlock(block, previousBlock.length);
+        }
+
+        section.removeBlock(block);
+      }
+
+      this.updatePoint(point);
+    }
   }
 
   removeBlocks(vector, options={}) {
