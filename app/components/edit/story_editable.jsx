@@ -170,7 +170,11 @@ class StoryEditable extends Component {
 
   render() {
     return (
-      <div className={"story-container"} ref={"story"}>
+      <div
+        className={"story-container"}
+        contentEditable={"true"}
+        ref={"story"}
+        onKeyDown={function(event) { console.log("blah"); }}>
         {this.renderSections()}
       </div>
     );
@@ -178,7 +182,6 @@ class StoryEditable extends Component {
 }
 
 StoryEditable.propTypes = {
-  isEditable: React.PropTypes.bool.isRequired,
   point: React.PropTypes.instanceOf(Point),
   shouldUpdate: React.PropTypes.bool.isRequired,
   story: React.PropTypes.instanceOf(Story).isRequired,
@@ -188,7 +191,6 @@ StoryEditable.propTypes = {
 };
 
 StoryEditable.defaultProps = {
-  isEditable: true,
   shouldUpdate: true,
   story: new Story(),
   updateModalLink: null,

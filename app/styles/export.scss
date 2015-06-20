@@ -20,6 +20,8 @@ code {
 }
 
 .code {
+  position: relative;
+  width: 100%;
   font-size: $font-size-smallest;
   font-family: $font-family-tertiary;
   line-height: 20px;

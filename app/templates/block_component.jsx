@@ -92,6 +92,7 @@ class BlockComponent extends Component {
           break;
       }
     } else if (event.which === KeyConstants.backspace) {
+      console.log("BC handling backspace.");
       // TODO: Backspace does not cause rerender,
       // so link modal stays in the wrong position.
       if (point.caretOffset !== 0) {
@@ -191,7 +192,6 @@ class BlockComponent extends Component {
     content.addEventListener("keypress", this.handleKeyPress.bind(this));
     content.addEventListener("mousemove", this.handleMouseMove.bind(this));
     content.addEventListener("mouseup", this.handleMouseUp.bind(this));
-
     this.renderContent(content);
   }
 
@@ -216,6 +216,16 @@ class BlockComponent extends Component {
     node.innerHTML = this.props.block.toString();
   }
 
+  renderEditable(className) {
+    return (
+      <p
+        className={className}
+        ref={"content"}
+        onKeyDown={this.handleKeyDown.bind(this)}>
+      </p>
+    );
+  }
+
   renderModal() {
     var block = this.props.block;
     var point = EditorStore.point;
@@ -232,7 +242,7 @@ class BlockComponent extends Component {
   render() {
     return (
       <div>
-        <p ref={"content"}></p>
+        {this.renderEditable("block-content")}
       </div>
     );
   }

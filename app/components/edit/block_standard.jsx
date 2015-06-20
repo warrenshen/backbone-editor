@@ -30,11 +30,7 @@ class BlockStandard extends BlockComponent {
       <div
         className={"block-container"}
         data-index={block.get("index")}>
-        <p
-          className={contentClass}
-          contentEditable={this.props.isEditable}
-          ref={"content"}>
-        </p>
+        {this.renderEditable(contentClass)}
         {this.renderModal()}
       </div>
     );

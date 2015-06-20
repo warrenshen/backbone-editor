@@ -35,7 +35,7 @@ class ViewEdit extends Component {
     return {
       shouldUpdateModalLink: false,
       shouldUpdateModalStyle: false,
-      shouldupdateStoryEditableEditable: false,
+      shouldUpdateStoryEditable: false,
     };
   }
 
@@ -44,7 +44,6 @@ class ViewEdit extends Component {
       activeStyles: EditorStore.activeStyles,
       link: EditorStore.link,
       point: EditorStore.point,
-      isEditable: EditorStore.mouseState === TypeConstants.mouse.up,
       story: EditorStore.story,
       vector: EditorStore.vector,
     };
@@ -54,7 +53,7 @@ class ViewEdit extends Component {
     this.setState({
       shouldUpdateModalLink: true,
       shouldUpdateModalStyle: false,
-      shouldupdateStoryEditableEditable: false,
+      shouldUpdateStoryEditable: false,
     });
   }
 
@@ -62,7 +61,7 @@ class ViewEdit extends Component {
     this.setState({
       shouldUpdateModalLink: false,
       shouldUpdateModalStyle: true,
-      shouldupdateStoryEditableEditable: false,
+      shouldUpdateStoryEditable: false,
     });
   }
 
@@ -70,7 +69,7 @@ class ViewEdit extends Component {
     this.setState({
       shouldUpdateModalLink: false,
       shouldUpdateModalStyle: true,
-      shouldupdateStoryEditableEditable: true,
+      shouldUpdateStoryEditable: true,
     });
   }
 
@@ -78,7 +77,7 @@ class ViewEdit extends Component {
     this.setState({
       shouldUpdateModalLink: false,
       shouldUpdateModalStyle: false,
-      shouldupdateStoryEditableEditable: true,
+      shouldUpdateStoryEditable: true,
     });
   }
 
@@ -241,9 +240,8 @@ class ViewEdit extends Component {
     return (
       <div className={"general-view"} ref={"view"}>
         <StoryEditable
-          isEditable={this.state.isEditable}
           point={this.state.point}
-          shouldUpdate={this.state.shouldupdateStoryEditableEditable}
+          shouldUpdate={this.state.shouldUpdateStoryEditable}
           story={this.state.story}
           updateModalLink={this.updateModalLink.bind(this)}
           updateModalStyle={this.updateModalStyle.bind(this)}
