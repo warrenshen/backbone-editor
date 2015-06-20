@@ -287,10 +287,7 @@ class EditorStore extends Store {
 
   resetCookies() {
     if (CookiesJS.enabled) {
-      console.log(this._story);
-      var json = this._story.toJSON();
-      console.log(json);
-      CookiesJS.set("editor", JSON.stringify(json));
+      CookiesJS.set("editor", JSON.stringify(this._story.toJSON()));
     }
   }
 
