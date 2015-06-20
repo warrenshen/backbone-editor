@@ -25,7 +25,7 @@ class EditorStore extends Store {
     this._link = null;
     this._mouseState = TypeConstants.mouse.up;
     this._point = new Point(0, 0, 0);
-    this._story = new Story(this.retreiveCookies());
+    this._story = new Story(this.retrieveCookies());
     this._vector = null;
   }
 
@@ -275,7 +275,7 @@ class EditorStore extends Store {
     this.updatePoint(startPoint);
   }
 
-  retreiveCookies() {
+  retrieveCookies() {
     // TODO: Fix cookies to support longer stories.
     if (CookiesJS.enabled) {
       var cookie = CookiesJS.get("editor");
@@ -287,10 +287,10 @@ class EditorStore extends Store {
 
   resetCookies() {
     if (CookiesJS.enabled) {
-      debugger
-      var json = JSON.stringify(this._story.toJSON());
-      console.log("Saving cookie of length: " + json.length);
-      CookiesJS.set("editor", json);
+      console.log(this._story);
+      var json = this._story.toJSON();
+      console.log(json);
+      CookiesJS.set("editor", JSON.stringify(json));
     }
   }
 

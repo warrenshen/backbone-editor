@@ -1,8 +1,5 @@
-import _ from "lodash"
-
 import Model from "app/templates/model";
 
-import Block from "app/models/block";
 import Section from "app/models/section";
 
 import ModelDirectory from "app/directories/model_directory";
@@ -15,9 +12,9 @@ class Story extends Model {
   // --------------------------------------------------
   initialize() {
     if (!this.length) {
-      var section = new Section();
-      section.addBlock(new Block());
-      this.addSection(section);
+      this.addSection(new Section());
+    } else {
+      this.resetIndices();
     }
   }
 

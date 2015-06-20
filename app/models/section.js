@@ -1,11 +1,24 @@
 import Model from "app/templates/model";
 
+import Block from "app/models/block";
+
 import ModelDirectory from "app/directories/model_directory";
 
 import TypeConstants from "app/constants/type_constants";
 
 
 class Section extends Model {
+
+  // --------------------------------------------------
+  // Setup
+  // --------------------------------------------------
+  initialize() {
+    if (!this.length) {
+      this.addBlock(new Block());
+    } else {
+      this.resetIndices();
+    }
+  }
 
   // --------------------------------------------------
   // Getters
@@ -76,7 +89,7 @@ class Section extends Model {
   resetIndices() {
     this.get("blocks").map(function(block, index) {
       block.set("index", index);
-      block.set("section", this);
+      block.set("section_index", this.get("index"));
       block.set("is_last", this.get("is_last") && index === this.length - 1);
     }, this);
   }
