@@ -165,14 +165,19 @@ class BlockComponent extends Component {
       event.stopPropagation();
 
       var selection = window.getSelection();
-      var range = document.caretRangeFromPoint(event.clientX, event.clientY);
+      var vector = Selector.generateVector(selection);
 
-      selection.removeAllRanges();
-      selection.addRange(range);
+      if (vector) {
+        EditorActor.updateVector(vector);
+      } else {
+        var range = document.caretRangeFromPoint(event.clientX, event.clientY);
+        selection.addRange(range);
 
-      var point = Selector.generatePoint(selection);
+        var point = Selector.generatePoint(selection);
 
-      EditorActor.updatePoint(point);
+        EditorActor.updatePoint(point);
+      }
+
       this.props.updateStoryStyle();
     }
   }

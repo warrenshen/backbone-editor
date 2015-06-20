@@ -1,4 +1,5 @@
-import _ from "lodash"
+import _ from "lodash";
+import CookiesJS from "cookies-js";
 
 import Store from "app/templates/store";
 
@@ -24,7 +25,7 @@ class EditorStore extends Store {
     this._link = null;
     this._mouseState = TypeConstants.mouse.up;
     this._point = new Point(0, 0, 0);
-    this._story = new Story();
+    this._story = new Story(this.retrieveCookies());
     this._vector = null;
   }
 
@@ -272,6 +273,22 @@ class EditorStore extends Store {
 
     story.mergeSections();
     this.updatePoint(startPoint);
+  }
+
+  retrieveCookies() {
+    // TODO: Fix cookies to support longer stories.
+    if (CookiesJS.enabled) {
+      var cookie = CookiesJS.get("editor");
+      return cookie ? JSON.parse(cookie) : null;
+    } else {
+      return null;
+    }
+  }
+
+  resetCookies() {
+    if (CookiesJS.enabled) {
+      CookiesJS.set("editor", JSON.stringify(this._story.toJSON()));
+    }
   }
 
   shiftDown(point) {
@@ -528,6 +545,8 @@ class EditorStore extends Store {
 
     this._point = point;
     this._vector = null;
+
+    this.resetCookies();
   }
 
   updateVector(vector) {

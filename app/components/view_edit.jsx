@@ -156,6 +156,8 @@ class ViewEdit extends Component {
   }
 
   handleMouseDown(event) {
+    var selection = window.getSelection();
+    selection.removeAllRanges();
     EditorActor.updateMouseState(TypeConstants.mouse.down);
   }
 
