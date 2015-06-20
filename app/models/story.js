@@ -14,9 +14,11 @@ class Story extends Model {
   // Setup
   // --------------------------------------------------
   initialize() {
-    var section = new Section();
-    section.addBlock(new Block());
-    this.addSection(section);
+    if (!this.get("sections").length) {
+      var section = new Section();
+      section.addBlock(new Block());
+      this.addSection(section);
+    }
   }
 
   // --------------------------------------------------

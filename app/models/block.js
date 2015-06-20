@@ -61,7 +61,11 @@ class Block extends Model {
   }
 
   isLast() {
-    return this.get("section").get("is_last") && this.get("is_local_last");
+    var section = this.get("section");
+    return section ?
+           this.get("section").get("is_last") &&
+           this.get("is_local_last") :
+           false;
   }
 
   // --------------------------------------------------
