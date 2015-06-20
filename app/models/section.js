@@ -77,12 +77,7 @@ class Section extends Model {
     this.get("blocks").map(function(block, index) {
       block.set("index", index);
       block.set("section", this);
-
-      if (index === this.length - 1) {
-        block.set("is_local_last", true);
-      } else {
-        block.set("is_local_last", false);
-      }
+      block.set("is_last", this.get("is_last") && index === this.length - 1);
     }, this);
   }
 }

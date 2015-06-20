@@ -14,7 +14,7 @@ class Story extends Model {
   // Setup
   // --------------------------------------------------
   initialize() {
-    if (!this.get("sections").length) {
+    if (!this.length) {
       var section = new Section();
       section.addBlock(new Block());
       this.addSection(section);
@@ -71,12 +71,7 @@ class Story extends Model {
   resetIndices() {
     this.get("sections").map(function(section, index) {
       section.set("index", index);
-
-      if (index === this.length - 1) {
-        section.set("is_last", true);
-      } else {
-        section.set("is_last", false);
-      }
+      section.set("is_last", index === this.length - 1);
     }, this);
   }
 }
