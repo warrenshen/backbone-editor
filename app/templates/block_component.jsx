@@ -169,10 +169,8 @@ class BlockComponent extends Component {
 
       if (vector) {
         EditorActor.updateVector(vector);
-      } else if (!this.props.isEditable) {
+      } else {
         var range = document.caretRangeFromPoint(event.clientX, event.clientY);
-
-        selection.removeAllRanges();
         selection.addRange(range);
 
         var point = Selector.generatePoint(selection);
