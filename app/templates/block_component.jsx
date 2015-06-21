@@ -18,37 +18,11 @@ import TypeConstants from "app/constants/type_constants";
 class BlockComponent extends Component {
 
   // --------------------------------------------------
-  // Handlers
-  // --------------------------------------------------
-  handleMouseUp(event) {
-    if (EditorStore.mouseState !== TypeConstants.mouse.move) {
-      event.stopPropagation();
-
-      var selection = window.getSelection();
-      var vector = Selector.generateVector(selection);
-
-      if (vector) {
-        EditorActor.updateVector(vector);
-      } else {
-        var range = document.caretRangeFromPoint(event.clientX, event.clientY);
-        selection.addRange(range);
-
-        var point = Selector.generatePoint(selection);
-
-        EditorActor.updatePoint(point);
-      }
-
-      this.props.updateStoryStyle();
-    }
-  }
-
-  // --------------------------------------------------
   // Lifecycle
   // --------------------------------------------------
   componentDidMount() {
     var content = React.findDOMNode(this.refs.content);
-    content.addEventListener("mousemove", this.handleMouseMove.bind(this));
-    content.addEventListener("mouseup", this.handleMouseUp.bind(this));
+
     this.renderContent(content);
   }
 
@@ -56,12 +30,6 @@ class BlockComponent extends Component {
     var content = React.findDOMNode(this.refs.content);
 
     this.renderContent(content);
-  }
-
-  componentWillUnmount() {
-    var content = React.findDOMNode(this.refs.content);
-    content.removeEventListener("mousemove", this.handleMouseMove);
-    content.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   // --------------------------------------------------
