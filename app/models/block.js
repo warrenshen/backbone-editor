@@ -270,8 +270,7 @@ class Block extends Model {
   }
 
   toString() {
-    // TODO: Move formatter methods into this model?
-    return Formatter.formatBlock(this);
+    return Formatter.stringifyBlock(this);
   }
 }
 

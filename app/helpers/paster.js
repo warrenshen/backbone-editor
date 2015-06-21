@@ -5,8 +5,6 @@ import Element from "app/models/element";
 
 import EditorStore from "app/stores/editor_store";
 
-import EditorActor from "app/actors/editor_actor";
-
 import TypeConstants from "app/constants/type_constants";
 
 
@@ -106,7 +104,7 @@ class Paster {
       for (var i = 0; i < nodes.length; i += 1) {
         var node = nodes[i];
         block = this.createBlock(node);
-        EditorActor.addBlock(block, point.clone());
+        EditorStore.addBlock(block, point.clone());
         point.blockIndex += 1;
       }
       if (clone) {
@@ -114,7 +112,7 @@ class Paster {
       }
       point.blockIndex -= 1;
       point.caretOffset = block.length;
-      EditorActor.updatePoint(point);
+      EditorStore.updatePoint(point);
       return true;
     }
   }
