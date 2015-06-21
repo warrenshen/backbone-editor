@@ -32,12 +32,10 @@ class StoryEditable extends Component {
   // Handlers
   // --------------------------------------------------
   handleKeyDown(event) {
-    // console.log("SE handling key down");
     event.stopPropagation();
 
     var selection = window.getSelection();
     var which = event.which;
-    // console.log(selection.type);
 
     if (selection.type === TypeConstants.selection.caret) {
       var point = Selector.generatePoint(selection);
@@ -88,11 +86,8 @@ class StoryEditable extends Component {
   }
 
   handleKeyPress(event) {
-    console.log("SE handling key press");
-
     var selection = window.getSelection();
     var which = event.which;
-    console.log(selection.type);
 
     if (selection.type === TypeConstants.selection.caret) {
       var point = Selector.generatePoint(selection);
@@ -143,8 +138,13 @@ class StoryEditable extends Component {
 
   handleKeyUp(event) {
     var selection = window.getSelection();
-    var which = event.which;
-    console.log(selection.type);
+
+    if (selection.type === TypeConstants.selection.caret) {
+      var point = Selector.generatePoint(selection);
+
+      EditorActor.updatePoint(point);
+      this.props.updateStoryStyle();
+    }
   }
 
   handleMouseEnter(event) {

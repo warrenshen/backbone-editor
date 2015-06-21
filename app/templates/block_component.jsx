@@ -20,16 +20,6 @@ class BlockComponent extends Component {
   // --------------------------------------------------
   // Handlers
   // --------------------------------------------------
-  handleMouseMove(event) {
-    if (EditorStore.mouseState === TypeConstants.mouse.down) {
-      EditorActor.updateMouseState(TypeConstants.mouse.move);
-
-      if (this.props.isEditable) {
-        this.props.updateStoryEditable();
-      }
-    }
-  }
-
   handleMouseUp(event) {
     if (EditorStore.mouseState !== TypeConstants.mouse.move) {
       event.stopPropagation();

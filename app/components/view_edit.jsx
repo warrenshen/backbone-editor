@@ -91,23 +91,22 @@ class ViewEdit extends Component {
     }
   }
 
-  handleMouseDown(event) {
-    var selection = window.getSelection();
-    selection.removeAllRanges();
-    EditorActor.updateMouseState(TypeConstants.mouse.down);
-  }
-
   handleMouseUp(event) {
-    if (EditorStore.mouseState === TypeConstants.mouse.move) {
-      var selection = window.getSelection();
+    var selection = window.getSelection();
+
+    if (selection.type === TypeConstants.selection.caret) {
+      var point = Selector.generatePoint(selection);
+
+      EditorActor.updatePoint(point);
+    } else if (selection.type === TypeConstants.selection.range) {
       var vector = Selector.generateVector(selection);
 
       EditorActor.updateVector(vector);
-      this.updateModalStyle();
     } else {
       EditorActor.updatePoint(null);
-      this.updateModalStyle();
     }
+
+    this.updateModalStyle();
   }
 
   handlePaste(event) {
@@ -146,28 +145,24 @@ class ViewEdit extends Component {
   // --------------------------------------------------
   componentDidMount() {
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
-    document.addEventListener("keypress", this.handleKeyPress.bind(this));
     document.addEventListener("paste", this.handlePaste.bind(this));
 
     window.addEventListener("scroll", this.handleScroll.bind(this));
     window.addEventListener("resize", this.handleResize.bind(this));
 
-    var view = React.findDOMNode(this.refs.view);
-    view.addEventListener("mousedown", this.handleMouseDown.bind(this));
-    view.addEventListener("mouseup", this.handleMouseUp.bind(this));
+    var node = React.findDOMNode(this.refs.view);
+    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
   }
 
   componentWillUnmount() {
     document.removeEventListener("keydown", this.handleKeyDown);
-    document.removeEventListener("keypress", this.handleKeyPress);
     document.removeEventListener("paste", this.handlePaste);
 
     window.removeEventListener("scroll", this.handleScroll);
     window.removeEventListener("resize", this.handleResize);
 
-    var view = React.findDOMNode(this.refs.view);
-    view.removeEventListener("mousedown", this.handleMouseDown);
-    view.removeEventListener("mouseup", this.handleMouseUp);
+    var node = React.findDOMNode(this.refs.view);
+    node.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   // --------------------------------------------------
