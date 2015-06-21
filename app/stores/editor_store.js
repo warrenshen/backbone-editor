@@ -23,7 +23,6 @@ class EditorStore extends Store {
   setDefaults() {
     this._activeStyles = {};
     this._link = null;
-    this._mouseState = TypeConstants.mouse.up;
     this._point = new Point(0, 0, 0);
     this._story = new Story(this.retrieveCookies());
     this._vector = null;
@@ -38,10 +37,6 @@ class EditorStore extends Store {
 
   get link() {
     return this._link;
-  }
-
-  get mouseState() {
-    return this._mouseState;
   }
 
   get name() {
@@ -530,19 +525,7 @@ class EditorStore extends Store {
     this._link = link;
   }
 
-  updateMouseState(mouseState) {
-    if (this._point !== null) {
-      this._point = null;
-    }
-
-    this._mouseState = mouseState;
-  }
-
   updatePoint(point) {
-    if (this._mouseState !== TypeConstants.mouse.up) {
-      this.updateMouseState(TypeConstants.mouse.up);
-    }
-
     this._point = point;
     this._vector = null;
 
@@ -550,10 +533,6 @@ class EditorStore extends Store {
   }
 
   updateVector(vector) {
-    if (this._mouseState !== TypeConstants.mouse.move) {
-      this.updateMouseState(TypeConstants.mouse.move);
-    }
-
     this._point = null;
     this._vector = vector;
 
@@ -600,9 +579,6 @@ class EditorStore extends Store {
         break;
       case ActionConstants.editor.styleElements:
         this.styleElements(action.vector, action.which, action.link);
-        break;
-      case ActionConstants.editor.updateMouseState:
-        this.updateMouseState(action.mouseState);
         break;
       case ActionConstants.editor.updateLink:
         this.updateLink(action.link);

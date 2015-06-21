@@ -12,7 +12,6 @@ module.exports = {
     styleBlocks: "style-blocks",
     styleElements: "style-elements",
     updateLink: "update-link",
-    updateMouseState: "update-mouse-state",
     updatePoint: "update-point",
     updateVector: "update-vector",
   },

@@ -95,13 +95,6 @@ class EditorActor extends Actor {
     });
   }
 
-  updateMouseState(mouseState) {
-    this.act({
-      type: ActionConstants.editor.updateMouseState,
-      mouseState: mouseState,
-    });
-  }
-
   updatePoint(point) {
     this.act({
       type: ActionConstants.editor.updatePoint,
