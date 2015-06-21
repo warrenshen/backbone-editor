@@ -142,6 +142,7 @@ class EditorStore extends Store {
     }
   }
 
+  // TODO: This action is acting funny.
   removeBlocks(vector, options={}) {
     var startPoint = vector.startPoint;
     var endPoint = vector.endPoint;

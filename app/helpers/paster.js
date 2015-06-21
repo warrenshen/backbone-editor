@@ -98,6 +98,9 @@ class Paster {
       var node = nodes.shift();
       block = this.createBlock(node);
       clone = anchor.destructiveClone(point.caretOffset);
+      if (!anchor.length) {
+        anchor.set("type", block.get("type"));
+      }
       block = anchor.mergeBlock(block, point.clone());
       point.blockIndex += 1;
       for (var i = 0; i < nodes.length; i += 1) {
