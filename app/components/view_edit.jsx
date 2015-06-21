@@ -85,6 +85,7 @@ class ViewEdit extends Component {
   // Handlers
   // --------------------------------------------------
   handleKeyDown(event) {
+    console.log("VE handling key down");
     var selection = window.getSelection();
 
     if (event.which === KeyConstants.backspace) {

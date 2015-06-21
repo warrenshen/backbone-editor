@@ -67,62 +67,6 @@ class BlockComponent extends Component {
     }
   }
 
-  handleKeyDown(event) {
-    if (!event.shiftKey &&
-        (event.which < KeyConstants.left ||
-        event.which > KeyConstants.down)) {
-      event.stopPropagation();
-    }
-
-    var selection = window.getSelection();
-    var point = Selector.generatePoint(selection);
-
-    if (EditorStore.mouseState !== TypeConstants.mouse.move &&
-        event.which >= KeyConstants.left &&
-        event.which <= KeyConstants.down &&
-        !event.shiftKey) {
-      switch (event.which) {
-        case KeyConstants.left:
-        case KeyConstants.right:
-          this.handleArrowHorizontal(event, point);
-          break;
-        case KeyConstants.down:
-        case KeyConstants.up:
-          this.handleArrowVertical(event, point);
-          break;
-      }
-    } else if (event.which === KeyConstants.backspace) {
-      console.log("BC handling backspace.");
-      // TODO: Backspace does not cause rerender,
-      // so link modal stays in the wrong position.
-      if (point.caretOffset !== 0) {
-        var block = this.props.block;
-        var caretOffset = point.caretOffset;
-
-        block.removeFragment(caretOffset - 1, caretOffset);
-
-        if (!block.get("content")) {
-          event.preventDefault();
-
-          point.caretOffset = 0;
-          EditorActor.updatePoint(point);
-          this.props.updateStoryEditable();
-        }
-      } else if (!point.matchesValues(0, 0)) {
-        event.preventDefault();
-
-        EditorActor.removeBlock(point);
-        this.props.updateStoryEditable();
-      }
-    } else if (event.which === KeyConstants.tab) {
-      event.preventDefault();
-
-      point.caretOffset = 0;
-      EditorActor.shiftDown(point);
-      this.props.updateStoryEditable();
-    }
-  }
-
   handleKeyPress(event) {
     event.stopPropagation();
 
@@ -188,7 +132,6 @@ class BlockComponent extends Component {
   // --------------------------------------------------
   componentDidMount() {
     var content = React.findDOMNode(this.refs.content);
-    content.addEventListener("keydown", this.handleKeyDown.bind(this));
     content.addEventListener("keypress", this.handleKeyPress.bind(this));
     content.addEventListener("mousemove", this.handleMouseMove.bind(this));
     content.addEventListener("mouseup", this.handleMouseUp.bind(this));
@@ -203,7 +146,6 @@ class BlockComponent extends Component {
 
   componentWillUnmount() {
     var content = React.findDOMNode(this.refs.content);
-    content.removeEventListener("keydown", this.handleKeyDown);
     content.removeEventListener("keypress", this.handleKeyPress);
     content.removeEventListener("mousemove", this.handleMouseMove);
     content.removeEventListener("mouseup", this.handleMouseUp);
@@ -220,8 +162,7 @@ class BlockComponent extends Component {
     return (
       <p
         className={className}
-        ref={"content"}
-        onKeyDown={this.handleKeyDown.bind(this)}>
+        ref={"content"}>
       </p>
     );
   }

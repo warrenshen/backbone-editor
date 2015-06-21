@@ -13,6 +13,9 @@ import Link from "app/helpers/link";
 import Point from "app/helpers/point";
 import Selector from "app/helpers/selector";
 
+import KeyConstants from "app/constants/key_constants";
+import TypeConstants from "app/constants/type_constants";
+
 
 class StoryEditable extends Component {
 
@@ -26,6 +29,57 @@ class StoryEditable extends Component {
   // --------------------------------------------------
   // Handlers
   // --------------------------------------------------
+  handleKeyDown(event) {
+    console.log("SE handling key down");
+    event.stopPropagation();
+
+    var selection = window.getSelection();
+
+    if (selection.type === TypeConstants.selection.caret) {
+      var point = Selector.generatePoint(selection);
+
+    if (event.which >= KeyConstants.left &&
+        event.which <= KeyConstants.down &&
+        !event.shiftKey) {
+      switch (event.which) {
+        case KeyConstants.left:
+        case KeyConstants.right:
+          return this.handleArrowHorizontal(event, point);
+        case KeyConstants.down:
+        case KeyConstants.up:
+          return this.handleArrowVertical(event, point);
+      }
+    } else if (event.which === KeyConstants.backspace) {
+      // TODO: Backspace does not cause rerender,
+      // so link modal stays in the wrong position.
+      if (point.caretOffset !== 0) {
+        var block = this.props.block;
+        var caretOffset = point.caretOffset;
+
+        block.removeFragment(caretOffset - 1, caretOffset);
+
+        if (!block.get("content")) {
+          event.preventDefault();
+
+          point.caretOffset = 0;
+          EditorActor.updatePoint(point);
+          this.props.updateStoryEditable();
+        }
+      } else if (!point.matchesValues(0, 0)) {
+        event.preventDefault();
+
+        EditorActor.removeBlock(point);
+        this.props.updateStoryEditable();
+      }
+    } else if (event.which === KeyConstants.tab) {
+      event.preventDefault();
+
+      point.caretOffset = 0;
+      EditorActor.shiftDown(point);
+      this.props.updateStoryEditable();
+    }
+  }
+
   handleMouseEnter(event) {
     var range = document.createRange();
 
@@ -133,6 +187,9 @@ class StoryEditable extends Component {
   // Lifecycle
   // --------------------------------------------------
   componentDidMount() {
+    var node = React.findDOMNode(this.refs.story);
+    node.addEventListener("keydown", this.handleKeyDown.bind(this));
+
     this.createCaret(this.props.point);
     this.createHandlers();
   }
@@ -144,6 +201,11 @@ class StoryEditable extends Component {
 
     this.createCaret(this.props.point);
     this.createHandlers();
+  }
+
+  componentWillUnmount() {
+    var node = React.findDOMNode(this.refs.story);
+    node.removeEventListener("keydown", this.handleKeyDown);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -158,7 +220,6 @@ class StoryEditable extends Component {
       <SectionStandard
         key={section.cid}
         section={section}
-        isEditable={this.props.isEditable}
         updateStoryStyle={this.props.updateStoryStyle}
         updateStoryEditable={this.props.updateStoryEditable} />
     );
@@ -173,8 +234,7 @@ class StoryEditable extends Component {
       <div
         className={"story-container"}
         contentEditable={"true"}
-        ref={"story"}
-        onKeyDown={function(event) { console.log("blah"); }}>
+        ref={"story"}>
         {this.renderSections()}
       </div>
     );
