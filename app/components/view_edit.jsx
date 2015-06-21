@@ -95,7 +95,8 @@ class ViewEdit extends Component {
     setTimeout(function() {
       if (selection.type === TypeConstants.selection.caret) {
         var point = Selector.generatePoint(selection);
-        if (point.compareShallowly(EditorStore.point) ||
+        if (!EditorStore.point ||
+            point.compareShallowly(EditorStore.point) ||
             EditorStore.vector) {
           EditorActor.updatePoint(point);
           this.updateStoryStyle();
@@ -109,18 +110,20 @@ class ViewEdit extends Component {
   }
 
   handlePaste(event) {
-    // TODO: Set up support for pasting with active selection.
+    var point = null;
     var selection = window.getSelection();
-    var point = Selector.generatePoint(selection);
-
+    if (selection.type === TypeConstants.selection.caret) {
+      point = Selector.generatePoint(selection);
+    } else if (selection.type === TypeConstants.selection.range) {
+      var vector = Selector.generateVector(selection);
+      point = vector.startPoint;
+      EditorActor.removeBlocks(vector);
+    }
     if (point) {
       event.preventDefault();
-
       var html = event.clipboardData.getData("text/html");
       var container = document.createElement("div");
-
       container.innerHTML = html;
-
       if (Paster.parseContainer(container, point)) {
         this.updateStoryEditable();
       }

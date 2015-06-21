@@ -200,6 +200,8 @@ class Block extends Model {
     for (var element of bucket) {
       elements.push(element);
     }
+
+    return this;
   }
 
   parseElement(target) {
