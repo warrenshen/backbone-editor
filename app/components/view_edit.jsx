@@ -92,15 +92,16 @@ class ViewEdit extends Component {
 
   handleMouseUp(event) {
     var selection = window.getSelection();
-
     setTimeout(function() {
       if (selection.type === TypeConstants.selection.caret) {
         var point = Selector.generatePoint(selection);
-        EditorActor.updatePoint(point);
-        this.updateStoryStyle();
+        if (point.compareShallowly(EditorStore.point) ||
+            EditorStore.vector) {
+          EditorActor.updatePoint(point);
+          this.updateStoryStyle();
+        }
       } else if (selection.type === TypeConstants.selection.range) {
         var vector = Selector.generateVector(selection);
-        console.log(vector);
         EditorActor.updateVector(vector);
         this.updateModalStyle();
       }
@@ -142,32 +143,27 @@ class ViewEdit extends Component {
   // Lifecycle
   // --------------------------------------------------
   componentDidMount() {
-    document.addEventListener("keydown", this.handleKeyDown.bind(this));
-    document.addEventListener("paste", this.handlePaste.bind(this));
-
-    window.addEventListener("scroll", this.handleScroll.bind(this));
-    window.addEventListener("resize", this.handleResize.bind(this));
-
     var node = React.findDOMNode(this.refs.view);
     node.addEventListener("mouseup", this.handleMouseUp.bind(this));
+    document.addEventListener("keydown", this.handleKeyDown.bind(this));
+    document.addEventListener("paste", this.handlePaste.bind(this));
+    window.addEventListener("scroll", this.handleScroll.bind(this));
+    window.addEventListener("resize", this.handleResize.bind(this));
   }
 
   componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleKeyDown);
-    document.removeEventListener("paste", this.handlePaste);
-
-    window.removeEventListener("scroll", this.handleScroll);
-    window.removeEventListener("resize", this.handleResize);
-
     var node = React.findDOMNode(this.refs.view);
     node.removeEventListener("mouseup", this.handleMouseUp);
+    document.removeEventListener("keydown", this.handleKeyDown);
+    document.removeEventListener("paste", this.handlePaste);
+    window.removeEventListener("scroll", this.handleScroll);
+    window.removeEventListener("resize", this.handleResize);
   }
 
   // --------------------------------------------------
   // Render
   // --------------------------------------------------
   render() {
-    console.log("view edit rerendering");
     return (
       <div className={"general-view"} ref={"view"}>
         <StoryEditable

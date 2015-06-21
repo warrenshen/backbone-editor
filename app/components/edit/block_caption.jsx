@@ -40,7 +40,6 @@ class BlockCaption extends Component {
   }
 
   handleFocus(event) {
-    console.log("focusing!");
     if (this.state.shouldShowPlaceholder) {
       this.setState({ shouldShowPlaceholder: false });
     }
@@ -151,7 +150,6 @@ class BlockCaption extends Component {
   }
 
   render() {
-    console.log(this.state.shouldShowPlaceholder);
     var captionClass = ClassNames(
       { "block-caption": true },
       { "general-placeholder": this.state.shouldShowPlaceholder }

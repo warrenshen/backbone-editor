@@ -37,7 +37,6 @@ class StoryEditable extends Component {
     var selection = window.getSelection();
     var which = event.which;
 
-    console.log(selection.type);
     if (selection.type === TypeConstants.selection.caret) {
       var point = Selector.generatePoint(selection);
 
@@ -155,7 +154,8 @@ class StoryEditable extends Component {
         !event.shiftKey) {
       var point = Selector.generatePoint(selection);
 
-      if (point.compareShallowly(EditorStore.point)) {
+      if (point.compareShallowly(EditorStore.point) &&
+          point.caretOffset === 0) {
         EditorActor.updatePoint(point);
         this.props.updateStoryEditable();
       }
