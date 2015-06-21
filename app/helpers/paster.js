@@ -101,7 +101,7 @@ class Paster {
       for (var i = 0; i < nodes.length; i += 1) {
         var node = nodes[i];
         block = this.createBlock(node);
-        EditorStore.addBlock(block, point.clone());
+        EditorStore.addBlock(oint.clone(), block);
         point.blockIndex += 1;
       }
       if (clone) {

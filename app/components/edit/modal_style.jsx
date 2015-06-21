@@ -80,7 +80,7 @@ class ModalStyle extends Component {
   // Actions
   // --------------------------------------------------
   styleBlocks(type) {
-    EditorActor.styleBlocks(this.props.vector, type);
+    EditorActor.styleBlocks(this.props.vector, { type: type });
     this.props.updateStoryStyle();
   }
 
@@ -105,7 +105,7 @@ class ModalStyle extends Component {
   }
 
   styleElements(type, url="") {
-    EditorActor.styleElements(this.props.vector, type, url);
+    EditorActor.styleElements(this.props.vector, { type: type, url: url });
     this.props.updateStoryStyle();
   }
 

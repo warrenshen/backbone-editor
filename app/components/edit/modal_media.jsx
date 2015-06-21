@@ -60,7 +60,7 @@ class ModalMedia extends Component {
       reader.onloadend = function(file) {
         var source = file.target.result;
         block.set("source", source);
-        EditorActor.addBlock(block, point);
+        EditorActor.addBlock(point, block);
         callback();
       };
 
@@ -99,7 +99,7 @@ class ModalMedia extends Component {
     var block = new Block({ type: TypeConstants.block.divider });
     var point = this.generatePoint();
 
-    EditorActor.addBlock(block, point);
+    EditorActor.addBlock(point, block);
     this.props.updateStoryEditable();
   }
 

@@ -5,11 +5,11 @@ import ActionConstants from "app/constants/action_constants";
 
 class EditorActor extends Actor {
 
-  addBlock(block, point) {
+  addBlock(point, block) {
     this.act({
       type: ActionConstants.editor.addBlock,
-      block: block,
       point: point,
+      block: block,
     });
   }
 
@@ -41,20 +41,19 @@ class EditorActor extends Actor {
     });
   }
 
-  styleBlocks(vector, which) {
+  styleBlocks(vector, options) {
     this.act({
       type: ActionConstants.editor.styleBlocks,
       vector: vector,
-      which: which,
+      options: options,
     })
   }
 
-  styleElements(vector, which, url="") {
+  styleElements(vector, options) {
     this.act({
       type: ActionConstants.editor.styleElements,
       vector: vector,
-      which: which,
-      url: url,
+      options: options,
     });
   }
 

@@ -62,6 +62,7 @@ class StoryEditable extends Component {
           this.props.updateModalStyle();
         }
       } else if (which === KeyConstants.backspace) {
+        event.preventDefault();
         EditorActor.removeBlocks(vector);
         this.props.updateStoryStyle();
       } else if (event.ctrlKey || event.metaKey) {
@@ -97,6 +98,7 @@ class StoryEditable extends Component {
         }
       }
     } else if (selection.type === TypeConstants.selection.range) {
+      event.preventDefault();
       var vector = Selector.generateVector(selection);
       if (which === KeyConstants.enter) {
         EditorActor.removeBlocks(vector, { enter: true });
