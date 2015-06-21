@@ -64,6 +64,14 @@ class StoryEditable extends Component {
       } else if (which === KeyConstants.backspace) {
         EditorActor.removeBlocks(vector);
         this.props.updateStoryStyle();
+      } else if (event.ctrlKey || event.metaKey) {
+        if (which === KeyConstants.b || which === KeyConstants.B) {
+          EditorActor.styleElements(vector, TypeConstants.element.bold);
+          this.props.updateModalStyle();
+        } else if (which === KeyConstants.i || which === KeyConstants.I) {
+          EditorActor.styleElements(vector, TypeConstants.element.italic);
+          this.props.updateModalStyle();
+        }
       }
     }
   }
@@ -94,17 +102,7 @@ class StoryEditable extends Component {
         EditorActor.removeBlocks(vector, { enter: true });
       } else {
         var character = String.fromCharCode(which);
-        if (event.ctrlKey || event.metaKey) {
-          if (character === KeyConstants.b) {
-            EditorActor.styleElements(vector, TypeConstants.element.bold);
-          } else if (character === KeyConstants.i) {
-            EditorActor.styleElements(vector, TypeConstants.element.italic);
-          } else {
-            return;
-          }
-        } else {
-          EditorActor.removeBlocks(vector, { character: character });
-        }
+        EditorActor.removeBlocks(vector, { character: character });
       }
       this.props.updateStoryStyle();
     }
@@ -187,8 +185,8 @@ class StoryEditable extends Component {
     }
   }
 
-  createHandlers() {
-    var nodes = $(".link-node");
+  attachHandlers() {
+    var nodes = $(".element-link");
     for (var i = 0; i < nodes.length; i += 1) {
       var nodes = nodes[i];
       nodes.addEventListener("mouseenter", this.handleMouseEnter.bind(this));
@@ -205,7 +203,7 @@ class StoryEditable extends Component {
     node.addEventListener("keypress", this.handleKeyPress.bind(this));
     node.addEventListener("keyup", this.handleKeyUp.bind(this));
     this.createCaret(this.props.point);
-    this.createHandlers();
+    this.attachHandlers();
   }
 
   componentDidUpdate() {
@@ -213,7 +211,7 @@ class StoryEditable extends Component {
       console.log("Story editable component updated.");
     }
     this.createCaret(this.props.point);
-    this.createHandlers();
+    this.attachHandlers();
   }
 
   componentWillUnmount() {

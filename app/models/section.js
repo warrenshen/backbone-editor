@@ -72,11 +72,9 @@ class Section extends Model {
     } else {
       var index = this.length;
       var models = section.get("blocks").models;
-
       for (var i = 0; i < section.length; i += 1) {
         this.addBlock(models.shift(), index);
       }
-
       return true;
     }
   }

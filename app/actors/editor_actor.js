@@ -49,7 +49,7 @@ class EditorActor extends Actor {
     })
   }
 
-  styleElements(vector, which, url) {
+  styleElements(vector, which, url="") {
     this.act({
       type: ActionConstants.editor.styleElements,
       vector: vector,
