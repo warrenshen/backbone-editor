@@ -70,8 +70,8 @@ class Paster {
         if (type === TypeConstants.node.link) {
           var attributes = node.attributes;
           var dataset = node.dataset;
-          var href = dataset.link ? dataset.link : attributes.href.value;
-          element.set("link", href);
+          var url = dataset.link ? dataset.link : attributes.href.value;
+          element.set("url", url);
         }
         element.setOffsets(offset, offset + length);
         block.parseElement(element);

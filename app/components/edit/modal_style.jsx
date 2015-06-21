@@ -61,7 +61,6 @@ class ModalStyle extends Component {
 
     if (event.which === KeyConstants.enter) {
       var input = React.findDOMNode(this.refs.input);
-
       this.styleLink(input.value);
       input.blur();
     }
@@ -108,8 +107,8 @@ class ModalStyle extends Component {
     this.styleBlocks(TypeConstants.block.quote);
   }
 
-  styleElements(type, link="") {
-    EditorActor.styleElements(this.props.vector, type, link);
+  styleElements(type, url="") {
+    EditorActor.styleElements(this.props.vector, type, url);
     this.props.updateStoryStyle();
   }
 
@@ -121,8 +120,8 @@ class ModalStyle extends Component {
     this.styleElements(TypeConstants.element.italic);
   }
 
-  styleLink(link) {
-    this.styleElements(TypeConstants.element.link, link);
+  styleLink(url) {
+    this.styleElements(TypeConstants.element.link, url);
   }
 
   // --------------------------------------------------

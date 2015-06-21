@@ -19,7 +19,8 @@ class Formatter {
           closer = "i";
           break;
         case TypeConstants.element.link:
-          opener = "span class=\"element-link\" data-link=\"" + element.get("link") + "\"";
+          opener = "span class=\"link-node\" " +
+                   "data-link=\"" + element.get("url") + "\"";
           closer = "span";
           break;
       }

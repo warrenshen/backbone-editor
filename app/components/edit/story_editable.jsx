@@ -91,24 +91,18 @@ class StoryEditable extends Component {
   handleKeyPress(event) {
     var selection = window.getSelection();
     var which = event.which;
-
     if (selection.type === TypeConstants.selection.caret) {
       var point = Selector.generatePoint(selection);
-
       if (which === KeyConstants.enter) {
         event.preventDefault();
-
         EditorActor.splitBlock(point);
         this.props.updateStoryEditable();
       } else {
         var block = this.getBlock(point);
         var character = String.fromCharCode(which);
-
         block.addFragment(character, point.caretOffset);
-
         if (block.length === 1) {
           event.preventDefault();
-
           point.caretOffset = 1;
           EditorActor.updatePoint(point);
           this.props.updateStoryEditable();
@@ -116,12 +110,10 @@ class StoryEditable extends Component {
       }
     } else if (selection.type === TypeConstants.selection.range) {
       var vector = Selector.generateVector(selection);
-
       if (which === KeyConstants.enter) {
         EditorActor.removeBlocks(vector, { enter: true });
       } else {
         var character = String.fromCharCode(which);
-
         if (event.ctrlKey || event.metaKey) {
           if (character === KeyConstants.b) {
             EditorActor.styleElements(vector, TypeConstants.element.bold);
@@ -134,7 +126,6 @@ class StoryEditable extends Component {
           EditorActor.removeBlocks(vector, { character: character });
         }
       }
-
       this.props.updateStoryStyle();
     }
   }
@@ -142,20 +133,16 @@ class StoryEditable extends Component {
   handleKeyUp(event) {
     var selection = window.getSelection();
     var which = event.which;
-
     if (EditorStore.vector &&
         selection.type === TypeConstants.selection.caret) {
       var point = Selector.generatePoint(selection);
-
       EditorActor.updatePoint(point);
       this.props.updateStoryStyle();
     } else if (which >= KeyConstants.left &&
         which <= KeyConstants.down &&
         !event.shiftKey) {
       var point = Selector.generatePoint(selection);
-
-      if (point.compareShallowly(EditorStore.point) &&
-          point.caretOffset === 0) {
+      if (point.compareShallowly(EditorStore.point)) {
         EditorActor.updatePoint(point);
         this.props.updateStoryEditable();
       }
@@ -164,13 +151,11 @@ class StoryEditable extends Component {
 
   handleMouseEnter(event) {
     var range = document.createRange();
-
     range.setStartBefore(event.target);
     range.setEndAfter(event.target);
-
     var rectangle = range.getBoundingClientRect();
-    var link = new Link(rectangle, event.currentTarget.dataset.link);
-
+    var url = event.currentTarget.dataset.link;
+    var link = new Link(rectangle, url);
     EditorActor.updateLink(link)
     this.props.updateModalLink();
   }
@@ -183,85 +168,51 @@ class StoryEditable extends Component {
   // --------------------------------------------------
   // Helpers
   // --------------------------------------------------
-  // TODO: Fix caret creation bug when styled
-  // elements and selection are present.
   createCaret(point) {
     if (point) {
-      var story = React.findDOMNode(this.refs.story);
-      var section = story.childNodes[point.sectionIndex];
-      var block = section.childNodes[point.blockIndex];
-      var caretOffset = point.caretOffset;
-
-      var node;
-      var children = block.childNodes;
-      var complete = false;
-
-      for (var i = 0; i < children.length && !complete; i += 1) {
-        if (children[i].isContentEditable) {
-          node = children[i];
-          complete = true;
+      var parentNode = React.findDOMNode(this.refs.story)
+                       .childNodes[point.sectionIndex]
+                       .childNodes[point.blockIndex];
+      var childrenNodes = parentNode.childNodes;
+      var node = null;
+      for (var i = 0; i < childrenNodes.length && !node; i += 1) {
+        if (childrenNodes[i].isContentEditable) {
+          node = childrenNodes[i];
         }
       }
-
-      node.focus();
-
-      var selection = window.getSelection();
-      var range = document.createRange();
-
-      if (point.shouldFloor) {
-        var floorOffset = Selector.findFloorOffset(node, 30);
-
-        caretOffset += floorOffset;
-      }
-
-      if (caretOffset > 0) {
-        var complete = false;
+      if (node) {
+        node.focus();
+        var selection = window.getSelection();
+        var range = document.createRange();
+        var caretOffset = point.caretOffset;
         var currentNode = node;
-        var walker = Selector.createTreeWalker(node);
-
-        while (walker.nextNode() && !complete) {
-          currentNode = walker.currentNode;
-
-          if (caretOffset - currentNode.length <= 0) {
-            range.setStart(currentNode, caretOffset);
-            range.setEnd(currentNode, caretOffset);
-            complete = true;
-          }
-
-          caretOffset -= currentNode.length;
-        }
-
-        // Default to end of block if leftover caret offset present.
         if (caretOffset > 0) {
-          if (!node.textContent) {
-            point.caretOffset = 0;
-            EditorActor.updatePoint(point);
-            this.props.updateStoryEditable();
-            return;
-          } else {
-            range.setStart(currentNode, currentNode.length);
-            range.setEnd(currentNode, currentNode.length);
+          var walker = Selector.createTreeWalker(node);
+          while (walker.nextNode() && caretOffset >= 0) {
+            currentNode = walker.currentNode;
+            if (caretOffset - currentNode.length <= 0) {
+              range.setStart(currentNode, caretOffset);
+              range.setEnd(currentNode, caretOffset);
+            }
+            caretOffset -= currentNode.length;
           }
+        } else {
+          range.setStart(currentNode, 0);
+          range.setEnd(currentNode, 0);
         }
-      } else {
-        range.setStart(node, 0);
-        range.setEnd(node, 0);
+        range.collapse(true);
+        selection.removeAllRanges();
+        selection.addRange(range);
       }
-
-      range.collapse(true);
-      selection.removeAllRanges();
-      selection.addRange(range);
     }
   }
 
   createHandlers() {
-    var links = $(".element-link");
-
-    for (var i = 0; i < links.length; i += 1) {
-      var link = links[i];
-
-      link.addEventListener("mouseenter", this.handleMouseEnter.bind(this));
-      link.addEventListener("mouseleave", this.handleMouseLeave.bind(this));
+    var nodes = $(".link-node");
+    for (var i = 0; i < nodes.length; i += 1) {
+      var nodes = nodes[i];
+      nodes.addEventListener("mouseenter", this.handleMouseEnter.bind(this));
+      nodes.addEventListener("mouseleave", this.handleMouseLeave.bind(this));
     }
   }
 
@@ -277,7 +228,6 @@ class StoryEditable extends Component {
     node.addEventListener("keydown", this.handleKeyDown.bind(this));
     node.addEventListener("keypress", this.handleKeyPress.bind(this));
     node.addEventListener("keyup", this.handleKeyUp.bind(this));
-
     this.createCaret(this.props.point);
     this.createHandlers();
   }
@@ -286,7 +236,6 @@ class StoryEditable extends Component {
     if (false) {
       console.log("Story editable component updated.");
     }
-
     this.createCaret(this.props.point);
     this.createHandlers();
   }

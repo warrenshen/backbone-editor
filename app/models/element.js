@@ -13,9 +13,9 @@ class Element extends Model {
   get defaults() {
     return {
       end: 0,
-      link: "",
       start: 0,
       type: TypeConstants.element.bold,
+      url: "",
     };
   }
 

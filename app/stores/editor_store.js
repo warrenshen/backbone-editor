@@ -305,7 +305,7 @@ class EditorStore extends Store {
   }
 
   // TODO: Set up better support for links.
-  styleElements(vector, which, link) {
+  styleElements(vector, which, url) {
     var startPoint = vector.startPoint;
     var endPoint = vector.endPoint;
 
@@ -339,7 +339,7 @@ class EditorStore extends Store {
 
       for (var blockIndex of blockIndices) {
         var block = blocks.at(blockIndex);
-        var element = new Element({ type: which, link: link });
+        var element = new Element({ type: which, url: url });
 
         if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
           element.setOffsets(startCaretOffset, endCaretOffset);
@@ -468,7 +468,7 @@ class EditorStore extends Store {
         this.styleBlocks(action.vector, action.which);
         break;
       case ActionConstants.editor.styleElements:
-        this.styleElements(action.vector, action.which, action.link);
+        this.styleElements(action.vector, action.which, action.url);
         break;
       case ActionConstants.editor.updateLink:
         this.updateLink(action.link);
