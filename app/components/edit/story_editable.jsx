@@ -78,7 +78,7 @@ class StoryEditable extends Component {
         EditorActor.splitBlock(point);
         this.props.updateStoryEditable();
       } else {
-        var block = this.getBlock(point);
+        var block = EditorStore.getBlock(point);
         var character = String.fromCharCode(which);
         block.addFragment(character, point.caretOffset);
         if (block.length === 1) {
@@ -194,10 +194,6 @@ class StoryEditable extends Component {
       nodes.addEventListener("mouseenter", this.handleMouseEnter.bind(this));
       nodes.addEventListener("mouseleave", this.handleMouseLeave.bind(this));
     }
-  }
-
-  getBlock(point) {
-    return EditorStore.getBlock(point.sectionIndex, point.blockIndex);
   }
 
   // --------------------------------------------------

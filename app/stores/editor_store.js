@@ -21,18 +21,18 @@ class EditorStore extends Store {
   // Setup
   // --------------------------------------------------
   setDefaults() {
-    this._activeStyles = {};
     this._link = null;
     this._point = new Point(0, 0, 0);
     this._story = new Story(this.retrieveCookies());
+    this._styles = {};
     this._vector = null;
   }
 
   // --------------------------------------------------
   // Getters
   // --------------------------------------------------
-  get activeStyles() {
-    return this._activeStyles;
+  get styles() {
+    return this._styles;
   }
 
   get link() {
@@ -58,10 +58,10 @@ class EditorStore extends Store {
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------
-  getBlock(sectionIndex, blockIndex) {
+  getBlock(point) {
     var story = this._story;
-    var section = story.get("sections").at(sectionIndex);
-    return section.get("blocks").at(blockIndex);
+    var section = story.get("sections").at(point.sectionIndex);
+    return section.get("blocks").at(point.blockIndex);
   }
 
   getSection(sectionIndex) {
@@ -301,7 +301,7 @@ class EditorStore extends Store {
       }
     }
 
-    this.updateActiveStyles(vector);
+    this.updateStyles(vector);
   }
 
   // TODO: Set up better support for links.
@@ -355,10 +355,10 @@ class EditorStore extends Store {
       }
     }
 
-    this.updateActiveStyles(vector);
+    this.updateStyles(vector);
   }
 
-  updateActiveStyles(vector) {
+  updateStyles(vector) {
     var startPoint = vector.startPoint;
     var endPoint = vector.endPoint;
 
@@ -409,18 +409,18 @@ class EditorStore extends Store {
       }
     }
 
-    var activeStyles = {};
+    var styles = {};
     for (var stylesMap of stylesMaps) {
       for (var [type, value] of stylesMap) {
-        if (!value && activeStyles[type])
-          activeStyles[type] = false;
-        else if (value && activeStyles[type] === undefined) {
-          activeStyles[type] = true;
+        if (!value && styles[type])
+          styles[type] = false;
+        else if (value && styles[type] === undefined) {
+          styles[type] = true;
         }
       }
     }
 
-    this._activeStyles = activeStyles;
+    this._styles = styles;
   }
 
   updateLink(link) {
@@ -439,7 +439,7 @@ class EditorStore extends Store {
     this._vector = vector;
 
     if (vector !== null) {
-      this.updateActiveStyles(vector);
+      this.updateStyles(vector);
     }
   }
 

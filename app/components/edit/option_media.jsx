@@ -22,7 +22,6 @@ class OptionMedia extends Component {
 
   handleMouseDown(event) {
     event.preventDefault();
-    event.stopPropagation();
   }
 
   // --------------------------------------------------

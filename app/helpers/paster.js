@@ -81,10 +81,7 @@ class Paster {
   }
 
   parseContainer(container, point) {
-    var anchor = EditorStore.getBlock(
-      point.sectionIndex,
-      point.blockIndex
-    );
+    var anchor = EditorStore.getBlock(point);
     var nodes = $("blockquote, h1, h2, h3, h4, h5, " +
                   "img, hr, p, span", container);
     if (!nodes.length) {

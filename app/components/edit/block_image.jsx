@@ -65,7 +65,6 @@ class BlockImage extends Component {
 
   handleMouseDown(event) {
     event.preventDefault();
-    event.stopPropagation();
   }
 
   handleMouseUp(event) {
