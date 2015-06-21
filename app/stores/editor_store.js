@@ -69,50 +69,6 @@ class EditorStore extends Store {
     return story.get("sections").at(sectionIndex);
   }
 
-  nextEditableBlock(sectionIndex, blockIndex) {
-    var story = this._story;
-    var sections = story.get("sections");
-    var section = sections.at(sectionIndex);
-
-    var block;
-
-    if (blockIndex < section.length - 1) {
-      block = section.get("blocks").at(blockIndex + 1);
-    } else if (sectionIndex < sections.length - 1) {
-      block = sections.at(sectionIndex + 1).leader;
-    } else {
-      return null;
-    }
-
-    if (block.isEditable()) {
-      return block;
-    } else {
-      return this.nextEditableBlock(block.get("section_index"), block.get("index"));
-    }
-  }
-
-  previousEditableBlock(sectionIndex, blockIndex) {
-    var story = this._story;
-    var sections = story.get("sections");
-    var section = sections.at(sectionIndex);
-
-    var block;
-
-    if (blockIndex > 0) {
-      block = section.get("blocks").at(blockIndex - 1);
-    } else if (sectionIndex > 0) {
-      block = sections.at(sectionIndex - 1).footer;
-    } else {
-      return null;
-    }
-
-    if (block.isEditable()) {
-      return block;
-    } else {
-      return this.previousEditableBlock(block.get("section_index"), block.get("index"));
-    }
-  }
-
   // --------------------------------------------------
   // Actions
   // --------------------------------------------------
@@ -284,61 +240,6 @@ class EditorStore extends Store {
     if (CookiesJS.enabled) {
       CookiesJS.set("editor", JSON.stringify(this._story.toJSON()));
     }
-  }
-
-  shiftDown(point) {
-    var sectionIndex = point.sectionIndex;
-    var blockIndex = point.blockIndex;
-
-    var block = this.getBlock(sectionIndex, blockIndex);
-    var editableBlock = this.nextEditableBlock(sectionIndex, blockIndex);
-
-    if (editableBlock) {
-      point.sectionIndex = editableBlock.get("section_index");
-      point.blockIndex = editableBlock.get("index");
-    } else {
-      point.caretOffset = block.length;
-    }
-
-    this.updatePoint(point);
-  }
-
-  shiftLeft(point) {
-    var editableBlock = this.previousEditableBlock(point.sectionIndex, point.blockIndex);
-
-    if (editableBlock) {
-      point.sectionIndex = editableBlock.get("section_index");
-      point.blockIndex = editableBlock.get("index");
-      point.caretOffset = editableBlock.length;
-    }
-
-    this.updatePoint(point);
-  }
-
-  shiftRight(point) {
-    var editableBlock = this.nextEditableBlock(point.sectionIndex, point.blockIndex);
-
-    if (editableBlock) {
-      point.sectionIndex = editableBlock.get("section_index");
-      point.blockIndex = editableBlock.get("index");
-      point.caretOffset = 0;
-    }
-
-    this.updatePoint(point);
-  }
-
-  shiftUp(point) {
-    var editableBlock = this.previousEditableBlock(point.sectionIndex, point.blockIndex);
-
-    if (editableBlock) {
-      point.sectionIndex = editableBlock.get("section_index");
-      point.blockIndex = editableBlock.get("index");
-      point.shouldFloor = true;
-    } else {
-      point.caretOffset = 0;
-    }
-
-    this.updatePoint(point);
   }
 
   splitBlock(point) {
@@ -558,18 +459,6 @@ class EditorStore extends Store {
         break;
       case ActionConstants.editor.removeBlocks:
         this.removeBlocks(action.vector, action.options);
-        break;
-      case ActionConstants.editor.shiftDown:
-        this.shiftDown(action.point);
-        break;
-      case ActionConstants.editor.shiftLeft:
-        this.shiftLeft(action.point);
-        break;
-      case ActionConstants.editor.shiftRight:
-        this.shiftRight(action.point);
-        break;
-      case ActionConstants.editor.shiftUp:
-        this.shiftUp(action.point);
         break;
       case ActionConstants.editor.splitBlock:
         this.splitBlock(action.point);

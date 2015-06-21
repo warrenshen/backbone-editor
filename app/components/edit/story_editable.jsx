@@ -37,6 +37,7 @@ class StoryEditable extends Component {
     var selection = window.getSelection();
     var which = event.which;
 
+    console.log(selection.type);
     if (selection.type === TypeConstants.selection.caret) {
       var point = Selector.generatePoint(selection);
 
@@ -141,6 +142,7 @@ class StoryEditable extends Component {
 
   handleKeyUp(event) {
     var selection = window.getSelection();
+    var which = event.which;
 
     if (EditorStore.vector &&
         selection.type === TypeConstants.selection.caret) {
@@ -148,6 +150,15 @@ class StoryEditable extends Component {
 
       EditorActor.updatePoint(point);
       this.props.updateStoryStyle();
+    } else if (which >= KeyConstants.left &&
+        which <= KeyConstants.down &&
+        !event.shiftKey) {
+      var point = Selector.generatePoint(selection);
+
+      if (point.compareShallowly(EditorStore.point)) {
+        EditorActor.updatePoint(point);
+        this.props.updateStoryEditable();
+      }
     }
   }
 
