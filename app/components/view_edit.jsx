@@ -85,7 +85,6 @@ class ViewEdit extends Component {
   // Handlers
   // --------------------------------------------------
   handleKeyDown(event) {
-    console.log("VE handling key down");
     if (event.which === KeyConstants.backspace) {
       event.preventDefault();
     }
@@ -93,20 +92,20 @@ class ViewEdit extends Component {
 
   handleMouseUp(event) {
     var selection = window.getSelection();
+    console.log(selection.type);
 
-    if (selection.type === TypeConstants.selection.caret) {
-      var point = Selector.generatePoint(selection);
-
-      EditorActor.updatePoint(point);
-    } else if (selection.type === TypeConstants.selection.range) {
-      var vector = Selector.generateVector(selection);
-
-      EditorActor.updateVector(vector);
-    } else {
-      EditorActor.updatePoint(null);
-    }
-
-    this.updateModalStyle();
+    setTimeout(function() {
+      if (selection.type === TypeConstants.selection.caret) {
+        var point = Selector.generatePoint(selection);
+        EditorActor.updatePoint(point);
+        this.updateStoryStyle();
+      } else if (selection.type === TypeConstants.selection.range) {
+        var vector = Selector.generateVector(selection);
+        console.log(vector);
+        EditorActor.updateVector(vector);
+        this.updateModalStyle();
+      }
+    }.bind(this), 25);
   }
 
   handlePaste(event) {
@@ -169,6 +168,7 @@ class ViewEdit extends Component {
   // Render
   // --------------------------------------------------
   render() {
+    console.log("view edit rerendering");
     return (
       <div className={"general-view"} ref={"view"}>
         <StoryEditable

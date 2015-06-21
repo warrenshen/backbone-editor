@@ -19,6 +19,8 @@ class BlockHeading extends BlockComponent {
   // Render
   // --------------------------------------------------
   renderEditable() {
+    var block = this.props.block;
+    var type = block.get("type");
     var contentClass = ClassNames(
       { "block-content": true },
       { "block-centered": block.get("is_centered") },

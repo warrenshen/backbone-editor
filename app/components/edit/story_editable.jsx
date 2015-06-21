@@ -47,6 +47,8 @@ class StoryEditable extends Component {
           var block = this.getBlock(point);
           var caretOffset = point.caretOffset;
 
+          // TODO: Could set this up with action so that a block
+          // does not have to be grabbed directly from store.
           block.removeFragment(caretOffset - 1, caretOffset);
 
           if (!block.get("content")) {
@@ -63,13 +65,14 @@ class StoryEditable extends Component {
           this.props.updateStoryEditable();
         }
       }
-       else if (which === KeyConstants.tab) {
-        event.preventDefault();
+      // TODO: Handle tab for both point and vector.
+      // else if (which === KeyConstants.tab) {
+      //   event.preventDefault();
 
-        point.caretOffset = 0;
-        EditorActor.shiftDown(point);
-        this.props.updateStoryEditable();
-      }
+      //   point.caretOffset = 0;
+      //   EditorActor.shiftDown(point);
+      //   this.props.updateStoryEditable();
+      // }
     } else if (selection.type === TypeConstants.selection.range) {
       var vector = Selector.generateVector(selection);
 
@@ -99,12 +102,11 @@ class StoryEditable extends Component {
         this.props.updateStoryEditable();
       } else {
         var block = this.getBlock(point);
-        var length = block.length;
         var character = String.fromCharCode(which);
 
         block.addFragment(character, point.caretOffset);
 
-        if (!length) {
+        if (block.length === 1) {
           event.preventDefault();
 
           point.caretOffset = 1;
@@ -113,33 +115,35 @@ class StoryEditable extends Component {
         }
       }
     } else if (selection.type === TypeConstants.selection.range) {
-      var character = String.fromCharCode(which);
       var vector = Selector.generateVector(selection);
 
       if (which === KeyConstants.enter) {
         EditorActor.removeBlocks(vector, { enter: true });
-        this.props.updateStoryStyle();
       } else {
+        var character = String.fromCharCode(which);
+
         if (event.ctrlKey || event.metaKey) {
           if (character === KeyConstants.b) {
             EditorActor.styleElements(vector, TypeConstants.element.bold);
-            this.updateStoryStyle();
           } else if (character === KeyConstants.i) {
             EditorActor.styleElements(vector, TypeConstants.element.italic);
-            this.props.updateStoryStyle();
+          } else {
+            return;
           }
         } else {
           EditorActor.removeBlocks(vector, { character: character });
-          this.props.updateStoryStyle();
         }
       }
+
+      this.props.updateStoryStyle();
     }
   }
 
   handleKeyUp(event) {
     var selection = window.getSelection();
 
-    if (selection.type === TypeConstants.selection.caret) {
+    if (EditorStore.vector &&
+        selection.type === TypeConstants.selection.caret) {
       var point = Selector.generatePoint(selection);
 
       EditorActor.updatePoint(point);

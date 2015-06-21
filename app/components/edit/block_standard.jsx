@@ -5,6 +5,8 @@ import BlockComponent from "app/templates/block_component";
 
 import ModalMedia from "app/components/edit/modal_media";
 
+import EditorStore from "app/stores/editor_store";
+
 
 class BlockStandard extends BlockComponent {
 
