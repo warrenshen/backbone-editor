@@ -179,7 +179,7 @@ class ModalMedia extends Component {
     );
 
     return (
-      <div className={modalClass}>
+      <div className={modalClass} contentEditable={"false"}>
         <span className={promptClass} ref={"prompt"}>
           <span className={"vertical-anchor"}></span>
           <i className={"fa fa-plus"}></i>

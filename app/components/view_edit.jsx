@@ -92,7 +92,6 @@ class ViewEdit extends Component {
 
   handleMouseUp(event) {
     var selection = window.getSelection();
-    console.log(selection.type);
 
     setTimeout(function() {
       if (selection.type === TypeConstants.selection.caret) {

@@ -61,14 +61,11 @@ class Selector {
   generateVector(selection) {
     var anchorPoint = this.generatePoint(selection);
     var focusPoint = this.generatePoint(selection, "focus");
-    var delta = anchorPoint.compareDeeply(focusPoint);
 
-    if (delta < 0) {
+    if (anchorPoint.compareDeeply(focusPoint) < 0) {
       return new Vector(anchorPoint, focusPoint);
-    } else if (delta > 0) {
-      return new Vector(focusPoint, anchorPoint);
     } else {
-      return null;
+      return new Vector(focusPoint, anchorPoint);
     }
   }
 }
