@@ -102,7 +102,7 @@ class BlockImage extends Component {
   // --------------------------------------------------
   // Render
   // --------------------------------------------------
-  render() {
+  renderImage() {
     var block = this.props.block;
     var imageClass = ClassNames(
       { "block-image": true },
@@ -110,24 +110,23 @@ class BlockImage extends Component {
     );
 
     return (
-      <div
-        className={"block-container"}
-        data-index={block.get("index")}>
-        <div className={"block-image-container"}>
-          <img
-            className={imageClass}
-            ref={"image"}
-            src={block.get("source")} />
-          <p
-            className={"general-invisible"}
-            contentEditable={"true"}
-            ref={"invisible"}>
-          </p>
-        </div>
-        <BlockCaption
-          block={this.props.block}
-          isEditable={this.props.isEditable}
-          updateStoryEditable={this.props.updateStoryEditable} />
+      <div className={"block-image-container"}>
+        <img
+          className={imageClass}
+          ref={"image"}
+          src={block.get("source")} />
+        <p
+          className={"general-invisible"}
+          ref={"invisible"}>
+        </p>
+      </div>
+    );
+  }
+  render() {
+    var block = this.props.block;
+    return (
+      <div className={"block-container"} data-index={block.get("index")}>
+        <BlockCaption block={this.props.block} />
       </div>
     );
   }
@@ -135,14 +134,10 @@ class BlockImage extends Component {
 
 BlockImage.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
-  isEditable: React.PropTypes.bool.isRequired,
-  updateStoryEditable: React.PropTypes.func.isRequired,
 };
 
 BlockImage.defaultProps = {
   block: new Block(),
-  isEditable: true,
-  updateStoryEditable: null,
 };
 
 

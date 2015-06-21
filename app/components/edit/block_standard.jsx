@@ -3,7 +3,7 @@ import React from "react";
 
 import BlockComponent from "app/templates/block_component";
 
-import EditorStore from "app/stores/editor_store";
+import ModalMedia from "app/components/edit/modal_media";
 
 
 class BlockStandard extends BlockComponent {
@@ -18,6 +18,21 @@ class BlockStandard extends BlockComponent {
   // --------------------------------------------------
   // Render
   // --------------------------------------------------
+  renderModal() {
+    var block = this.props.block;
+    var point = EditorStore.point;
+    if (!block.get("content") &&
+        point &&
+        point.matchesValues(
+          block.get("section_index"),
+          block.get("index")
+        )) {
+      return (
+        <ModalMedia block={this.props.block} />
+      );
+    }
+  }
+
   render() {
     var block = this.props.block;
     var contentClass = ClassNames(
@@ -27,10 +42,8 @@ class BlockStandard extends BlockComponent {
     );
 
     return (
-      <div
-        className={"block-container"}
-        data-index={block.get("index")}>
-        {this.renderEditable(contentClass)}
+      <div className={"block-container"} data-index={block.get("index")}>
+        <p className={contentClass} ref={"content"}></p>
         {this.renderModal()}
       </div>
     );

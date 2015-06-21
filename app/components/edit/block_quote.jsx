@@ -29,11 +29,7 @@ class BlockQuote extends BlockComponent {
       <blockquote
         className={"block-container"}
         data-index={block.get("index")}>
-        <p
-          className={contentClass}
-          contentEditable={this.props.isEditable}
-          ref={"content"}>
-        </p>
+        <p className={contentClass} ref={"content"}></p>
       </blockquote>
     );
   }

@@ -122,7 +122,6 @@ class BlockCaption extends Component {
     content.addEventListener("mousedown", this.handleMouseDown.bind(this));
     content.addEventListener("mouseup", this.handleMouseUp.bind(this));
 
-    content.placeholder = "Write a caption here...";
     this.renderContent(content);
   }
 
@@ -155,7 +154,13 @@ class BlockCaption extends Component {
       { "block-image-caption": true },
       { "general-placeholder": this.state.shouldShowPlaceholder }
     );
-    return this.renderEditable(captionClass);
+    return (
+      <p
+        className={captionClass}
+        placeholder={"Write a caption here..."}
+        ref={"content"}>
+      </p>
+    );
   }
 }
 
