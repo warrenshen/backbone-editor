@@ -113,33 +113,33 @@ class BlockCaption extends Component {
   // Lifecycle
   // --------------------------------------------------
   componentDidMount() {
-    var content = React.findDOMNode(this.refs.content);
-    content.addEventListener("blur", this.handleBlur.bind(this));
-    content.addEventListener("focus", this.handleFocus.bind(this));
-    content.addEventListener("keydown", this.handleKeyDown.bind(this));
-    content.addEventListener("keypress", this.handleKeyPress.bind(this));
-    content.addEventListener("keyup", this.handleKeyUp.bind(this));
-    content.addEventListener("mousedown", this.handleMouseDown.bind(this));
-    content.addEventListener("mouseup", this.handleMouseUp.bind(this));
+    var node = React.findDOMNode(this.refs.content);
+    node.addEventListener("blur", this.handleBlur.bind(this));
+    node.addEventListener("focus", this.handleFocus.bind(this));
+    node.addEventListener("keydown", this.handleKeyDown.bind(this));
+    node.addEventListener("keypress", this.handleKeyPress.bind(this));
+    node.addEventListener("keyup", this.handleKeyUp.bind(this));
+    node.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
 
-    this.renderContent(content);
+    this.renderContent(node);
   }
 
   componentDidUpdate() {
-    var content = React.findDOMNode(this.refs.content);
+    var node = React.findDOMNode(this.refs.content);
 
-    this.renderContent(content);
+    this.renderContent(node);
   }
 
   componentWillUnmount() {
-    var content = React.findDOMNode(this.refs.content);
-    content.removeEventListener("blur", this.handleBlur);
-    content.removeEventListener("focus", this.handleFocus);
-    content.removeEventListener("keydown", this.handleKeyDown);
-    content.removeEventListener("keypress", this.handleKeyPress);
-    content.removeEventListener("keyup", this.handleKeyUp);
-    content.removeEventListener("mousedown", this.handleMouseDown);
-    content.removeEventListener("mouseup", this.handleMouseUp);
+    var node = React.findDOMNode(this.refs.content);
+    node.removeEventListener("blur", this.handleBlur);
+    node.removeEventListener("focus", this.handleFocus);
+    node.removeEventListener("keydown", this.handleKeyDown);
+    node.removeEventListener("keypress", this.handleKeyPress);
+    node.removeEventListener("keyup", this.handleKeyUp);
+    node.removeEventListener("mousedown", this.handleMouseDown);
+    node.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   // --------------------------------------------------
@@ -151,15 +151,14 @@ class BlockCaption extends Component {
 
   render() {
     var captionClass = ClassNames(
-      { "block-image-caption": true },
+      { "block-caption": true },
       { "general-placeholder": this.state.shouldShowPlaceholder }
     );
-
     return (
       <p
         className={captionClass}
-        contentEditable={this.props.isEditable}
-        placeholder={"Write caption here..."}
+        contentEditable={"true"}
+        placeholder={"Write a caption here..."}
         ref={"content"}>
       </p>
     );
@@ -168,13 +167,11 @@ class BlockCaption extends Component {
 
 BlockCaption.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
-  isEditable: React.PropTypes.bool.isRequired,
   updateStoryEditable: React.PropTypes.func.isRequired,
 };
 
 BlockCaption.defaultProps = {
   block: new Block(),
-  isEditable: true,
   updateStoryEditable: null,
 };
 

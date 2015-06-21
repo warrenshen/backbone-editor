@@ -30,10 +30,10 @@ class Element extends Model {
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------
-  completelyBounds(other) {
-    return this.get("type") === other.get("type") &&
-           this.get("start") <= other.get("start") &&
-           this.get("end") >= other.get("end");
+  completelyBounds(element) {
+    return this.get("type") === element.get("type") &&
+           this.get("start") <= element.get("start") &&
+           this.get("end") >= element.get("end");
   }
 
   decrementOffsets(value) {

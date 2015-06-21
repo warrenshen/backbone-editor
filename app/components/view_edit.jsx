@@ -35,7 +35,7 @@ class ViewEdit extends Component {
     return {
       shouldUpdateModalLink: false,
       shouldUpdateModalStyle: false,
-      shouldupdateStoryEditableEditable: false,
+      shouldUpdateStoryEditable: false,
     };
   }
 
@@ -44,7 +44,6 @@ class ViewEdit extends Component {
       activeStyles: EditorStore.activeStyles,
       link: EditorStore.link,
       point: EditorStore.point,
-      isEditable: EditorStore.mouseState === TypeConstants.mouse.up,
       story: EditorStore.story,
       vector: EditorStore.vector,
     };
@@ -54,7 +53,7 @@ class ViewEdit extends Component {
     this.setState({
       shouldUpdateModalLink: true,
       shouldUpdateModalStyle: false,
-      shouldupdateStoryEditableEditable: false,
+      shouldUpdateStoryEditable: false,
     });
   }
 
@@ -62,7 +61,7 @@ class ViewEdit extends Component {
     this.setState({
       shouldUpdateModalLink: false,
       shouldUpdateModalStyle: true,
-      shouldupdateStoryEditableEditable: false,
+      shouldUpdateStoryEditable: false,
     });
   }
 
@@ -70,7 +69,7 @@ class ViewEdit extends Component {
     this.setState({
       shouldUpdateModalLink: false,
       shouldUpdateModalStyle: true,
-      shouldupdateStoryEditableEditable: true,
+      shouldUpdateStoryEditable: true,
     });
   }
 
@@ -78,7 +77,7 @@ class ViewEdit extends Component {
     this.setState({
       shouldUpdateModalLink: false,
       shouldUpdateModalStyle: false,
-      shouldupdateStoryEditableEditable: true,
+      shouldUpdateStoryEditable: true,
     });
   }
 
@@ -86,107 +85,45 @@ class ViewEdit extends Component {
   // Handlers
   // --------------------------------------------------
   handleKeyDown(event) {
-    var selection = window.getSelection();
-
     if (event.which === KeyConstants.backspace) {
       event.preventDefault();
     }
-
-    if (selection.type === TypeConstants.selection.range) {
-      var vector = Selector.generateVector(selection);
-
-      if (event.which >= KeyConstants.left &&
-        event.which <= KeyConstants.down) {
-        if (event.shiftKey) {
-          var mouseState = EditorStore.mouseState;
-
-          EditorActor.updateVector(vector);
-
-          if (mouseState !== TypeConstants.mouse.move) {
-            this.updateStoryEditable();
-          }
-
-          this.updateModalStyle();
-        } else {
-          event.preventDefault();
-
-          if (event.which === KeyConstants.left ||
-              event.which === KeyConstants.up) {
-            EditorActor.updatePoint(vector.startPoint);
-          } else {
-            EditorActor.updatePoint(vector.endPoint);
-          }
-
-          this.updateStoryStyle();
-        }
-      } else if (event.which === KeyConstants.backspace) {
-        EditorActor.removeBlocks(vector);
-        this.updateStoryStyle();
-      }
-    }
-  }
-
-  handleKeyPress(event) {
-    if (EditorStore.mouseState === TypeConstants.mouse.move) {
-      event.preventDefault();
-
-      var selection = window.getSelection();
-      var vector = Selector.generateVector(selection);
-
-      if (event.which === KeyConstants.enter) {
-        EditorActor.removeBlocks(vector, { enter: true });
-        this.updateStoryStyle();
-      } else {
-        if (event.ctrlKey || event.metaKey) {
-          if (event.which === KeyConstants.b) {
-            EditorActor.styleElements(vector, TypeConstants.element.bold);
-            this.updateStoryStyle();
-          } else if (event.which === KeyConstants.i) {
-            EditorActor.styleElements(vector, TypeConstants.element.italic);
-            this.updateStoryStyle();
-          }
-        } else {
-          var character = String.fromCharCode(event.which);
-
-          EditorActor.removeBlocks(vector, { character: character });
-          this.updateStoryStyle();
-        }
-      }
-    }
-  }
-
-  handleMouseDown(event) {
-    var selection = window.getSelection();
-    selection.removeAllRanges();
-    EditorActor.updateMouseState(TypeConstants.mouse.down);
   }
 
   handleMouseUp(event) {
-    if (EditorStore.mouseState === TypeConstants.mouse.move) {
-      var selection = window.getSelection();
-      var vector = Selector.generateVector(selection);
-
-      EditorActor.updateVector(vector);
-      this.updateModalStyle();
-    } else {
-      EditorActor.updatePoint(null);
-      this.updateModalStyle();
-    }
+    var selection = window.getSelection();
+    setTimeout(function() {
+      if (selection.type === TypeConstants.selection.caret) {
+        var point = Selector.generatePoint(selection);
+        if (!EditorStore.point ||
+            point.compareShallowly(EditorStore.point) ||
+            EditorStore.vector) {
+          EditorActor.updatePoint(point);
+          this.updateStoryStyle();
+        }
+      } else if (selection.type === TypeConstants.selection.range) {
+        var vector = Selector.generateVector(selection);
+        EditorActor.updateVector(vector);
+        this.updateModalStyle();
+      }
+    }.bind(this), 25);
   }
 
   handlePaste(event) {
-    // TODO: Set up support for pasting with active selection.
+    var point = null;
     var selection = window.getSelection();
-    var point = Selector.generatePoint(selection);
-
+    if (selection.type === TypeConstants.selection.caret) {
+      point = Selector.generatePoint(selection);
+    } else if (selection.type === TypeConstants.selection.range) {
+      var vector = Selector.generateVector(selection);
+      point = vector.startPoint;
+      EditorActor.removeBlocks(vector);
+    }
     if (point) {
       event.preventDefault();
-
       var html = event.clipboardData.getData("text/html");
       var container = document.createElement("div");
-
       container.innerHTML = html;
-
       if (Paster.parseContainer(container, point)) {
         this.updateStoryEditable();
       }
@@ -209,29 +146,21 @@ class ViewEdit extends Component {
   // Lifecycle
   // --------------------------------------------------
   componentDidMount() {
+    var node = React.findDOMNode(this.refs.view);
+    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
-    document.addEventListener("keypress", this.handleKeyPress.bind(this));
     document.addEventListener("paste", this.handlePaste.bind(this));
-
     window.addEventListener("scroll", this.handleScroll.bind(this));
     window.addEventListener("resize", this.handleResize.bind(this));
-
-    var view = React.findDOMNode(this.refs.view);
-    view.addEventListener("mousedown", this.handleMouseDown.bind(this));
-    view.addEventListener("mouseup", this.handleMouseUp.bind(this));
   }
 
   componentWillUnmount() {
+    var node = React.findDOMNode(this.refs.view);
+    node.removeEventListener("mouseup", this.handleMouseUp);
     document.removeEventListener("keydown", this.handleKeyDown);
-    document.removeEventListener("keypress", this.handleKeyPress);
     document.removeEventListener("paste", this.handlePaste);
-
     window.removeEventListener("scroll", this.handleScroll);
     window.removeEventListener("resize", this.handleResize);
-
-    var view = React.findDOMNode(this.refs.view);
-    view.removeEventListener("mousedown", this.handleMouseDown);
-    view.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   // --------------------------------------------------
@@ -241,9 +170,8 @@ class ViewEdit extends Component {
     return (
       <div className={"general-view"} ref={"view"}>
         <StoryEditable
-          isEditable={this.state.isEditable}
           point={this.state.point}
-          shouldUpdate={this.state.shouldupdateStoryEditableEditable}
+          shouldUpdate={this.state.shouldUpdateStoryEditable}
           story={this.state.story}
           updateModalLink={this.updateModalLink.bind(this)}
           updateModalStyle={this.updateModalStyle.bind(this)}

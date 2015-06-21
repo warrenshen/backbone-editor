@@ -200,6 +200,8 @@ class Block extends Model {
     for (var element of bucket) {
       elements.push(element);
     }
+
+    return this;
   }
 
   parseElement(target) {
@@ -268,8 +270,7 @@ class Block extends Model {
   }
 
   toString() {
-    // TODO: Move formatter methods into this model?
-    return Formatter.formatBlock(this);
+    return Formatter.stringifyBlock(this);
   }
 }
 
