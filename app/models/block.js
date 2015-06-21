@@ -22,7 +22,7 @@ class Block extends Model {
       is_last: false,
       section_index: 0,
       source: "",
-      type: TypeConstants.block.standard,
+      type: TypeConstants.block.paragraph,
     };
   }
 

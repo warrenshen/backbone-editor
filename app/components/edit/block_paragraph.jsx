@@ -8,13 +8,13 @@ import ModalMedia from "app/components/edit/modal_media";
 import EditorStore from "app/stores/editor_store";
 
 
-class BlockStandard extends BlockComponent {
+class BlockParagraph extends BlockComponent {
 
   // --------------------------------------------------
   // Defaults
   // --------------------------------------------------
   displayName() {
-    return "BlockStandard";
+    return "BlockParagraph";
   }
 
   // --------------------------------------------------
@@ -51,4 +51,4 @@ class BlockStandard extends BlockComponent {
 }
 
 
-module.exports = BlockStandard;
+module.exports = BlockParagraph;

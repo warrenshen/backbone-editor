@@ -4,7 +4,7 @@ import Component from "app/templates/component";
 
 import BlockHeading from "app/components/export/block_heading";
 import BlockQuote from "app/components/export/block_quote";
-import BlockStandard from "app/components/export/block_standard";
+import BlockParagraph from "app/components/export/block_paragraph";
 
 import Section from "app/models/section";
 
@@ -40,8 +40,8 @@ class SectionStandard extends Component {
       //   return <BlockImage {...props} />;
       case TypeConstants.block.quote:
         return <BlockQuote {...props} />;
-      case TypeConstants.block.standard:
-        return <BlockStandard {...props} />;
+      case TypeConstants.block.paragraph:
+        return <BlockParagraph {...props} />;
     }
   }
 

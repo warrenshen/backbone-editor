@@ -233,7 +233,7 @@ class EditorStore extends Store {
     var block = this.getBlock(point);
     var clone = block.destructiveClone(point.caretOffset);
     if (!clone.length) {
-      clone.set("type", TypeConstants.block.standard);
+      clone.set("type", TypeConstants.block.paragraph);
     }
     section.addBlock(clone, block.get("index") + 1);
     point.blockIndex += 1;
@@ -276,7 +276,7 @@ class EditorStore extends Store {
           block.set("is_centered", !block.get("is_centered"));
         } else {
           if (block.get("type") === which) {
-            block.set("type", TypeConstants.block.standard);
+            block.set("type", TypeConstants.block.paragraph);
           } else {
             block.set("type", which);
           }

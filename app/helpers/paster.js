@@ -27,7 +27,7 @@ class Paster {
       case TypeConstants.node.quote:
         return TypeConstants.block.quote;
       default:
-        return TypeConstants.block.standard;
+        return TypeConstants.block.paragraph;
     }
   }
 
@@ -52,7 +52,7 @@ class Paster {
       source: node.src ? node.src : "",
       type: type,
     });
-    if (type === TypeConstants.block.standard) {
+    if (type === TypeConstants.block.paragraph) {
       var elements = node.childNodes;
       this.createElements(block, elements);
     }
