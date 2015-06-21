@@ -33,49 +33,29 @@ class StoryEditable extends Component {
   // --------------------------------------------------
   handleKeyDown(event) {
     event.stopPropagation();
-
     var selection = window.getSelection();
     var which = event.which;
-
     if (selection.type === TypeConstants.selection.caret) {
       var point = Selector.generatePoint(selection);
-
       if (which === KeyConstants.backspace) {
-        // TODO: Backspace does not cause rerender,
-        // so link modal stays in the wrong position.
         if (point.caretOffset !== 0) {
           var block = this.getBlock(point);
           var caretOffset = point.caretOffset;
-
-          // TODO: Could set this up with action so that a block
-          // does not have to be grabbed directly from store.
           block.removeFragment(caretOffset - 1, caretOffset);
-
           if (!block.get("content")) {
             event.preventDefault();
-
             point.caretOffset = 0;
             EditorActor.updatePoint(point);
             this.props.updateStoryEditable();
           }
         } else if (!point.matchesValues(0, 0)) {
           event.preventDefault();
-
           EditorActor.removeBlock(point);
           this.props.updateStoryEditable();
         }
       }
-      // TODO: Handle tab for both point and vector.
-      // else if (which === KeyConstants.tab) {
-      //   event.preventDefault();
-
-      //   point.caretOffset = 0;
-      //   EditorActor.shiftDown(point);
-      //   this.props.updateStoryEditable();
-      // }
     } else if (selection.type === TypeConstants.selection.range) {
       var vector = Selector.generateVector(selection);
-
       if (which >= KeyConstants.left && which <= KeyConstants.down) {
         if (event.shiftKey) {
           EditorActor.updateVector(vector);
