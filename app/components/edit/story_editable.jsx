@@ -39,7 +39,7 @@ class StoryEditable extends Component {
       var point = Selector.generatePoint(selection);
       if (which === KeyConstants.backspace) {
         if (point.caretOffset !== 0) {
-          var block = this.getBlock(point);
+          var block = EditorStore.getBlock(point);
           var caretOffset = point.caretOffset;
           block.removeFragment(caretOffset - 1, caretOffset);
           if (!block.get("content")) {

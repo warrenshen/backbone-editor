@@ -13,14 +13,6 @@ class EditorActor extends Actor {
     });
   }
 
-  mergeBlock(block, point) {
-    this.act({
-      type: ActionConstants.editor.mergeBlock,
-      block: block,
-      point: point,
-    })
-  }
-
   removeBlock(point) {
     this.act({
       type: ActionConstants.editor.removeBlock,
@@ -33,6 +25,12 @@ class EditorActor extends Actor {
       type: ActionConstants.editor.removeBlocks,
       vector: vector,
       options: options,
+    });
+  }
+
+  resetCookies() {
+    this.act({
+      type: ActionConstants.editor.resetCookies,
     });
   }
 

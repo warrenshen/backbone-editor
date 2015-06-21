@@ -34,7 +34,6 @@ class OptionStyle extends Component {
       { "style-option": true },
       { "style-option-active": this.props.isActive }
     );
-
     return (
       <span className={optionClass} ref="option">
         <i className={this.props.className}></i>
