@@ -34,16 +34,16 @@ class BlockImage extends Component {
   // Handlers
   // --------------------------------------------------
   handleBlur(event) {
-    var invisible = React.findDOMNode(this.refs.invisible);
+    var node = React.findDOMNode(this.refs.input);
 
-    if (invisible && this.state.shouldShowBorder) {
+    if (node && this.state.shouldShowBorder) {
       this.setState({ shouldShowBorder: false });
     }
   }
 
   handleClick(event) {
     if (!this.state.shouldShowBorder) {
-      React.findDOMNode(this.refs.invisible).focus();
+      React.findDOMNode(this.refs.input).focus();
     }
   }
 
@@ -76,27 +76,27 @@ class BlockImage extends Component {
   // Lifecycle
   // --------------------------------------------------
   componentDidMount() {
-    var image = React.findDOMNode(this.refs.image);
-    image.addEventListener("click", this.handleClick.bind(this));
-    image.addEventListener("mousedown", this.handleMouseDown.bind(this));
-    image.addEventListener("mouseup", this.handleMouseUp.bind(this));
+    var node = React.findDOMNode(this.refs.image);
+    node.addEventListener("click", this.handleClick.bind(this));
+    node.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
 
-    var invisible = React.findDOMNode(this.refs.invisible);
-    invisible.addEventListener("blur", this.handleBlur.bind(this));
-    invisible.addEventListener("focus", this.handleFocus.bind(this));
-    invisible.addEventListener("keydown", this.handleKeyDown.bind(this));
+    node = React.findDOMNode(this.refs.input);
+    node.addEventListener("blur", this.handleBlur.bind(this));
+    node.addEventListener("focus", this.handleFocus.bind(this));
+    node.addEventListener("keydown", this.handleKeyDown.bind(this));
   }
 
   componentWillUnmount() {
-    var image = React.findDOMNode(this.refs.image);
-    image.removeEventListener("click", this.handleClick);
-    image.removeEventListener("mousedown", this.handleMouseDown);
-    image.removeEventListener("mouseup", this.handleMouseUp);
+    var node = React.findDOMNode(this.refs.image);
+    node.removeEventListener("click", this.handleClick);
+    node.removeEventListener("mousedown", this.handleMouseDown);
+    node.removeEventListener("mouseup", this.handleMouseUp);
 
-    var invisible = React.findDOMNode(this.refs.invisible);
-    invisible.removeEventListener("blur", this.handleBlur);
-    invisible.removeEventListener("focus", this.handleFocus);
-    invisible.removeEventListener("keydown", this.handleKeyDown);
+    node = React.findDOMNode(this.refs.input);
+    node.removeEventListener("blur", this.handleBlur);
+    node.removeEventListener("focus", this.handleFocus);
+    node.removeEventListener("keydown", this.handleKeyDown);
   }
 
   // --------------------------------------------------
@@ -115,18 +115,23 @@ class BlockImage extends Component {
           className={imageClass}
           ref={"image"}
           src={block.get("source")} />
-        <p
+        <input
           className={"general-invisible"}
-          ref={"invisible"}>
-        </p>
+          ref={"input"}>
+        </input>
       </div>
     );
   }
+
   render() {
     var block = this.props.block;
     return (
-      <div className={"block-container"} data-index={block.get("index")}>
-        <BlockCaption block={this.props.block} />
+      <div
+        className={"block-container"}
+        contentEditable={"false"}
+        data-index={block.get("index")}>
+        {this.renderImage()}
+        <BlockCaption {...this.props} />
       </div>
     );
   }
@@ -134,10 +139,12 @@ class BlockImage extends Component {
 
 BlockImage.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
+  updateStoryEditable: React.PropTypes.func.isRequired,
 };
 
 BlockImage.defaultProps = {
   block: new Block(),
+  updateStoryEditable: null,
 };
 
 

@@ -29,9 +29,7 @@ class BlockStandard extends BlockComponent {
           block.get("section_index"),
           block.get("index")
         )) {
-      return (
-        <ModalMedia block={this.props.block} />
-      );
+      return <ModalMedia {...this.props} />;
     }
   }
 

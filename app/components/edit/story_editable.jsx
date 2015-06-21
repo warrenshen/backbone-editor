@@ -299,7 +299,6 @@ class StoryEditable extends Component {
       <SectionStandard
         key={section.cid}
         section={section}
-        updateStoryStyle={this.props.updateStoryStyle}
         updateStoryEditable={this.props.updateStoryEditable} />
     );
   }
@@ -325,7 +324,6 @@ StoryEditable.propTypes = {
   shouldUpdate: React.PropTypes.bool.isRequired,
   story: React.PropTypes.instanceOf(Story).isRequired,
   updateModalLink: React.PropTypes.func.isRequired,
-  updateStoryStyle: React.PropTypes.func.isRequired,
   updateStoryEditable: React.PropTypes.func.isRequired,
 };
 

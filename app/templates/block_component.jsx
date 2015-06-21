@@ -38,10 +38,12 @@ class BlockComponent extends Component {
 
 BlockComponent.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
+  updateStoryEditable: React.PropTypes.func.isRequired,
 };
 
 BlockComponent.defaultProps = {
   block: new Block(),
+  updateStoryEditable: null,
 };
 
 
