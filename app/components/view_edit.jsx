@@ -91,35 +91,6 @@ class ViewEdit extends Component {
     }
   }
 
-  handleKeyPress(event) {
-    if (EditorStore.mouseState === TypeConstants.mouse.move) {
-      event.preventDefault();
-
-      var selection = window.getSelection();
-      var vector = Selector.generateVector(selection);
-
-      if (event.which === KeyConstants.enter) {
-        EditorActor.removeBlocks(vector, { enter: true });
-        this.updateStoryStyle();
-      } else {
-        if (event.ctrlKey || event.metaKey) {
-          if (event.which === KeyConstants.b) {
-            EditorActor.styleElements(vector, TypeConstants.element.bold);
-            this.updateStoryStyle();
-          } else if (event.which === KeyConstants.i) {
-            EditorActor.styleElements(vector, TypeConstants.element.italic);
-            this.updateStoryStyle();
-          }
-        } else {
-          var character = String.fromCharCode(event.which);
-
-          EditorActor.removeBlocks(vector, { character: character });
-          this.updateStoryStyle();
-        }
-      }
-    }
-  }
-
   handleMouseDown(event) {
     var selection = window.getSelection();
     selection.removeAllRanges();

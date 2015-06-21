@@ -32,12 +32,12 @@ class StoryEditable extends Component {
   // Handlers
   // --------------------------------------------------
   handleKeyDown(event) {
-    console.log("SE handling key down");
+    // console.log("SE handling key down");
     event.stopPropagation();
 
     var selection = window.getSelection();
     var which = event.which;
-    console.log(selection.type);
+    // console.log(selection.type);
 
     if (selection.type === TypeConstants.selection.caret) {
       var point = Selector.generatePoint(selection);
@@ -46,7 +46,7 @@ class StoryEditable extends Component {
         // TODO: Backspace does not cause rerender,
         // so link modal stays in the wrong position.
         if (point.caretOffset !== 0) {
-          var block = EditorStore.getBlock(point.sectionIndex, point.blockIndex);
+          var block = this.getBlock(point);
           var caretOffset = point.caretOffset;
 
           block.removeFragment(caretOffset - 1, caretOffset);
@@ -72,9 +72,7 @@ class StoryEditable extends Component {
         EditorActor.shiftDown(point);
         this.props.updateStoryEditable();
       }
-    }
-
-    if (selection.type === TypeConstants.selection.range) {
+    } else if (selection.type === TypeConstants.selection.range) {
       var vector = Selector.generateVector(selection);
 
       if (which >= KeyConstants.left && which <= KeyConstants.down) {
@@ -91,31 +89,62 @@ class StoryEditable extends Component {
 
   handleKeyPress(event) {
     console.log("SE handling key press");
-    event.stopPropagation();
 
     var selection = window.getSelection();
-    var point = Selector.generatePoint(selection);
+    var which = event.which;
+    console.log(selection.type);
 
-    if (event.which === KeyConstants.enter) {
-      event.preventDefault();
+    if (selection.type === TypeConstants.selection.caret) {
+      var point = Selector.generatePoint(selection);
 
-      EditorActor.splitBlock(point);
-      this.props.updateStoryEditable();
-    } else {
-      var block = this.props.block;
-      var length = block.length;
-      var character = String.fromCharCode(event.which);
-
-      block.addFragment(character, point.caretOffset);
-
-      if (!length) {
+      if (which === KeyConstants.enter) {
         event.preventDefault();
 
-        point.caretOffset = 1;
-        EditorActor.updatePoint(point);
+        EditorActor.splitBlock(point);
         this.props.updateStoryEditable();
+      } else {
+        var block = this.getBlock(point);
+        var length = block.length;
+        var character = String.fromCharCode(which);
+
+        block.addFragment(character, point.caretOffset);
+
+        if (!length) {
+          event.preventDefault();
+
+          point.caretOffset = 1;
+          EditorActor.updatePoint(point);
+          this.props.updateStoryEditable();
+        }
+      }
+    } else if (selection.type === TypeConstants.selection.range) {
+      var character = String.fromCharCode(which);
+      var vector = Selector.generateVector(selection);
+
+      if (which === KeyConstants.enter) {
+        EditorActor.removeBlocks(vector, { enter: true });
+        this.props.updateStoryStyle();
+      } else {
+        if (event.ctrlKey || event.metaKey) {
+          if (character === KeyConstants.b) {
+            EditorActor.styleElements(vector, TypeConstants.element.bold);
+            this.updateStoryStyle();
+          } else if (character === KeyConstants.i) {
+            EditorActor.styleElements(vector, TypeConstants.element.italic);
+            this.props.updateStoryStyle();
+          }
+        } else {
+          EditorActor.removeBlocks(vector, { character: character });
+          this.props.updateStoryStyle();
+        }
       }
     }
+  }
+
+  handleKeyUp(event) {
+    var selection = window.getSelection();
+    var which = event.which;
+    console.log(selection.type);
   }
 
   handleMouseEnter(event) {
@@ -221,6 +250,10 @@ class StoryEditable extends Component {
     }
   }
 
+  getBlock(point) {
+    return EditorStore.getBlock(point.sectionIndex, point.blockIndex);
+  }
+
   // --------------------------------------------------
   // Lifecycle
   // --------------------------------------------------
@@ -228,6 +261,7 @@ class StoryEditable extends Component {
     var node = React.findDOMNode(this.refs.story);
     node.addEventListener("keydown", this.handleKeyDown.bind(this));
     node.addEventListener("keypress", this.handleKeyPress.bind(this));
+    node.addEventListener("keyup", this.handleKeyUp.bind(this));
 
     this.createCaret(this.props.point);
     this.createHandlers();
@@ -246,6 +280,7 @@ class StoryEditable extends Component {
     var node = React.findDOMNode(this.refs.story);
     node.removeEventListener("keydown", this.handleKeyDown);
     node.removeEventListener("keypress", this.handleKeyPress);
+    node.removeEventListener("keyup", this.handleKeyUp);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
