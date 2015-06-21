@@ -69,7 +69,7 @@ class ModalMedia extends Component {
   }
 
   handleClick(event) {
-    React.findDOMNode(this.refs.invisible).focus();
+    React.findDOMNode(this.refs.input).focus();
 
     if (!this.state.shouldShowOptions) {
       this.setState({ shouldShowOptions: true });
@@ -106,36 +106,36 @@ class ModalMedia extends Component {
 
   styleImage(event) {
     React.findDOMNode(this.refs.uploader).click();
-    React.findDOMNode(this.refs.invisible).blur();
+    React.findDOMNode(this.refs.input).blur();
   }
 
   // --------------------------------------------------
   // Lifecycle
   // --------------------------------------------------
   componentDidMount() {
-    var invisible = React.findDOMNode(this.refs.invisible);
-    invisible.addEventListener("blur", this.handleBlur.bind(this));
+    var node = React.findDOMNode(this.refs.input);
+    node.addEventListener("blur", this.handleBlur.bind(this));
 
-    var prompt = React.findDOMNode(this.refs.prompt);
-    prompt.addEventListener("click", this.handleClick.bind(this));
-    prompt.addEventListener("mouseup", this.handleMouseUp.bind(this));
-    prompt.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    node = React.findDOMNode(this.refs.prompt);
+    node.addEventListener("click", this.handleClick.bind(this));
+    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
+    node.addEventListener("mousedown", this.handleMouseDown.bind(this));
 
-    var uploader = React.findDOMNode(this.refs.uploader);
-    uploader.addEventListener("change", this.handleChange.bind(this));
+    node = React.findDOMNode(this.refs.uploader);
+    node.addEventListener("change", this.handleChange.bind(this));
   }
 
   componentWillUnmount() {
-    var invisible = React.findDOMNode(this.refs.invisible);
-    invisible.removeEventListener("blur", this.handleBlur);
+    var node = React.findDOMNode(this.refs.input);
+    node.removeEventListener("blur", this.handleBlur);
 
-    var prompt = React.findDOMNode(this.refs.prompt);
-    prompt.removeEventListener("click", this.handleClick);
-    prompt.removeEventListener("mouseup", this.handleMouseUp);
-    prompt.removeEventListener("mousedown", this.handleMouseDown);
+    node = React.findDOMNode(this.refs.prompt);
+    node.removeEventListener("click", this.handleClick);
+    node.removeEventListener("mouseup", this.handleMouseUp);
+    node.removeEventListener("mousedown", this.handleMouseDown);
 
-    var uploader = React.findDOMNode(this.refs.uploader);
-    uploader.removeEventListener("change", this.handleChange);
+    node = React.findDOMNode(this.refs.uploader);
+    node.removeEventListener("change", this.handleChange);
   }
 
   // --------------------------------------------------
@@ -179,7 +179,9 @@ class ModalMedia extends Component {
     );
 
     return (
-      <div className={modalClass}>
+      <div
+        className={modalClass}
+        contentEditable={"false"}>
         <span className={promptClass} ref={"prompt"}>
           <span className={"vertical-anchor"}></span>
           <i className={"fa fa-plus"}></i>
@@ -191,11 +193,10 @@ class ModalMedia extends Component {
           type={"file"}
           accept={"image/*"}>
         </input>
-        <p
+        <input
           className={"general-invisible"}
-          contentEditable={"true"}
-          ref={"invisible"}>
-        </p>
+          ref={"input"}>
+        </input>
       </div>
     );
   }

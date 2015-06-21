@@ -17,8 +17,8 @@ class BlockDivider extends Component {
   // --------------------------------------------------
   render() {
     return (
-      <div className={"block-container"}>
-        <hr className={"block-divider"}/>
+      <div className={"block-container"} data-index={block.get("index")}>
+        <hr className={"block-divider"} />
       </div>
     );
   }

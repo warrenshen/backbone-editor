@@ -1,8 +1,5 @@
-import _ from "lodash"
-
 import Model from "app/templates/model";
 
-import Block from "app/models/block";
 import Section from "app/models/section";
 
 import ModelDirectory from "app/directories/model_directory";
@@ -14,9 +11,11 @@ class Story extends Model {
   // Setup
   // --------------------------------------------------
   initialize() {
-    var section = new Section();
-    section.addBlock(new Block());
-    this.addSection(section);
+    if (!this.length) {
+      this.addSection(new Section());
+    } else {
+      this.resetIndices();
+    }
   }
 
   // --------------------------------------------------
@@ -69,12 +68,7 @@ class Story extends Model {
   resetIndices() {
     this.get("sections").map(function(section, index) {
       section.set("index", index);
-
-      if (index === this.length - 1) {
-        section.set("is_last", true);
-      } else {
-        section.set("is_last", false);
-      }
+      section.set("is_last", index === this.length - 1);
     }, this);
   }
 }

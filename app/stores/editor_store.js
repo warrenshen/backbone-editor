@@ -1,4 +1,5 @@
-import _ from "lodash"
+import _ from "lodash";
+import CookiesJS from "cookies-js";
 
 import Store from "app/templates/store";
 
@@ -22,9 +23,8 @@ class EditorStore extends Store {
   setDefaults() {
     this._activeStyles = {};
     this._link = null;
-    this._mouseState = TypeConstants.mouse.up;
     this._point = new Point(0, 0, 0);
-    this._story = new Story();
+    this._story = new Story(this.retrieveCookies());
     this._vector = null;
   }
 
@@ -37,10 +37,6 @@ class EditorStore extends Store {
 
   get link() {
     return this._link;
-  }
-
-  get mouseState() {
-    return this._mouseState;
   }
 
   get name() {
@@ -71,50 +67,6 @@ class EditorStore extends Store {
   getSection(sectionIndex) {
     var story = this._story;
     return story.get("sections").at(sectionIndex);
-  }
-
-  nextEditableBlock(sectionIndex, blockIndex) {
-    var story = this._story;
-    var sections = story.get("sections");
-    var section = sections.at(sectionIndex);
-
-    var block;
-
-    if (blockIndex < section.length - 1) {
-      block = section.get("blocks").at(blockIndex + 1);
-    } else if (sectionIndex < sections.length - 1) {
-      block = sections.at(sectionIndex + 1).leader;
-    } else {
-      return null;
-    }
-
-    if (block.isEditable()) {
-      return block;
-    } else {
-      return this.nextEditableBlock(block.get("section_index"), block.get("index"));
-    }
-  }
-
-  previousEditableBlock(sectionIndex, blockIndex) {
-    var story = this._story;
-    var sections = story.get("sections");
-    var section = sections.at(sectionIndex);
-
-    var block;
-
-    if (blockIndex > 0) {
-      block = section.get("blocks").at(blockIndex - 1);
-    } else if (sectionIndex > 0) {
-      block = sections.at(sectionIndex - 1).footer;
-    } else {
-      return null;
-    }
-
-    if (block.isEditable()) {
-      return block;
-    } else {
-      return this.previousEditableBlock(block.get("section_index"), block.get("index"));
-    }
   }
 
   // --------------------------------------------------
@@ -190,6 +142,7 @@ class EditorStore extends Store {
     }
   }
 
+  // TODO: This action is acting funny.
   removeBlocks(vector, options={}) {
     var startPoint = vector.startPoint;
     var endPoint = vector.endPoint;
@@ -274,59 +227,20 @@ class EditorStore extends Store {
     this.updatePoint(startPoint);
   }
 
-  shiftDown(point) {
-    var sectionIndex = point.sectionIndex;
-    var blockIndex = point.blockIndex;
-
-    var block = this.getBlock(sectionIndex, blockIndex);
-    var editableBlock = this.nextEditableBlock(sectionIndex, blockIndex);
-
-    if (editableBlock) {
-      point.sectionIndex = editableBlock.get("section_index");
-      point.blockIndex = editableBlock.get("index");
+  retrieveCookies() {
+    // TODO: Fix cookies to support longer stories.
+    if (CookiesJS.enabled) {
+      var cookie = CookiesJS.get("editor");
+      return cookie ? JSON.parse(cookie) : null;
     } else {
-      point.caretOffset = block.length;
+      return null;
     }
-
-    this.updatePoint(point);
   }
 
-  shiftLeft(point) {
-    var editableBlock = this.previousEditableBlock(point.sectionIndex, point.blockIndex);
-
-    if (editableBlock) {
-      point.sectionIndex = editableBlock.get("section_index");
-      point.blockIndex = editableBlock.get("index");
-      point.caretOffset = editableBlock.length;
+  resetCookies() {
+    if (CookiesJS.enabled) {
+      CookiesJS.set("editor", JSON.stringify(this._story.toJSON()));
     }
-
-    this.updatePoint(point);
-  }
-
-  shiftRight(point) {
-    var editableBlock = this.nextEditableBlock(point.sectionIndex, point.blockIndex);
-
-    if (editableBlock) {
-      point.sectionIndex = editableBlock.get("section_index");
-      point.blockIndex = editableBlock.get("index");
-      point.caretOffset = 0;
-    }
-
-    this.updatePoint(point);
-  }
-
-  shiftUp(point) {
-    var editableBlock = this.previousEditableBlock(point.sectionIndex, point.blockIndex);
-
-    if (editableBlock) {
-      point.sectionIndex = editableBlock.get("section_index");
-      point.blockIndex = editableBlock.get("index");
-      point.shouldFloor = true;
-    } else {
-      point.caretOffset = 0;
-    }
-
-    this.updatePoint(point);
   }
 
   splitBlock(point) {
@@ -513,28 +427,14 @@ class EditorStore extends Store {
     this._link = link;
   }
 
-  updateMouseState(mouseState) {
-    if (this._point !== null) {
-      this._point = null;
-    }
-
-    this._mouseState = mouseState;
-  }
-
   updatePoint(point) {
-    if (this._mouseState !== TypeConstants.mouse.up) {
-      this.updateMouseState(TypeConstants.mouse.up);
-    }
-
     this._point = point;
     this._vector = null;
+
+    this.resetCookies();
   }
 
   updateVector(vector) {
-    if (this._mouseState !== TypeConstants.mouse.move) {
-      this.updateMouseState(TypeConstants.mouse.move);
-    }
-
     this._point = null;
     this._vector = vector;
 
@@ -561,18 +461,6 @@ class EditorStore extends Store {
       case ActionConstants.editor.removeBlocks:
         this.removeBlocks(action.vector, action.options);
         break;
-      case ActionConstants.editor.shiftDown:
-        this.shiftDown(action.point);
-        break;
-      case ActionConstants.editor.shiftLeft:
-        this.shiftLeft(action.point);
-        break;
-      case ActionConstants.editor.shiftRight:
-        this.shiftRight(action.point);
-        break;
-      case ActionConstants.editor.shiftUp:
-        this.shiftUp(action.point);
-        break;
       case ActionConstants.editor.splitBlock:
         this.splitBlock(action.point);
         break;
@@ -581,9 +469,6 @@ class EditorStore extends Store {
         break;
       case ActionConstants.editor.styleElements:
         this.styleElements(action.vector, action.which, action.link);
-        break;
-      case ActionConstants.editor.updateMouseState:
-        this.updateMouseState(action.mouseState);
         break;
       case ActionConstants.editor.updateLink:
         this.updateLink(action.link);

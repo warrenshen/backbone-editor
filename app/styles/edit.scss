@@ -1,6 +1,20 @@
 @import "variables";
 
 
+.block-caption {
+  position: relative;
+  min-height: 18px;
+  padding-top: 6px;
+  margin: auto;
+  color: $gray;
+  font-size: $font-size-smallest;
+  font-style: italic;
+  text-align: center;
+  line-height: 18px;
+  outline: none;
+  word-wrap: break-word;
+}
+
 .block-centered {
   text-align: center;
 }
@@ -67,20 +81,6 @@
   position: relative;
   width: 100%;
   line-height: 0;
-}
-
-.block-image-caption {
-  position: relative;
-  min-height: 18px;
-  padding-top: 6px;
-  margin: auto;
-  color: $gray;
-  font-size: $font-size-smallest;
-  font-style: italic;
-  text-align: center;
-  line-height: 18px;
-  outline: none;
-  word-wrap: break-word;
 }
 
 .block-last {
@@ -229,6 +229,7 @@
   position: relative;
   width: 712px;
   margin: auto;
+  outline: none;
   -webkit-user-select: none;
 }
 

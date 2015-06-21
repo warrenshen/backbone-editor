@@ -36,34 +36,6 @@ class EditorActor extends Actor {
     });
   }
 
-  shiftDown(point) {
-    this.act({
-      type: ActionConstants.editor.shiftDown,
-      point: point,
-    });
-  }
-
-  shiftLeft(point) {
-    this.act({
-      type: ActionConstants.editor.shiftLeft,
-      point: point,
-    });
-  }
-
-  shiftRight(point) {
-    this.act({
-      type: ActionConstants.editor.shiftRight,
-      point: point,
-    });
-  }
-
-  shiftUp(point) {
-    this.act({
-      type: ActionConstants.editor.shiftUp,
-      point: point,
-    });
-  }
-
   splitBlock(point) {
     this.act({
       type: ActionConstants.editor.splitBlock,
@@ -92,13 +64,6 @@ class EditorActor extends Actor {
     this.act({
       type: ActionConstants.editor.updateLink,
       link: link,
-    });
-  }
-
-  updateMouseState(mouseState) {
-    this.act({
-      type: ActionConstants.editor.updateMouseState,
-      mouseState: mouseState,
     });
   }
 

@@ -19,7 +19,7 @@ class Block extends Model {
       content: "",
       index: 0,
       is_centered: false,
-      is_local_last: false,
+      is_last: false,
       section_index: 0,
       source: "",
       type: TypeConstants.block.standard,
@@ -41,11 +41,6 @@ class Block extends Model {
         key: "elements",
         relatedModel: ModelDirectory.get("Element"),
       },
-      {
-        type: "HasOne",
-        key: "section",
-        relatedModel: ModelDirectory.get("Section"),
-      }
     ];
   }
 
@@ -61,7 +56,7 @@ class Block extends Model {
   }
 
   isLast() {
-    return this.get("section").get("is_last") && this.get("is_local_last");
+    return this.get("is_last");
   }
 
   // --------------------------------------------------
@@ -205,6 +200,8 @@ class Block extends Model {
     for (var element of bucket) {
       elements.push(element);
     }
+
+    return this;
   }
 
   parseElement(target) {
@@ -273,8 +270,7 @@ class Block extends Model {
   }
 
   toString() {
-    // TODO: Move formatter methods into this model?
-    return Formatter.formatBlock(this);
+    return Formatter.stringifyBlock(this);
   }
 }
 

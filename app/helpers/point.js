@@ -55,16 +55,16 @@ class Point {
     return new Point(this._sectionIndex, this._blockIndex, this._caretOffset);
   }
 
-  compareDeeply(otherPoint) {
-    var sectionDifference = this._sectionIndex - otherPoint.sectionIndex;
-    var blockDifference = this._blockIndex - otherPoint.blockIndex;
-    var caretDifference = this._caretOffset - otherPoint.caretOffset;
+  compareDeeply(point) {
+    var shallowDifference = this.compareShallowly(point);
+    var caretDifference = this._caretOffset - point.caretOffset;
+    return shallowDifference ? shallowDifference : caretDifference;
+  }
 
-    if (sectionDifference) {
-      return sectionDifference;
-    } else {
-      return blockDifference ? blockDifference : caretDifference;
-    }
+  compareShallowly(point) {
+    var sectionDifference = this._sectionIndex - point.sectionIndex;
+    var blockDifference = this._blockIndex - point.blockIndex;
+    return sectionDifference ? sectionDifference : blockDifference;
   }
 
   matchesValues(sectionIndex, blockIndex, caretOffset=0) {
