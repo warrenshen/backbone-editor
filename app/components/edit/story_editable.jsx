@@ -7,6 +7,8 @@ import SectionStandard from "app/components/edit/section_standard";
 
 import Story from "app/models/story";
 
+import EditorStore from "app/stores/editor_store";
+
 import EditorActor from "app/actors/editor_actor";
 
 import Link from "app/helpers/link";
@@ -34,49 +36,85 @@ class StoryEditable extends Component {
     event.stopPropagation();
 
     var selection = window.getSelection();
+    var which = event.which;
+    console.log(selection.type);
 
     if (selection.type === TypeConstants.selection.caret) {
       var point = Selector.generatePoint(selection);
 
-    if (event.which >= KeyConstants.left &&
-        event.which <= KeyConstants.down &&
-        !event.shiftKey) {
-      switch (event.which) {
-        case KeyConstants.left:
-        case KeyConstants.right:
-          return this.handleArrowHorizontal(event, point);
-        case KeyConstants.down:
-        case KeyConstants.up:
-          return this.handleArrowVertical(event, point);
-      }
-    } else if (event.which === KeyConstants.backspace) {
-      // TODO: Backspace does not cause rerender,
-      // so link modal stays in the wrong position.
-      if (point.caretOffset !== 0) {
-        var block = this.props.block;
-        var caretOffset = point.caretOffset;
+      if (which === KeyConstants.backspace) {
+        // TODO: Backspace does not cause rerender,
+        // so link modal stays in the wrong position.
+        if (point.caretOffset !== 0) {
+          var block = EditorStore.getBlock(point.sectionIndex, point.blockIndex);
+          var caretOffset = point.caretOffset;
 
-        block.removeFragment(caretOffset - 1, caretOffset);
+          block.removeFragment(caretOffset - 1, caretOffset);
 
-        if (!block.get("content")) {
+          if (!block.get("content")) {
+            event.preventDefault();
+
+            point.caretOffset = 0;
+            EditorActor.updatePoint(point);
+            this.props.updateStoryEditable();
+          }
+        } else if (!point.matchesValues(0, 0)) {
           event.preventDefault();
 
-          point.caretOffset = 0;
-          EditorActor.updatePoint(point);
+          EditorActor.removeBlock(point);
           this.props.updateStoryEditable();
         }
-      } else if (!point.matchesValues(0, 0)) {
+      }
+       else if (which === KeyConstants.tab) {
         event.preventDefault();
 
-        EditorActor.removeBlock(point);
+        point.caretOffset = 0;
+        EditorActor.shiftDown(point);
         this.props.updateStoryEditable();
       }
-    } else if (event.which === KeyConstants.tab) {
+    }
+
+    if (selection.type === TypeConstants.selection.range) {
+      var vector = Selector.generateVector(selection);
+
+      if (which >= KeyConstants.left && which <= KeyConstants.down) {
+        if (event.shiftKey) {
+          EditorActor.updateVector(vector);
+          this.props.updateModalStyle();
+        }
+      } else if (which === KeyConstants.backspace) {
+        EditorActor.removeBlocks(vector);
+        this.props.updateStoryStyle();
+      }
+    }
+  }
+
+  handleKeyPress(event) {
+    console.log("SE handling key press");
+    event.stopPropagation();
+
+    var selection = window.getSelection();
+    var point = Selector.generatePoint(selection);
+
+    if (event.which === KeyConstants.enter) {
       event.preventDefault();
 
-      point.caretOffset = 0;
-      EditorActor.shiftDown(point);
+      EditorActor.splitBlock(point);
       this.props.updateStoryEditable();
+    } else {
+      var block = this.props.block;
+      var length = block.length;
+      var character = String.fromCharCode(event.which);
+
+      block.addFragment(character, point.caretOffset);
+
+      if (!length) {
+        event.preventDefault();
+
+        point.caretOffset = 1;
+        EditorActor.updatePoint(point);
+        this.props.updateStoryEditable();
+      }
     }
   }
 
@@ -189,6 +227,7 @@ class StoryEditable extends Component {
   componentDidMount() {
     var node = React.findDOMNode(this.refs.story);
     node.addEventListener("keydown", this.handleKeyDown.bind(this));
+    node.addEventListener("keypress", this.handleKeyPress.bind(this));
 
     this.createCaret(this.props.point);
     this.createHandlers();
@@ -206,6 +245,7 @@ class StoryEditable extends Component {
   componentWillUnmount() {
     var node = React.findDOMNode(this.refs.story);
     node.removeEventListener("keydown", this.handleKeyDown);
+    node.removeEventListener("keypress", this.handleKeyPress);
   }
 
   shouldComponentUpdate(nextProps, nextState) {

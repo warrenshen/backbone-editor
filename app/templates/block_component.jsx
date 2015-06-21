@@ -20,81 +20,6 @@ class BlockComponent extends Component {
   // --------------------------------------------------
   // Handlers
   // --------------------------------------------------
-  handleArrowHorizontal(event, point) {
-    var block = this.props.block;
-    var caretOffset = point.caretOffset;
-
-    if (event.which === KeyConstants.left) {
-      if (!caretOffset) {
-        event.preventDefault();
-
-        EditorActor.shiftLeft(point);
-        this.props.updateStoryEditable();
-      }
-    } else {
-      if (point.caretOffset === block.length) {
-        event.preventDefault();
-
-        EditorActor.shiftRight(point);
-        this.props.updateStoryEditable();
-      }
-    }
-  }
-
-  handleArrowVertical(event, point) {
-    var content = React.findDOMNode(this.refs.content);
-    var caretOffset = point.caretOffset;
-
-    if (event.which === KeyConstants.down) {
-      var floorOffset = Selector.findFloorOffset(content);
-
-      if (caretOffset >= floorOffset) {
-        event.preventDefault();
-
-        point.caretOffset = caretOffset - floorOffset;
-        EditorActor.shiftDown(point);
-        this.props.updateStoryEditable();
-      }
-    } else {
-      var ceilingOffset = Selector.findCeilingOffset(content);
-
-      if (caretOffset < ceilingOffset || !caretOffset || ceilingOffset < 0) {
-        event.preventDefault();
-
-        EditorActor.shiftUp(point);
-        this.props.updateStoryEditable();
-      }
-    }
-  }
-
-  handleKeyPress(event) {
-    event.stopPropagation();
-
-    var selection = window.getSelection();
-    var point = Selector.generatePoint(selection);
-
-    if (event.which === KeyConstants.enter) {
-      event.preventDefault();
-
-      EditorActor.splitBlock(point);
-      this.props.updateStoryEditable();
-    } else {
-      var block = this.props.block;
-      var length = block.length;
-      var character = String.fromCharCode(event.which);
-
-      block.addFragment(character, point.caretOffset);
-
-      if (!length) {
-        event.preventDefault();
-
-        point.caretOffset = 1;
-        EditorActor.updatePoint(point);
-        this.props.updateStoryEditable();
-      }
-    }
-  }
-
   handleMouseMove(event) {
     if (EditorStore.mouseState === TypeConstants.mouse.down) {
       EditorActor.updateMouseState(TypeConstants.mouse.move);
@@ -132,7 +57,6 @@ class BlockComponent extends Component {
   // --------------------------------------------------
   componentDidMount() {
     var content = React.findDOMNode(this.refs.content);
-    content.addEventListener("keypress", this.handleKeyPress.bind(this));
     content.addEventListener("mousemove", this.handleMouseMove.bind(this));
     content.addEventListener("mouseup", this.handleMouseUp.bind(this));
     this.renderContent(content);
@@ -146,7 +70,6 @@ class BlockComponent extends Component {
 
   componentWillUnmount() {
     var content = React.findDOMNode(this.refs.content);
-    content.removeEventListener("keypress", this.handleKeyPress);
     content.removeEventListener("mousemove", this.handleMouseMove);
     content.removeEventListener("mouseup", this.handleMouseUp);
   }

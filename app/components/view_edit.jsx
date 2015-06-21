@@ -86,43 +86,8 @@ class ViewEdit extends Component {
   // --------------------------------------------------
   handleKeyDown(event) {
     console.log("VE handling key down");
-    var selection = window.getSelection();
-
     if (event.which === KeyConstants.backspace) {
       event.preventDefault();
-    }
-
-    if (selection.type === TypeConstants.selection.range) {
-      var vector = Selector.generateVector(selection);
-
-      if (event.which >= KeyConstants.left &&
-        event.which <= KeyConstants.down) {
-        if (event.shiftKey) {
-          var mouseState = EditorStore.mouseState;
-
-          EditorActor.updateVector(vector);
-
-          if (mouseState !== TypeConstants.mouse.move) {
-            this.updateStoryEditable();
-          }
-
-          this.updateModalStyle();
-        } else {
-          event.preventDefault();
-
-          if (event.which === KeyConstants.left ||
-              event.which === KeyConstants.up) {
-            EditorActor.updatePoint(vector.startPoint);
-          } else {
-            EditorActor.updatePoint(vector.endPoint);
-          }
-
-          this.updateStoryStyle();
-        }
-      } else if (event.which === KeyConstants.backspace) {
-        EditorActor.removeBlocks(vector);
-        this.updateStoryStyle();
-      }
     }
   }
 
