@@ -26,8 +26,7 @@ class BlockHeading extends BlockComponent {
       { "block-centered": block.get("is_centered") },
       { "block-heading-one": type === TypeConstants.block.headingOne },
       { "block-heading-two": type === TypeConstants.block.headingTwo },
-      { "block-heading-three": type === TypeConstants.block.headingThree },
-      { "block-last": block.isLast() }
+      { "block-heading-three": type === TypeConstants.block.headingThree }
     );
     return <p className={contentClass} ref={"content"}></p>;
   }
@@ -35,7 +34,6 @@ class BlockHeading extends BlockComponent {
   render() {
     var block = this.props.block;
     var type = block.get("type");
-
     switch (block.get("type")) {
       case TypeConstants.block.headingOne:
         return (

@@ -21,7 +21,6 @@ class ModalLink extends Component {
   positionModal(rectangle) {
     var modal = React.findDOMNode(this.refs.modal);
     var offset = rectangle.width / 2 - modal.offsetWidth / 2;
-
     modal.style.top = rectangle.bottom + 6 + "px";
     modal.style.left = rectangle.left + offset + "px";
   }
@@ -33,13 +32,10 @@ class ModalLink extends Component {
     if (false) {
       console.log("Link modal component updated.");
     }
-
     var link = this.props.link;
-
     if (link) {
-      var content = React.findDOMNode(this.refs.content);
-
-      content.innerHTML = link.content;
+      var node = React.findDOMNode(this.refs.content);
+      node.innerHTML = link.content;
       this.positionModal(link.rectangle);
     }
   }
@@ -56,7 +52,6 @@ class ModalLink extends Component {
       { "link-modal": true },
       { "general-hidden": !this.props.link }
     );
-
     return (
       <div className={modalClass} ref={"modal"}>
         <span className={"vertical-anchor"}></span>

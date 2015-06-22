@@ -7,7 +7,7 @@ module.exports = {
     headingThree: "heading_three",
     image: "image",
     quote: "quote",
-    standard: "standard",
+    paragraph: "paragraph",
   },
 
   element: {

@@ -22,7 +22,7 @@ class Block extends Model {
       is_last: false,
       section_index: 0,
       source: "",
-      type: TypeConstants.block.standard,
+      type: TypeConstants.block.paragraph,
     };
   }
 
@@ -45,7 +45,7 @@ class Block extends Model {
   }
 
   // --------------------------------------------------
-  // Conditions
+  // Conditionals
   // --------------------------------------------------
   isEditable() {
     return this.get("type") !== TypeConstants.block.divider;
@@ -65,15 +65,12 @@ class Block extends Model {
   addFragment(fragment, offset) {
     var content = this.get("content");
     var elements = this.get("elements");
-
     this.set("content", content.substring(0, offset) +
                         fragment +
                         content.substring(offset));
-
     for (var element of elements.models) {
       var end = element.get("end");
       var length = fragment.length;
-
       if (element.get("start") >= offset) {
         element.incrementOffsets(length);
       } else if (end >= offset) {
@@ -88,36 +85,28 @@ class Block extends Model {
       content: content.substring(offset),
       type: this.get("type"),
     });
-
     var bucket = [];
     var elements = this.get("elements");
-    var otherElements = block.get("elements");
-
     for (var i = 0; i < elements.length; i += 1) {
       var element = elements.at(i);
       var startOffset = element.get("start");
-
       if (startOffset < offset && element.get("end") > offset) {
         var clones = element.partialClones(offset, offset);
         var clone = clones[1];
-
         elements.remove(element);
         bucket.push(clones[0]);
-
         clone.decrementOffsets(clone.get("start"));
-        otherElements.push(clone);
+        block.get("elements").push(clone);
         i -= 1;
       } else if (startOffset >= offset) {
         elements.remove(element);
-        otherElements.push(element.decrementOffsets(offset));
+        block.get("elements").push(element.decrementOffsets(offset));
         i -= 1;
       }
     }
-
     for (var element of bucket) {
       elements.push(element);
     }
-
     this.set("content", content.substring(0, offset));
     return block;
   }
@@ -129,35 +118,29 @@ class Block extends Model {
   filterStyles(firstOffset, lastOffset) {
     var elements = this.get("elements");
     var type = this.get("type");
-
     var headingOne = TypeConstants.block.headingOne;
     var headingTwo = TypeConstants.block.headingTwo;
     var headingThree = TypeConstants.block.headingThree;
     var quote = TypeConstants.block.quote;
     var bucket = [];
-
     bucket.push([TypeConstants.block.centered, this.get("is_centered")]);
     bucket.push([headingOne, type === headingOne]);
     bucket.push([headingTwo, type === headingTwo]);
     bucket.push([headingThree, type === headingThree]);
     bucket.push([quote, type === quote]);
-
     for (var element of elements.models) {
       if (element.get("start") <= firstOffset &&
           element.get("end") >= lastOffset) {
         bucket.push([element.get("type"), true]);
       }
     }
-
     return new Map(bucket);
   }
 
   mergeElements() {
     var elements = this.get("elements");
-
     elements.comparator = this.elementComparator;
     elements.sort();
-
     for (var i = 0; i < elements.length - 1; i += 1) {
       if (elements.at(i).mergeElement(elements.at(i + 1))) {
         elements.remove(elements.at(i + 1));
@@ -169,83 +152,65 @@ class Block extends Model {
   mergeBlock(block, offset) {
     var content = this.get("content");
     var elements = this.get("elements");
-
-    var otherContent = block.get("content");
-    var otherElements = block.get("elements");
-
-    for (var element of otherElements.models) {
+    for (var element of block.get("elements").models) {
       element.incrementOffsets(offset);
       elements.push(element);
     }
-
     this.set("content", content.substring(0, offset) +
-                        otherContent +
+                        block.get("content") +
                         content.substring(offset));
-
     var bucket = [];
-
     for (var i = 0; i < elements.length; i += 1) {
       var element = elements.at(i);
-
       if (element.get("start") > offset && element.get("end") < offset) {
         var clones = element.partialClones(offset, offset);
-
-        clones[1].incrementOffsets(otherContent.length);
+        clones[1].incrementOffsets(block.get("content").length);
         bucket.concat(clones);
         elements.remove(element);
         i -= 1;
       }
     }
-
     for (var element of bucket) {
       elements.push(element);
     }
-
     return this;
   }
 
   parseElement(target) {
     var elements = this.get("elements");
     var bucket = [];
-    var complete = true;
-
+    var shouldIterate = false;
     for (var i = 0; i < elements.length; i += 1) {
       var element = elements.at(i);
-
       if (element.completelyBounds(target)) {
         var clones = element.partialClones(target.get("start"),
                                            target.get("end"));
         bucket = bucket.concat(clones);
         elements.remove(element);
-        complete = false;
+        shouldIterate = true;
         i -= 1;
       }
     }
-
-    if (!complete) {
+    if (shouldIterate) {
       for (var element of bucket) {
         elements.push(element);
       }
     } else {
       elements.push(target);
     }
-
     this.mergeElements();
   }
 
   removeFragment(firstOffset, lastOffset) {
     var elements = this.get("elements");
     var content = this.get("content");
-
     this.set("content", content.substring(0, firstOffset) +
                         content.substring(lastOffset));
-
     for (var i = 0; i < elements.length; i += 1) {
       var element = elements.at(i);
       var startOffset = element.get("start");
       var endOffset = element.get("end");
       var length = lastOffset - firstOffset;
-
       if (startOffset >= firstOffset && endOffset <= lastOffset) {
         elements.remove(element);
         i -= 1;
@@ -257,7 +222,6 @@ class Block extends Model {
             element.set("start", startOffset - length);
           }
         }
-
         if (endOffset > firstOffset) {
           if (endOffset <= lastOffset) {
             element.set("end", firstOffset);

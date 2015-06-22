@@ -26,7 +26,6 @@ class Section extends Model {
   get defaults() {
     return {
       index: 0,
-      is_last: false,
       type: TypeConstants.section.standard,
     };
   }
@@ -72,11 +71,9 @@ class Section extends Model {
     } else {
       var index = this.length;
       var models = section.get("blocks").models;
-
       for (var i = 0; i < section.length; i += 1) {
         this.addBlock(models.shift(), index);
       }
-
       return true;
     }
   }
@@ -90,7 +87,7 @@ class Section extends Model {
     this.get("blocks").map(function(block, index) {
       block.set("index", index);
       block.set("section_index", this.get("index"));
-      block.set("is_last", this.get("is_last") && index === this.length - 1);
+      block.set("is_last", index === this.length - 1 && this.get("is_last"));
     }, this);
   }
 }

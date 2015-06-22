@@ -5,20 +5,12 @@ import ActionConstants from "app/constants/action_constants";
 
 class EditorActor extends Actor {
 
-  addBlock(block, point) {
+  addBlock(point, block) {
     this.act({
       type: ActionConstants.editor.addBlock,
-      block: block,
       point: point,
+      block: block,
     });
-  }
-
-  mergeBlock(block, point) {
-    this.act({
-      type: ActionConstants.editor.mergeBlock,
-      block: block,
-      point: point,
-    })
   }
 
   removeBlock(point) {
@@ -36,6 +28,12 @@ class EditorActor extends Actor {
     });
   }
 
+  resetCookies() {
+    this.act({
+      type: ActionConstants.editor.resetCookies,
+    });
+  }
+
   splitBlock(point) {
     this.act({
       type: ActionConstants.editor.splitBlock,
@@ -43,20 +41,19 @@ class EditorActor extends Actor {
     });
   }
 
-  styleBlocks(vector, which) {
+  styleBlocks(vector, options) {
     this.act({
       type: ActionConstants.editor.styleBlocks,
       vector: vector,
-      which: which,
+      options: options,
     })
   }
 
-  styleElements(vector, which, link) {
+  styleElements(vector, options) {
     this.act({
       type: ActionConstants.editor.styleElements,
       vector: vector,
-      which: which,
-      link: link,
+      options: options,
     });
   }
 

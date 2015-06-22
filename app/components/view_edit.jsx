@@ -41,10 +41,10 @@ class ViewEdit extends Component {
 
   getStoreState() {
     return {
-      activeStyles: EditorStore.activeStyles,
       link: EditorStore.link,
       point: EditorStore.point,
       story: EditorStore.story,
+      styles: EditorStore.styles,
       vector: EditorStore.vector,
     };
   }
@@ -92,6 +92,7 @@ class ViewEdit extends Component {
 
   handleMouseUp(event) {
     var selection = window.getSelection();
+    console.log(selection.type);
     setTimeout(function() {
       if (selection.type === TypeConstants.selection.caret) {
         var point = Selector.generatePoint(selection);
@@ -178,9 +179,8 @@ class ViewEdit extends Component {
           updateStoryStyle={this.updateStoryStyle.bind(this)}
           updateStoryEditable={this.updateStoryEditable.bind(this)} />
         <ModalStyle
-          activeStyles={this.state.activeStyles}
-          point={this.state.point}
           shouldUpdate={this.state.shouldUpdateModalStyle}
+          styles={this.state.styles}
           updateStoryStyle={this.updateStoryStyle.bind(this)}
           vector={this.state.vector} />
         <ModalLink

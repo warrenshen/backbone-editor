@@ -8,13 +8,13 @@ import ModalMedia from "app/components/edit/modal_media";
 import EditorStore from "app/stores/editor_store";
 
 
-class BlockStandard extends BlockComponent {
+class BlockParagraph extends BlockComponent {
 
   // --------------------------------------------------
   // Defaults
   // --------------------------------------------------
   displayName() {
-    return "BlockStandard";
+    return "BlockParagraph";
   }
 
   // --------------------------------------------------
@@ -37,12 +37,12 @@ class BlockStandard extends BlockComponent {
     var block = this.props.block;
     var contentClass = ClassNames(
       { "block-content": true },
-      { "block-centered": block.get("is_centered") },
-      { "block-last": block.isLast() }
+      { "block-centered": block.get("is_centered") }
     );
-
     return (
-      <div className={"block-container"} data-index={block.get("index")}>
+      <div
+        className={"block-container"}
+        data-index={block.get("index")}>
         <p className={contentClass} ref={"content"}></p>
         {this.renderModal()}
       </div>
@@ -51,4 +51,4 @@ class BlockStandard extends BlockComponent {
 }
 
 
-module.exports = BlockStandard;
+module.exports = BlockParagraph;
