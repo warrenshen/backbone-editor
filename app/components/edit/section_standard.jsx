@@ -31,7 +31,6 @@ class SectionStandard extends Component {
       block: block,
       updateStoryEditable: this.props.updateStoryEditable,
     };
-
     switch (block.get("type")) {
       case TypeConstants.block.divider:
         return <BlockDivider {...props} />;

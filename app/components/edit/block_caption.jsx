@@ -81,14 +81,6 @@ class BlockCaption extends Component {
     }
   }
 
-  handleKeyUp(event) {
-    event.stopPropagation();
-  }
-
-  handleMouseDown(event) {
-    event.stopPropagation();
-  }
-
   handleMouseUp(event) {
     event.stopPropagation();
   }
@@ -102,8 +94,6 @@ class BlockCaption extends Component {
     node.addEventListener("focus", this.handleFocus.bind(this));
     node.addEventListener("keydown", this.handleKeyDown.bind(this));
     node.addEventListener("keypress", this.handleKeyPress.bind(this));
-    node.addEventListener("keyup", this.handleKeyUp.bind(this));
-    node.addEventListener("mousedown", this.handleMouseDown.bind(this));
     node.addEventListener("mouseup", this.handleMouseUp.bind(this));
     this.renderContent(node);
   }
@@ -119,8 +109,6 @@ class BlockCaption extends Component {
     node.removeEventListener("focus", this.handleFocus);
     node.removeEventListener("keydown", this.handleKeyDown);
     node.removeEventListener("keypress", this.handleKeyPress);
-    node.removeEventListener("keyup", this.handleKeyUp);
-    node.removeEventListener("mousedown", this.handleMouseDown);
     node.removeEventListener("mouseup", this.handleMouseUp);
   }
 

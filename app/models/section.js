@@ -26,7 +26,6 @@ class Section extends Model {
   get defaults() {
     return {
       index: 0,
-      is_last: false,
       type: TypeConstants.section.standard,
     };
   }
