@@ -65,6 +65,15 @@ class Section extends Model {
     this.resetIndices();
   }
 
+  cloneDestructively(index) {
+    var section = new Section({ type: this.get("type") });
+    var blocks = this.get("blocks");
+    for (var i = 0; i < this.length - index; i += 1) {
+      section.get("blocks").add(blocks.pop(), { at: 0 });
+    }
+    return section;
+  }
+
   mergeSection(section) {
     if (this.get("type") !== section.get("type")) {
       return false;

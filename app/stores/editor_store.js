@@ -70,16 +70,38 @@ class EditorStore extends Store {
   // --------------------------------------------------
   // Actions
   // --------------------------------------------------
-  addSection(section, index=0) {
-    this._story.addSection(section, index);
-  }
-
   addBlock(point, block) {
     var section = this.getSection(point);
     section.addBlock(block, point.blockIndex);
     if (!block.isEditable()) {
       point.blockIndex += 1;
     }
+    this.resetCookies();
+    this.updatePoint(point);
+  }
+
+  addSection(point, options) {
+    var story = this._story;
+    var sections = story.get("sections");
+    var section = this.getSection(point);
+    var block = this.getBlock(point);
+    var list = new Section({ type: options.type });
+    var clone = section.cloneDestructively(point.blockIndex + 1);
+    section.get("blocks").remove(block);
+    block.set("type", TypeConstants.block.list);
+    block.set("content", block.get("content").substring(3));
+    list.addBlock(block);
+    sections.add(list, { at: point.sectionIndex + 1 });
+    if (clone.length) {
+      sections.add(clone, { at: point.sectionIndex + 2 });
+    }
+    if (!section.length) {
+      sections.remove(section);
+    }
+    point.sectionIndex += 1;
+    point.blockIndex = 0;
+    point.caretOffset = 0;
+    story.resetIndices();
     this.resetCookies();
     this.updatePoint(point);
   }
@@ -237,7 +259,7 @@ class EditorStore extends Store {
       startPoint.caretOffset += 1;
     } else if (options.enter) {
       var block = this.getBlock(startPoint);
-      var clone = block.destructiveClone(startCaretOffset);
+      var clone = block.cloneDestructively(startCaretOffset);
       var section = this.getSection(startPoint);
       section.addBlock(clone, startBlockIndex + 1);
     }
@@ -266,7 +288,7 @@ class EditorStore extends Store {
   splitBlock(point) {
     var section = this.getSection(point);
     var block = this.getBlock(point);
-    var clone = block.destructiveClone(point.caretOffset);
+    var clone = block.cloneDestructively(point.caretOffset);
     if (!clone.length) {
       clone.set("type", TypeConstants.block.paragraph);
     }
@@ -388,6 +410,8 @@ class EditorStore extends Store {
     switch (action.type) {
       case ActionConstants.editor.addBlock:
         return this.addBlock(action.point, action.block);
+      case ActionConstants.editor.addSection:
+        return this.addSection(action.point, action.options);
       case ActionConstants.editor.removeBlock:
         return this.removeBlock(action.point);
       case ActionConstants.editor.removeBlocks:

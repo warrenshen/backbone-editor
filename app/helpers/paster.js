@@ -92,7 +92,7 @@ class Paster {
       $.fn.shift = [].shift;
       var node = nodes.shift();
       block = this.createBlock(node);
-      clone = anchor.destructiveClone(point.caretOffset);
+      clone = anchor.cloneDestructively(point.caretOffset);
       if (!anchor.length) {
         anchor.set("type", block.get("type"));
       }

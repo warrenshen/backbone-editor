@@ -79,7 +79,7 @@ class Block extends Model {
     }
   }
 
-  destructiveClone(offset) {
+  cloneDestructively(offset) {
     var content = this.get("content");
     var block = new Block({
       content: content.substring(offset),

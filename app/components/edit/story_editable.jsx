@@ -101,10 +101,15 @@ class StoryEditable extends Component {
           point.caretOffset = 1;
           EditorActor.updatePoint(point);
           this.props.updateStoryEditable();
-        }
-        if (character === "." ||
-            character === "?" ||
-            character === "!") {
+        } else if (block.get("content").substring(0, 3) === "1. ") {
+          EditorActor.addSection(
+            point,
+            { type: TypeConstants.section.listOrdered }
+          );
+          this.props.updateStoryEditable();
+        } else if (character === "." ||
+                   character === "?" ||
+                   character === "!") {
           EditorActor.resetCookies();
         }
       }
