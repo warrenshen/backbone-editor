@@ -38,6 +38,8 @@ module.exports = {
   },
 
   section: {
+    listOrdered: "list_ordered",
+    listUnordered: "list_unordered",
     standard: "standard",
   },
 

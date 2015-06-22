@@ -3,6 +3,7 @@ import React from "react";
 
 import Component from "app/templates/component";
 
+import SectionList from "app/components/edit/section_list";
 import SectionStandard from "app/components/edit/section_standard";
 
 import Story from "app/models/story";
@@ -247,12 +248,18 @@ class StoryEditable extends Component {
   // Render
   // --------------------------------------------------
   renderSection(section) {
-    return (
-      <SectionStandard
-        key={section.cid}
-        section={section}
-        updateStoryEditable={this.props.updateStoryEditable} />
-    );
+    var props = {
+      key: section.cid,
+      section: section,
+      updateStoryEditable: this.props.updateStoryEditable,
+    };
+    switch (section.get("type")) {
+      case TypeConstants.section.listOrdered:
+      case TypeConstants.section.listUnordered:
+        return <SectionList {...props} />
+      case TypeConstants.section.standard:
+        return <SectionStandard {...props} />
+    }
   }
 
   renderSections() {

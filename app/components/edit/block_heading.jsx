@@ -33,7 +33,6 @@ class BlockHeading extends BlockComponent {
 
   render() {
     var block = this.props.block;
-    var type = block.get("type");
     switch (block.get("type")) {
       case TypeConstants.block.headingOne:
         return (
