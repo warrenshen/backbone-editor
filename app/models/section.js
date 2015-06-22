@@ -10,17 +10,6 @@ import TypeConstants from "app/constants/type_constants";
 class Section extends Model {
 
   // --------------------------------------------------
-  // Setup
-  // --------------------------------------------------
-  initialize() {
-    if (!this.length) {
-      this.addBlock(new Block());
-    } else {
-      this.resetIndices();
-    }
-  }
-
-  // --------------------------------------------------
   // Getters
   // --------------------------------------------------
   get defaults() {

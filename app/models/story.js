@@ -8,17 +8,6 @@ import ModelDirectory from "app/directories/model_directory";
 class Story extends Model {
 
   // --------------------------------------------------
-  // Setup
-  // --------------------------------------------------
-  initialize() {
-    if (!this.length) {
-      this.addSection(new Section());
-    } else {
-      this.resetIndices();
-    }
-  }
-
-  // --------------------------------------------------
   // Getters
   // --------------------------------------------------
   get defaults() {

@@ -103,6 +103,7 @@ class StoryEditable extends Component {
           EditorActor.updatePoint(point);
           this.props.updateStoryEditable();
         } else if (block.get("content").substring(0, 3) === "1. ") {
+          event.preventDefault();
           EditorActor.addSection(
             point,
             { type: TypeConstants.section.listOrdered }

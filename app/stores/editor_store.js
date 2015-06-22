@@ -23,7 +23,7 @@ class EditorStore extends Store {
   setDefaults() {
     this._link = null;
     this._point = new Point(0, 0, 0);
-    this._story = new Story(this.retrieveCookies());
+    this._story = this.retrieveCookies();
     this._styles = {};
     this._vector = null;
   }
@@ -86,7 +86,7 @@ class EditorStore extends Store {
     var section = this.getSection(point);
     var block = this.getBlock(point);
     var list = new Section({ type: options.type });
-    var clone = section.cloneDestructively(point.blockIndex + 1);
+    var clone = section.cloneDestructively(point.blockIndex + 1  );
     section.get("blocks").remove(block);
     block.set("type", TypeConstants.block.list);
     block.set("content", block.get("content").substring(3));
@@ -98,10 +98,10 @@ class EditorStore extends Store {
     if (!section.length) {
       sections.remove(section);
     }
-    point.sectionIndex += 1;
+    story.resetIndices();
+    point.sectionIndex = list.get("index");
     point.blockIndex = 0;
     point.caretOffset = 0;
-    story.resetIndices();
     this.resetCookies();
     this.updatePoint(point);
   }
@@ -270,16 +270,22 @@ class EditorStore extends Store {
 
   retrieveCookies() {
     // TODO: Fix cookies to support longer stories.
-    if (CookiesJS.enabled) {
+    if (false && CookiesJS.enabled) {
       var cookie = CookiesJS.get("editor");
-      return cookie ? JSON.parse(cookie) : null;
-    } else {
-      return null;
+      if (cookie) {
+        var json = JSON.parse(cookie);
+        return new Story(json);
+      }
     }
+    var story = new Story();
+    var section = new Section();
+    section.addBlock(new Block());
+    story.addSection(section);
+    return story;
   }
 
   resetCookies() {
-    if (CookiesJS.enabled) {
+    if (false && CookiesJS.enabled) {
       console.log("ES resetting cookies...");
       CookiesJS.set("editor", JSON.stringify(this._story.toJSON()));
     }
