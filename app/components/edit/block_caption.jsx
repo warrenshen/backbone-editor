@@ -7,7 +7,6 @@ import Block from "app/models/block";
 
 import EditorActor from "app/actors/editor_actor";
 
-import Formatter from "app/helpers/formatter";
 import Selector from "app/helpers/selector";
 
 import KeyConstants from "app/constants/key_constants";

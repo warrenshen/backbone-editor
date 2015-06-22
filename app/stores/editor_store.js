@@ -257,8 +257,8 @@ class EditorStore extends Store {
   }
 
   resetCookies() {
-    console.log("ES resetting cookies...")
     if (CookiesJS.enabled) {
+      console.log("ES resetting cookies...");
       CookiesJS.set("editor", JSON.stringify(this._story.toJSON()));
     }
   }

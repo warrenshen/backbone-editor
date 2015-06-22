@@ -45,7 +45,7 @@ class Block extends Model {
   }
 
   // --------------------------------------------------
-  // Conditions
+  // Conditionals
   // --------------------------------------------------
   isEditable() {
     return this.get("type") !== TypeConstants.block.divider;
