@@ -40,7 +40,9 @@ class BlockParagraph extends BlockComponent {
       { "block-centered": block.get("is_centered") }
     );
     return (
-      <div className={"block-container"} data-index={block.get("index")}>
+      <div
+        className={"block-container"}
+        data-index={block.get("index")}>
         <p className={contentClass} ref={"content"}></p>
         {this.renderModal()}
       </div>

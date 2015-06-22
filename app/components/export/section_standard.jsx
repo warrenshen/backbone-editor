@@ -28,7 +28,6 @@ class SectionStandard extends Component {
       key: block.cid,
       block: block,
     };
-
     switch (block.get("type")) {
       // case TypeConstants.block.divider:
       //   return <BlockDivider {...props} />;

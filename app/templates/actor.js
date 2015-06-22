@@ -9,7 +9,6 @@ class Actor {
     if (false) {
       console.log("Dispatching action: " + action.type);
     }
-
     Dispatcher.dispatchAction(action);
   }
 }
