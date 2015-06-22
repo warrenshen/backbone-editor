@@ -67,10 +67,16 @@ class StoryEditable extends Component {
         this.props.updateStoryStyle();
       } else if (event.ctrlKey || event.metaKey) {
         if (which === KeyConstants.b || which === KeyConstants.B) {
-          EditorActor.styleElements(vector, TypeConstants.element.bold);
+          EditorActor.styleElements(
+            vector,
+            { type: TypeConstants.element.bold }
+          );
           this.props.updateModalStyle();
         } else if (which === KeyConstants.i || which === KeyConstants.I) {
-          EditorActor.styleElements(vector, TypeConstants.element.italic);
+          EditorActor.styleElements(
+            vector,
+            { type: TypeConstants.element.italic }
+          );
           this.props.updateModalStyle();
         }
       }
@@ -95,6 +101,11 @@ class StoryEditable extends Component {
           point.caretOffset = 1;
           EditorActor.updatePoint(point);
           this.props.updateStoryEditable();
+        }
+        if (character === "." ||
+            character === "?" ||
+            character === "!") {
+          EditorActor.resetCookies();
         }
       }
     } else if (selection.type === TypeConstants.selection.range) {

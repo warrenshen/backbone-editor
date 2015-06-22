@@ -80,6 +80,7 @@ class EditorStore extends Store {
     if (!block.isEditable()) {
       point.blockIndex += 1;
     }
+    this.resetCookies();
     this.updatePoint(point);
   }
 
@@ -172,6 +173,7 @@ class EditorStore extends Store {
           section.removeBlock(block);
         }
       }
+      this.resetCookies();
       this.updatePoint(point);
     }
   }
@@ -240,6 +242,7 @@ class EditorStore extends Store {
       section.addBlock(clone, startBlockIndex + 1);
     }
     story.mergeSections();
+    this.resetCookies();
     this.updatePoint(startPoint);
   }
 
@@ -254,7 +257,7 @@ class EditorStore extends Store {
   }
 
   resetCookies() {
-    console.log("Resetting cookies...")
+    console.log("ES resetting cookies...")
     if (CookiesJS.enabled) {
       CookiesJS.set("editor", JSON.stringify(this._story.toJSON()));
     }
@@ -267,10 +270,9 @@ class EditorStore extends Store {
     if (!clone.length) {
       clone.set("type", TypeConstants.block.paragraph);
     }
-    section.addBlock(clone, block.get("index") + 1);
     point.blockIndex += 1;
     point.caretOffset = 0;
-    this.updatePoint(point);
+    this.addBlock(point, clone);
   }
 
   styleBlocks(vector, options) {
@@ -307,6 +309,7 @@ class EditorStore extends Store {
         }
       }
     }
+    this.resetCookies();
     this.updateStyles(vector);
   }
 
@@ -336,10 +339,12 @@ class EditorStore extends Store {
       }
       for (var blockIndex of blockIndices) {
         var block = blocks.at(blockIndex);
+        console.log(options.type);
         var element = new Element({
           type: options.type,
           url: options.url ? options.url : "",
         });
+        console.log(element);
         if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
           element.setOffsets(startCaretOffset, endCaretOffset);
         } else if (blockIndex === blockIndices[0]) {
@@ -352,6 +357,7 @@ class EditorStore extends Store {
         block.parseElement(element);
       }
     }
+    this.resetCookies();
     this.updateStyles(vector);
   }
 
@@ -364,10 +370,14 @@ class EditorStore extends Store {
     this._vector = null;
   }
 
+  updateStyles(vector) {
+    this._styles = vector ? this.findStyles(vector) : {};
+  }
+
   updateVector(vector) {
     this._point = null;
     this._vector = vector;
-    this._styles = vector ? this.findStyles(vector) : {};
+    this.updateStyles();
   }
 
   // --------------------------------------------------
