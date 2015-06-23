@@ -124,11 +124,11 @@ class ModalStyle extends Component {
   // --------------------------------------------------
   // Helpers
   // --------------------------------------------------
-  createVector(vector, point) {
+  createVector(vector) {
     if (vector) {
       var startPoint = vector.startPoint;
       var endPoint = vector.endPoint;
-      var sectionNodes = $("section");
+      var sectionNodes = $("section, ol, ul");
       var startNode = sectionNodes[startPoint.sectionIndex]
                       .childNodes[startPoint.blockIndex];
       var endNode = sectionNodes[endPoint.sectionIndex]
@@ -162,20 +162,20 @@ class ModalStyle extends Component {
 
   positionModal(range) {
     var rectangle = range.getBoundingClientRect();
-    var modal = React.findDOMNode(this.refs.modal);
-    var offset = rectangle.width / 2 - modal.offsetWidth / 2;
-    modal.style.top = rectangle.top - 44 + "px";
-    modal.style.left = rectangle.left + offset + "px";
+    var node = React.findDOMNode(this.refs.modal);
+    var offset = rectangle.width / 2 - node.offsetWidth / 2;
+    node.style.top = rectangle.top - 44 + "px";
+    node.style.left = rectangle.left + offset + "px";
   }
 
   // --------------------------------------------------
   // Lifecycle
   // --------------------------------------------------
   componentDidMount() {
-    var modal = React.findDOMNode(this.refs.modal);
-    modal.addEventListener("mousedown", this.handleMouseDown.bind(this));
-    modal.addEventListener("mouseup", this.handleMouseUp.bind(this));
-    this.createVector(this.props.vector, this.props.point);
+    var node = React.findDOMNode(this.refs.modal);
+    node.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
+    this.createVector(this.props.vector);
   }
 
   componentDidUpdate() {
@@ -190,7 +190,7 @@ class ModalStyle extends Component {
       node.addEventListener("keypress", this.handleKeyPress.bind(this));
       node.addEventListener("keyup", this.handleKeyUp.bind(this));
     }
-    this.createVector(this.props.vector, this.props.point);
+    this.createVector(this.props.vector);
   }
 
   componentWillUnmount() {

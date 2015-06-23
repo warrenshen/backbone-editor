@@ -28,6 +28,13 @@ class Element extends Model {
   }
 
   // --------------------------------------------------
+  // Conditionals
+  // --------------------------------------------------
+  isLink() {
+    return this.get("type") !== TypeConstants.element.link;
+  }
+
+  // --------------------------------------------------
   // Methods
   // --------------------------------------------------
   completelyBounds(element) {

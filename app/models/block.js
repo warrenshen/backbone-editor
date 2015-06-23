@@ -47,6 +47,10 @@ class Block extends Model {
   // --------------------------------------------------
   // Conditionals
   // --------------------------------------------------
+  isCentered() {
+    return this.get("is_centered");
+  }
+
   isEditable() {
     return this.get("type") !== TypeConstants.block.divider;
   }
@@ -61,6 +65,10 @@ class Block extends Model {
 
   isList() {
     return this.get("type") === TypeConstants.block.list;
+  }
+
+  isParagraph() {
+    return this.get("type") === TypeConstants.block.paragraph;
   }
 
   // --------------------------------------------------
