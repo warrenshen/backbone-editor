@@ -26,7 +26,7 @@ class SectionList extends Component {
       <BlockList
         key={block.cid}
         block={block}
-        updateStoryEditable={this.props.storyEditable} />
+        updateStoryEditable={this.props.updateStoryEditable} />
     );
   }
 

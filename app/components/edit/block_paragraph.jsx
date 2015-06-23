@@ -25,10 +25,8 @@ class BlockParagraph extends BlockComponent {
     var point = EditorStore.point;
     if (!block.get("content") &&
         point &&
-        point.matchesValues(
-          block.get("section_index"),
-          block.get("index")
-        )) {
+        point.sectionIndex === block.get("section_index") &&
+        point.blockIndex === block.get("index")) {
       return <ModalMedia {...this.props} />;
     }
   }

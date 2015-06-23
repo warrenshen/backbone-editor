@@ -96,21 +96,20 @@ class EditorStore extends Store {
     var clone = section.cloneDestructively(point.blockIndex + 1);
     var addition = section.cloneDestructively(point.blockIndex);
     addition.set("type", type);
+    story.addSection(addition, point.sectionIndex + 1);
     if (addition.isList()) {
       block.set("type", TypeConstants.block.list);
       block.set("content", block.get("content").substring(3));
     } else {
       block.set("type", TypeConstants.block.paragraph);
     }
-    addition.addBlock(block);
-    story.addSection(addition, point.sectionIndex + 1);
     if (clone.length) {
       story.addSection(clone, point.sectionIndex + 2);
     }
     if (!section.length) {
       story.removeSection(section);
     }
-    point.sectionIndex = addition.get("index");
+    point.sectionIndex = block.get("section_index");
     point.blockIndex = block.get("index");
     point.caretOffset = 0;
     this.resetCookies();
@@ -304,13 +303,17 @@ class EditorStore extends Store {
   splitBlock(point) {
     var section = this.getSection(point);
     var block = this.getBlock(point);
-    var clone = block.cloneDestructively(point.caretOffset);
-    if (!clone.length) {
-      clone.set("type", TypeConstants.block.paragraph);
+    if (!block.length && block.isList()) {
+      this.addSection(point, { type: TypeConstants.section.standard });
+    } else {
+      var clone = block.cloneDestructively(point.caretOffset);
+      if (!clone.length) {
+        clone.set("type", TypeConstants.block.paragraph);
+      }
+      point.blockIndex += 1;
+      point.caretOffset = 0;
+      this.addBlock(point, clone);
     }
-    point.blockIndex += 1;
-    point.caretOffset = 0;
-    this.addBlock(point, clone);
   }
 
   styleBlocks(vector, options) {
