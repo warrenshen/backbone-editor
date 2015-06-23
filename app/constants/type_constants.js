@@ -6,8 +6,9 @@ module.exports = {
     headingTwo: "heading_two",
     headingThree: "heading_three",
     image: "image",
+    list: "list",
     quote: "quote",
-    standard: "standard",
+    paragraph: "paragraph",
   },
 
   element: {
@@ -38,6 +39,8 @@ module.exports = {
   },
 
   section: {
+    listOrdered: "list_ordered",
+    listUnordered: "list_unordered",
     standard: "standard",
   },
 

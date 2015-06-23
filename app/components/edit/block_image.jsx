@@ -35,7 +35,6 @@ class BlockImage extends Component {
   // --------------------------------------------------
   handleBlur(event) {
     var node = React.findDOMNode(this.refs.input);
-
     if (node && this.state.shouldShowBorder) {
       this.setState({ shouldShowBorder: false });
     }
@@ -53,11 +52,13 @@ class BlockImage extends Component {
 
   handleKeyDown(event) {
     event.preventDefault();
-
     if (event.which === KeyConstants.backspace) {
       var block = this.props.block;
-      var point = new Point(block.get("section_index"), block.get("index"), 0);
-
+      var point = new Point(
+        block.get("section_index"),
+        block.get("index"),
+        0
+      );
       EditorActor.removeBlock(point);
       this.props.updateStoryEditable();
     }
@@ -65,7 +66,6 @@ class BlockImage extends Component {
 
   handleMouseDown(event) {
     event.preventDefault();
-    event.stopPropagation();
   }
 
   handleMouseUp(event) {
@@ -80,7 +80,6 @@ class BlockImage extends Component {
     node.addEventListener("click", this.handleClick.bind(this));
     node.addEventListener("mousedown", this.handleMouseDown.bind(this));
     node.addEventListener("mouseup", this.handleMouseUp.bind(this));
-
     node = React.findDOMNode(this.refs.input);
     node.addEventListener("blur", this.handleBlur.bind(this));
     node.addEventListener("focus", this.handleFocus.bind(this));
@@ -92,7 +91,6 @@ class BlockImage extends Component {
     node.removeEventListener("click", this.handleClick);
     node.removeEventListener("mousedown", this.handleMouseDown);
     node.removeEventListener("mouseup", this.handleMouseUp);
-
     node = React.findDOMNode(this.refs.input);
     node.removeEventListener("blur", this.handleBlur);
     node.removeEventListener("focus", this.handleFocus);
@@ -103,18 +101,16 @@ class BlockImage extends Component {
   // Render
   // --------------------------------------------------
   renderImage() {
-    var block = this.props.block;
     var imageClass = ClassNames(
       { "block-image": true },
       { "block-image-bordered": this.state.shouldShowBorder }
     );
-
     return (
       <div className={"block-image-container"}>
         <img
           className={imageClass}
           ref={"image"}
-          src={block.get("source")} />
+          src={this.props.block.get("source")} />
         <input
           className={"general-invisible"}
           ref={"input"}>
@@ -124,12 +120,11 @@ class BlockImage extends Component {
   }
 
   render() {
-    var block = this.props.block;
     return (
       <div
         className={"block-container"}
         contentEditable={"false"}
-        data-index={block.get("index")}>
+        data-index={this.props.block.get("index")}>
         {this.renderImage()}
         <BlockCaption {...this.props} />
       </div>

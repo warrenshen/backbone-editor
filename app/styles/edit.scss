@@ -38,7 +38,6 @@
   line-height: $font-size-large;
   outline: none;
   word-wrap: break-word;
-  box-sizing: border-box;
 }
 
 .block-divider {
@@ -85,6 +84,10 @@
 
 .block-last {
   padding-bottom: 356px;
+}
+
+.block-list {
+  margin-left: 24px;
 }
 
 .block-quote {
@@ -228,6 +231,7 @@
 .story-container {
   position: relative;
   width: 712px;
+  padding-bottom: 356px;
   margin: auto;
   outline: none;
   -webkit-user-select: none;

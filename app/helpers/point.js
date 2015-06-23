@@ -3,11 +3,10 @@ class Point {
   // --------------------------------------------------
   // Setup
   // --------------------------------------------------
-  constructor(sectionIndex, blockIndex, caretOffset, shouldFloor=false) {
+  constructor(sectionIndex, blockIndex, caretOffset) {
     this._sectionIndex = sectionIndex;
     this._blockIndex = blockIndex;
     this._caretOffset = caretOffset;
-    this._shouldFloor = shouldFloor;
   }
 
   // --------------------------------------------------
@@ -25,10 +24,6 @@ class Point {
     return this._caretOffset;
   }
 
-  get shouldFloor() {
-    return this._shouldFloor;
-  }
-
   // --------------------------------------------------
   // Setters
   // --------------------------------------------------
@@ -44,15 +39,15 @@ class Point {
     this._caretOffset = caretOffset;
   }
 
-  set shouldFloor(shouldFloor) {
-    this._shouldFloor = shouldFloor;
-  }
-
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------
   clone() {
-    return new Point(this._sectionIndex, this._blockIndex, this._caretOffset);
+    return new Point(
+      this._sectionIndex,
+      this._blockIndex,
+      this._caretOffset
+    );
   }
 
   compareDeeply(point) {
@@ -65,12 +60,6 @@ class Point {
     var sectionDifference = this._sectionIndex - point.sectionIndex;
     var blockDifference = this._blockIndex - point.blockIndex;
     return sectionDifference ? sectionDifference : blockDifference;
-  }
-
-  matchesValues(sectionIndex, blockIndex, caretOffset=0) {
-    return this._sectionIndex === sectionIndex &&
-           this._blockIndex === blockIndex &&
-           this._caretOffset === caretOffset;
   }
 }
 

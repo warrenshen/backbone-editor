@@ -27,9 +27,10 @@ class BlockComponent extends Component {
   }
 
   render() {
-    var block = this.props.block;
     return (
-      <div className={"block-container"} data-index={block.get("index")}>
+      <div
+        className={"block-container"}
+        data-index={this.props.block.get("index")}>
         <p className={"block-content"} ref={"content"}></p>
       </div>
     );

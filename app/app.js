@@ -25,12 +25,10 @@ class App {
     models.map(function(model) {
       ModelDirectory.add(model);
     });
-
     stores.map(function(store) {
       StoreDirectory.add(store);
-      // Call store's initialize method here instead of in
-      // store's constructor so registration with store directory
-      // takes place before store initializaiton.
+      // Call store's initialize method here so initializaiton takes
+      // place after after registration with store directory.
       store.initialize();
     });
   }

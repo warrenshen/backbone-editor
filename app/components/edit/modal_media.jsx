@@ -37,7 +37,6 @@ class ModalMedia extends Component {
   // --------------------------------------------------
   generatePoint() {
     var block = this.props.block;
-
     return new Point(block.get("section_index"), block.get("index"), 0);
   }
 
@@ -50,27 +49,23 @@ class ModalMedia extends Component {
 
   handleChange(event) {
     var files = event.target.files;
-
     if (files && files[0]) {
       var block = new Block({ type: TypeConstants.block.image });
       var callback = this.props.updateStoryEditable;
       var point = this.generatePoint();
-
       var reader = new FileReader();
       reader.onloadend = function(file) {
         var source = file.target.result;
         block.set("source", source);
-        EditorActor.addBlock(block, point);
+        EditorActor.addBlock(point, block);
         callback();
       };
-
       reader.readAsDataURL(files[0]);
     }
   }
 
   handleClick(event) {
     React.findDOMNode(this.refs.input).focus();
-
     if (!this.state.shouldShowOptions) {
       this.setState({ shouldShowOptions: true });
     } else {
@@ -81,12 +76,10 @@ class ModalMedia extends Component {
 
   handleMouseDown(event) {
     event.preventDefault();
-    event.stopPropagation();
   }
 
   handleMouseUp(event) {
     event.preventDefault();
-    event.stopPropagation();
   }
 
   // --------------------------------------------------
@@ -99,8 +92,7 @@ class ModalMedia extends Component {
   styleDivider(event) {
     var block = new Block({ type: TypeConstants.block.divider });
     var point = this.generatePoint();
-
-    EditorActor.addBlock(block, point);
+    EditorActor.addBlock(point, block);
     this.props.updateStoryEditable();
   }
 
@@ -115,12 +107,10 @@ class ModalMedia extends Component {
   componentDidMount() {
     var node = React.findDOMNode(this.refs.input);
     node.addEventListener("blur", this.handleBlur.bind(this));
-
     node = React.findDOMNode(this.refs.prompt);
     node.addEventListener("click", this.handleClick.bind(this));
     node.addEventListener("mouseup", this.handleMouseUp.bind(this));
     node.addEventListener("mousedown", this.handleMouseDown.bind(this));
-
     node = React.findDOMNode(this.refs.uploader);
     node.addEventListener("change", this.handleChange.bind(this));
   }
@@ -128,12 +118,10 @@ class ModalMedia extends Component {
   componentWillUnmount() {
     var node = React.findDOMNode(this.refs.input);
     node.removeEventListener("blur", this.handleBlur);
-
     node = React.findDOMNode(this.refs.prompt);
     node.removeEventListener("click", this.handleClick);
     node.removeEventListener("mouseup", this.handleMouseUp);
     node.removeEventListener("mousedown", this.handleMouseDown);
-
     node = React.findDOMNode(this.refs.uploader);
     node.removeEventListener("change", this.handleChange);
   }
@@ -177,7 +165,6 @@ class ModalMedia extends Component {
       { "media-modal-prompt": true },
       { "media-modal-prompt-open": this.state.shouldShowOptions }
     );
-
     return (
       <div
         className={modalClass}

@@ -1,15 +1,15 @@
 import React from "react";
 
-import Component from "app/templates/component";
+import BlockComponent from "app/templates/block_component";
 
 
-class BlockDivider extends Component {
+class BlockList extends BlockComponent {
 
   // --------------------------------------------------
   // Defaults
   // --------------------------------------------------
   displayName() {
-    return "BlockDivider";
+    return "BlockList";
   }
 
   // --------------------------------------------------
@@ -20,11 +20,14 @@ class BlockDivider extends Component {
       <div
         className={"block-container"}
         data-index={this.props.block.get("index")}>
-        <hr className={"block-divider"} />
+        <li
+          className={"block-content block-list"}
+          ref={"content"}>
+        </li>
       </div>
     );
   }
 }
 
 
-module.exports = BlockDivider;
+module.exports = BlockList;

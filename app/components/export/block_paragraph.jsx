@@ -5,13 +5,13 @@ import Component from "app/templates/component";
 import Block from "app/models/block";
 
 
-class BlockStandard extends Component {
+class BlockParagraph extends Component {
 
   // --------------------------------------------------
   // Defaults
   // --------------------------------------------------
   displayName() {
-    return "BlockStandard";
+    return "BlockParagraph";
   }
 
   // --------------------------------------------------
@@ -45,13 +45,13 @@ class BlockStandard extends Component {
   }
 }
 
-BlockStandard.propTypes = {
+BlockParagraph.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
 };
 
-BlockStandard.defaultProps = {
+BlockParagraph.defaultProps = {
   block: new Block(),
 };
 
 
-module.exports = BlockStandard;
+module.exports = BlockParagraph;

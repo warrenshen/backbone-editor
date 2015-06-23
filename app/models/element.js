@@ -13,9 +13,9 @@ class Element extends Model {
   get defaults() {
     return {
       end: 0,
-      link: "",
       start: 0,
       type: TypeConstants.element.bold,
+      url: "",
     };
   }
 
@@ -25,6 +25,13 @@ class Element extends Model {
 
   get relations() {
     return [];
+  }
+
+  // --------------------------------------------------
+  // Conditionals
+  // --------------------------------------------------
+  isLink() {
+    return this.get("type") !== TypeConstants.element.link;
   }
 
   // --------------------------------------------------
@@ -66,7 +73,6 @@ class Element extends Model {
     var clones = [];
     var startOffset = this.get("start");
     var endOffset = this.get("end");
-
     if (firstOffset > startOffset) {
       clones.push(new Element({
         end: firstOffset,
@@ -74,7 +80,6 @@ class Element extends Model {
         type: this.get("type"),
       }));
     }
-
     if (lastOffset < endOffset) {
       clones.push(new Element({
         end: endOffset,
@@ -82,7 +87,6 @@ class Element extends Model {
         type: this.get("type"),
       }));
     }
-
     return clones;
   }
 

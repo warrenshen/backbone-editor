@@ -10,23 +10,11 @@ import TypeConstants from "app/constants/type_constants";
 class Section extends Model {
 
   // --------------------------------------------------
-  // Setup
-  // --------------------------------------------------
-  initialize() {
-    if (!this.length) {
-      this.addBlock(new Block());
-    } else {
-      this.resetIndices();
-    }
-  }
-
-  // --------------------------------------------------
   // Getters
   // --------------------------------------------------
   get defaults() {
     return {
       index: 0,
-      is_last: false,
       type: TypeConstants.section.standard,
     };
   }
@@ -58,6 +46,14 @@ class Section extends Model {
   }
 
   // --------------------------------------------------
+  // Conditionals
+  // --------------------------------------------------
+  isList() {
+    return this.get("type") === TypeConstants.section.listOrdered ||
+           this.get("type") === TypeConstants.section.listUnordered;
+  }
+
+  // --------------------------------------------------
   // Methods
   // --------------------------------------------------
   addBlock(block, index=0) {
@@ -66,17 +62,25 @@ class Section extends Model {
     this.resetIndices();
   }
 
+  cloneDestructively(index) {
+    var section = new Section({ type: this.get("type") });
+    var blocks = this.get("blocks");
+    for (var i = 0; i < this.length - index; i += 1) {
+      section.get("blocks").add(blocks.pop(), { at: 0 });
+    }
+    section.resetIndices();
+    return section;
+  }
+
   mergeSection(section) {
     if (this.get("type") !== section.get("type")) {
       return false;
     } else {
       var index = this.length;
       var models = section.get("blocks").models;
-
       for (var i = 0; i < section.length; i += 1) {
         this.addBlock(models.shift(), index);
       }
-
       return true;
     }
   }
@@ -90,7 +94,7 @@ class Section extends Model {
     this.get("blocks").map(function(block, index) {
       block.set("index", index);
       block.set("section_index", this.get("index"));
-      block.set("is_last", this.get("is_last") && index === this.length - 1);
+      block.set("is_last", index === this.length - 1 && this.get("is_last"));
     }, this);
   }
 }

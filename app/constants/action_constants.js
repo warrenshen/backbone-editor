@@ -1,9 +1,9 @@
 module.exports = {
   editor: {
     addBlock: "add-block",
-    mergeBlock: "merge-block",
     removeBlock: "remove-block",
     removeBlocks: "remove-blocks",
+    resetCookies: "reset-cookies",
     splitBlock: "split-block",
     styleBlocks: "style-blocks",
     styleElements: "style-elements",

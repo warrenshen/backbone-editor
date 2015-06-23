@@ -41,14 +41,12 @@ class ModalStyle extends Component {
 
   handleClick(event) {
     event.stopPropagation();
-
     this.setState({ shouldShowInput: true });
     React.findDOMNode(this.refs.input).focus();
   }
 
   handleFocus(event) {
     event.stopPropagation();
-
     React.findDOMNode(this.refs.input).focus();
   }
 
@@ -58,12 +56,10 @@ class ModalStyle extends Component {
 
   handleKeyPress(event) {
     event.stopPropagation();
-
     if (event.which === KeyConstants.enter) {
-      var input = React.findDOMNode(this.refs.input);
-
-      this.styleLink(input.value);
-      input.blur();
+      var node = React.findDOMNode(this.refs.input);
+      this.styleLink(node.value);
+      node.blur();
     }
   }
 
@@ -73,10 +69,10 @@ class ModalStyle extends Component {
 
   handleMouseDown(event) {
     event.preventDefault();
-    event.stopPropagation();
   }
 
   handleMouseUp(event) {
+    event.preventDefault();
     event.stopPropagation();
   }
 
@@ -84,7 +80,7 @@ class ModalStyle extends Component {
   // Actions
   // --------------------------------------------------
   styleBlocks(type) {
-    EditorActor.styleBlocks(this.props.vector, type);
+    EditorActor.styleBlocks(this.props.vector, { type: type });
     this.props.updateStoryStyle();
   }
 
@@ -108,8 +104,8 @@ class ModalStyle extends Component {
     this.styleBlocks(TypeConstants.block.quote);
   }
 
-  styleElements(type, link="") {
-    EditorActor.styleElements(this.props.vector, type, link);
+  styleElements(type, url="") {
+    EditorActor.styleElements(this.props.vector, { type: type, url: url });
     this.props.updateStoryStyle();
   }
 
@@ -121,120 +117,94 @@ class ModalStyle extends Component {
     this.styleElements(TypeConstants.element.italic);
   }
 
-  styleLink(link) {
-    this.styleElements(TypeConstants.element.link, link);
+  styleLink(url) {
+    this.styleElements(TypeConstants.element.link, url);
   }
 
   // --------------------------------------------------
   // Helpers
   // --------------------------------------------------
-  createVector(vector, point) {
+  createVector(vector) {
     if (vector) {
       var startPoint = vector.startPoint;
       var endPoint = vector.endPoint;
-
-      var startSection = $('section[data-index="' + startPoint.sectionIndex + '"]')[0];
-      var endSection = $('section[data-index="' + endPoint.sectionIndex + '"]')[0];
-
-      var startBlock = startSection.childNodes[startPoint.blockIndex];
-      var endBlock = endSection.childNodes[endPoint.blockIndex];
-
-      var startCaretOffset = startPoint.caretOffset;
-      var endCaretOffset = endPoint.caretOffset;
-
+      var sectionNodes = $("section, ol, ul");
+      var startNode = sectionNodes[startPoint.sectionIndex]
+                      .childNodes[startPoint.blockIndex];
+      var endNode = sectionNodes[endPoint.sectionIndex]
+                    .childNodes[endPoint.blockIndex];
       var selection = window.getSelection();
       var range = document.createRange();
-
-      var currentNode;
-      var complete = false;
-      var walker = Selector.createTreeWalker(startBlock);
-
-      while (walker.nextNode() && !complete) {
+      var caretOffset = startPoint.caretOffset;
+      var currentNode = null;
+      var walker = Selector.createTreeWalker(startNode);
+      while (walker.nextNode() && caretOffset >= 0) {
         currentNode = walker.currentNode;
-
-        if (startCaretOffset - currentNode.length < 0) {
-          range.setStart(currentNode, startCaretOffset);
-          complete = true;
-        } else {
-          startCaretOffset -= currentNode.length;
+        if (caretOffset - currentNode.length < 0) {
+          range.setStart(currentNode, caretOffset);
         }
+        caretOffset -= currentNode.length;
       }
-
-      complete = false;
-      walker = Selector.createTreeWalker(endBlock);
-
-      while (walker.nextNode() && !complete) {
+      caretOffset = endPoint.caretOffset;
+      walker = Selector.createTreeWalker(endNode);
+      while (walker.nextNode() && caretOffset >= 0) {
         currentNode = walker.currentNode;
-
-        if (endCaretOffset - currentNode.length <= 0) {
-          range.setEnd(currentNode, endCaretOffset);
-          complete = true;
-        } else {
-          endCaretOffset -= currentNode.length;
+        if (caretOffset - currentNode.length <= 0) {
+          range.setEnd(currentNode, caretOffset);
         }
+        caretOffset -= currentNode.length;
       }
-
       selection.removeAllRanges();
       selection.addRange(range);
       this.positionModal(range);
-    } else if (!point) {
-      var selection = window.getSelection();
-      selection.removeAllRanges();
     }
   }
 
   positionModal(range) {
     var rectangle = range.getBoundingClientRect();
-    var modal = React.findDOMNode(this.refs.modal);
-    var offset = rectangle.width / 2 - modal.offsetWidth / 2;
-
-    modal.style.top = rectangle.top - 44 + "px";
-    modal.style.left = rectangle.left + offset + "px";
+    var node = React.findDOMNode(this.refs.modal);
+    var offset = rectangle.width / 2 - node.offsetWidth / 2;
+    node.style.top = rectangle.top - 44 + "px";
+    node.style.left = rectangle.left + offset + "px";
   }
 
   // --------------------------------------------------
   // Lifecycle
   // --------------------------------------------------
   componentDidMount() {
-    var modal = React.findDOMNode(this.refs.modal);
-    modal.addEventListener("mousedown", this.handleMouseDown.bind(this));
-    modal.addEventListener("mouseup", this.handleMouseUp.bind(this));
-
-    this.createVector(this.props.vector, this.props.point);
+    var node = React.findDOMNode(this.refs.modal);
+    node.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
+    this.createVector(this.props.vector);
   }
 
   componentDidUpdate() {
     if (false) {
       console.log("Style modal component updated.");
     }
-
-    var input = React.findDOMNode(this.refs.input);
-
-    if (input) {
-      input.addEventListener("blur", this.handleBlur.bind(this));
-      input.addEventListener("click", this.handleFocus.bind(this));
-      input.addEventListener("keydown", this.handleKeyDown.bind(this));
-      input.addEventListener("keypress", this.handleKeyPress.bind(this));
-      input.addEventListener("keyup", this.handleKeyUp.bind(this));
+    var node = React.findDOMNode(this.refs.input);
+    if (node) {
+      node.addEventListener("blur", this.handleBlur.bind(this));
+      node.addEventListener("click", this.handleFocus.bind(this));
+      node.addEventListener("keydown", this.handleKeyDown.bind(this));
+      node.addEventListener("keypress", this.handleKeyPress.bind(this));
+      node.addEventListener("keyup", this.handleKeyUp.bind(this));
     }
-
-    this.createVector(this.props.vector, this.props.point);
+    this.createVector(this.props.vector);
   }
 
   componentWillUnmount() {
-    var input = React.findDOMNode(this.refs.input);
-
-    if (input) {
-      input.removeEventListener("blur", this.handleBlur);
-      input.removeEventListener("click", this.handleFocus);
-      input.removeEventListener("keydown", this.handleKeyDown);
-      input.removeEventListener("keypress", this.handleKeyPress);
-      input.removeEventListener("keyup", this.handleKeyUp);
+    var node = React.findDOMNode(this.refs.input);
+    if (node) {
+      node.removeEventListener("blur", this.handleBlur);
+      node.removeEventListener("click", this.handleFocus);
+      node.removeEventListener("keydown", this.handleKeyDown);
+      node.removeEventListener("keypress", this.handleKeyPress);
+      node.removeEventListener("keyup", this.handleKeyUp);
     }
-
-    var modal = React.findDOMNode(this.refs.modal);
-    modal.removeEventListener("mousedown", this.handleMouseDown);
-    modal.removeEventListener("mouseup", this.handleMouseUp);
+    node = React.findDOMNode(this.refs.modal);
+    node.removeEventListener("mousedown", this.handleMouseDown);
+    node.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -273,42 +243,42 @@ class ModalStyle extends Component {
       {
         action: this.styleHeadingOne.bind(this),
         className: "fa fa-header",
-        isActive: this.props.activeStyles[TypeConstants.block.headingOne],
+        isActive: this.props.styles[TypeConstants.block.headingOne],
       },
       {
         action: this.styleHeadingTwo.bind(this),
         className: "fa fa-header",
-        isActive: this.props.activeStyles[TypeConstants.block.headingTwo],
+        isActive: this.props.styles[TypeConstants.block.headingTwo],
       },
       {
         action: this.styleHeadingThree.bind(this),
         className: "fa fa-header",
-        isActive: this.props.activeStyles[TypeConstants.block.headingThree],
+        isActive: this.props.styles[TypeConstants.block.headingThree],
       },
       {
         action: this.styleQuote.bind(this),
         className: "fa fa-quote-right",
-        isActive: this.props.activeStyles[TypeConstants.block.quote],
+        isActive: this.props.styles[TypeConstants.block.quote],
       },
       {
         action: this.styleCentered.bind(this),
         className: "fa fa-align-center",
-        isActive: this.props.activeStyles[TypeConstants.block.centered],
+        isActive: this.props.styles[TypeConstants.block.centered],
       },
       {
         action: this.styleBold.bind(this),
         className: "fa fa-bold",
-        isActive: this.props.activeStyles[TypeConstants.element.bold],
+        isActive: this.props.styles[TypeConstants.element.bold],
       },
       {
         action: this.styleItalic.bind(this),
         className: "fa fa-italic",
-        isActive: this.props.activeStyles[TypeConstants.element.italic],
+        isActive: this.props.styles[TypeConstants.element.italic],
       },
       {
         action: this.handleClick.bind(this),
         className: "fa fa-link",
-        isActive: this.props.activeStyles[TypeConstants.element.link],
+        isActive: this.props.styles[TypeConstants.element.link],
       },
     ].map(this.renderOption, this);
   }
@@ -318,7 +288,6 @@ class ModalStyle extends Component {
       { "style-modal": true },
       { "general-hidden": !this.props.vector }
     );
-
     return (
       <div className={modalClass} ref="modal">
         <span className={"vertical-anchor"}></span>
@@ -331,17 +300,15 @@ class ModalStyle extends Component {
 }
 
 ModalStyle.propTypes = {
-  activeStyles: React.PropTypes.object.isRequired,
-  point: React.PropTypes.instanceOf(Point),
   shouldUpdate: React.PropTypes.bool.isRequired,
+  styles: React.PropTypes.object.isRequired,
   updateStoryStyle: React.PropTypes.func.isRequired,
   vector: React.PropTypes.instanceOf(Vector),
 };
 
 ModalStyle.defaultProps = {
-  activeStyles: {},
-  point: null,
   shouldUpdate: true,
+  styles: {},
   updateStoryStyle: null,
   vector: null,
 };
