@@ -8,17 +8,6 @@ import ModelDirectory from "app/directories/model_directory";
 class Story extends Model {
 
   // --------------------------------------------------
-  // Setup
-  // --------------------------------------------------
-  initialize() {
-    if (!this.length) {
-      this.addSection(new Section());
-    } else {
-      this.resetIndices();
-    }
-  }
-
-  // --------------------------------------------------
   // Getters
   // --------------------------------------------------
   get defaults() {
@@ -62,11 +51,16 @@ class Story extends Model {
     this.resetIndices();
   }
 
+  removeSection(section) {
+    this.get("sections").remove(section);
+    this.mergeSections();
+  }
 
   resetIndices() {
     this.get("sections").map(function(section, index) {
       section.set("index", index);
       section.set("is_last", index === this.length - 1);
+      section.resetIndices();
     }, this);
   }
 }

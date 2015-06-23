@@ -47,6 +47,10 @@ class Block extends Model {
   // --------------------------------------------------
   // Conditionals
   // --------------------------------------------------
+  isCentered() {
+    return this.get("is_centered");
+  }
+
   isEditable() {
     return this.get("type") !== TypeConstants.block.divider;
   }
@@ -57,6 +61,14 @@ class Block extends Model {
 
   isLast() {
     return this.get("is_last");
+  }
+
+  isList() {
+    return this.get("type") === TypeConstants.block.list;
+  }
+
+  isParagraph() {
+    return this.get("type") === TypeConstants.block.paragraph;
   }
 
   // --------------------------------------------------
@@ -79,7 +91,7 @@ class Block extends Model {
     }
   }
 
-  destructiveClone(offset) {
+  cloneDestructively(offset) {
     var content = this.get("content");
     var block = new Block({
       content: content.substring(offset),

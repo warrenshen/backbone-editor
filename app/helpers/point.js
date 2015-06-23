@@ -61,12 +61,6 @@ class Point {
     var blockDifference = this._blockIndex - point.blockIndex;
     return sectionDifference ? sectionDifference : blockDifference;
   }
-
-  matchesValues(sectionIndex, blockIndex, caretOffset=0) {
-    return this._sectionIndex === sectionIndex &&
-           this._blockIndex === blockIndex &&
-           this._caretOffset === caretOffset;
-  }
 }
 
 

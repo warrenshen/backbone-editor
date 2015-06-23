@@ -10,17 +10,6 @@ import TypeConstants from "app/constants/type_constants";
 class Section extends Model {
 
   // --------------------------------------------------
-  // Setup
-  // --------------------------------------------------
-  initialize() {
-    if (!this.length) {
-      this.addBlock(new Block());
-    } else {
-      this.resetIndices();
-    }
-  }
-
-  // --------------------------------------------------
   // Getters
   // --------------------------------------------------
   get defaults() {
@@ -57,12 +46,30 @@ class Section extends Model {
   }
 
   // --------------------------------------------------
+  // Conditionals
+  // --------------------------------------------------
+  isList() {
+    return this.get("type") === TypeConstants.section.listOrdered ||
+           this.get("type") === TypeConstants.section.listUnordered;
+  }
+
+  // --------------------------------------------------
   // Methods
   // --------------------------------------------------
   addBlock(block, index=0) {
     block.set("section_index", this.get("index"));
     this.get("blocks").add(block, { at: index });
     this.resetIndices();
+  }
+
+  cloneDestructively(index) {
+    var section = new Section({ type: this.get("type") });
+    var blocks = this.get("blocks");
+    for (var i = 0; i < this.length - index; i += 1) {
+      section.get("blocks").add(blocks.pop(), { at: 0 });
+    }
+    section.resetIndices();
+    return section;
   }
 
   mergeSection(section) {

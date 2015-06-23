@@ -52,7 +52,7 @@ class Paster {
       source: node.src ? node.src : "",
       type: type,
     });
-    if (type === TypeConstants.block.paragraph) {
+    if (block.isParagraph()) {
       var elements = node.childNodes;
       this.createElements(block, elements);
     }
@@ -67,7 +67,7 @@ class Paster {
       var type = this.classifyElement(node);
       if (type) {
         var element = new Element({ type: type });
-        if (type === TypeConstants.node.link) {
+        if (element.isLink()) {
           var attributes = node.attributes;
           var dataset = node.dataset;
           var url = dataset.link ? dataset.link : attributes.href.value;
@@ -92,7 +92,7 @@ class Paster {
       $.fn.shift = [].shift;
       var node = nodes.shift();
       block = this.createBlock(node);
-      clone = anchor.destructiveClone(point.caretOffset);
+      clone = anchor.cloneDestructively(point.caretOffset);
       if (!anchor.length) {
         anchor.set("type", block.get("type"));
       }

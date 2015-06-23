@@ -3,6 +3,7 @@ import React from "react";
 
 import Component from "app/templates/component";
 
+import SectionList from "app/components/edit/section_list";
 import SectionStandard from "app/components/edit/section_standard";
 
 import Story from "app/models/story";
@@ -38,8 +39,8 @@ class StoryEditable extends Component {
     if (selection.type === TypeConstants.selection.caret) {
       var point = Selector.generatePoint(selection);
       if (which === KeyConstants.backspace) {
+        var block = EditorStore.getBlock(point);
         if (point.caretOffset !== 0) {
-          var block = EditorStore.getBlock(point);
           var caretOffset = point.caretOffset;
           block.removeFragment(caretOffset - 1, caretOffset);
           if (!block.get("content")) {
@@ -48,7 +49,7 @@ class StoryEditable extends Component {
             EditorActor.updatePoint(point);
             this.props.updateStoryEditable();
           }
-        } else if (!point.matchesValues(0, 0)) {
+        } else {
           event.preventDefault();
           EditorActor.removeBlock(point);
           this.props.updateStoryEditable();
@@ -101,10 +102,16 @@ class StoryEditable extends Component {
           point.caretOffset = 1;
           EditorActor.updatePoint(point);
           this.props.updateStoryEditable();
-        }
-        if (character === "." ||
-            character === "?" ||
-            character === "!") {
+        } else if (block.get("content").substring(0, 3) === "1. ") {
+          event.preventDefault();
+          EditorActor.addSection(
+            point,
+            { type: TypeConstants.section.listOrdered }
+          );
+          this.props.updateStoryEditable();
+        } else if (character === "." ||
+                   character === "?" ||
+                   character === "!") {
           EditorActor.resetCookies();
         }
       }
@@ -242,12 +249,18 @@ class StoryEditable extends Component {
   // Render
   // --------------------------------------------------
   renderSection(section) {
-    return (
-      <SectionStandard
-        key={section.cid}
-        section={section}
-        updateStoryEditable={this.props.updateStoryEditable} />
-    );
+    var props = {
+      key: section.cid,
+      section: section,
+      updateStoryEditable: this.props.updateStoryEditable,
+    };
+    switch (section.get("type")) {
+      case TypeConstants.section.listOrdered:
+      case TypeConstants.section.listUnordered:
+        return <SectionList {...props} />
+      case TypeConstants.section.standard:
+        return <SectionStandard {...props} />
+    }
   }
 
   renderSections() {
@@ -255,6 +268,7 @@ class StoryEditable extends Component {
   }
 
   render() {
+    console.log(this.props.story.length);
     return (
       <div
         className={"story-container"}

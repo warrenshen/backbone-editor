@@ -13,6 +13,14 @@ class EditorActor extends Actor {
     });
   }
 
+  addSection(point, options) {
+    this.act({
+      type: ActionConstants.editor.addSection,
+      point: point,
+      options: options,
+    });
+  }
+
   removeBlock(point) {
     this.act({
       type: ActionConstants.editor.removeBlock,
