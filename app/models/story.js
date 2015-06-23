@@ -51,17 +51,16 @@ class Story extends Model {
     this.resetIndices();
   }
 
+  removeSection(section) {
+    this.get("sections").remove(section);
+    this.mergeSections();
+  }
 
   resetIndices() {
     this.get("sections").map(function(section, index) {
       section.set("index", index);
       section.set("is_last", index === this.length - 1);
     }, this);
-  }
-
-  removeSection(section) {
-    this.get("sections").remove(section);
-    this.mergeSections();
   }
 }
 

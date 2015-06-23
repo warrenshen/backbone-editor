@@ -46,6 +46,14 @@ class Section extends Model {
   }
 
   // --------------------------------------------------
+  // Conditionals
+  // --------------------------------------------------
+  isList() {
+    return this.get("type") === TypeConstants.section.listOrdered ||
+           this.get("type") === TypeConstants.section.listUnordered;
+  }
+
+  // --------------------------------------------------
   // Methods
   // --------------------------------------------------
   addBlock(block, index=0) {
@@ -60,6 +68,7 @@ class Section extends Model {
     for (var i = 0; i < this.length - index; i += 1) {
       section.get("blocks").add(blocks.pop(), { at: 0 });
     }
+    section.resetIndices();
     return section;
   }
 
@@ -87,11 +96,6 @@ class Section extends Model {
       block.set("section_index", this.get("index"));
       block.set("is_last", index === this.length - 1 && this.get("is_last"));
     }, this);
-  }
-
-  removeBlock(block) {
-    this.get("blocks").remove(block);
-    this.resetIndices();
   }
 }
 

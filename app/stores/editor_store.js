@@ -84,21 +84,26 @@ class EditorStore extends Store {
     var story = this._story;
     var section = this.getSection(point);
     var block = this.getBlock(point);
-    var list = new Section({ type: options.type });
-    var clone = section.cloneDestructively(point.blockIndex + 1  );
-    section.get("blocks").remove(block);
-    block.set("type", TypeConstants.block.list);
-    block.set("content", block.get("content").substring(3));
-    list.addBlock(block);
-    story.addSection(list, point.sectionIndex + 1);
+    var type = options.type;
+    var clone = section.cloneDestructively(point.blockIndex + 1);
+    var addition = section.cloneDestructively(point.blockIndex);
+    addition.set("type", type);
+    if (addition.isList()) {
+      block.set("type", TypeConstants.block.list);
+      block.set("content", block.get("content").substring(3));
+    } else {
+      block.set("type", TypeConstants.block.paragraph);
+    }
+    addition.addBlock(block);
+    story.addSection(addition, point.sectionIndex + 1);
     if (clone.length) {
       story.addSection(clone, point.sectionIndex + 2);
     }
     if (!section.length) {
       story.removeSection(section);
     }
-    point.sectionIndex = list.get("index");
-    point.blockIndex = 0;
+    point.sectionIndex = addition.get("index");
+    point.blockIndex = block.get("index");
     point.caretOffset = 0;
     this.resetCookies();
     this.updatePoint(point);
@@ -158,41 +163,45 @@ class EditorStore extends Store {
   removeBlock(point) {
     var section = this.getSection(point);
     var block = this.getBlock(point);
-    var previousBlock = null;
-    if (block.get("index") > 0) {
-      var clone = point.clone();
-      clone.blockIndex -= 1;
-      previousBlock = this.getBlock(clone);
-    } else if (sectionIndex > 0) {
-      var clone = point.clone();
-      clone.sectionIndex -= 1;
-      previousBlock = this.getSection(point).footer;
-    }
-    if (previousBlock === null) {
-      if (block.isImage()) {
-        section.removeBlock(block);
-        this.addBlock(new Block(), point);
-      }
+    if (block.isList()) {
+      this.addSection(point, { type: TypeConstants.section.standard });
     } else {
-      if (previousBlock.isImage()) {
-        if (!block.get("content") && !block.isLast()) {
+      var previousBlock = null;
+      if (block.get("index") > 0) {
+        var clone = point.clone();
+        clone.blockIndex -= 1;
+        previousBlock = this.getBlock(clone);
+      } else if (sectionIndex > 0) {
+        var clone = point.clone();
+        clone.sectionIndex -= 1;
+        previousBlock = this.getSection(point).footer;
+      }
+      if (previousBlock === null) {
+        if (block.isImage()) {
           section.removeBlock(block);
+          this.addBlock(new Block(), point);
         }
       } else {
-        point.sectionIndex = previousBlock.get("section_index");
-        point.blockIndex = previousBlock.get("index");
-        point.caretOffset = previousBlock.length;
-        if (!previousBlock.isEditable()) {
-          section.removeBlock(previousBlock);
-        } else {
-          if (!block.isImage()) {
-            previousBlock.mergeBlock(block, previousBlock.length);
+        if (previousBlock.isImage()) {
+          if (!block.get("content") && !block.isLast()) {
+            section.removeBlock(block);
           }
-          section.removeBlock(block);
+        } else {
+          point.sectionIndex = previousBlock.get("section_index");
+          point.blockIndex = previousBlock.get("index");
+          point.caretOffset = previousBlock.length;
+          if (!previousBlock.isEditable()) {
+            section.removeBlock(previousBlock);
+          } else {
+            if (!block.isImage()) {
+              previousBlock.mergeBlock(block, previousBlock.length);
+            }
+            section.removeBlock(block);
+          }
         }
+        this.resetCookies();
+        this.updatePoint(point);
       }
-      this.resetCookies();
-      this.updatePoint(point);
     }
   }
 

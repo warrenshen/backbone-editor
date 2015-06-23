@@ -49,7 +49,6 @@ class ViewContainer extends Component {
   renderButton(props, index) {
     var className = "view-button";
     className += (props.isSelected) ? " view-button-selected" : "";
-
     return (
       <Clickable
         key={index}

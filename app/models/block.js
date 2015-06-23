@@ -59,6 +59,10 @@ class Block extends Model {
     return this.get("is_last");
   }
 
+  isList() {
+    return this.get("type") === TypeConstants.block.list;
+  }
+
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------

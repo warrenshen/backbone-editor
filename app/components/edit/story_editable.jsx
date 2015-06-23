@@ -39,8 +39,8 @@ class StoryEditable extends Component {
     if (selection.type === TypeConstants.selection.caret) {
       var point = Selector.generatePoint(selection);
       if (which === KeyConstants.backspace) {
+        var block = EditorStore.getBlock(point);
         if (point.caretOffset !== 0) {
-          var block = EditorStore.getBlock(point);
           var caretOffset = point.caretOffset;
           block.removeFragment(caretOffset - 1, caretOffset);
           if (!block.get("content")) {
@@ -49,7 +49,7 @@ class StoryEditable extends Component {
             EditorActor.updatePoint(point);
             this.props.updateStoryEditable();
           }
-        } else if (!point.matchesValues(0, 0)) {
+        } else {
           event.preventDefault();
           EditorActor.removeBlock(point);
           this.props.updateStoryEditable();
@@ -268,6 +268,7 @@ class StoryEditable extends Component {
   }
 
   render() {
+    console.log(this.props.story.length);
     return (
       <div
         className={"story-container"}
