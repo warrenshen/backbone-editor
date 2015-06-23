@@ -88,6 +88,11 @@ class Section extends Model {
       block.set("is_last", index === this.length - 1 && this.get("is_last"));
     }, this);
   }
+
+  removeBlock(block) {
+    this.get("blocks").remove(block);
+    this.resetIndices();
+  }
 }
 
 

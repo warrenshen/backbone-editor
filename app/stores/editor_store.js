@@ -82,7 +82,6 @@ class EditorStore extends Store {
 
   addSection(point, options) {
     var story = this._story;
-    var sections = story.get("sections");
     var section = this.getSection(point);
     var block = this.getBlock(point);
     var list = new Section({ type: options.type });
@@ -91,14 +90,13 @@ class EditorStore extends Store {
     block.set("type", TypeConstants.block.list);
     block.set("content", block.get("content").substring(3));
     list.addBlock(block);
-    sections.add(list, { at: point.sectionIndex + 1 });
+    story.addSection(list, point.sectionIndex + 1);
     if (clone.length) {
-      sections.add(clone, { at: point.sectionIndex + 2 });
+      story.addSection(clone, point.sectionIndex + 2);
     }
     if (!section.length) {
-      sections.remove(section);
+      story.removeSection(section);
     }
-    story.resetIndices();
     point.sectionIndex = list.get("index");
     point.blockIndex = 0;
     point.caretOffset = 0;
@@ -115,25 +113,23 @@ class EditorStore extends Store {
     var endBlockIndex = endPoint.blockIndex;
     var startCaretOffset = startPoint.caretOffset;
     var endCaretOffset = endPoint.caretOffset;
-    var sections = this._story.get("sections");
     var styles = {};
     var stylesMaps = [];
     var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
     for (var sectionIndex of sectionIndices) {
-      var section = sections.at(sectionIndex);
-      var blocks = section.get("blocks");
+      var section = this.getSection(sectionIndex);
       var blockIndices = null;
       if (startSectionIndex === endSectionIndex) {
         blockIndices = _.range(startBlockIndex, endBlockIndex + 1);
       } else if (sectionIndex === startSectionIndex) {
-        blockIndices = _.range(startBlockIndex, blocks.length);
+        blockIndices = _.range(startBlockIndex, section.length);
       } else if (sectionIndex === endSectionIndex) {
         blockIndices = _.range(0, endBlockIndex + 1);
       } else {
-        blockIndices = _.range(0, blocks.length);
+        blockIndices = _.range(0, section.length);
       }
       for (var blockIndex of blockIndices) {
-        var block = blocks.at(blockIndex);
+        var block = this.getBlock(sectionIndex, blockIndex);
         var stylesMap = null;
         if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
           stylesMap = block.filterStyles(startCaretOffset, endCaretOffset);
@@ -210,19 +206,16 @@ class EditorStore extends Store {
     var endBlockIndex = endPoint.blockIndex;
     var startCaretOffset = startPoint.caretOffset;
     var endCaretOffset = endPoint.caretOffset;
-    var story = this._story;
-    var sections = story.get("sections");
     var sectionBucket = [];
     var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
     for (var sectionIndex of sectionIndices) {
-      var section = sections.at(sectionIndex);
-      var blocks = section.get("blocks");
+      var section = this.getSection(sectionIndex);
       var blockIndices = null;
       var shouldContinue = true;
       if (startSectionIndex === endSectionIndex) {
         blockIndices = _.range(startBlockIndex, endBlockIndex + 1);
       } else if (sectionIndex === startSectionIndex) {
-        blockIndices = _.range(startBlockIndex, blocks.length);
+        blockIndices = _.range(startBlockIndex, section.length);
       } else if (sectionIndex === endSectionIndex) {
         blockIndices = _.range(0, endBlockIndex + 1);
       } else {
@@ -232,7 +225,7 @@ class EditorStore extends Store {
       if (shouldContinue) {
         var blockBucket = [];
         for (var blockIndex of blockIndices) {
-          var block = blocks.at(blockIndex);
+          var block = this.getBlock(sectionIndex, blockIndex);
           if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
             block.removeFragment(startCaretOffset, endCaretOffset);
           } else if (blockIndex === blockIndices[0]) {
@@ -245,13 +238,12 @@ class EditorStore extends Store {
           }
         }
         for (var block of blockBucket) {
-          blocks.remove(block);
+          section.removeBlock(block);
         }
-        section.resetIndices();
       }
     }
     for (var section of sectionBucket) {
-      sections.remove(section);
+      this._story.removeSection(section);
     }
     if (options.character) {
       var block = this.getBlock(startPoint);
@@ -263,7 +255,6 @@ class EditorStore extends Store {
       var section = this.getSection(startPoint);
       section.addBlock(clone, startBlockIndex + 1);
     }
-    story.mergeSections();
     this.resetCookies();
     this.updatePoint(startPoint);
   }
@@ -310,23 +301,21 @@ class EditorStore extends Store {
     var endSectionIndex = endPoint.sectionIndex;
     var startBlockIndex = startPoint.blockIndex;
     var endBlockIndex = endPoint.blockIndex;
-    var sections = this._story.get("sections");
     var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
     for (var sectionIndex of sectionIndices) {
-      var section = sections.at(sectionIndex);
-      var blocks = section.get("blocks");
+      var section = this.getSection(sectionIndex);
       var blockIndices = null;
       if (startSectionIndex === endSectionIndex) {
         blockIndices = _.range(startBlockIndex, endBlockIndex + 1);
       } else if (sectionIndex === startSectionIndex) {
-        blockIndices = _.range(startBlockIndex, blocks.length);
+        blockIndices = _.range(startBlockIndex, section.length);
       } else if (sectionIndex === endSectionIndex) {
         blockIndices = _.range(0, endBlockIndex + 1);
       } else {
-        blockIndices = _.range(0, blocks.length);
+        blockIndices = _.range(0, section.length);
       }
       for (var blockIndex of blockIndices) {
-        var block = blocks.at(blockIndex);
+        var block = this.getBlock(sectionIndex, blockIndex);
         var type = options.type;
         if (type === TypeConstants.block.centered) {
           block.set("is_centered", !block.get("is_centered"));
@@ -350,29 +339,25 @@ class EditorStore extends Store {
     var endBlockIndex = endPoint.blockIndex;
     var startCaretOffset = startPoint.caretOffset;
     var endCaretOffset = endPoint.caretOffset;
-    var sections = this._story.get("sections");
     var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
     for (var sectionIndex of sectionIndices) {
-      var section = sections.at(sectionIndex);
-      var blocks = section.get("blocks");
+      var section = this.getSection(sectionIndex);
       var blockIndices = null;
       if (startSectionIndex === endSectionIndex) {
         blockIndices = _.range(startBlockIndex, endBlockIndex + 1);
       } else if (sectionIndex === startSectionIndex) {
-        blockIndices = _.range(startBlockIndex, blocks.length);
+        blockIndices = _.range(startBlockIndex, section.length);
       } else if (sectionIndex === endSectionIndex) {
         blockIndices = _.range(0, endBlockIndex + 1);
       } else {
-        blockIndices = _.range(0, blocks.length);
+        blockIndices = _.range(0, section.length);
       }
       for (var blockIndex of blockIndices) {
-        var block = blocks.at(blockIndex);
-        console.log(options.type);
+        var block = this.getBlock(sectionIndex, blockIndex);
         var element = new Element({
           type: options.type,
           url: options.url ? options.url : "",
         });
-        console.log(element);
         if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
           element.setOffsets(startCaretOffset, endCaretOffset);
         } else if (blockIndex === blockIndices[0]) {

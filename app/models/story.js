@@ -58,6 +58,11 @@ class Story extends Model {
       section.set("is_last", index === this.length - 1);
     }, this);
   }
+
+  removeSection(section) {
+    this.get("sections").remove(section);
+    this.mergeSections();
+  }
 }
 
 
