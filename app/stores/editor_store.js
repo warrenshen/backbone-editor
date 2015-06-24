@@ -104,11 +104,9 @@ class EditorStore extends Store {
       block.set("type", TypeConstants.block.paragraph);
     }
     if (clone.length) {
-      console.log("adding tail.");
       story.addSection(clone, point.sectionIndex + 2);
     }
     if (!section.length) {
-      console.log("removing head.");
       story.removeSection(section);
     }
     point.sectionIndex = block.get("section_index");
@@ -228,6 +226,8 @@ class EditorStore extends Store {
     var endBlockIndex = endPoint.blockIndex;
     var startCaretOffset = startPoint.caretOffset;
     var endCaretOffset = endPoint.caretOffset;
+    var startBlock = this.getBlock(startPoint);
+    var endBlock = this.getBlock(endPoint);
     var sectionBucket = [];
     var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
     for (var sectionIndex of sectionIndices) {
@@ -268,19 +268,15 @@ class EditorStore extends Store {
       this._story.removeSection(section);
     }
     if (options.enter) {
-      var block = this.getBlock(startPoint);
-      var clone = block.cloneDestructively(startCaretOffset);
+      var clone = startBlock.cloneDestructively(startCaretOffset);
       var section = this.getSection(startPoint);
       section.addBlock(clone, startBlockIndex + 1);
     } else {
-      var startBlock = this.getBlock(startPoint);
-      var endBlock = this.getBlock(endPoint);
       var endSection = this.getSection(endPoint);
       if (options.character) {
         startBlock.addFragment(options.character, startCaretOffset);
         startBlock.caretOffset += 1;
       }
-      console.log(endBlock);
       startBlock.mergeBlock(endBlock, startBlock.length);
       endSection.removeBlock(endBlock);
     }

@@ -275,7 +275,6 @@ class StoryEditable extends Component {
   }
 
   render() {
-    console.log(this.props.story.length);
     return (
       <div
         className={"story-container"}
