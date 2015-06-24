@@ -22,6 +22,9 @@ class SectionList extends Component {
   // Render
   // --------------------------------------------------
   renderBlock(block) {
+    if (!block.isList()) {
+      console.log("Warning: block should be of type list.")
+    }
     return (
       <BlockList
         key={block.cid}

@@ -104,9 +104,11 @@ class EditorStore extends Store {
       block.set("type", TypeConstants.block.paragraph);
     }
     if (clone.length) {
+      console.log("adding tail.");
       story.addSection(clone, point.sectionIndex + 2);
     }
     if (!section.length) {
+      console.log("removing head.");
       story.removeSection(section);
     }
     point.sectionIndex = block.get("section_index");
@@ -195,6 +197,7 @@ class EditorStore extends Store {
         if (previousBlock.isImage()) {
           if (!block.get("content") && !block.isLast()) {
             section.removeBlock(block);
+            this._story.mergeSections();
           }
         } else {
           point.sectionIndex = previousBlock.get("section_index");
@@ -209,6 +212,7 @@ class EditorStore extends Store {
             section.removeBlock(block);
           }
         }
+        this._story.mergeSections();
         this.resetCookies();
         this.updatePoint(point);
       }
@@ -307,7 +311,7 @@ class EditorStore extends Store {
       this.addSection(point, { type: TypeConstants.section.standard });
     } else {
       var clone = block.cloneDestructively(point.caretOffset);
-      if (!clone.length) {
+      if (!clone.length && !clone.isList()) {
         clone.set("type", TypeConstants.block.paragraph);
       }
       point.blockIndex += 1;

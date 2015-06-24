@@ -102,6 +102,13 @@ class StoryEditable extends Component {
           point.caretOffset = 1;
           EditorActor.updatePoint(point);
           this.props.updateStoryEditable();
+        } else if (block.get("content").substring(0, 2) === "* ") {
+          event.preventDefault();
+          EditorActor.addSection(
+            point,
+            { type: TypeConstants.section.listUnordered }
+          );
+          this.props.updateStoryEditable();
         } else if (block.get("content").substring(0, 3) === "1. ") {
           event.preventDefault();
           EditorActor.addSection(
