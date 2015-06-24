@@ -267,15 +267,22 @@ class EditorStore extends Store {
     for (var section of sectionBucket) {
       this._story.removeSection(section);
     }
-    if (options.character) {
-      var block = this.getBlock(startPoint);
-      block.addFragment(options.character, startCaretOffset);
-      startPoint.caretOffset += 1;
-    } else if (options.enter) {
+    if (options.enter) {
       var block = this.getBlock(startPoint);
       var clone = block.cloneDestructively(startCaretOffset);
       var section = this.getSection(startPoint);
       section.addBlock(clone, startBlockIndex + 1);
+    } else {
+      var startBlock = this.getBlock(startPoint);
+      var endBlock = this.getBlock(endPoint);
+      var endSection = this.getSection(endPoint);
+      if (options.character) {
+        startBlock.addFragment(options.character, startCaretOffset);
+        startBlock.caretOffset += 1;
+      }
+      console.log(endBlock);
+      startBlock.mergeBlock(endBlock, startBlock.length);
+      endSection.removeBlock(endBlock);
     }
     this.resetCookies();
     this.updatePoint(startPoint);
