@@ -58,21 +58,89 @@ class EditorStore extends Store {
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------
-  getBlock(point, sectionIndex, blockIndex) {
-    if (point) {
-      return this.getSection(point).get("blocks").at(point.blockIndex);
-    } else {
-      return this.getSection(null, sectionIndex)
-                 .get("blocks").at(blockIndex);
+  callBlocks(vector, callback, shouldRemove=false) {
+    var startPoint = vector.startPoint;
+    var endPoint = vector.endPoint;
+    var startSectionIndex = startPoint.sectionIndex;
+    var endSectionIndex = endPoint.sectionIndex;
+    var startBlockIndex = startPoint.blockIndex;
+    var endBlockIndex = endPoint.blockIndex;
+    var startCaretOffset = startPoint.caretOffset;
+    var endCaretOffset = endPoint.caretOffset;
+    var sectionBucket = [];
+    var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
+    for (var sectionIndex of sectionIndices) {
+      var point = new Point(sectionIndex, 0, 0);
+      var section = this.getSection(point);
+      var blockIndices = null;
+      if (startSectionIndex === endSectionIndex) {
+        blockIndices = _.range(startBlockIndex, endBlockIndex + 1);
+      } else if (sectionIndex === startSectionIndex) {
+        blockIndices = _.range(startBlockIndex, section.length);
+      } else if (sectionIndex === endSectionIndex) {
+        blockIndices = _.range(0, endBlockIndex + 1);
+      } else {
+        if (shouldRemove) {
+          sectionBucket.push(section);
+        } else {
+          blockIndices = _.range(0, section.length);
+        }
+      }
+      if (blockIndices) {
+        var blockBucket = [];
+        for (var blockIndex of blockIndices) {
+          point.blockIndex = blockIndex;
+          var block = this.getBlock(point);
+          if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
+            callback(block, startCaretOffset, endCaretOffset);
+          } else if (blockIndex === blockIndices[0]) {
+            callback(block, startCaretOffset, block.length);
+          } else if (blockIndex === blockIndices[blockIndices.length - 1]) {
+            callback(block, 0, endCaretOffset);
+          } else {
+            if (shouldRemove) {
+              blockBucket.push(block);
+            } else {
+              callback(block, 0, block.length);
+            }
+          }
+        }
+        for (var block of blockBucket) {
+          section.removeBlock(block);
+        }
+      }
+      for (var section of sectionBucket) {
+        this._story.removeSection(section);
+      }
     }
   }
 
-  getSection(point, sectionIndex) {
-    if (point) {
-      return this._story.get("sections").at(point.sectionIndex);
-    } else {
-      return this._story.get("sections").at(sectionIndex);
+  filterStyles(vector) {
+    var styles = {};
+    var maps = [];
+    var callback = function(block, start, end) {
+      var map = block.filterStyles(start, end);
+      maps.push(map);
+    };
+    this.callBlocks(vector, callback);
+    for (var map of maps) {
+      for (var [type, value] of map) {
+        if (!value && styles[type])
+          styles[type] = false;
+        else if (value && styles[type] === undefined) {
+          styles[type] = true;
+        }
+      }
     }
+    return styles;
+  }
+
+  getBlock(point, sectionIndex, blockIndex) {
+    return this.getSection(point).get("blocks").at(point.blockIndex);
+  }
+
+  getSection(point, sectionIndex) {
+    return this._story.get("sections").at(point.sectionIndex);
   }
 
   // --------------------------------------------------
@@ -116,57 +184,6 @@ class EditorStore extends Store {
     this.updatePoint(point);
   }
 
-  findStyles(vector) {
-    var startPoint = vector.startPoint;
-    var endPoint = vector.endPoint;
-    var startSectionIndex = startPoint.sectionIndex;
-    var endSectionIndex = endPoint.sectionIndex;
-    var startBlockIndex = startPoint.blockIndex;
-    var endBlockIndex = endPoint.blockIndex;
-    var startCaretOffset = startPoint.caretOffset;
-    var endCaretOffset = endPoint.caretOffset;
-    var styles = {};
-    var stylesMaps = [];
-    var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
-    for (var sectionIndex of sectionIndices) {
-      var section = this.getSection(null, sectionIndex);
-      var blockIndices = null;
-      if (startSectionIndex === endSectionIndex) {
-        blockIndices = _.range(startBlockIndex, endBlockIndex + 1);
-      } else if (sectionIndex === startSectionIndex) {
-        blockIndices = _.range(startBlockIndex, section.length);
-      } else if (sectionIndex === endSectionIndex) {
-        blockIndices = _.range(0, endBlockIndex + 1);
-      } else {
-        blockIndices = _.range(0, section.length);
-      }
-      for (var blockIndex of blockIndices) {
-        var block = this.getBlock(null, sectionIndex, blockIndex);
-        var stylesMap = null;
-        if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
-          stylesMap = block.filterStyles(startCaretOffset, endCaretOffset);
-        } else if (blockIndex === blockIndices[0]) {
-          stylesMap = block.filterStyles(startCaretOffset, block.length);
-        } else if (blockIndex === blockIndices[blockIndices.length - 1]) {
-          stylesMap = block.filterStyles(0, endCaretOffset);
-        } else {
-          stylesMap = block.filterStyles(0, block.length);
-        }
-        stylesMaps.push(stylesMap);
-      }
-    }
-    for (var stylesMap of stylesMaps) {
-      for (var [type, value] of stylesMap) {
-        if (!value && styles[type])
-          styles[type] = false;
-        else if (value && styles[type] === undefined) {
-          styles[type] = true;
-        }
-      }
-    }
-    return styles;
-  }
-
   removeBlock(point) {
     var section = this.getSection(point);
     var block = this.getBlock(point);
@@ -195,6 +212,7 @@ class EditorStore extends Store {
         if (previousBlock.isImage()) {
           if (!block.get("content") && !block.isLast()) {
             section.removeBlock(block);
+            this._story.mergeSections();
           }
         } else {
           point.sectionIndex = previousBlock.get("section_index");
@@ -209,6 +227,7 @@ class EditorStore extends Store {
             section.removeBlock(block);
           }
         }
+        this._story.mergeSections();
         this.resetCookies();
         this.updatePoint(point);
       }
@@ -218,60 +237,27 @@ class EditorStore extends Store {
   removeBlocks(vector, options={}) {
     var startPoint = vector.startPoint;
     var endPoint = vector.endPoint;
-    var startSectionIndex = startPoint.sectionIndex;
-    var endSectionIndex = endPoint.sectionIndex;
-    var startBlockIndex = startPoint.blockIndex;
-    var endBlockIndex = endPoint.blockIndex;
-    var startCaretOffset = startPoint.caretOffset;
-    var endCaretOffset = endPoint.caretOffset;
-    var sectionBucket = [];
-    var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
-    for (var sectionIndex of sectionIndices) {
-      var section = this.getSection(null, sectionIndex);
-      var blockIndices = null;
-      var shouldContinue = true;
-      if (startSectionIndex === endSectionIndex) {
-        blockIndices = _.range(startBlockIndex, endBlockIndex + 1);
-      } else if (sectionIndex === startSectionIndex) {
-        blockIndices = _.range(startBlockIndex, section.length);
-      } else if (sectionIndex === endSectionIndex) {
-        blockIndices = _.range(0, endBlockIndex + 1);
-      } else {
-        sectionBucket.push(section);
-        shouldContinue = false;
-      }
-      if (shouldContinue) {
-        var blockBucket = [];
-        for (var blockIndex of blockIndices) {
-          var block = this.getBlock(null, sectionIndex, blockIndex);
-          if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
-            block.removeFragment(startCaretOffset, endCaretOffset);
-          } else if (blockIndex === blockIndices[0]) {
-            block.removeFragment(startCaretOffset, block.length);
-          } else if (blockIndex === blockIndices[blockIndices.length - 1] &&
-                     endCaretOffset !== block.length) {
-            block.removeFragment(0, endCaretOffset);
-          } else {
-            blockBucket.push(block);
-          }
-        }
-        for (var block of blockBucket) {
-          section.removeBlock(block);
-        }
-      }
-    }
-    for (var section of sectionBucket) {
-      this._story.removeSection(section);
-    }
-    if (options.character) {
-      var block = this.getBlock(startPoint);
-      block.addFragment(options.character, startCaretOffset);
-      startPoint.caretOffset += 1;
-    } else if (options.enter) {
-      var block = this.getBlock(startPoint);
-      var clone = block.cloneDestructively(startCaretOffset);
+    // Figure out if there is a better way to do this.
+    var startBlock = this.getBlock(startPoint);
+    var endBlock = this.getBlock(endPoint);
+    var callback = function(block, start, end) {
+      block.removeFragment(start, end);
+    };
+    this.callBlocks(vector, callback, true);
+    if (options.enter) {
+      var clone = startBlock.cloneDestructively(startCaretOffset);
       var section = this.getSection(startPoint);
       section.addBlock(clone, startBlockIndex + 1);
+      startPoint.blockIndex += 1;
+      startPoint.caretOffset = 0;
+    } else {
+      var endSection = this.getSection(endPoint);
+      if (options.character) {
+        startBlock.addFragment(options.character, startCaretOffset);
+        startBlock.caretOffset += 1;
+      }
+      startBlock.mergeBlock(endBlock, startBlock.length);
+      endSection.removeBlock(endBlock);
     }
     this.resetCookies();
     this.updatePoint(startPoint);
@@ -307,7 +293,7 @@ class EditorStore extends Store {
       this.addSection(point, { type: TypeConstants.section.standard });
     } else {
       var clone = block.cloneDestructively(point.caretOffset);
-      if (!clone.length) {
+      if (!clone.length && !clone.isList()) {
         clone.set("type", TypeConstants.block.paragraph);
       }
       point.blockIndex += 1;
@@ -317,81 +303,28 @@ class EditorStore extends Store {
   }
 
   styleBlocks(vector, options) {
-    var startPoint = vector.startPoint;
-    var endPoint = vector.endPoint;
-    var startSectionIndex = startPoint.sectionIndex;
-    var endSectionIndex = endPoint.sectionIndex;
-    var startBlockIndex = startPoint.blockIndex;
-    var endBlockIndex = endPoint.blockIndex;
-    var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
-    for (var sectionIndex of sectionIndices) {
-      var section = this.getSection(null, sectionIndex);
-      var blockIndices = null;
-      if (startSectionIndex === endSectionIndex) {
-        blockIndices = _.range(startBlockIndex, endBlockIndex + 1);
-      } else if (sectionIndex === startSectionIndex) {
-        blockIndices = _.range(startBlockIndex, section.length);
-      } else if (sectionIndex === endSectionIndex) {
-        blockIndices = _.range(0, endBlockIndex + 1);
+    var callback = function(block, start, end) {
+      var type = options.type;
+      if (block.isCentered()) {
+        block.set("is_centered", false);
+      } else if (block.get("type") === type) {
+        block.set("type", TypeConstants.block.paragraph);
       } else {
-        blockIndices = _.range(0, section.length);
+        block.set("type", type);
       }
-      for (var blockIndex of blockIndices) {
-        var block = this.getBlock(null, sectionIndex, blockIndex);
-        var type = options.type;
-        if (block.isCentered()) {
-          block.set("is_centered", false);
-        } else {
-          block.set("type", (block.get("type") === type) ?
-                             TypeConstants.block.paragraph :
-                             type);
-        }
-      }
-    }
+    };
+    this.callBlocks(vector, callback);
     this.resetCookies();
     this.updateStyles(vector);
   }
 
   styleElements(vector, options) {
-    var startPoint = vector.startPoint;
-    var endPoint = vector.endPoint;
-    var startSectionIndex = startPoint.sectionIndex;
-    var endSectionIndex = endPoint.sectionIndex;
-    var startBlockIndex = startPoint.blockIndex;
-    var endBlockIndex = endPoint.blockIndex;
-    var startCaretOffset = startPoint.caretOffset;
-    var endCaretOffset = endPoint.caretOffset;
-    var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
-    for (var sectionIndex of sectionIndices) {
-      var section = this.getSection(null, sectionIndex);
-      var blockIndices = null;
-      if (startSectionIndex === endSectionIndex) {
-        blockIndices = _.range(startBlockIndex, endBlockIndex + 1);
-      } else if (sectionIndex === startSectionIndex) {
-        blockIndices = _.range(startBlockIndex, section.length);
-      } else if (sectionIndex === endSectionIndex) {
-        blockIndices = _.range(0, endBlockIndex + 1);
-      } else {
-        blockIndices = _.range(0, section.length);
-      }
-      for (var blockIndex of blockIndices) {
-        var block = this.getBlock(null, sectionIndex, blockIndex);
-        var element = new Element({
-          type: options.type,
-          url: options.url ? options.url : "",
-        });
-        if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
-          element.setOffsets(startCaretOffset, endCaretOffset);
-        } else if (blockIndex === blockIndices[0]) {
-          element.setOffsets(startCaretOffset, block.length);
-        } else if (blockIndex === blockIndices[blockIndices.length - 1]) {
-          element.setOffsets(0, endCaretOffset);
-        } else {
-          element.setOffsets(0, block.length);
-        }
-        block.parseElement(element);
-      }
-    }
+    var callback = function(block, start, end) {
+      var element = new Element({ type: options.type, url: options.url });
+      element.setOffsets(start, end);
+      block.parseElement(element);
+    };
+    this.callBlocks(vector, callback);
     this.resetCookies();
     this.updateStyles(vector);
   }
@@ -406,7 +339,7 @@ class EditorStore extends Store {
   }
 
   updateStyles(vector) {
-    this._styles = vector ? this.findStyles(vector) : {};
+    this._styles = vector ? this.filterStyles(vector) : {};
   }
 
   updateVector(vector) {

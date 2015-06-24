@@ -140,7 +140,7 @@ class ModalStyle extends Component {
       var walker = Selector.createTreeWalker(startNode);
       while (walker.nextNode() && caretOffset >= 0) {
         currentNode = walker.currentNode;
-        if (caretOffset - currentNode.length < 0) {
+        if (caretOffset - currentNode.length <= 0) {
           range.setStart(currentNode, caretOffset);
         }
         caretOffset -= currentNode.length;
