@@ -72,7 +72,6 @@ class EditorStore extends Store {
     for (var sectionIndex of sectionIndices) {
       var point = new Point(sectionIndex, 0, 0);
       var section = this.getSection(point);
-      var shouldContinue = true;
       var blockIndices = null;
       if (startSectionIndex === endSectionIndex) {
         blockIndices = _.range(startBlockIndex, endBlockIndex + 1);
@@ -83,12 +82,11 @@ class EditorStore extends Store {
       } else {
         if (shouldRemove) {
           sectionBucket.push(section);
-          shouldContinue = false;
         } else {
           blockIndices = _.range(0, section.length);
         }
       }
-      if (shouldContinue) {
+      if (blockIndices) {
         var blockBucket = [];
         for (var blockIndex of blockIndices) {
           point.blockIndex = blockIndex;
