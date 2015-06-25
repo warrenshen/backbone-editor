@@ -51,7 +51,14 @@ class StoryEditable extends Component {
           }
         } else {
           event.preventDefault();
-          EditorActor.removeBlock(point);
+          if (block.isList()) {
+            EditorActor.addSection(
+              point,
+              { type: TypeConstants.section.standard }
+            );
+          } else {
+            EditorActor.removeBlock(point);
+          }
           this.props.updateStoryEditable();
         }
       }
@@ -67,18 +74,20 @@ class StoryEditable extends Component {
         EditorActor.removeBlocks(vector);
         this.props.updateStoryStyle();
       } else if (event.ctrlKey || event.metaKey) {
-        if (which === KeyConstants.b || which === KeyConstants.B) {
+        if (which === KeyConstants.b) {
           EditorActor.styleElements(
             vector,
             { type: TypeConstants.element.bold }
           );
           this.props.updateModalStyle();
-        } else if (which === KeyConstants.i || which === KeyConstants.I) {
+        } else if (which === KeyConstants.i) {
           EditorActor.styleElements(
             vector,
             { type: TypeConstants.element.italic }
           );
           this.props.updateModalStyle();
+        } else if (which === KeyConstants.a) {
+          console.log("Select all!");
         }
       }
     }
@@ -101,6 +110,13 @@ class StoryEditable extends Component {
           event.preventDefault();
           point.caretOffset = 1;
           EditorActor.updatePoint(point);
+          this.props.updateStoryEditable();
+        } else if (block.get("content").substring(0, 2) === "* ") {
+          event.preventDefault();
+          EditorActor.addSection(
+            point,
+            { type: TypeConstants.section.listUnordered }
+          );
           this.props.updateStoryEditable();
         } else if (block.get("content").substring(0, 3) === "1. ") {
           event.preventDefault();
@@ -268,7 +284,6 @@ class StoryEditable extends Component {
   }
 
   render() {
-    console.log(this.props.story.length);
     return (
       <div
         className={"story-container"}

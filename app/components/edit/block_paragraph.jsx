@@ -35,7 +35,7 @@ class BlockParagraph extends BlockComponent {
     var block = this.props.block;
     var contentClass = ClassNames(
       { "block-content": true },
-      { "block-centered": block.get("is_centered") }
+      { "block-centered": block.isCentered() }
     );
     return (
       <div
