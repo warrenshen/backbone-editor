@@ -270,12 +270,10 @@ class StoryEditable extends Component {
       section: section,
       updateStoryEditable: this.props.updateStoryEditable,
     };
-    switch (section.get("type")) {
-      case TypeConstants.section.listOrdered:
-      case TypeConstants.section.listUnordered:
-        return <SectionList {...props} />
-      case TypeConstants.section.standard:
-        return <SectionStandard {...props} />
+    if (section.isList()) {
+      return <SectionList {...props} />;
+    } else {
+      return <SectionStandard {...props} />;
     }
   }
 

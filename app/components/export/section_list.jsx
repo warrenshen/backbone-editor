@@ -33,10 +33,25 @@ class SectionList extends Component {
     return this.props.section.get("blocks").map(this.renderBlock, this);
   }
 
+  renderTag() {
+    var section = this.props.section;
+    if (section.get("type") === TypeConstants.section.listOrdered) {
+      return "ol";
+    } else {
+      return "ul";
+    }
+  }
   render() {
+
     return (
       <code>
+        <p className={"code code-rose"}>
+          {"  <" + this.renderTag() + ">"}
+        </p>
         {this.renderBlocks()}
+        <p className={"code code-rose"}>
+          {"  </" + this.renderTag() + ">"}
+        </p>
       </code>
     );
   }

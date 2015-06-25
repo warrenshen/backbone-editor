@@ -22,7 +22,7 @@ class BlockQuote extends Component {
       <code>
         <p className={"code"}>
           <span className={"code code-rose"}>
-            {"  <blockquote"}
+            {"    <blockquote"}
           </span>
           <span className={"code code-green"}>
             {" class="}
@@ -35,10 +35,10 @@ class BlockQuote extends Component {
           </span>
         </p>
         <p className={"code code-indented"}>
-          {"    " + this.props.block.toString()}
+          {"      " + this.props.block.toString()}
         </p>
         <p className={"code code-rose"}>
-          {"  </blockquote>"}
+          {"    </blockquote>"}
         </p>
       </code>
     );

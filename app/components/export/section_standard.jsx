@@ -51,7 +51,13 @@ class SectionStandard extends Component {
   render() {
     return (
       <code>
+        <p className={"code code-rose"}>
+          {"  <section>"}
+        </p>
         {this.renderBlocks()}
+        <p className={"code code-rose"}>
+          {"  </section>"}
+        </p>
       </code>
     );
   }
