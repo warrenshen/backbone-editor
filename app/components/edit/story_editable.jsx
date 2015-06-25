@@ -51,7 +51,14 @@ class StoryEditable extends Component {
           }
         } else {
           event.preventDefault();
-          EditorActor.removeBlock(point);
+          if (block.isList()) {
+            EditorActor.addSection(
+              point,
+              { type: TypeConstants.section.standard }
+            );
+          } else {
+            EditorActor.removeBlock(point);
+          }
           this.props.updateStoryEditable();
         }
       }

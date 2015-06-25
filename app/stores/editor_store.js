@@ -187,48 +187,44 @@ class EditorStore extends Store {
     this.updatePoint(point);
   }
 
-  removeBlock(point, shouldForce=false) {
+  removeBlock(point) {
     var section = this.getSection(point);
     var block = this.getBlock(point);
-    if (block.isList() && !shouldForce) {
-      this.addSection(point, { type: TypeConstants.section.standard });
-    } else {
-      var clone = point.clone();
-      var previousBlock = null;
-      if (block.get("index") > 0) {
-        clone.blockIndex -= 1;
-        previousBlock = this.getBlock(clone);
-      } else if (section.get("index") > 0) {
-        clone.sectionIndex -= 1;
-        previousBlock = this.getSection(clone).footer;
+    var clone = point.clone();
+    var previousBlock = null;
+    if (block.get("index") > 0) {
+      clone.blockIndex -= 1;
+      previousBlock = this.getBlock(clone);
+    } else if (section.get("index") > 0) {
+      clone.sectionIndex -= 1;
+      previousBlock = this.getSection(clone).footer;
+    }
+    if (previousBlock === null) {
+      if (block.isImage()) {
+        section.removeBlock(block);
+        this.addBlock(new Block(), point);
       }
-      if (previousBlock === null) {
-        if (block.isImage()) {
+    } else {
+      if (previousBlock.isImage()) {
+        if (!block.get("content") && !block.isLast()) {
           section.removeBlock(block);
-          this.addBlock(new Block(), point);
         }
       } else {
-        if (previousBlock.isImage()) {
-          if (!block.get("content") && !block.isLast()) {
-            section.removeBlock(block);
-          }
+        point.sectionIndex = previousBlock.get("section_index");
+        point.blockIndex = previousBlock.get("index");
+        point.caretOffset = previousBlock.length;
+        if (!previousBlock.isEditable()) {
+          section.removeBlock(previousBlock);
         } else {
-          point.sectionIndex = previousBlock.get("section_index");
-          point.blockIndex = previousBlock.get("index");
-          point.caretOffset = previousBlock.length;
-          if (!previousBlock.isEditable()) {
-            section.removeBlock(previousBlock);
-          } else {
-            if (!block.isImage()) {
-              previousBlock.mergeBlock(block, previousBlock.length);
-            }
-            section.removeBlock(block);
+          if (!block.isImage()) {
+            previousBlock.mergeBlock(block, previousBlock.length);
           }
+          section.removeBlock(block);
         }
-        this._story.mergeSections();
-        this.resetCookies();
-        this.updatePoint(point);
       }
+      this._story.mergeSections();
+      this.resetCookies();
+      this.updatePoint(point);
     }
   }
 
@@ -252,7 +248,7 @@ class EditorStore extends Store {
         endBlock.get("index"),
         0
       );
-      this.removeBlock(point, true);
+      this.removeBlock(point);
     }
     this.resetCookies();
   }
