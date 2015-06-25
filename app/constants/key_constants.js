@@ -7,9 +7,7 @@ module.exports = {
   right: 39,
   down: 40,
 
-  B: 66,
-  I: 73,
-
-  b: 98,
-  i: 105,
+  a: 65,
+  b: 66,
+  i: 73,
 }

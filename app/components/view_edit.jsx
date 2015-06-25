@@ -180,6 +180,7 @@ class ViewEdit extends Component {
         <ModalStyle
           shouldUpdate={this.state.shouldUpdateModalStyle}
           styles={this.state.styles}
+          updateModalStyle={this.updateModalStyle.bind(this)}
           updateStoryStyle={this.updateStoryStyle.bind(this)}
           vector={this.state.vector} />
         <ModalLink

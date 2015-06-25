@@ -71,6 +71,10 @@ class Block extends Model {
     return this.get("type") === TypeConstants.block.paragraph;
   }
 
+  isQuote() {
+    return this.get("type") === TypeConstants.block.quote;
+  }
+
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------
@@ -133,13 +137,12 @@ class Block extends Model {
     var headingOne = TypeConstants.block.headingOne;
     var headingTwo = TypeConstants.block.headingTwo;
     var headingThree = TypeConstants.block.headingThree;
-    var quote = TypeConstants.block.quote;
     var bucket = [];
-    bucket.push([TypeConstants.block.centered, this.get("is_centered")]);
+    bucket.push([TypeConstants.block.centered, this.isCentered()]);
     bucket.push([headingOne, type === headingOne]);
     bucket.push([headingTwo, type === headingTwo]);
     bucket.push([headingThree, type === headingThree]);
-    bucket.push([quote, type === quote]);
+    bucket.push([TypeConstants.block.quote, this.isQuote()]);
     for (var element of elements.models) {
       if (element.get("start") <= firstOffset &&
           element.get("end") >= lastOffset) {

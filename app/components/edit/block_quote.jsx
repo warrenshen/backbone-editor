@@ -21,7 +21,7 @@ class BlockQuote extends BlockComponent {
     var contentClass = ClassNames(
       { "block-content": true },
       { "block-quote": true },
-      { "block-centered": block.get("is_centered") }
+      { "block-centered": block.isCentered() }
     );
     return (
       <blockquote

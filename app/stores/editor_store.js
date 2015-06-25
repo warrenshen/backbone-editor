@@ -91,11 +91,14 @@ class EditorStore extends Store {
         for (var blockIndex of blockIndices) {
           point.blockIndex = blockIndex;
           var block = this.getBlock(point);
-          if (blockIndices[0] === blockIndices[blockIndices.length - 1]) {
+          if (startSectionIndex === endSectionIndex &&
+              blockIndices[0] === blockIndices[blockIndices.length - 1]) {
             callback(block, startCaretOffset, endCaretOffset);
-          } else if (blockIndex === blockIndices[0]) {
+          } else if (sectionIndex === startSectionIndex &&
+                     blockIndex === blockIndices[0]) {
             callback(block, startCaretOffset, block.length);
-          } else if (blockIndex === blockIndices[blockIndices.length - 1]) {
+          } else if (sectionIndex === endSectionIndex &&
+                     blockIndex === blockIndices[blockIndices.length - 1]) {
             callback(block, 0, endCaretOffset);
           } else {
             if (shouldRemove) {
@@ -109,9 +112,9 @@ class EditorStore extends Store {
           section.removeBlock(block);
         }
       }
-      for (var section of sectionBucket) {
-        this._story.removeSection(section);
-      }
+    }
+    for (var section of sectionBucket) {
+      this._story.removeSection(section);
     }
   }
 
@@ -135,11 +138,11 @@ class EditorStore extends Store {
     return styles;
   }
 
-  getBlock(point, sectionIndex, blockIndex) {
+  getBlock(point) {
     return this.getSection(point).get("blocks").at(point.blockIndex);
   }
 
-  getSection(point, sectionIndex) {
+  getSection(point) {
     return this._story.get("sections").at(point.sectionIndex);
   }
 
@@ -187,57 +190,47 @@ class EditorStore extends Store {
   removeBlock(point) {
     var section = this.getSection(point);
     var block = this.getBlock(point);
-    if (block.isList()) {
-      this.addSection(point, { type: TypeConstants.section.standard });
-    } else {
-      var previousBlock = null;
-      if (block.get("index") > 0) {
-        previousBlock = this.getBlock(
-          null,
-          point.sectionIndex,
-          point.blockIndex - 1
-        );
-      } else if (section.get("index") > 0) {
-        previousBlock = this.getSection(
-          null,
-          point.sectionIndex - 1
-        ).footer;
+    var clone = point.clone();
+    var previousBlock = null;
+    if (block.get("index") > 0) {
+      clone.blockIndex -= 1;
+      previousBlock = this.getBlock(clone);
+    } else if (section.get("index") > 0) {
+      clone.sectionIndex -= 1;
+      previousBlock = this.getSection(clone).footer;
+    }
+    if (previousBlock === null) {
+      if (block.isImage()) {
+        section.removeBlock(block);
+        this.addBlock(new Block(), point);
       }
-      if (previousBlock === null) {
-        if (block.isImage()) {
+    } else {
+      if (previousBlock.isImage()) {
+        if (!block.get("content") && !block.isLast()) {
           section.removeBlock(block);
-          this.addBlock(new Block(), point);
         }
       } else {
-        if (previousBlock.isImage()) {
-          if (!block.get("content") && !block.isLast()) {
-            section.removeBlock(block);
-            this._story.mergeSections();
-          }
+        point.sectionIndex = previousBlock.get("section_index");
+        point.blockIndex = previousBlock.get("index");
+        point.caretOffset = previousBlock.length;
+        if (!previousBlock.isEditable()) {
+          section.removeBlock(previousBlock);
         } else {
-          point.sectionIndex = previousBlock.get("section_index");
-          point.blockIndex = previousBlock.get("index");
-          point.caretOffset = previousBlock.length;
-          if (!previousBlock.isEditable()) {
-            section.removeBlock(previousBlock);
-          } else {
-            if (!block.isImage()) {
-              previousBlock.mergeBlock(block, previousBlock.length);
-            }
-            section.removeBlock(block);
+          if (!block.isImage()) {
+            previousBlock.mergeBlock(block, previousBlock.length);
           }
+          section.removeBlock(block);
         }
-        this._story.mergeSections();
-        this.resetCookies();
-        this.updatePoint(point);
       }
+      this._story.mergeSections();
+      this.resetCookies();
+      this.updatePoint(point);
     }
   }
 
   removeBlocks(vector, options={}) {
     var startPoint = vector.startPoint;
     var endPoint = vector.endPoint;
-    // Figure out if there is a better way to do this.
     var startBlock = this.getBlock(startPoint);
     var endBlock = this.getBlock(endPoint);
     var callback = function(block, start, end) {
@@ -245,27 +238,24 @@ class EditorStore extends Store {
     };
     this.callBlocks(vector, callback, true);
     if (options.enter) {
-      var clone = startBlock.cloneDestructively(startCaretOffset);
-      var section = this.getSection(startPoint);
-      section.addBlock(clone, startBlockIndex + 1);
-      startPoint.blockIndex += 1;
-      startPoint.caretOffset = 0;
+      this.splitBlock(startPoint);
     } else {
-      var endSection = this.getSection(endPoint);
       if (options.character) {
-        startBlock.addFragment(options.character, startCaretOffset);
-        startBlock.caretOffset += 1;
+        startBlock.addFragment(options.character, startPoint.caretOffset);
       }
-      startBlock.mergeBlock(endBlock, startBlock.length);
-      endSection.removeBlock(endBlock);
+      var point = new Point(
+        endBlock.get("section_index"),
+        endBlock.get("index"),
+        0
+      );
+      this.removeBlock(point);
     }
     this.resetCookies();
-    this.updatePoint(startPoint);
   }
 
   retrieveCookies() {
     // TODO: Fix cookies to support longer stories.
-    if (false && CookiesJS.enabled) {
+    if (true && CookiesJS.enabled) {
       var cookie = CookiesJS.get("editor");
       if (cookie) {
         var json = JSON.parse(cookie);
@@ -305,12 +295,14 @@ class EditorStore extends Store {
   styleBlocks(vector, options) {
     var callback = function(block, start, end) {
       var type = options.type;
-      if (block.isCentered()) {
-        block.set("is_centered", false);
-      } else if (block.get("type") === type) {
-        block.set("type", TypeConstants.block.paragraph);
+      if (type === TypeConstants.block.centered) {
+        block.set("is_centered", !block.isCentered());
       } else {
-        block.set("type", type);
+        if (block.get("type") === type) {
+          block.set("type", TypeConstants.block.paragraph);
+        } else {
+          block.set("type", type);
+        }
       }
     };
     this.callBlocks(vector, callback);
@@ -345,7 +337,7 @@ class EditorStore extends Store {
   updateVector(vector) {
     this._point = null;
     this._vector = vector;
-    this.updateStyles();
+    this.updateStyles(vector);
   }
 
   // --------------------------------------------------
