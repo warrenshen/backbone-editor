@@ -2,6 +2,7 @@ import React from "react";
 
 import Component from "app/templates/component";
 
+import SectionList from "app/components/export/section_list";
 import SectionStandard from "app/components/export/section_standard";
 
 import Story from "app/models/story";
@@ -20,11 +21,17 @@ class StoryCode extends Component {
   // Render
   // --------------------------------------------------
   renderSection(section) {
-    return (
-      <SectionStandard
-        key={section.cid}
-        section={section} />
-    );
+    var props = {
+      key: section.cid,
+      section: section,
+    };
+    switch (section.get("type")) {
+      case TypeConstants.section.listOrdered:
+      case TypeConstants.section.listUnordered:
+        return <SectionList {...props} />
+      case TypeConstants.section.standard:
+        return <SectionStandard {...props} />
+    }
   }
 
   renderSections() {
