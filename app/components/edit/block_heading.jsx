@@ -23,7 +23,7 @@ class BlockHeading extends BlockComponent {
     var type = block.get("type");
     var contentClass = ClassNames(
       { "block-content": true },
-      { "block-centered": block.get("is_centered") },
+      { "block-centered": block.isCentered() },
       { "block-heading-one": type === TypeConstants.block.headingOne },
       { "block-heading-two": type === TypeConstants.block.headingTwo },
       { "block-heading-three": type === TypeConstants.block.headingThree }

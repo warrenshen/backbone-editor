@@ -305,12 +305,14 @@ class EditorStore extends Store {
   styleBlocks(vector, options) {
     var callback = function(block, start, end) {
       var type = options.type;
-      if (block.isCentered()) {
-        block.set("is_centered", false);
-      } else if (block.get("type") === type) {
-        block.set("type", TypeConstants.block.paragraph);
+      if (type === TypeConstants.block.centered) {
+        block.set("is_centered", !block.isCentered());
       } else {
-        block.set("type", type);
+        if (block.get("type") === type) {
+          block.set("type", TypeConstants.block.paragraph);
+        } else {
+          block.set("type", type);
+        }
       }
     };
     this.callBlocks(vector, callback);
@@ -345,7 +347,7 @@ class EditorStore extends Store {
   updateVector(vector) {
     this._point = null;
     this._vector = vector;
-    this.updateStyles();
+    this.updateStyles(vector);
   }
 
   // --------------------------------------------------
