@@ -164,8 +164,13 @@ class ModalStyle extends Component {
     var rectangle = range.getBoundingClientRect();
     var node = React.findDOMNode(this.refs.modal);
     var offset = rectangle.width / 2 - node.offsetWidth / 2;
-    node.style.top = rectangle.top - 44 + "px";
-    node.style.left = rectangle.left + offset + "px";
+    if (rectangle.top) {
+      node.style.top = rectangle.top - 44 + "px";
+      node.style.left = rectangle.left + offset + "px";
+    } else {
+      EditorActor.updateVector(null);
+      this.props.updateModalStyle();
+    }
   }
 
   // --------------------------------------------------
@@ -302,6 +307,7 @@ class ModalStyle extends Component {
 ModalStyle.propTypes = {
   shouldUpdate: React.PropTypes.bool.isRequired,
   styles: React.PropTypes.object.isRequired,
+  updateModalStyle: React.PropTypes.func.isRequired,
   updateStoryStyle: React.PropTypes.func.isRequired,
   vector: React.PropTypes.instanceOf(Vector),
 };
@@ -309,6 +315,7 @@ ModalStyle.propTypes = {
 ModalStyle.defaultProps = {
   shouldUpdate: true,
   styles: {},
+  updateModalStyle: null,
   updateStoryStyle: null,
   vector: null,
 };

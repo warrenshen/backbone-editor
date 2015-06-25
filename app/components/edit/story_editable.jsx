@@ -67,18 +67,20 @@ class StoryEditable extends Component {
         EditorActor.removeBlocks(vector);
         this.props.updateStoryStyle();
       } else if (event.ctrlKey || event.metaKey) {
-        if (which === KeyConstants.b || which === KeyConstants.B) {
+        if (which === KeyConstants.b) {
           EditorActor.styleElements(
             vector,
             { type: TypeConstants.element.bold }
           );
           this.props.updateModalStyle();
-        } else if (which === KeyConstants.i || which === KeyConstants.I) {
+        } else if (which === KeyConstants.i) {
           EditorActor.styleElements(
             vector,
             { type: TypeConstants.element.italic }
           );
           this.props.updateModalStyle();
+        } else if (which === KeyConstants.a) {
+          console.log("Select all!");
         }
       }
     }
