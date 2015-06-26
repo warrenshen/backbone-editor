@@ -4,7 +4,7 @@ import Component from "app/templates/component";
 import Block from "app/models/block";
 
 
-class BlockComponent extends Component {
+class BlockEdit extends Component {
 
   // --------------------------------------------------
   // Lifecycle
@@ -37,15 +37,15 @@ class BlockComponent extends Component {
   }
 }
 
-BlockComponent.propTypes = {
+BlockEdit.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
   updateStoryEditable: React.PropTypes.func.isRequired,
 };
 
-BlockComponent.defaultProps = {
+BlockEdit.defaultProps = {
   block: new Block(),
   updateStoryEditable: null,
 };
 
 
-module.exports = BlockComponent;
+module.exports = BlockEdit;

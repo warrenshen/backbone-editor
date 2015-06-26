@@ -1,11 +1,11 @@
 import React from "react";
 
-import Component from "app/templates/component";
+import BlockExport from "app/templates/block_export";
 
 import Block from "app/models/block";
 
 
-class BlockDivider extends Component {
+class BlockDivider extends BlockExport {
 
   // --------------------------------------------------
   // Defaults
@@ -17,25 +17,12 @@ class BlockDivider extends Component {
   // --------------------------------------------------
   // Render
   // --------------------------------------------------
-  render() {
-    return (
-      <code>
-        <p className={"code"}>
-          <span className={"code code-rose"}>
-            {"    <hr"}
-          </span>
-          <span className={"code code-green"}>
-            {" class="}
-          </span>
-          <span className={"code code-blue"}>
-            {"\"block block-divider\""}
-          </span>
-          <span className={"code code-rose"}>
-            {">"}
-          </span>
-        </p>
-      </code>
-    );
+  renderClass() {
+    return "block-divider";
+  }
+
+  renderTag() {
+    return "hr";
   }
 }
 

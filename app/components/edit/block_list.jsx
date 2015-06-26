@@ -1,9 +1,9 @@
 import React from "react";
 
-import BlockComponent from "app/templates/block_component";
+import BlockEdit from "app/templates/block_edit";
 
 
-class BlockList extends BlockComponent {
+class BlockList extends BlockEdit {
 
   // --------------------------------------------------
   // Defaults
