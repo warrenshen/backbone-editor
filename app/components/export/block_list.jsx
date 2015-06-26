@@ -1,11 +1,9 @@
 import React from "react";
 
-import Component from "app/templates/component";
-
-import Block from "app/models/block";
+import BlockExport from "app/templates/block_export";
 
 
-class BlockList extends Component {
+class BlockList extends BlockExport {
 
   // --------------------------------------------------
   // Defaults
@@ -17,41 +15,14 @@ class BlockList extends Component {
   // --------------------------------------------------
   // Render
   // --------------------------------------------------
-  render() {
-    return (
-      <code>
-        <p className={"code"}>
-          <span className={"code code-rose"}>
-            {"    <li"}
-          </span>
-          <span className={"code code-green"}>
-            {" class="}
-          </span>
-          <span className={"code code-blue"}>
-            {"\"block block-paragraph\""}
-          </span>
-          <span className={"code code-rose"}>
-            {">"}
-          </span>
-        </p>
-        <p className={"code code-indented"}>
-          {"      " + this.props.block.toString()}
-        </p>
-        <p className={"code code-rose"}>
-          {"    </li>"}
-        </p>
-      </code>
-    );
+  renderClass() {
+    return "block-list";
+  }
+
+  renderTag() {
+    return "li";
   }
 }
-
-BlockList.propTypes = {
-  block: React.PropTypes.instanceOf(Block).isRequired,
-};
-
-BlockList.defaultProps = {
-  block: new Block(),
-};
 
 
 module.exports = BlockList;
