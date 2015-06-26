@@ -18,12 +18,13 @@ class BlockExport extends Component {
   // Render
   // --------------------------------------------------
   renderBody() {
-    if (this.props.block.isEditable()) {
+    var block = this.props.block;
+    if (block.get("content") && block.isEditable()) {
       return [
-        <p className={"code code-indented"}>
+        <p className={"code code-indented"} key={0}>
           {"      " + this.props.block.toString()}
         </p>,
-        <p className={"code code-rose"}>
+        <p className={"code code-rose"} key={1}>
           {"    </" + this.renderTag() + ">"}
         </p>,
       ];
@@ -35,22 +36,36 @@ class BlockExport extends Component {
   }
 
   renderHead() {
-    return (
-      <p className={"code"}>
-        <span className={"code code-rose"}>
-          {"    <" + this.renderTag()}
-        </span>
-        <span className={"code code-green"}>
-          {" class="}
-        </span>
-        <span className={"code code-blue"}>
-          {"\"block " + this.renderClass() + "\""}
-        </span>
-        <span className={"code code-rose"}>
-          {">"}
-        </span>
-      </p>
-    );
+    var clause = [
+      <span className={"code code-rose"}>
+        {"    <" + this.renderTag()}
+      </span>,
+      <span className={"code code-green"}>
+        {" class="}
+      </span>,
+      <span className={"code code-blue"}>
+        {"\"block " + this.renderClass() + "\""}
+      </span>,
+      <span className={"code code-rose"}>
+        {">"}
+      </span>,
+    ];
+    if (this.props.block.get("content")) {
+      return (
+        <p className={"code"}>
+          {clause}
+        </p>
+      );
+    } else {
+      return (
+        <p className={"code"}>
+          {clause}
+          <span className={"code code-rose"}>
+            {"</" + this.renderTag() + ">"}
+          </span>
+        </p>
+      );
+    }
   }
 
   renderTag() {
