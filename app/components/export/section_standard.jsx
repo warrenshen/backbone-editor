@@ -2,6 +2,7 @@ import React from "react";
 
 import Component from "app/templates/component";
 
+import BlockDivider from "app/components/export/block_divider";
 import BlockHeading from "app/components/export/block_heading";
 import BlockQuote from "app/components/export/block_quote";
 import BlockParagraph from "app/components/export/block_paragraph";
@@ -29,8 +30,8 @@ class SectionStandard extends Component {
       block: block,
     };
     switch (block.get("type")) {
-      // case TypeConstants.block.divider:
-      //   return <BlockDivider {...props} />;
+      case TypeConstants.block.divider:
+        return <BlockDivider {...props} />;
       case TypeConstants.block.headingOne:
       case TypeConstants.block.headingTwo:
       case TypeConstants.block.headingThree:
