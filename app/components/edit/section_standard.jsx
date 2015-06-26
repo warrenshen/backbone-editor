@@ -27,8 +27,8 @@ class SectionStandard extends Component {
   // --------------------------------------------------
   renderBlock(block) {
     var props = {
-      key: block.cid,
       block: block,
+      key: block.cid,
       updateStoryEditable: this.props.updateStoryEditable,
     };
     switch (block.get("type")) {

@@ -132,8 +132,8 @@ class ModalMedia extends Component {
   renderOption(props, index) {
     return (
       <OptionMedia
-        key={index}
         isActive={this.state.shouldShowOptions}
+        key={index}
         {...props} />
     );
   }

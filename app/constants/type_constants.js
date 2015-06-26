@@ -51,7 +51,6 @@ module.exports = {
 
   view: {
     edit: "edit",
-    preview: "preview",
     export: "export",
   },
 }

@@ -26,6 +26,7 @@ code {
   font-family: $font-family-tertiary;
   line-height: 20px;
   white-space: pre-wrap;
+  box-sizing: border-box;
 }
 
 .code-blue {

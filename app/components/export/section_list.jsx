@@ -24,8 +24,8 @@ class SectionList extends Component {
   renderBlock(block) {
     return (
       <BlockList
-        key={block.cid}
-        block={block} />
+        block={block}
+        key={block.cid} />
     );
   }
 

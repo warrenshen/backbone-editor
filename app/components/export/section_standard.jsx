@@ -26,8 +26,8 @@ class SectionStandard extends Component {
   // --------------------------------------------------
   renderBlock(block) {
     var props = {
-      key: block.cid,
       block: block,
+      key: block.cid,
     };
     switch (block.get("type")) {
       case TypeConstants.block.divider:

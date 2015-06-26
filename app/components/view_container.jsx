@@ -31,12 +31,6 @@ class ViewContainer extends Component {
     }
   }
 
-  selectPreview() {
-    if (this.state.viewType !== TypeConstants.view.preview) {
-      this.setState({ viewType: TypeConstants.view.preview });
-    }
-  }
-
   selectExport() {
     if (this.state.viewType !== TypeConstants.view.export) {
       this.setState({ viewType: TypeConstants.view.export });
@@ -51,10 +45,10 @@ class ViewContainer extends Component {
     className += (props.isSelected) ? " view-button-selected" : "";
     return (
       <Clickable
-        key={index}
         action={props.action}
         className={className}
-        content={props.content} />
+        content={props.content}
+        key={index} />
     );
   }
 
@@ -64,11 +58,6 @@ class ViewContainer extends Component {
         action: this.selectEdit.bind(this),
         content: TypeConstants.view.edit,
         isSelected: this.state.viewType === TypeConstants.view.edit,
-      },
-      {
-        action: this.selectPreview.bind(this),
-        content: TypeConstants.view.preview,
-        isSelected: this.state.viewType === TypeConstants.view.preview,
       },
       {
         action: this.selectExport.bind(this),
@@ -82,8 +71,6 @@ class ViewContainer extends Component {
     switch (this.state.viewType) {
       case TypeConstants.view.edit:
         return <ViewEdit />;
-      case TypeConstants.view.view:
-        return null;
       case TypeConstants.view.export:
         return <ViewExport />;
     }
