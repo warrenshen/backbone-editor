@@ -41,7 +41,9 @@ class BlockImage extends Component {
   }
 
   handleClick(event) {
-    if (!this.state.shouldShowBorder) {
+    if (this.props.block.get("source") === "placeholder") {
+      console.log("Should prompt image upload!");
+    } else if (!this.state.shouldShowBorder) {
       React.findDOMNode(this.refs.input).focus();
     }
   }
@@ -101,16 +103,18 @@ class BlockImage extends Component {
   // Render
   // --------------------------------------------------
   renderImage() {
+    var block = this.props.block;
     var imageClass = ClassNames(
       { "block-image": true },
-      { "block-image-bordered": this.state.shouldShowBorder }
+      { "block-image-bordered": this.state.shouldShowBorder },
+      { "block-image-placeholder": block.get("source") === "placeholder" }
     );
     return (
       <div className={"block-image-container"}>
         <img
           className={imageClass}
           ref={"image"}
-          src={this.props.block.get("source")} />
+          src={block.get("source")} />
         <input
           className={"general-invisible"}
           ref={"input"}>

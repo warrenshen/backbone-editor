@@ -37,16 +37,16 @@ class BlockExport extends Component {
 
   renderHead() {
     var clause = [
-      <span className={"code code-rose"}>
+      <span className={"code code-rose"} key={0}>
         {"    <" + this.renderTag()}
       </span>,
-      <span className={"code code-green"}>
+      <span className={"code code-green"} key={1}>
         {" class="}
       </span>,
-      <span className={"code code-blue"}>
+      <span className={"code code-blue"} key={2}>
         {"\"block " + this.renderClass() + "\""}
       </span>,
-      <span className={"code code-rose"}>
+      <span className={"code code-rose"} key={3}>
         {">"}
       </span>,
     ];
