@@ -42,6 +42,12 @@ class EditorActor extends Actor {
     });
   }
 
+  selectAll() {
+    this.act({
+      type: ActionConstants.editor.selectAll,
+    });
+  }
+
   splitBlock(point) {
     this.act({
       type: ActionConstants.editor.splitBlock,

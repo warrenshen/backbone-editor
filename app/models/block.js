@@ -253,7 +253,6 @@ class Block extends Model {
     if (this.isImage()) {
       json.source = "placeholder";
     }
-    console.log(json);
     return json;
   }
 

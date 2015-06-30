@@ -276,6 +276,14 @@ class EditorStore extends Store {
     }
   }
 
+  selectAll() {
+    var startPoint = new Point(0, 0, 0);
+    var endPoint = new Point(this._story.length - 1, 0, 0);
+    endPoint.blockIndex = this.getSection(endPoint).length - 1;
+    endPoint.caretOffset = this.getBlock(endPoint).length;
+    this.updateVector(new Vector(startPoint, endPoint));
+  }
+
   splitBlock(point) {
     var section = this.getSection(point);
     var block = this.getBlock(point);
@@ -356,6 +364,8 @@ class EditorStore extends Store {
         return this.removeBlocks(action.vector, action.options);
       case ActionConstants.editor.resetCookies:
         return this.resetCookies();
+      case ActionConstants.editor.selectAll:
+        return this.selectAll();
       case ActionConstants.editor.splitBlock:
         return this.splitBlock(action.point);
       case ActionConstants.editor.styleBlocks:

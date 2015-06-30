@@ -36,7 +36,10 @@ class StoryEditable extends Component {
     event.stopPropagation();
     var selection = window.getSelection();
     var which = event.which;
-    if (selection.type === TypeConstants.selection.caret) {
+    if (event.ctrlKey || event.metaKey && which === KeyConstants.a) {
+      EditorActor.selectAll();
+      this.props.updateStoryStyle();
+    } else if (selection.type === TypeConstants.selection.caret) {
       var point = Selector.generatePoint(selection);
       if (which === KeyConstants.backspace) {
         var block = EditorStore.getBlock(point);
@@ -86,8 +89,6 @@ class StoryEditable extends Component {
             { type: TypeConstants.element.italic }
           );
           this.props.updateModalStyle();
-        } else if (which === KeyConstants.a) {
-          console.log("Select all!");
         }
       }
     }

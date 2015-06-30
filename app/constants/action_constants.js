@@ -4,6 +4,7 @@ module.exports = {
     removeBlock: "remove-block",
     removeBlocks: "remove-blocks",
     resetCookies: "reset-cookies",
+    selectAll: "select-all",
     splitBlock: "split-block",
     styleBlocks: "style-blocks",
     styleElements: "style-elements",
