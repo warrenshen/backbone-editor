@@ -269,6 +269,7 @@ class StoryEditable extends Component {
     var props = {
       key: section.cid,
       section: section,
+      updateStoryStyle: this.props.updateStoryStyle,
       updateStoryEditable: this.props.updateStoryEditable,
     };
     if (section.isList()) {
@@ -299,6 +300,8 @@ StoryEditable.propTypes = {
   shouldUpdate: React.PropTypes.bool.isRequired,
   story: React.PropTypes.instanceOf(Story).isRequired,
   updateModalLink: React.PropTypes.func.isRequired,
+  updateModalStyle: React.PropTypes.func.isRequired,
+  updateStoryStyle: React.PropTypes.func.isRequired,
   updateStoryEditable: React.PropTypes.func.isRequired,
 };
 
@@ -306,6 +309,7 @@ StoryEditable.defaultProps = {
   shouldUpdate: true,
   story: new Story(),
   updateModalLink: null,
+  updateModalStyle: null,
   updateStoryStyle: null,
   updateStoryEditable: null,
 };

@@ -39,7 +39,11 @@ class SectionStandard extends Component {
       case TypeConstants.block.headingThree:
         return <BlockHeading {...props} />;
       case TypeConstants.block.image:
-        return <BlockImage {...props} />;
+        return (
+          <BlockImage
+            updateStoryStyle={this.props.updateStoryStyle}
+            {...props} />
+        );
       case TypeConstants.block.quote:
         return <BlockQuote {...props} />;
       case TypeConstants.block.paragraph:
@@ -64,11 +68,13 @@ class SectionStandard extends Component {
 
 SectionStandard.propTypes = {
   section: React.PropTypes.instanceOf(Section).isRequired,
+  updateStoryStyle: React.PropTypes.func.isRequired,
   updateStoryEditable: React.PropTypes.func.isRequired,
 };
 
 SectionStandard.defaultProps = {
   section: new Section(),
+  updateStoryStyle: null,
   updateStoryEditable: null,
 };
 

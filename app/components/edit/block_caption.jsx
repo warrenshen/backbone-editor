@@ -48,7 +48,11 @@ class BlockCaption extends Component {
     event.stopPropagation();
     var block = this.props.block;
     var selection = window.getSelection();
-    if (event.which === KeyConstants.backspace) {
+    var which = event.which;
+    if (event.ctrlKey || event.metaKey && which === KeyConstants.a) {
+      EditorActor.selectAll();
+      this.props.updateStoryStyle();
+    } else if (which === KeyConstants.backspace) {
       if (selection.type === TypeConstants.selection.caret) {
         var point = Selector.generatePoint(selection);
         var caretOffset = point.caretOffset;
@@ -81,10 +85,6 @@ class BlockCaption extends Component {
     }
   }
 
-  handleMouseUp(event) {
-    event.stopPropagation();
-  }
-
   // --------------------------------------------------
   // Lifecycle
   // --------------------------------------------------
@@ -94,7 +94,6 @@ class BlockCaption extends Component {
     node.addEventListener("focus", this.handleFocus.bind(this));
     node.addEventListener("keydown", this.handleKeyDown.bind(this));
     node.addEventListener("keypress", this.handleKeyPress.bind(this));
-    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
     this.renderContent(node);
   }
 
@@ -109,7 +108,6 @@ class BlockCaption extends Component {
     node.removeEventListener("focus", this.handleFocus);
     node.removeEventListener("keydown", this.handleKeyDown);
     node.removeEventListener("keypress", this.handleKeyPress);
-    node.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   // --------------------------------------------------
@@ -137,11 +135,13 @@ class BlockCaption extends Component {
 
 BlockCaption.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
+  updateStoryStyle: React.PropTypes.func.isRequired,
   updateStoryEditable: React.PropTypes.func.isRequired,
 };
 
 BlockCaption.defaultProps = {
   block: new Block(),
+  updateStoryStyle: null,
   updateStoryEditable: null,
 };
 

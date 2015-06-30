@@ -138,11 +138,13 @@ class BlockImage extends Component {
 
 BlockImage.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
+  updateStoryStyle: React.PropTypes.func.isRequired,
   updateStoryEditable: React.PropTypes.func.isRequired,
 };
 
 BlockImage.defaultProps = {
   block: new Block(),
+  updateStoryStyle: null,
   updateStoryEditable: null,
 };
 
