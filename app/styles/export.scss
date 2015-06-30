@@ -41,8 +41,12 @@ code {
   color: $rose;
 }
 
-.code-indented {
+.indented-primary {
   padding-left: 49px;
-  color: $ash;
   text-indent: -50px;
+}
+
+.indented-secondary {
+  padding-left: 66px;
+  text-indent: -67px;
 }

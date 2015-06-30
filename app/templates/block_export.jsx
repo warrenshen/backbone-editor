@@ -21,7 +21,7 @@ class BlockExport extends Component {
     var block = this.props.block;
     if (block.get("content") && block.isEditable()) {
       return [
-        <p className={"code code-indented"} key={0}>
+        <p className={"code indented-primary"} key={0}>
           {"      " + this.props.block.toString()}
         </p>,
         <p className={"code code-rose"} key={1}>
