@@ -6,6 +6,7 @@ import Clickable from "app/components/clickable";
 import ViewEdit from "app/components/view_edit";
 import ViewExport from "app/components/view_export";
 
+import KeyConstants from "app/constants/key_constants";
 import TypeConstants from "app/constants/type_constants";
 
 
@@ -35,6 +36,31 @@ class ViewContainer extends Component {
     if (this.state.viewType !== TypeConstants.view.export) {
       this.setState({ viewType: TypeConstants.view.export });
     }
+  }
+
+  // --------------------------------------------------
+  // Handlers
+  // --------------------------------------------------
+  handleKeyDown(event) {
+    if (event.which === KeyConstants.backspace) {
+      var shouldPrevent = !confirm("Are you sure you want to leave this page?");
+      if (shouldPrevent) {
+        event.preventDefault();
+      }
+    }
+  }
+
+  // --------------------------------------------------
+  // Lifecycle
+  // --------------------------------------------------
+  componentDidMount() {
+    var node = React.findDOMNode(this.refs.view);
+    document.addEventListener("keydown", this.handleKeyDown.bind(this));
+  }
+
+  componentWillUnmount() {
+    var node = React.findDOMNode(this.refs.view);
+    document.removeEventListener("keydown", this.handleKeyDown);
   }
 
   // --------------------------------------------------
