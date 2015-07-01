@@ -126,7 +126,6 @@ class ModalStyle extends Component {
   // --------------------------------------------------
   createVector(vector) {
     if (vector) {
-      console.log(vector);
       var startPoint = vector.startPoint;
       var endPoint = vector.endPoint;
       var sectionNodes = $("section, ol, ul");

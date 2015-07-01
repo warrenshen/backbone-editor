@@ -242,13 +242,18 @@ class EditorStore extends Store {
     } else {
       if (options.character) {
         startBlock.addFragment(options.character, startPoint.caretOffset);
+        startPoint.caretOffset += 1;
       }
-      var point = new Point(
-        endBlock.get("section_index"),
-        endBlock.get("index"),
-        0
-      );
-      this.removeBlock(point);
+      if (startPoint.compareShallowly(endPoint)) {
+        var point = new Point(
+          endBlock.get("section_index"),
+          endBlock.get("index"),
+          0
+        );
+        this.removeBlock(point);
+      } else {
+        this.updatePoint(startPoint);
+      }
     }
     this.resetCookies();
   }
