@@ -69,12 +69,7 @@
 .block-image {
   position: relative;
   width: 100%;
-  cursor: pointer;
   box-sizing: border-box;
-}
-
-.block-image-bordered {
-  border: 2px solid $coral;
 }
 
 .block-image-container {
@@ -87,6 +82,17 @@
   width: 100%;
   height: 436px;
   content: url("http://media2.loungepuppy.com/2013/10/placeholder_image12.png");
+}
+
+.block-image-overlay {
+  position: absolute;
+  z-index: $z-index-2;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 90, 95, 0.5);
+  cursor: default;
 }
 
 .block-last {
