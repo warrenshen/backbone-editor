@@ -17,13 +17,13 @@ class OptionStyle extends Component {
   // Lifecycle
   // --------------------------------------------------
   componentDidMount() {
-    var option = React.findDOMNode(this.refs.option);
-    option.addEventListener("click", this.props.action);
+    var node = React.findDOMNode(this.refs.option);
+    node.addEventListener("click", this.props.action);
   }
 
   componentWillUnmount() {
-    var option = React.findDOMNode(this.refs.option);
-    option.removeEventListener("click", this.props.action);
+    var node = React.findDOMNode(this.refs.option);
+    node.removeEventListener("click", this.props.action);
   }
 
   // --------------------------------------------------

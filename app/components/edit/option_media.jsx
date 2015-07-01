@@ -16,10 +16,6 @@ class OptionMedia extends Component {
   // --------------------------------------------------
   // Handlers
   // --------------------------------------------------
-  handleClick(event) {
-    this.props.action();
-  }
-
   handleMouseDown(event) {
     event.preventDefault();
   }
@@ -28,15 +24,15 @@ class OptionMedia extends Component {
   // Lifecycle
   // --------------------------------------------------
   componentDidMount() {
-    var option = React.findDOMNode(this.refs.option);
-    option.addEventListener("click", this.handleClick.bind(this));
-    option.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    var node = React.findDOMNode(this.refs.option);
+    node.addEventListener("click", this.props.action);
+    node.addEventListener("mousedown", this.handleMouseDown);
   }
 
   componentWillUnmount() {
-    var option = React.findDOMNode(this.refs.option);
-    option.removeEventListener("click", this.handleClick);
-    option.removeEventListener("mousedown", this.handleMouseDown);
+    var node = React.findDOMNode(this.refs.option);
+    node.removeEventListener("click", this.props.action);
+    node.removeEventListener("mousedown", this.handleMouseDown);
   }
 
   // --------------------------------------------------

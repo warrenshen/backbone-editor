@@ -33,8 +33,21 @@ class BlockImage extends Component {
   // --------------------------------------------------
   // Handlers
   // --------------------------------------------------
+  handleChange(event) {
+    var files = event.target.files;
+    if (files && files[0]) {
+      var reader = new FileReader();
+      reader.onloadend = function(file) {
+        var source = file.target.result;
+        this.props.block.set("source", source);
+        this.props.updateStoryEditable();
+      }.bind(this);
+      reader.readAsDataURL(files[0]);
+    }
+  }
+
   handleClick(event) {
-    console.log("click");
+    React.findDOMNode(this.refs.uploader).click();
   }
 
   handleMouseEnter(event) {
@@ -57,6 +70,14 @@ class BlockImage extends Component {
     node.addEventListener("click", this.handleClick.bind(this));
     node.addEventListener("mouseenter", this.handleMouseEnter.bind(this));
     node.addEventListener("mouseleave", this.handleMouseLeave.bind(this));
+    node = React.findDOMNode(this.refs.uploader);
+  }
+
+  componentDidUpdate() {
+    var node = React.findDOMNode(this.refs.uploader);
+    if (node) {
+      node.addEventListener("change", this.handleChange.bind(this));
+    }
   }
 
   componentWillUnmount() {
@@ -64,16 +85,45 @@ class BlockImage extends Component {
     node.removeEventListener("click", this.handleClick);
     node.removeEventListener("mouseenter", this.handleMouseEnter);
     node.removeEventListener("mouseleave", this.handleMouseLeave);
+    node = React.findDOMNode(this.refs.uploader);
+    if (node) {
+      node.removeEventListener("change", this.handleChange);
+    }
   }
 
   // --------------------------------------------------
   // Render
   // --------------------------------------------------
+  renderOption(props, index) {
+    return (
+    );
+  }
+
   renderOptions() {
+    return [
+      {
+        action: null,
+        className: "fa fa-image",
+      },
+      {
+        action: null,
+        className: "fa fa-close",
+      },
+    ].map(this.renderOption, this);
+  }
+
+  renderOverlay() {
     if (this.state.shouldShowOptions) {
       return (
         <div className={"block-image-overlay"}>
           <span className={"vertical-anchor"}></span>
+
+          <input
+            className={"general-invisible"}
+            ref={"uploader"}
+            type={"file"}
+            accept={"image/*"}>
+          </input>
         </div>
       );
     }
@@ -95,7 +145,7 @@ class BlockImage extends Component {
           <img
             className={imageClass}
             src={block.get("source")} />
-          {this.renderOptions()}
+          {this.renderOverlay()}
         </div>
         <BlockCaption {...this.props} />
       </div>
