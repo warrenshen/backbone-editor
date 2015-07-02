@@ -151,7 +151,6 @@ class EditorStore extends Store {
   // --------------------------------------------------
   addBlock(point, block) {
     var section = this.getSection(point);
-    console.log(point);
     section.addBlock(block, point.blockIndex);
     if (!block.isEditable()) {
       point.blockIndex += 1;
