@@ -3,14 +3,7 @@
 
 pre {
   position: relative;
-  width: 712px;
-  margin: auto;
   clear: both;
-  -webkit-user-select: all;
-
-  &:hover {
-    cursor: text;
-  }
 }
 
 code {
@@ -54,4 +47,16 @@ code {
 .indented-tertiary {
   padding-left: 15px;
   text-indent: -16px;
+}
+
+.pre-container {
+  position: relative;
+  width: 712px;
+  padding-bottom: 128px;
+  margin: auto;
+  -webkit-user-select: all;
+
+  &:hover {
+    cursor: text;
+  }
 }

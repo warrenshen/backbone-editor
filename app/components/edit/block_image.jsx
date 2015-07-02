@@ -42,6 +42,7 @@ class BlockImage extends Component {
         var source = file.target.result;
         this.props.block.set("source", source);
         this.props.updateStoryEditable();
+        EditorActor.resetCookies();
       }.bind(this);
       reader.readAsDataURL(files[0]);
     }
@@ -109,7 +110,7 @@ class BlockImage extends Component {
       <OptionImage
         key={index}
         {...props} />
-      );
+    );
   }
 
   renderOptions() {
@@ -146,7 +147,7 @@ class BlockImage extends Component {
     var block = this.props.block;
     var imageClass = ClassNames(
       { "block-image": true },
-      { "block-image-placeholder": block.get("source") === "placeholder" }
+      { "block-image-placeholder": !block.get("source") }
     );
     return (
       <div

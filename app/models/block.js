@@ -250,9 +250,7 @@ class Block extends Model {
 
   toJSON() {
     var json = Backbone.Model.prototype.toJSON.call(this);
-    if (this.isImage()) {
-      json.source = "placeholder";
-    }
+    json.source = "";
     return json;
   }
 

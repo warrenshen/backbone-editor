@@ -151,6 +151,7 @@ class EditorStore extends Store {
   // --------------------------------------------------
   addBlock(point, block) {
     var section = this.getSection(point);
+    console.log(point);
     section.addBlock(block, point.blockIndex);
     if (!block.isEditable()) {
       point.blockIndex += 1;
@@ -202,7 +203,7 @@ class EditorStore extends Store {
     if (previousBlock === null) {
       if (block.isImage()) {
         section.removeBlock(block);
-        this.addBlock(new Block(), point);
+        this.addBlock(point, new Block());
       }
     } else {
       if (previousBlock.isImage()) {
