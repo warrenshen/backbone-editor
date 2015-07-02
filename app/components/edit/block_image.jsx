@@ -95,8 +95,7 @@ class BlockImage extends Component {
   // Render
   // --------------------------------------------------
   renderOption(props, index) {
-    return (
-    );
+    return null;
   }
 
   renderOptions() {
