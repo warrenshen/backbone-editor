@@ -1,10 +1,10 @@
 import ClassNames from "classnames";
 import React from "react";
 
-import BlockComponent from "app/templates/block_component";
+import BlockEdit from "app/templates/block_edit";
 
 
-class BlockQuote extends BlockComponent {
+class BlockQuote extends BlockEdit {
 
   // --------------------------------------------------
   // Defaults

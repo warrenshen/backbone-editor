@@ -36,7 +36,10 @@ class StoryEditable extends Component {
     event.stopPropagation();
     var selection = window.getSelection();
     var which = event.which;
-    if (selection.type === TypeConstants.selection.caret) {
+    if (event.ctrlKey || event.metaKey && which === KeyConstants.a) {
+      EditorActor.selectAll();
+      this.props.updateStoryStyle();
+    } else if (selection.type === TypeConstants.selection.caret) {
       var point = Selector.generatePoint(selection);
       if (which === KeyConstants.backspace) {
         var block = EditorStore.getBlock(point);
@@ -86,8 +89,6 @@ class StoryEditable extends Component {
             { type: TypeConstants.element.italic }
           );
           this.props.updateModalStyle();
-        } else if (which === KeyConstants.a) {
-          console.log("Select all!");
         }
       }
     }
@@ -268,14 +269,13 @@ class StoryEditable extends Component {
     var props = {
       key: section.cid,
       section: section,
+      updateStoryStyle: this.props.updateStoryStyle,
       updateStoryEditable: this.props.updateStoryEditable,
     };
-    switch (section.get("type")) {
-      case TypeConstants.section.listOrdered:
-      case TypeConstants.section.listUnordered:
-        return <SectionList {...props} />
-      case TypeConstants.section.standard:
-        return <SectionStandard {...props} />
+    if (section.isList()) {
+      return <SectionList {...props} />;
+    } else {
+      return <SectionStandard {...props} />;
     }
   }
 
@@ -300,6 +300,8 @@ StoryEditable.propTypes = {
   shouldUpdate: React.PropTypes.bool.isRequired,
   story: React.PropTypes.instanceOf(Story).isRequired,
   updateModalLink: React.PropTypes.func.isRequired,
+  updateModalStyle: React.PropTypes.func.isRequired,
+  updateStoryStyle: React.PropTypes.func.isRequired,
   updateStoryEditable: React.PropTypes.func.isRequired,
 };
 
@@ -307,6 +309,7 @@ StoryEditable.defaultProps = {
   shouldUpdate: true,
   story: new Story(),
   updateModalLink: null,
+  updateModalStyle: null,
   updateStoryStyle: null,
   updateStoryEditable: null,
 };

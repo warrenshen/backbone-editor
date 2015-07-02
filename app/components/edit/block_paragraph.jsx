@@ -1,14 +1,14 @@
 import ClassNames from "classnames";
 import React from "react";
 
-import BlockComponent from "app/templates/block_component";
+import BlockEdit from "app/templates/block_edit";
 
 import ModalMedia from "app/components/edit/modal_media";
 
 import EditorStore from "app/stores/editor_store";
 
 
-class BlockParagraph extends BlockComponent {
+class BlockParagraph extends BlockEdit {
 
   // --------------------------------------------------
   // Defaults

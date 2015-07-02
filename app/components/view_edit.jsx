@@ -15,7 +15,6 @@ import EditorActor from "app/actors/editor_actor";
 import Paster from "app/helpers/paster";
 import Selector from "app/helpers/selector";
 
-import KeyConstants from "app/constants/key_constants";
 import TypeConstants from "app/constants/type_constants";
 
 
@@ -84,12 +83,6 @@ class ViewEdit extends Component {
   // --------------------------------------------------
   // Handlers
   // --------------------------------------------------
-  handleKeyDown(event) {
-    if (event.which === KeyConstants.backspace) {
-      event.preventDefault();
-    }
-  }
-
   handleMouseUp(event) {
     var selection = window.getSelection();
     setTimeout(function() {
@@ -148,7 +141,6 @@ class ViewEdit extends Component {
   componentDidMount() {
     var node = React.findDOMNode(this.refs.view);
     node.addEventListener("mouseup", this.handleMouseUp.bind(this));
-    document.addEventListener("keydown", this.handleKeyDown.bind(this));
     document.addEventListener("paste", this.handlePaste.bind(this));
     window.addEventListener("scroll", this.handleScroll.bind(this));
     window.addEventListener("resize", this.handleResize.bind(this));
@@ -157,7 +149,6 @@ class ViewEdit extends Component {
   componentWillUnmount() {
     var node = React.findDOMNode(this.refs.view);
     node.removeEventListener("mouseup", this.handleMouseUp);
-    document.removeEventListener("keydown", this.handleKeyDown);
     document.removeEventListener("paste", this.handlePaste);
     window.removeEventListener("scroll", this.handleScroll);
     window.removeEventListener("resize", this.handleResize);

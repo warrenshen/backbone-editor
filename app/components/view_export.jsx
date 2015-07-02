@@ -29,7 +29,7 @@ class ViewExport extends Component {
   render() {
     return (
       <div className={"general-view"} ref={"view"}>
-        <pre>
+        <pre className={"pre-container"}>
           <StoryCode story={this.state.story} />
         </pre>
       </div>

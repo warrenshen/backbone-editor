@@ -1,12 +1,12 @@
 import ClassNames from "classnames";
 import React from "react";
 
-import BlockComponent from "app/templates/block_component";
+import BlockEdit from "app/templates/block_edit";
 
 import TypeConstants from "app/constants/type_constants";
 
 
-class BlockHeading extends BlockComponent {
+class BlockHeading extends BlockEdit {
 
   // --------------------------------------------------
   // Defaults

@@ -4,6 +4,7 @@ import React from "react";
 import Component from "app/templates/component";
 
 import BlockCaption from "app/components/edit/block_caption";
+import OptionImage from "app/components/edit/option_image";
 
 import Block from "app/models/block";
 
@@ -27,105 +28,139 @@ class BlockImage extends Component {
   // State
   // --------------------------------------------------
   getDefaultState() {
-    return { shouldShowBorder: false };
+    return { shouldShowOptions: false };
   }
 
   // --------------------------------------------------
   // Handlers
   // --------------------------------------------------
-  handleBlur(event) {
-    var node = React.findDOMNode(this.refs.input);
-    if (node && this.state.shouldShowBorder) {
-      this.setState({ shouldShowBorder: false });
+  handleChange(event) {
+    var files = event.target.files;
+    if (files && files[0]) {
+      var reader = new FileReader();
+      reader.onloadend = function(file) {
+        var source = file.target.result;
+        this.props.block.set("source", source);
+        this.props.updateStoryEditable();
+        EditorActor.resetCookies();
+      }.bind(this);
+      reader.readAsDataURL(files[0]);
     }
   }
 
-  handleClick(event) {
-    if (!this.state.shouldShowBorder) {
-      React.findDOMNode(this.refs.input).focus();
+  handleMouseEnter(event) {
+    if (!this.state.shouldShowOptions) {
+      this.setState({ shouldShowOptions: true });
     }
   }
 
-  handleFocus(event) {
-    this.setState({ shouldShowBorder: true });
-  }
-
-  handleKeyDown(event) {
-    event.preventDefault();
-    if (event.which === KeyConstants.backspace) {
-      var block = this.props.block;
-      var point = new Point(
-        block.get("section_index"),
-        block.get("index"),
-        0
-      );
-      EditorActor.removeBlock(point);
-      this.props.updateStoryEditable();
+  handleMouseLeave(event) {
+    if (this.state.shouldShowOptions) {
+      this.setState({ shouldShowOptions: false });
     }
   }
 
-  handleMouseDown(event) {
-    event.preventDefault();
+  handleRemove(event) {
+    var block = this.props.block;
+    var point = new Point(
+      block.get("section_index"),
+      block.get("index"),
+      0
+    );
+    EditorActor.removeBlock(point);
+    this.props.updateStoryEditable();
   }
 
-  handleMouseUp(event) {
-    event.stopPropagation();
+  handleUpload(event) {
+    React.findDOMNode(this.refs.uploader).click();
   }
 
   // --------------------------------------------------
   // Lifecycle
   // --------------------------------------------------
   componentDidMount() {
-    var node = React.findDOMNode(this.refs.image);
-    node.addEventListener("click", this.handleClick.bind(this));
-    node.addEventListener("mousedown", this.handleMouseDown.bind(this));
-    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
-    node = React.findDOMNode(this.refs.input);
-    node.addEventListener("blur", this.handleBlur.bind(this));
-    node.addEventListener("focus", this.handleFocus.bind(this));
-    node.addEventListener("keydown", this.handleKeyDown.bind(this));
+    var node = React.findDOMNode(this.refs.container);
+    node.addEventListener("mouseenter", this.handleMouseEnter.bind(this));
+    node.addEventListener("mouseleave", this.handleMouseLeave.bind(this));
+    node = React.findDOMNode(this.refs.uploader);
+  }
+
+  componentDidUpdate() {
+    var node = React.findDOMNode(this.refs.uploader);
+    if (node) {
+      node.addEventListener("change", this.handleChange.bind(this));
+    }
   }
 
   componentWillUnmount() {
-    var node = React.findDOMNode(this.refs.image);
-    node.removeEventListener("click", this.handleClick);
-    node.removeEventListener("mousedown", this.handleMouseDown);
-    node.removeEventListener("mouseup", this.handleMouseUp);
-    node = React.findDOMNode(this.refs.input);
-    node.removeEventListener("blur", this.handleBlur);
-    node.removeEventListener("focus", this.handleFocus);
-    node.removeEventListener("keydown", this.handleKeyDown);
+    var node = React.findDOMNode(this.refs.container);
+    node.removeEventListener("mouseenter", this.handleMouseEnter);
+    node.removeEventListener("mouseleave", this.handleMouseLeave);
+    node = React.findDOMNode(this.refs.uploader);
+    if (node) {
+      node.removeEventListener("change", this.handleChange);
+    }
   }
 
   // --------------------------------------------------
   // Render
   // --------------------------------------------------
-  renderImage() {
-    var imageClass = ClassNames(
-      { "block-image": true },
-      { "block-image-bordered": this.state.shouldShowBorder }
-    );
+  renderOption(props, index) {
     return (
-      <div className={"block-image-container"}>
-        <img
-          className={imageClass}
-          ref={"image"}
-          src={this.props.block.get("source")} />
-        <input
-          className={"general-invisible"}
-          ref={"input"}>
-        </input>
-      </div>
+      <OptionImage
+        key={index}
+        {...props} />
     );
   }
 
+  renderOptions() {
+    return [
+      {
+        action: this.handleUpload.bind(this),
+        className: "fa fa-image",
+      },
+      {
+        action: this.handleRemove.bind(this),
+        className: "fa fa-close",
+      },
+    ].map(this.renderOption, this);
+  }
+
+  renderOverlay() {
+    if (this.state.shouldShowOptions) {
+      return (
+        <div className={"block-image-overlay"}>
+          <span className={"vertical-anchor"}></span>
+          {this.renderOptions()}
+          <input
+            className={"general-invisible"}
+            ref={"uploader"}
+            type={"file"}
+            accept={"image/*"}>
+          </input>
+        </div>
+      );
+    }
+  }
+
   render() {
+    var block = this.props.block;
+    var imageClass = ClassNames(
+      { "block-image": true },
+      { "block-image-placeholder": !block.get("source") }
+    );
     return (
       <div
         className={"block-container"}
         contentEditable={"false"}
-        data-index={this.props.block.get("index")}>
-        {this.renderImage()}
+        data-index={block.get("index")}
+        ref={"container"}>
+        <div className={"block-image-container"}>
+          <img
+            className={imageClass}
+            src={block.get("source")} />
+          {this.renderOverlay()}
+        </div>
         <BlockCaption {...this.props} />
       </div>
     );
@@ -134,11 +169,13 @@ class BlockImage extends Component {
 
 BlockImage.propTypes = {
   block: React.PropTypes.instanceOf(Block).isRequired,
+  updateStoryStyle: React.PropTypes.func.isRequired,
   updateStoryEditable: React.PropTypes.func.isRequired,
 };
 
 BlockImage.defaultProps = {
   block: new Block(),
+  updateStoryStyle: null,
   updateStoryEditable: null,
 };
 

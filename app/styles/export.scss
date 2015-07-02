@@ -1,24 +1,5 @@
 @import "variables";
 
-
-pre {
-  position: relative;
-  width: 712px;
-  margin: auto;
-  clear: both;
-  -webkit-user-select: all;
-
-  &:hover {
-    cursor: text;
-  }
-}
-
-code {
-  display: block;
-  position: relative;
-  width: 100%;
-}
-
 .code {
   position: relative;
   width: 100%;
@@ -26,6 +7,7 @@ code {
   font-family: $font-family-tertiary;
   line-height: 20px;
   white-space: pre-wrap;
+  box-sizing: border-box;
 }
 
 .code-blue {
@@ -40,8 +22,29 @@ code {
   color: $rose;
 }
 
-.code-indented {
-  padding-left: 33px;
-  color: $ash;
-  text-indent: -33px;
+.indented-primary {
+  padding-left: 49px;
+  text-indent: -50px;
+}
+
+.indented-secondary {
+  padding-left: 66px;
+  text-indent: -67px;
+}
+
+.indented-tertiary {
+  padding-left: 15px;
+  text-indent: -16px;
+}
+
+.pre-container {
+  position: relative;
+  width: 712px;
+  padding-bottom: 128px;
+  margin: auto;
+  -webkit-user-select: all;
+
+  &:hover {
+    cursor: text;
+  }
 }
