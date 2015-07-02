@@ -199,14 +199,18 @@ class EditorStore extends Store {
       clone.sectionIndex -= 1;
       previousBlock = this.getSection(clone).footer;
     }
-    if (previousBlock === null) {
+    if (!previousBlock) {
       if (block.isImage()) {
         section.removeBlock(block);
-        this.addBlock(point, new Block());
+        if (block.isLast()) {
+          this.addBlock(point, new Block());
+        }
+      } else {
+        this.updatePoint(point);
       }
     } else {
       if (previousBlock.isImage()) {
-        if (!block.get("content") && !block.isLast()) {
+        if (!block.get("content")) {
           section.removeBlock(block);
         }
       } else {
@@ -216,9 +220,7 @@ class EditorStore extends Store {
         if (!previousBlock.isEditable()) {
           section.removeBlock(previousBlock);
         } else {
-          if (!block.isImage()) {
-            previousBlock.mergeBlock(block, previousBlock.length);
-          }
+          previousBlock.mergeBlock(block, previousBlock.length);
           section.removeBlock(block);
         }
       }
@@ -302,6 +304,9 @@ class EditorStore extends Store {
       point.blockIndex += 1;
       point.caretOffset = 0;
       this.addBlock(point, clone);
+    }
+    if (!block.length && !block.isParagraph()) {
+      block.set("type", TypeConstants.block.paragraph);
     }
   }
 
