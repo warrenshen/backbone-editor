@@ -47,10 +47,6 @@ class BlockImage extends Component {
     }
   }
 
-  handleClick(event) {
-    React.findDOMNode(this.refs.uploader).click();
-  }
-
   handleMouseEnter(event) {
     if (!this.state.shouldShowOptions) {
       this.setState({ shouldShowOptions: true });
@@ -58,9 +54,24 @@ class BlockImage extends Component {
   }
 
   handleMouseLeave(event) {
-    // if (this.state.shouldShowOptions) {
-    //   this.setState({ shouldShowOptions: false });
-    // }
+    if (this.state.shouldShowOptions) {
+      this.setState({ shouldShowOptions: false });
+    }
+  }
+
+  handleRemove(event) {
+    var block = this.props.block;
+    var point = new Point(
+      block.get("section_index"),
+      block.get("index"),
+      0
+    );
+    EditorActor.removeBlock(point);
+    this.props.updateStoryEditable();
+  }
+
+  handleUpload(event) {
+    React.findDOMNode(this.refs.uploader).click();
   }
 
   // --------------------------------------------------
@@ -68,7 +79,6 @@ class BlockImage extends Component {
   // --------------------------------------------------
   componentDidMount() {
     var node = React.findDOMNode(this.refs.container);
-    node.addEventListener("click", this.handleClick.bind(this));
     node.addEventListener("mouseenter", this.handleMouseEnter.bind(this));
     node.addEventListener("mouseleave", this.handleMouseLeave.bind(this));
     node = React.findDOMNode(this.refs.uploader);
@@ -83,7 +93,6 @@ class BlockImage extends Component {
 
   componentWillUnmount() {
     var node = React.findDOMNode(this.refs.container);
-    node.removeEventListener("click", this.handleClick);
     node.removeEventListener("mouseenter", this.handleMouseEnter);
     node.removeEventListener("mouseleave", this.handleMouseLeave);
     node = React.findDOMNode(this.refs.uploader);
@@ -106,12 +115,12 @@ class BlockImage extends Component {
   renderOptions() {
     return [
       {
-        action: null,
-        className: "fa fa-image fa-lg",
+        action: this.handleUpload.bind(this),
+        className: "fa fa-image",
       },
       {
-        action: null,
-        className: "fa fa-close fa-lg",
+        action: this.handleRemove.bind(this),
+        className: "fa fa-close",
       },
     ].map(this.renderOption, this);
   }
