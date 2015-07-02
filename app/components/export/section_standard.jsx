@@ -2,7 +2,9 @@ import React from "react";
 
 import Component from "app/templates/component";
 
+import BlockDivider from "app/components/export/block_divider";
 import BlockHeading from "app/components/export/block_heading";
+import BlockImage from "app/components/export/block_image";
 import BlockQuote from "app/components/export/block_quote";
 import BlockParagraph from "app/components/export/block_paragraph";
 
@@ -25,18 +27,18 @@ class SectionStandard extends Component {
   // --------------------------------------------------
   renderBlock(block) {
     var props = {
-      key: block.cid,
       block: block,
+      key: block.cid,
     };
     switch (block.get("type")) {
-      // case TypeConstants.block.divider:
-      //   return <BlockDivider {...props} />;
+      case TypeConstants.block.divider:
+        return <BlockDivider {...props} />;
       case TypeConstants.block.headingOne:
       case TypeConstants.block.headingTwo:
       case TypeConstants.block.headingThree:
         return <BlockHeading {...props} />;
-      // case TypeConstants.block.image:
-      //   return <BlockImage {...props} />;
+      case TypeConstants.block.image:
+        return <BlockImage {...props} />;
       case TypeConstants.block.quote:
         return <BlockQuote {...props} />;
       case TypeConstants.block.paragraph:
@@ -51,7 +53,13 @@ class SectionStandard extends Component {
   render() {
     return (
       <code>
+        <p className={"code code-rose"}>
+          {"  <section>"}
+        </p>
         {this.renderBlocks()}
+        <p className={"code code-rose"}>
+          {"  </section>"}
+        </p>
       </code>
     );
   }

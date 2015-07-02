@@ -6,6 +6,7 @@ import Clickable from "app/components/clickable";
 import ViewEdit from "app/components/view_edit";
 import ViewExport from "app/components/view_export";
 
+import KeyConstants from "app/constants/key_constants";
 import TypeConstants from "app/constants/type_constants";
 
 
@@ -31,16 +32,35 @@ class ViewContainer extends Component {
     }
   }
 
-  selectPreview() {
-    if (this.state.viewType !== TypeConstants.view.preview) {
-      this.setState({ viewType: TypeConstants.view.preview });
-    }
-  }
-
   selectExport() {
     if (this.state.viewType !== TypeConstants.view.export) {
       this.setState({ viewType: TypeConstants.view.export });
     }
+  }
+
+  // --------------------------------------------------
+  // Handlers
+  // --------------------------------------------------
+  handleKeyDown(event) {
+    if (event.which === KeyConstants.backspace) {
+      var shouldPrevent = !confirm("Are you sure you want to leave this page?");
+      if (shouldPrevent) {
+        event.preventDefault();
+      }
+    }
+  }
+
+  // --------------------------------------------------
+  // Lifecycle
+  // --------------------------------------------------
+  componentDidMount() {
+    var node = React.findDOMNode(this.refs.view);
+    document.addEventListener("keydown", this.handleKeyDown.bind(this));
+  }
+
+  componentWillUnmount() {
+    var node = React.findDOMNode(this.refs.view);
+    document.removeEventListener("keydown", this.handleKeyDown);
   }
 
   // --------------------------------------------------
@@ -51,10 +71,10 @@ class ViewContainer extends Component {
     className += (props.isSelected) ? " view-button-selected" : "";
     return (
       <Clickable
-        key={index}
         action={props.action}
         className={className}
-        content={props.content} />
+        content={props.content}
+        key={index} />
     );
   }
 
@@ -64,11 +84,6 @@ class ViewContainer extends Component {
         action: this.selectEdit.bind(this),
         content: TypeConstants.view.edit,
         isSelected: this.state.viewType === TypeConstants.view.edit,
-      },
-      {
-        action: this.selectPreview.bind(this),
-        content: TypeConstants.view.preview,
-        isSelected: this.state.viewType === TypeConstants.view.preview,
       },
       {
         action: this.selectExport.bind(this),
@@ -82,8 +97,6 @@ class ViewContainer extends Component {
     switch (this.state.viewType) {
       case TypeConstants.view.edit:
         return <ViewEdit />;
-      case TypeConstants.view.view:
-        return null;
       case TypeConstants.view.export:
         return <ViewExport />;
     }

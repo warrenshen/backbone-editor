@@ -19,6 +19,7 @@ class BlockDivider extends Component {
     return (
       <div
         className={"block-container"}
+        contentEditable={"false"}
         data-index={this.props.block.get("index")}>
         <hr className={"block-divider"} />
       </div>

@@ -50,16 +50,17 @@ class ModalMedia extends Component {
   handleChange(event) {
     var files = event.target.files;
     if (files && files[0]) {
-      var block = new Block({ type: TypeConstants.block.image });
-      var callback = this.props.updateStoryEditable;
-      var point = this.generatePoint();
       var reader = new FileReader();
       reader.onloadend = function(file) {
         var source = file.target.result;
-        block.set("source", source);
+        var block = new Block({
+          type: TypeConstants.block.image,
+          source: source,
+        });
+        var point = this.generatePoint();
         EditorActor.addBlock(point, block);
-        callback();
-      };
+        this.props.updateStoryEditable();
+      }.bind(this);
       reader.readAsDataURL(files[0]);
     }
   }
@@ -72,14 +73,6 @@ class ModalMedia extends Component {
       this.setState({ shouldShowOptions: false });
       this.props.updateStoryEditable();
     }
-  }
-
-  handleMouseDown(event) {
-    event.preventDefault();
-  }
-
-  handleMouseUp(event) {
-    event.preventDefault();
   }
 
   // --------------------------------------------------
@@ -109,8 +102,6 @@ class ModalMedia extends Component {
     node.addEventListener("blur", this.handleBlur.bind(this));
     node = React.findDOMNode(this.refs.prompt);
     node.addEventListener("click", this.handleClick.bind(this));
-    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
-    node.addEventListener("mousedown", this.handleMouseDown.bind(this));
     node = React.findDOMNode(this.refs.uploader);
     node.addEventListener("change", this.handleChange.bind(this));
   }
@@ -120,8 +111,6 @@ class ModalMedia extends Component {
     node.removeEventListener("blur", this.handleBlur);
     node = React.findDOMNode(this.refs.prompt);
     node.removeEventListener("click", this.handleClick);
-    node.removeEventListener("mouseup", this.handleMouseUp);
-    node.removeEventListener("mousedown", this.handleMouseDown);
     node = React.findDOMNode(this.refs.uploader);
     node.removeEventListener("change", this.handleChange);
   }
@@ -132,8 +121,8 @@ class ModalMedia extends Component {
   renderOption(props, index) {
     return (
       <OptionMedia
-        key={index}
         isActive={this.state.shouldShowOptions}
+        key={index}
         {...props} />
     );
   }

@@ -3,26 +3,26 @@ import React from "react";
 import BlockExport from "app/templates/block_export";
 
 
-class BlockQuote extends BlockExport {
+class BlockDivider extends BlockExport {
 
   // --------------------------------------------------
   // Defaults
   // --------------------------------------------------
   displayName() {
-    return "BlockQuote";
+    return "BlockDivider";
   }
 
   // --------------------------------------------------
   // Render
   // --------------------------------------------------
   renderClass() {
-    return "block-quote";
+    return "block-divider";
   }
 
   renderTag() {
-    return "blockquote";
+    return "hr";
   }
 }
 
 
-module.exports = BlockQuote;
+module.exports = BlockDivider;

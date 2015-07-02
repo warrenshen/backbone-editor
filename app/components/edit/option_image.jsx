@@ -1,16 +1,15 @@
-import ClassNames from "classnames";
 import React from "react";
 
 import Component from "app/templates/component";
 
 
-class OptionStyle extends Component {
+class OptionImage extends Component {
 
   // --------------------------------------------------
   // Defaults
   // --------------------------------------------------
   displayName() {
-    return "OptionStyle";
+    return "OptionImage";
   }
 
   // --------------------------------------------------
@@ -30,29 +29,13 @@ class OptionStyle extends Component {
   // Render
   // --------------------------------------------------
   render() {
-    var optionClass = ClassNames(
-      { "style-option": true },
-      { "style-option-active": this.props.isActive }
-    );
     return (
-      <span className={optionClass} ref="option">
+      <span className={"block-image-option"} ref={"option"}>
         <i className={this.props.className}></i>
       </span>
     );
   }
 }
 
-OptionStyle.propTypes = {
-  action: React.PropTypes.func.isRequired,
-  className: React.PropTypes.string.isRequired,
-  isActive: React.PropTypes.bool.isRequired,
-};
 
-OptionStyle.defaultProps = {
-  action: null,
-  className: "fa fa-header",
-  isActive: false,
-};
-
-
-module.exports = OptionStyle;
+module.exports = OptionImage;

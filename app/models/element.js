@@ -31,7 +31,7 @@ class Element extends Model {
   // Conditionals
   // --------------------------------------------------
   isLink() {
-    return this.get("type") !== TypeConstants.element.link;
+    return this.get("type") === TypeConstants.element.link;
   }
 
   // --------------------------------------------------

@@ -199,14 +199,18 @@ class EditorStore extends Store {
       clone.sectionIndex -= 1;
       previousBlock = this.getSection(clone).footer;
     }
-    if (previousBlock === null) {
+    if (!previousBlock) {
       if (block.isImage()) {
         section.removeBlock(block);
-        this.addBlock(new Block(), point);
+        if (block.isLast()) {
+          this.addBlock(point, new Block());
+        }
+      } else {
+        this.updatePoint(point);
       }
     } else {
       if (previousBlock.isImage()) {
-        if (!block.get("content") && !block.isLast()) {
+        if (!block.get("content")) {
           section.removeBlock(block);
         }
       } else {
@@ -216,9 +220,7 @@ class EditorStore extends Store {
         if (!previousBlock.isEditable()) {
           section.removeBlock(previousBlock);
         } else {
-          if (!block.isImage()) {
-            previousBlock.mergeBlock(block, previousBlock.length);
-          }
+          previousBlock.mergeBlock(block, previousBlock.length);
           section.removeBlock(block);
         }
       }
@@ -242,13 +244,18 @@ class EditorStore extends Store {
     } else {
       if (options.character) {
         startBlock.addFragment(options.character, startPoint.caretOffset);
+        startPoint.caretOffset += 1;
       }
-      var point = new Point(
-        endBlock.get("section_index"),
-        endBlock.get("index"),
-        0
-      );
-      this.removeBlock(point);
+      if (startPoint.compareShallowly(endPoint)) {
+        var point = new Point(
+          endBlock.get("section_index"),
+          endBlock.get("index"),
+          0
+        );
+        this.removeBlock(point);
+      } else {
+        this.updatePoint(startPoint);
+      }
     }
     this.resetCookies();
   }
@@ -270,10 +277,18 @@ class EditorStore extends Store {
   }
 
   resetCookies() {
-    if (false && CookiesJS.enabled) {
-      console.log("ES resetting cookies...");
-      CookiesJS.set("editor", JSON.stringify(this._story.toJSON()));
+    if (true && CookiesJS.enabled) {
+      var json = this._story.toJSON();
+      CookiesJS.set("editor", JSON.stringify(json));
     }
+  }
+
+  selectAll() {
+    var startPoint = new Point(0, 0, 0);
+    var endPoint = new Point(this._story.length - 1, 0, 0);
+    endPoint.blockIndex = this.getSection(endPoint).length - 1;
+    endPoint.caretOffset = this.getBlock(endPoint).length;
+    this.updateVector(new Vector(startPoint, endPoint));
   }
 
   splitBlock(point) {
@@ -289,6 +304,9 @@ class EditorStore extends Store {
       point.blockIndex += 1;
       point.caretOffset = 0;
       this.addBlock(point, clone);
+    }
+    if (!block.length && !block.isParagraph()) {
+      block.set("type", TypeConstants.block.paragraph);
     }
   }
 
@@ -356,6 +374,8 @@ class EditorStore extends Store {
         return this.removeBlocks(action.vector, action.options);
       case ActionConstants.editor.resetCookies:
         return this.resetCookies();
+      case ActionConstants.editor.selectAll:
+        return this.selectAll();
       case ActionConstants.editor.splitBlock:
         return this.splitBlock(action.point);
       case ActionConstants.editor.styleBlocks:

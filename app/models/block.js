@@ -165,28 +165,33 @@ class Block extends Model {
   }
 
   mergeBlock(block, offset) {
-    var content = this.get("content");
-    var elements = this.get("elements");
-    for (var element of block.get("elements").models) {
-      element.incrementOffsets(offset);
-      elements.push(element);
-    }
-    this.set("content", content.substring(0, offset) +
-                        block.get("content") +
-                        content.substring(offset));
-    var bucket = [];
-    for (var i = 0; i < elements.length; i += 1) {
-      var element = elements.at(i);
-      if (element.get("start") > offset && element.get("end") < offset) {
-        var clones = element.partialClones(offset, offset);
-        clones[1].incrementOffsets(block.get("content").length);
-        bucket.concat(clones);
-        elements.remove(element);
-        i -= 1;
+    if (!block.isImage()) {
+      var bucket = [];
+      var content = this.get("content");
+      var elements = this.get("elements");
+      if (!content) {
+        this.set("type", block.get("type"));
       }
-    }
-    for (var element of bucket) {
-      elements.push(element);
+      this.set("content", content.substring(0, offset) +
+                          block.get("content") +
+                          content.substring(offset));
+      for (var element of block.get("elements").models) {
+        element.incrementOffsets(offset);
+        elements.push(element);
+      }
+      for (var i = 0; i < elements.length; i += 1) {
+        var element = elements.at(i);
+        if (element.get("start") > offset && element.get("end") < offset) {
+          var clones = element.partialClones(offset, offset);
+          clones[1].incrementOffsets(block.get("content").length);
+          bucket.concat(clones);
+          elements.remove(element);
+          i -= 1;
+        }
+      }
+      for (var element of bucket) {
+        elements.push(element);
+      }
     }
     return this;
   }
@@ -246,6 +251,12 @@ class Block extends Model {
         }
       }
     }
+  }
+
+  toJSON() {
+    var json = Backbone.Model.prototype.toJSON.call(this);
+    json.source = "";
+    return json;
   }
 
   toString() {
