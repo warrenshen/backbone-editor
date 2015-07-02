@@ -84,6 +84,17 @@
   content: url("http://media2.loungepuppy.com/2013/10/placeholder_image12.png");
 }
 
+.block-image-option {
+  position: relative;
+  margin: 0 24px;
+  color: white;
+  font-size: $font-size-largest;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .block-image-overlay {
   position: absolute;
   z-index: $z-index-2;
@@ -91,7 +102,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 90, 95, 0.5);
+  background-color: rgba(255, 90, 95, 0.75);
+  text-align: center;
   cursor: default;
 }
 

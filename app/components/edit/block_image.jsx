@@ -4,6 +4,7 @@ import React from "react";
 import Component from "app/templates/component";
 
 import BlockCaption from "app/components/edit/block_caption";
+import OptionImage from "app/components/edit/option_image";
 
 import Block from "app/models/block";
 
@@ -57,9 +58,9 @@ class BlockImage extends Component {
   }
 
   handleMouseLeave(event) {
-    if (this.state.shouldShowOptions) {
-      this.setState({ shouldShowOptions: false });
-    }
+    // if (this.state.shouldShowOptions) {
+    //   this.setState({ shouldShowOptions: false });
+    // }
   }
 
   // --------------------------------------------------
@@ -95,18 +96,22 @@ class BlockImage extends Component {
   // Render
   // --------------------------------------------------
   renderOption(props, index) {
-    return null;
+    return (
+      <OptionImage
+        key={index}
+        {...props} />
+      );
   }
 
   renderOptions() {
     return [
       {
         action: null,
-        className: "fa fa-image",
+        className: "fa fa-image fa-lg",
       },
       {
         action: null,
-        className: "fa fa-close",
+        className: "fa fa-close fa-lg",
       },
     ].map(this.renderOption, this);
   }
@@ -116,7 +121,7 @@ class BlockImage extends Component {
       return (
         <div className={"block-image-overlay"}>
           <span className={"vertical-anchor"}></span>
-
+          {this.renderOptions()}
           <input
             className={"general-invisible"}
             ref={"uploader"}
