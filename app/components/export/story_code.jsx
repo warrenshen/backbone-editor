@@ -4,6 +4,7 @@ import Component from "app/templates/component";
 
 import SectionList from "app/components/export/section_list";
 import SectionStandard from "app/components/export/section_standard";
+import StyleClass from "app/components/export/style_class";
 
 import Story from "app/models/story";
 
@@ -52,6 +53,7 @@ class StoryCode extends Component {
       </p>
     );
   }
+
   renderSection(section) {
     var props = {
       key: section.cid,
@@ -68,6 +70,10 @@ class StoryCode extends Component {
     return this.props.story.get("sections").map(this.renderSection, this);
   }
 
+  renderStyles() {
+    return <StyleClass />;
+  }
+
   render() {
     return (
       <code>
@@ -81,6 +87,7 @@ class StoryCode extends Component {
         {this.renderSections()}
         <p className="code code-rose">{"</body>"}</p>
         <p className="code code-rose">{"</html>"}</p>
+        {this.renderStyles()}
       </code>
     );
   }
