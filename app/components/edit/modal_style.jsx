@@ -179,6 +179,28 @@ class ModalStyle extends Component {
   }
 
   // --------------------------------------------------
+  // Helpers
+  // --------------------------------------------------
+  shouldShowCenteredOption() {
+    return !this.props.styles[TypeConstants.block.quote];
+  }
+
+  shouldShowItalicOption() {
+    return !this.props.styles[TypeConstants.block.quote];
+  }
+
+  shouldShowHeadingOptions() {
+    return !this.props.styles[TypeConstants.block.quote];
+  }
+
+  shouldShowQuoteOption() {
+    var styles = this.props.styles;
+    return !styles[TypeConstants.block.headingOne] &&
+           !styles[TypeConstants.block.headingTwo] &&
+           !styles[TypeConstants.block.headingThree];
+  }
+
+  // --------------------------------------------------
   // Render
   // --------------------------------------------------
   renderInput() {
@@ -205,41 +227,49 @@ class ModalStyle extends Component {
         action: this.styleHeadingOne.bind(this),
         className: "fa fa-header",
         isActive: this.props.styles[TypeConstants.block.headingOne],
+        isHidden: !this.shouldShowHeadingOptions(),
       },
       {
         action: this.styleHeadingTwo.bind(this),
         className: "fa fa-header",
         isActive: this.props.styles[TypeConstants.block.headingTwo],
+        isHidden: !this.shouldShowHeadingOptions(),
       },
       {
         action: this.styleHeadingThree.bind(this),
         className: "fa fa-header",
         isActive: this.props.styles[TypeConstants.block.headingThree],
+        isHidden: !this.shouldShowHeadingOptions(),
       },
       {
         action: this.styleQuote.bind(this),
         className: "fa fa-quote-right",
         isActive: this.props.styles[TypeConstants.block.quote],
+        isHidden: !this.shouldShowQuoteOption(),
       },
       {
         action: this.styleCentered.bind(this),
         className: "fa fa-align-center",
         isActive: this.props.styles[TypeConstants.block.centered],
+        isHidden: !this.shouldShowCenteredOption(),
       },
       {
         action: this.styleBold.bind(this),
         className: "fa fa-bold",
         isActive: this.props.styles[TypeConstants.element.bold],
+        isHidden: false,
       },
       {
         action: this.styleItalic.bind(this),
         className: "fa fa-italic",
         isActive: this.props.styles[TypeConstants.element.italic],
+        isHidden: !this.shouldShowItalicOption(),
       },
       {
         action: this.handleClick.bind(this),
         className: "fa fa-link",
         isActive: this.props.styles[TypeConstants.element.link],
+        isHidden: false,
       },
     ].map(this.renderOption, this);
   }
