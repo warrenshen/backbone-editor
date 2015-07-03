@@ -128,9 +128,9 @@ class EditorStore extends Store {
     this.callBlocks(vector, callback);
     for (var map of maps) {
       for (var [type, value] of map) {
-        if (!value && styles[type])
+        if (!value && (styles[type] || styles[type] === undefined)) {
           styles[type] = false;
-        else if (value && styles[type] === undefined) {
+        } else if (value && styles[type] === undefined) {
           styles[type] = true;
         }
       }

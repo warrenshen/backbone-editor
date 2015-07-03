@@ -225,9 +225,9 @@ class StoryEdit extends Component {
   attachHandlers() {
     var nodes = $(".element-link");
     for (var i = 0; i < nodes.length; i += 1) {
-      var nodes = nodes[i];
-      nodes.addEventListener("mouseenter", this.handleMouseEnter.bind(this));
-      nodes.addEventListener("mouseleave", this.handleMouseLeave.bind(this));
+      var node = nodes[i];
+      node.addEventListener("mouseenter", this.handleMouseEnter.bind(this));
+      node.addEventListener("mouseleave", this.handleMouseLeave.bind(this));
     }
   }
 
