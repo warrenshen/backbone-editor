@@ -87,6 +87,7 @@ class StoryCode extends Component {
         {this.renderSections()}
         <p className="code code-rose">{"</body>"}</p>
         <p className="code code-rose">{"</html>"}</p>
+        <p className="code code-rose">{" "}</p>
         {this.renderStyles()}
       </code>
     );
