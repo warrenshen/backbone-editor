@@ -87,17 +87,30 @@ class StoryExport extends Component {
           { type: "position", value: "relative" },
           { type: "width", value: "100%" },
           { type: "padding-bottom", value: "24px" },
+          { type: "margin", value: "0" },
+          { type: "color", value: "#565A5C" },
           { type: "font-weight", value: "400" },
           { type: "font-size", value: "18px" },
           { type: "font-family", value: "\"Merriweather\", serif" },
           { type: "line-height", value: "30px" },
           { type: "text-align", value: "left" },
+          { type: "white-space", value: "pre-wrap" },
         ],
       },
       {
         class: "block-centered",
         attributes: [
           { type: "text-align", value: "center" },
+        ],
+      },
+      {
+        class: "block-divider",
+        attributes: [
+          { type: "width", value: "10%" },
+          { type: "margin", value: "auto" },
+          { type: "border-width", value: "1px" },
+          { type: "border-style", value: "solid" },
+          { type: "border-color", value: "#878B8D" },
         ],
       },
       {
@@ -125,6 +138,47 @@ class StoryExport extends Component {
         { type: "font-size", value: "30px" },
         { type: "font-family", value: "\"Montserrat\", sans-serif" },
         { type: "line-height", value: "36px" },
+        ],
+      },
+      {
+        class: "block-quote",
+        attributes: [
+        { type: "width", value: "115%" },
+        { type: "margin-left", value: "-7.5%" },
+        { type: "font-size", value: "24px" },
+        { type: "font-family", value: "\"Montserrat\", sans-serif" },
+        { type: "font-style", value: "italic" },
+        { type: "line-height", value: "48px" },
+        { type: "text-align", value: "center" },
+        ],
+      },
+      {
+        class: "section",
+        attributes: [
+          { type: "display", value: "block" },
+          { type: "position", value: "relative" },
+          { type: "width", value: "100%" },
+        ],
+      },
+      {
+        class: "section-standard",
+        attributes: [],
+      },
+      {
+        class: "section-list",
+        attributes: [
+          { type: "padding", value: "0" },
+          { type: "margin", value: "0" },
+        ],
+      },
+      {
+        class: "story",
+        attributes: [
+          { type: "display", value: "block" },
+          { type: "position", value: "relative" },
+          { type: "width", value: "712px" },
+          { type: "padding-bottom", value: "356px" },
+          { type: "margin", value: "auto" },
         ],
       },
     ].map(this.renderClass, this);
@@ -158,7 +212,6 @@ class StoryExport extends Component {
         <p className="code code-rose">{"</div>"}</p>
         <p className="code code-rose">{"</body>"}</p>
         <p className="code code-rose">{"</html>"}</p>
-        <p className="code code-rose">{""}</p>
         {this.renderClasses()}
       </code>
     );

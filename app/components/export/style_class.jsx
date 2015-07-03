@@ -32,6 +32,7 @@ class StyleClass extends Component {
   render() {
     return (
       <code>
+        <p className="code">{""}</p>
         <p className="code">
           <span className="code code-rose">
             {"." + this.props.class}
