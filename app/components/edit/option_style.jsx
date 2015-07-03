@@ -32,7 +32,8 @@ class OptionStyle extends Component {
   render() {
     var optionClass = ClassNames(
       { "style-option": true },
-      { "style-option-active": this.props.isActive }
+      { "style-option-active": this.props.isActive },
+      { "general-hidden": this.props.isHidden }
     );
     return (
       <span className={optionClass} ref="option">
@@ -46,12 +47,14 @@ OptionStyle.propTypes = {
   action: React.PropTypes.func.isRequired,
   className: React.PropTypes.string.isRequired,
   isActive: React.PropTypes.bool.isRequired,
+  isHidden: React.PropTypes.bool.isRequired,
 };
 
 OptionStyle.defaultProps = {
   action: null,
   className: "fa fa-header",
   isActive: false,
+  isHidden: false,
 };
 
 

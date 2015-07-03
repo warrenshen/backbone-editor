@@ -1,5 +1,3 @@
-import _ from "lodash"
-
 import Model from "app/templates/model";
 
 import Formatter from "app/helpers/formatter";
@@ -251,6 +249,10 @@ class Block extends Model {
         }
       }
     }
+  }
+
+  toCode() {
+    return Formatter.codifyBlock(this);
   }
 
   toJSON() {

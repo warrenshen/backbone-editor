@@ -22,7 +22,10 @@ class BlockExport extends Component {
     if (block.get("content") && block.isEditable()) {
       return [
         <p className={"code indented-primary"} key={0}>
-          {"      " + this.props.block.toString()}
+          <span className={"code"}>
+            {"      "}
+          </span>
+          {this.renderContent()}
         </p>,
         <p className={"code code-rose"} key={1}>
           {"    </" + this.renderTag() + ">"}
@@ -32,7 +35,14 @@ class BlockExport extends Component {
   }
 
   renderClass() {
-    return "block-paragraph";
+    var block = this.props.block;
+    return block.isCentered() ?
+           "block-paragraph block-centered" :
+           "block-paragraph";
+  }
+
+  renderContent() {
+    return this.props.block.toCode();
   }
 
   renderHead() {

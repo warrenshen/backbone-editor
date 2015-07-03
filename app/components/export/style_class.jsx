@@ -2,6 +2,8 @@ import React from "react";
 
 import Component from "app/templates/component";
 
+import StyleAttribute from "app/components/export/style_attribute";
+
 
 class StyleClass extends Component {
 
@@ -15,18 +17,32 @@ class StyleClass extends Component {
   // --------------------------------------------------
   // Render
   // --------------------------------------------------
+  renderAttribute(attribute, index) {
+    return (
+      <StyleAttribute
+        attribute={attribute}
+        key={index} />
+    );
+  }
+
+  renderAttributes() {
+    return this.props.attributes.map(this.renderAttribute, this);
+  }
+
   render() {
     return (
       <code>
+        <p className="code">{""}</p>
         <p className="code">
-          <span className="code code-green">
-            {".block"}
-          </span>
           <span className="code code-rose">
+            {"." + this.props.class}
+          </span>
+          <span className="code">
             {" {"}
           </span>
         </p>
-        <p className="code code-rose">
+        {this.renderAttributes()}
+        <p className="code">
           {"}"}
         </p>
       </code>

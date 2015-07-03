@@ -2,7 +2,7 @@ import React from "react";
 
 import Component from "app/templates/component";
 
-import StoryEditable from "app/components/edit/story_editable";
+import StoryEdit from "app/components/edit/story_edit";
 import ModalLink from "app/components/edit/modal_link";
 import ModalStyle from "app/components/edit/modal_style";
 
@@ -160,7 +160,7 @@ class ViewEdit extends Component {
   render() {
     return (
       <div className={"general-view"} ref={"view"}>
-        <StoryEditable
+        <StoryEdit
           point={this.state.point}
           shouldUpdate={this.state.shouldUpdateStoryEditable}
           story={this.state.story}

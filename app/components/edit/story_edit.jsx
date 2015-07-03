@@ -20,13 +20,13 @@ import KeyConstants from "app/constants/key_constants";
 import TypeConstants from "app/constants/type_constants";
 
 
-class StoryEditable extends Component {
+class StoryEdit extends Component {
 
   // --------------------------------------------------
   // Defaults
   // --------------------------------------------------
   displayName() {
-    return "StoryEditable";
+    return "StoryEdit";
   }
 
   // --------------------------------------------------
@@ -225,9 +225,9 @@ class StoryEditable extends Component {
   attachHandlers() {
     var nodes = $(".element-link");
     for (var i = 0; i < nodes.length; i += 1) {
-      var nodes = nodes[i];
-      nodes.addEventListener("mouseenter", this.handleMouseEnter.bind(this));
-      nodes.addEventListener("mouseleave", this.handleMouseLeave.bind(this));
+      var node = nodes[i];
+      node.addEventListener("mouseenter", this.handleMouseEnter.bind(this));
+      node.addEventListener("mouseleave", this.handleMouseLeave.bind(this));
     }
   }
 
@@ -295,7 +295,7 @@ class StoryEditable extends Component {
   }
 }
 
-StoryEditable.propTypes = {
+StoryEdit.propTypes = {
   point: React.PropTypes.instanceOf(Point),
   shouldUpdate: React.PropTypes.bool.isRequired,
   story: React.PropTypes.instanceOf(Story).isRequired,
@@ -305,7 +305,7 @@ StoryEditable.propTypes = {
   updateStoryEditable: React.PropTypes.func.isRequired,
 };
 
-StoryEditable.defaultProps = {
+StoryEdit.defaultProps = {
   shouldUpdate: true,
   story: new Story(),
   updateModalLink: null,
@@ -315,4 +315,4 @@ StoryEditable.defaultProps = {
 };
 
 
-module.exports = StoryEditable;
+module.exports = StoryEdit;
