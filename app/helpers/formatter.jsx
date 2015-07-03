@@ -1,9 +1,13 @@
+import React from "react";
+
 import TypeConstants from "app/constants/type_constants";
 
 
 class Formatter {
 
-  parseElements(elements, openers, closers) {
+  parseElements(elements) {
+    var openers = {};
+    var closers = {};
     elements.map(function(element) {
       var start = element.get("start");
       var end = element.get("end");
@@ -35,12 +39,44 @@ class Formatter {
         closers[end] = ["</" + closer + ">"];
       }
     });
+    return [openers, closers];
   }
 
-  mergeElements(characters, openers, closers) {
+  mergeCode(characters, openers, closers) {
+    var arr = [];
+    var string = "";
+    var helper = function(class, content) {
+      string = "";
+      return (
+        <span className={class}>
+          {content}
+        </span>
+      );
+    };
+    for (var i = 0; i < characters.length; i += 1) {
+      if (closers[i]) {
+        if (string) {
+          arr.push(helper("code", string));
+        }
+        arr.push(helper("code code-rose", closers[i].join("")));
+      }
+      if (openers[i]) {
+        if (string) {
+          arr.push(helper("code", string));
+        }
+        arr.push(helper("code code-rose", openers[i].join("")));
+      }
+      string += characters[i];
+      if (i === characters.length - 1 && string) {
+        arr.push(helper("code", string));
+      }
+    }
+    return arr;
+  }
+
+  mergeStrings(characters, openers, closers) {
     var content = "";
     for (var i = 0; i < characters.length; i += 1) {
-      // .join("") concatenates multiple tags together.
       if (closers[i]) {
         content += closers[i].join("");
       }
@@ -55,12 +91,16 @@ class Formatter {
   stringifyBlock(block) {
     var elements = block.get("elements");
     var characters = block.get("content").split("");
-    var openers = {};
-    var closers = {};
-    this.parseElements(elements, openers, closers);
-    return this.mergeElements(characters, openers, closers);
+    var sets = this.parseElements(elements);
+    return this.mergeStrings(characters, sets[0], sets[1]);
   }
 
+  codifyBlock(block) {
+    var elements = block.get("elements");
+    var characters = block.get("content").split("");
+    var sets = this.parseElements(elements);
+    return this.mergeStrings(characters, sets[0], sets[1]);
+  }
 }
 
 

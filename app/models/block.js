@@ -251,6 +251,10 @@ class Block extends Model {
     }
   }
 
+  toCode() {
+    return Formatter.codifyBlock(this);
+  }
+
   toJSON() {
     var json = Backbone.Model.prototype.toJSON.call(this);
     json.source = "";
