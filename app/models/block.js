@@ -1,5 +1,3 @@
-import _ from "lodash"
-
 import Model from "app/templates/model";
 
 import Formatter from "app/helpers/formatter";
