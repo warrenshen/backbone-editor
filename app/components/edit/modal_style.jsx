@@ -164,7 +164,11 @@ class ModalStyle extends Component {
     if (false) {
       console.log("Style modal component updated.");
     }
-    this.createVector(this.props.vector);
+    if (!this.props.vector && this.state.shouldShowInput) {
+      this.setState({ shouldShowInput: false });
+    } else if (!this.state.shouldShowInput) {
+      this.createVector(this.props.vector);
+    }
   }
 
   componentWillUnmount() {

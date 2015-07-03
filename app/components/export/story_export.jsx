@@ -33,7 +33,7 @@ class StoryExport extends Component {
           {" href="}
         </span>
         <span className={"code code-blue"}>
-          {"\"http://fonts.googleapis.com/css?family=Merriweather:400italic,400,700,700italic|Montserrat:400,700\""}
+          {"\"http://fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic|Montserrat:400,700\""}
         </span>
         <span className={"code code-green"}>
           {" rel= "}

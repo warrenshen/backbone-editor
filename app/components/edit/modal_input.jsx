@@ -22,6 +22,11 @@ class ModalInput extends Component {
     React.findDOMNode(this.refs.input).focus();
   }
 
+  handleFocus(event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
   handleKeyDown(event) {
     event.stopPropagation();
   }
@@ -44,16 +49,16 @@ class ModalInput extends Component {
   // --------------------------------------------------
   componentDidMount() {
     var node = React.findDOMNode(this.refs.input);
-    node.addEventListener("blur", this.props.handleBlur);
     node.addEventListener("click", this.handleClick.bind(this));
+    node.addEventListener("focus", this.handleFocus.bind(this));
     node.addEventListener("keydown", this.handleKeyDown.bind(this));
     node.addEventListener("keypress", this.handleKeyPress.bind(this));
     node.addEventListener("keyup", this.handleKeyUp.bind(this));
+    node.focus();
   }
 
   componentWillUnmount() {
     var node = React.findDOMNode(this.refs.input);
-    node.removeEventListener("blur", this.props.handleBlur);
     node.removeEventListener("click", this.handleClick);
     node.removeEventListener("keydown", this.handleKeyDown);
     node.removeEventListener("keypress", this.handleKeyPress);
@@ -70,7 +75,7 @@ class ModalInput extends Component {
         <input
           className={"style-modal-input"}
           ref={"input"}
-          placeholder={"Enter or paste a link..."}>
+          placeholder={"Enter a link here..."}>
         </input>
       </div>
     );
