@@ -18,12 +18,15 @@ class StyleClass extends Component {
   // Render
   // --------------------------------------------------
   renderAttribute(attribute, index) {
-
+    return (
+      <StyleAttribute
+        attribute={attribute}
+        key={index} />
+    );
   }
 
   renderAttributes() {
-    // return this.props.attributes.map(this.renderAttribute, this);
-    return <StyleAttribute />
+    return this.props.attributes.map(this.renderAttribute, this);
   }
 
   render() {
@@ -31,7 +34,7 @@ class StyleClass extends Component {
       <code>
         <p className="code">
           <span className="code code-rose">
-            {".block"}
+            {"." + this.props.class}
           </span>
           <span className="code">
             {" {"}

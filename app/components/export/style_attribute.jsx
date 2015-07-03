@@ -16,16 +16,17 @@ class StyleAttribute extends Component {
   // Render
   // --------------------------------------------------
   render() {
+    var attribute = this.props.attribute;
     return (
       <p className="code">
         <span className="code code-blue">
-          {"  position"}
+          {"  " + attribute.type}
         </span>
         <span className="code">
           {": "}
         </span>
         <span className="code code-green">
-          {"relative"}
+          {attribute.value}
         </span>
         <span className="code">
           {";"}
@@ -33,6 +34,14 @@ class StyleAttribute extends Component {
       </p>
     );
   }
+}
+
+StyleAttribute.propTypes = {
+  attribute: React.PropTypes.object.isRequired,
+}
+
+StyleAttribute.defaultProps = {
+  attribute: { type: "position", value: "relative" },
 }
 
 

@@ -70,8 +70,30 @@ class StoryCode extends Component {
     return this.props.story.get("sections").map(this.renderSection, this);
   }
 
-  renderStyles() {
-    return <StyleClass />;
+  renderClass(props, index) {
+    return (
+      <StyleClass
+        key={index}
+        {...props} />
+    );
+  }
+
+  renderClasses() {
+    return [
+      {
+        class: "block",
+        attributes: [
+          {
+            type: "display",
+            value: "block",
+          },
+          {
+            type: "width",
+            value: "100%",
+          },
+        ],
+      },
+    ].map(this.renderClass, this);
   }
 
   render() {
@@ -88,7 +110,7 @@ class StoryCode extends Component {
         <p className="code code-rose">{"</body>"}</p>
         <p className="code code-rose">{"</html>"}</p>
         <p className="code code-rose">{" "}</p>
-        {this.renderStyles()}
+        {this.renderClasses()}
       </code>
     );
   }
