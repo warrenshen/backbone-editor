@@ -106,10 +106,25 @@ class StoryCode extends Component {
         <p className="code code-rose">{"<head>"}</p>
         <p className="code code-rose">{"</head>"}</p>
         <p className="code code-rose">{"<body>"}</p>
+        <p className="code">
+          <span className="code code-rose">
+            {"<div"}
+          </span>
+          <span className="code code-green">
+            {" class="}
+          </span>
+          <span className="code code-blue">
+            {"\"story\""}
+          </span>
+          <span className="code code-rose">
+            {">"}
+          </span>
+        </p>
         {this.renderSections()}
+        <p className="code code-rose">{"</div>"}</p>
         <p className="code code-rose">{"</body>"}</p>
         <p className="code code-rose">{"</html>"}</p>
-        <p className="code code-rose">{" "}</p>
+        <p className="code code-rose">{""}</p>
         {this.renderClasses()}
       </code>
     );

@@ -32,7 +32,10 @@ class BlockExport extends Component {
   }
 
   renderClass() {
-    return "block-paragraph";
+    var block = this.props.block;
+    return block.isCentered() ?
+           "block-paragraph block-centered" :
+           "block-paragraph";
   }
 
   renderHead() {
