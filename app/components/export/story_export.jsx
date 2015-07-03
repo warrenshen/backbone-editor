@@ -11,13 +11,13 @@ import Story from "app/models/story";
 import TypeConstants from "app/constants/type_constants";
 
 
-class StoryCode extends Component {
+class StoryExport extends Component {
 
   // --------------------------------------------------
   // Defaults
   // --------------------------------------------------
   displayName() {
-    return "StoryCode";
+    return "StoryExport";
   }
 
   // --------------------------------------------------
@@ -83,14 +83,48 @@ class StoryCode extends Component {
       {
         class: "block",
         attributes: [
-          {
-            type: "display",
-            value: "block",
-          },
-          {
-            type: "width",
-            value: "100%",
-          },
+          { type: "display", value: "block" },
+          { type: "position", value: "relative" },
+          { type: "width", value: "100%" },
+          { type: "padding-bottom", value: "24px" },
+          { type: "font-weight", value: "400" },
+          { type: "font-size", value: "18px" },
+          { type: "font-family", value: "\"Merriweather\", serif" },
+          { type: "line-height", value: "30px" },
+          { type: "text-align", value: "left" },
+        ],
+      },
+      {
+        class: "block-centered",
+        attributes: [
+          { type: "text-align", value: "center" },
+        ],
+      },
+      {
+        class: "block-heading-one",
+        attributes: [
+          { type: "font-weight", value: "700" },
+          { type: "font-size", value: "48px" },
+          { type: "font-family", value: "\"Montserrat\", sans-serif" },
+          { type: "line-height", value: "64px" },
+        ],
+      },
+      {
+        class: "block-heading-two",
+        attributes: [
+        { type: "font-weight", value: "700" },
+        { type: "font-size", value: "36px" },
+        { type: "font-family", value: "\"Montserrat\", sans-serif" },
+        { type: "line-height", value: "48px" },
+        ],
+      },
+      {
+        class: "block-heading-three",
+        attributes: [
+        { type: "font-weight", value: "700" },
+        { type: "font-size", value: "30px" },
+        { type: "font-family", value: "\"Montserrat\", sans-serif" },
+        { type: "line-height", value: "36px" },
         ],
       },
     ].map(this.renderClass, this);
@@ -131,13 +165,13 @@ class StoryCode extends Component {
   }
 }
 
-StoryCode.propTypes = {
+StoryExport.propTypes = {
   story: React.PropTypes.instanceOf(Story).isRequired,
 };
 
-StoryCode.defaultProps = {
+StoryExport.defaultProps = {
   story: new Story(),
 };
 
 
-module.exports = StoryCode;
+module.exports = StoryExport;
