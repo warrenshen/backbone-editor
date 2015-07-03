@@ -43,12 +43,14 @@ class Formatter {
   }
 
   mergeCode(characters, openers, closers) {
+    var index = -1;
     var nodes = [];
     var string = "";
     var helper = function(style, content) {
+      index += 1;
       string = "";
       return (
-        <span className={style}>
+        <span className={style} key={index}>
           {content}
         </span>
       );
