@@ -155,8 +155,8 @@ class EditorStore extends Store {
     if (!block.isEditable()) {
       point.blockIndex += 1;
     }
-    this.resetCookies();
     this.updatePoint(point);
+    this.resetCookies();
   }
 
   addSection(point, options) {
@@ -183,8 +183,8 @@ class EditorStore extends Store {
     point.sectionIndex = block.get("section_index");
     point.blockIndex = block.get("index");
     point.caretOffset = 0;
-    this.resetCookies();
     this.updatePoint(point);
+    this.resetCookies();
   }
 
   removeBlock(point) {
@@ -225,8 +225,8 @@ class EditorStore extends Store {
         }
       }
       this._story.mergeSections();
-      this.resetCookies();
       this.updatePoint(point);
+      this.resetCookies();
     }
   }
 
@@ -324,19 +324,26 @@ class EditorStore extends Store {
       }
     };
     this.callBlocks(vector, callback);
-    this.resetCookies();
     this.updateStyles(vector);
+    this.resetCookies();
   }
 
   styleElements(vector, options) {
     var callback = function(block, start, end) {
-      var element = new Element({ type: options.type, url: options.url });
+      var element = new Element({
+        type: options.type,
+        url: options.url,
+      });
       element.setOffsets(start, end);
       block.parseElement(element);
     };
     this.callBlocks(vector, callback);
+    if (options.url) {
+      this.updatePoint(vector.endPoint);
+    } else {
+      this.updateStyles(vector);
+    }
     this.resetCookies();
-    this.updateStyles(vector);
   }
 
   updateLink(link) {
