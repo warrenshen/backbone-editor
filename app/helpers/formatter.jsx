@@ -34,7 +34,7 @@ class Formatter {
         openers[start] = ["<" + opener + ">"]
       }
       if (closers[end]) {
-        closers[end].push("</" + closer +">");
+        closers[end].unshift("</" + closer +">");
       } else {
         closers[end] = ["</" + closer + ">"];
       }
@@ -43,12 +43,12 @@ class Formatter {
   }
 
   mergeCode(characters, openers, closers) {
-    var arr = [];
+    var nodes = [];
     var string = "";
-    var helper = function(class, content) {
+    var helper = function(style, content) {
       string = "";
       return (
-        <span className={class}>
+        <span className={style}>
           {content}
         </span>
       );
@@ -56,22 +56,22 @@ class Formatter {
     for (var i = 0; i < characters.length; i += 1) {
       if (closers[i]) {
         if (string) {
-          arr.push(helper("code", string));
+          nodes.push(helper("code", string));
         }
-        arr.push(helper("code code-rose", closers[i].join("")));
+        nodes.push(helper("code code-rose", closers[i].join("")));
       }
       if (openers[i]) {
         if (string) {
-          arr.push(helper("code", string));
+          nodes.push(helper("code", string));
         }
-        arr.push(helper("code code-rose", openers[i].join("")));
+        nodes.push(helper("code code-rose", openers[i].join("")));
       }
       string += characters[i];
       if (i === characters.length - 1 && string) {
-        arr.push(helper("code", string));
+        nodes.push(helper("code", string));
       }
     }
-    return arr;
+    return nodes;
   }
 
   mergeStrings(characters, openers, closers) {
@@ -99,7 +99,7 @@ class Formatter {
     var elements = block.get("elements");
     var characters = block.get("content").split("");
     var sets = this.parseElements(elements);
-    return this.mergeStrings(characters, sets[0], sets[1]);
+    return this.mergeCode(characters, sets[0], sets[1]);
   }
 }
 
