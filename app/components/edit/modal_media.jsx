@@ -40,7 +40,7 @@ class ModalMedia extends Component {
   // --------------------------------------------------
   generatePoint() {
     var block = this.props.block;
-    return new Point(block.get("section_index"), block.get("index"), 0);
+    return new Point(block.get("section_index"), block.get("index"));
   }
 
   // --------------------------------------------------

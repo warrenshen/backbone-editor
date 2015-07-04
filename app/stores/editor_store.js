@@ -22,7 +22,7 @@ class EditorStore extends Store {
   // --------------------------------------------------
   setDefaults() {
     this._link = null;
-    this._point = new Point(0, 0, 0);
+    this._point = new Point(0, 0);
     this._story = this.retrieveCookies();
     this._styles = {};
     this._vector = null;
@@ -70,7 +70,7 @@ class EditorStore extends Store {
     var sectionBucket = [];
     var sectionIndices = _.range(startSectionIndex, endSectionIndex + 1);
     for (var sectionIndex of sectionIndices) {
-      var point = new Point(sectionIndex, 0, 0);
+      var point = new Point(sectionIndex, 0);
       var section = this.getSection(point);
       var blockIndices = false;
       if (startSectionIndex === endSectionIndex) {
@@ -119,8 +119,9 @@ class EditorStore extends Store {
   }
 
   filterStyles(vector) {
-    var styles = {};
     var maps = [];
+    var styles = {};
+    var types = TypeConstants.block;
     var callback = function(block, start, end) {
       var map = block.filterStyles(start, end);
       maps.push(map);
@@ -284,8 +285,8 @@ class EditorStore extends Store {
   }
 
   selectAll() {
-    var startPoint = new Point(0, 0, 0);
-    var endPoint = new Point(this._story.length - 1, 0, 0);
+    var startPoint = new Point(0, 0);
+    var endPoint = new Point(this._story.length - 1, 0);
     endPoint.blockIndex = this.getSection(endPoint).length - 1;
     endPoint.caretOffset = this.getBlock(endPoint).length;
     this.updateVector(new Vector(startPoint, endPoint));

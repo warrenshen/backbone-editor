@@ -126,21 +126,23 @@ class Block extends Model {
   }
 
   elementComparator(element) {
-    return [element.get("type"), element.get("start"), element.get("end")];
+    return [
+      element.get("type"),
+      element.get("start"),
+      element.get("end"),
+    ];
   }
 
   filterStyles(firstOffset, lastOffset) {
+    var bucket = [];
     var elements = this.get("elements");
     var type = this.get("type");
-    var headingOne = TypeConstants.block.headingOne;
-    var headingTwo = TypeConstants.block.headingTwo;
-    var headingThree = TypeConstants.block.headingThree;
-    var bucket = [];
-    bucket.push([TypeConstants.block.centered, this.isCentered()]);
-    bucket.push([headingOne, type === headingOne]);
-    bucket.push([headingTwo, type === headingTwo]);
-    bucket.push([headingThree, type === headingThree]);
-    bucket.push([TypeConstants.block.quote, this.isQuote()]);
+    var types = TypeConstants.block;
+    bucket.push([types.centered, this.isCentered()]);
+    bucket.push([types.headingOne, type === types.headingOne]);
+    bucket.push([types.headingTwo, type === types.headingTwo]);
+    bucket.push([types.headingThree, type === types.headingThree]);
+    bucket.push([types.quote, this.isQuote()]);
     for (var element of elements.models) {
       if (element.get("start") <= firstOffset &&
           element.get("end") >= lastOffset) {

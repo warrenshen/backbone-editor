@@ -189,28 +189,6 @@ class ModalStyle extends Component {
   }
 
   // --------------------------------------------------
-  // Helpers
-  // --------------------------------------------------
-  shouldShowCenteredOption() {
-    return !this.props.styles[TypeConstants.block.quote];
-  }
-
-  shouldShowItalicOption() {
-    return !this.props.styles[TypeConstants.block.quote];
-  }
-
-  shouldShowHeadingOptions() {
-    return !this.props.styles[TypeConstants.block.quote];
-  }
-
-  shouldShowQuoteOption() {
-    var styles = this.props.styles;
-    return !styles[TypeConstants.block.headingOne] &&
-           !styles[TypeConstants.block.headingTwo] &&
-           !styles[TypeConstants.block.headingThree];
-  }
-
-  // --------------------------------------------------
   // Render
   // --------------------------------------------------
   renderInput() {
@@ -233,53 +211,54 @@ class ModalStyle extends Component {
 
   renderOptions() {
     var types = TypeConstants.block;
+    var styles = this.props.styles;
     return [
       {
         action: this.styleHeadingOne.bind(this),
         className: "fa fa-header",
-        isActive: this.props.styles[types.headingOne] === true,
-        isHidden: !this.shouldShowHeadingOptions(),
+        isActive: styles[types.headingOne] === true,
+        isHidden: false,
       },
       {
         action: this.styleHeadingTwo.bind(this),
         className: "fa fa-header",
-        isActive: this.props.styles[types.headingTwo] === true,
-        isHidden: !this.shouldShowHeadingOptions(),
+        isActive: styles[types.headingTwo] === true,
+        isHidden: false,
       },
       {
         action: this.styleHeadingThree.bind(this),
         className: "fa fa-header",
-        isActive: this.props.styles[types.headingThree] === true,
-        isHidden: !this.shouldShowHeadingOptions(),
+        isActive: styles[types.headingThree] === true,
+        isHidden: false,
       },
       {
         action: this.styleQuote.bind(this),
         className: "fa fa-quote-right",
-        isActive: this.props.styles[types.quote] === true,
-        isHidden: !this.shouldShowQuoteOption(),
+        isActive: styles[types.quote] === true,
+        isHidden: false,
       },
       {
         action: this.styleCentered.bind(this),
         className: "fa fa-align-center",
-        isActive: this.props.styles[types.centered] === true,
-        isHidden: !this.shouldShowCenteredOption(),
+        isActive: styles[types.centered] === true,
+        isHidden: styles[TypeConstants.block.quote],
       },
       {
         action: this.styleBold.bind(this),
         className: "fa fa-bold",
-        isActive: this.props.styles[types.bold] === true,
+        isActive: styles[types.bold] === true,
         isHidden: false,
       },
       {
         action: this.styleItalic.bind(this),
         className: "fa fa-italic",
-        isActive: this.props.styles[types.italic] === true,
-        isHidden: !this.shouldShowItalicOption(),
+        isActive: styles[types.italic] === true,
+        isHidden: styles[TypeConstants.block.quote],
       },
       {
         action: this.handleClick.bind(this),
         className: "fa fa-link",
-        isActive: this.props.styles[TypeConstants.element.link] === true,
+        isActive: styles[TypeConstants.element.link] === true,
         isHidden: false,
       },
     ].map(this.renderOption, this);
