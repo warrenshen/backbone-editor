@@ -14,10 +14,12 @@ import TypeConstants from "app/constants/type_constants";
 class StoryExport extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "StoryExport";
+  static get propTypes() {
+    return {
+      story: React.PropTypes.instanceOf(Story).isRequired,
+    };
   }
 
   // --------------------------------------------------
@@ -217,14 +219,6 @@ class StoryExport extends Component {
     );
   }
 }
-
-StoryExport.propTypes = {
-  story: React.PropTypes.instanceOf(Story).isRequired,
-};
-
-StoryExport.defaultProps = {
-  story: new Story(),
-};
 
 
 module.exports = StoryExport;

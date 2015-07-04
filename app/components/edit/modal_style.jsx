@@ -19,10 +19,16 @@ import TypeConstants from "app/constants/type_constants";
 class ModalStyle extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "ModalStyle";
+  static get propTypes() {
+    return {
+      shouldUpdate: React.PropTypes.bool.isRequired,
+      styles: React.PropTypes.object.isRequired,
+      updateModalStyle: React.PropTypes.func.isRequired,
+      updateStoryStyle: React.PropTypes.func.isRequired,
+      vector: React.PropTypes.instanceOf(Vector),
+    };
   }
 
   // --------------------------------------------------
@@ -226,53 +232,54 @@ class ModalStyle extends Component {
   }
 
   renderOptions() {
+    var types = TypeConstants.block;
     return [
       {
         action: this.styleHeadingOne.bind(this),
         className: "fa fa-header",
-        isActive: this.props.styles[TypeConstants.block.headingOne],
+        isActive: this.props.styles[types.headingOne] === true,
         isHidden: !this.shouldShowHeadingOptions(),
       },
       {
         action: this.styleHeadingTwo.bind(this),
         className: "fa fa-header",
-        isActive: this.props.styles[TypeConstants.block.headingTwo],
+        isActive: this.props.styles[types.headingTwo] === true,
         isHidden: !this.shouldShowHeadingOptions(),
       },
       {
         action: this.styleHeadingThree.bind(this),
         className: "fa fa-header",
-        isActive: this.props.styles[TypeConstants.block.headingThree],
+        isActive: this.props.styles[types.headingThree] === true,
         isHidden: !this.shouldShowHeadingOptions(),
       },
       {
         action: this.styleQuote.bind(this),
         className: "fa fa-quote-right",
-        isActive: this.props.styles[TypeConstants.block.quote],
+        isActive: this.props.styles[types.quote] === true,
         isHidden: !this.shouldShowQuoteOption(),
       },
       {
         action: this.styleCentered.bind(this),
         className: "fa fa-align-center",
-        isActive: this.props.styles[TypeConstants.block.centered],
+        isActive: this.props.styles[types.centered] === true,
         isHidden: !this.shouldShowCenteredOption(),
       },
       {
         action: this.styleBold.bind(this),
         className: "fa fa-bold",
-        isActive: this.props.styles[TypeConstants.element.bold],
+        isActive: this.props.styles[types.bold] === true,
         isHidden: false,
       },
       {
         action: this.styleItalic.bind(this),
         className: "fa fa-italic",
-        isActive: this.props.styles[TypeConstants.element.italic],
+        isActive: this.props.styles[types.italic] === true,
         isHidden: !this.shouldShowItalicOption(),
       },
       {
         action: this.handleClick.bind(this),
         className: "fa fa-link",
-        isActive: this.props.styles[TypeConstants.element.link],
+        isActive: this.props.styles[TypeConstants.element.link] === true,
         isHidden: false,
       },
     ].map(this.renderOption, this);
@@ -293,22 +300,6 @@ class ModalStyle extends Component {
     );
   }
 }
-
-ModalStyle.propTypes = {
-  shouldUpdate: React.PropTypes.bool.isRequired,
-  styles: React.PropTypes.object.isRequired,
-  updateModalStyle: React.PropTypes.func.isRequired,
-  updateStoryStyle: React.PropTypes.func.isRequired,
-  vector: React.PropTypes.instanceOf(Vector),
-};
-
-ModalStyle.defaultProps = {
-  shouldUpdate: true,
-  styles: {},
-  updateModalStyle: null,
-  updateStoryStyle: null,
-  vector: null,
-};
 
 
 module.exports = ModalStyle;

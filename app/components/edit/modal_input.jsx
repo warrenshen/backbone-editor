@@ -8,13 +8,6 @@ import KeyConstants from "app/constants/key_constants";
 class ModalInput extends Component {
 
   // --------------------------------------------------
-  // Defaults
-  // --------------------------------------------------
-  displayName() {
-    return "ModalInput";
-  }
-
-  // --------------------------------------------------
   // Handlers
   // --------------------------------------------------
   handleClick(event) {

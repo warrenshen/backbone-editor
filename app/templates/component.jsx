@@ -24,6 +24,13 @@ class Component extends React.Component {
   }
 
   // --------------------------------------------------
+  // Getters
+  // --------------------------------------------------
+  static get propTypes() {
+    return {};
+  }
+
+  // --------------------------------------------------
   // State
   // --------------------------------------------------
   getDefaultState() {
@@ -35,9 +42,6 @@ class Component extends React.Component {
   }
 
   setState(nextState) {
-    if (false) {
-      console.log("Setting state on: " + this.displayName());
-    }
     _.merge(nextState, this.getStoreState());
     super.setState(nextState);
   }

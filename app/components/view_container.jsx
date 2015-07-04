@@ -13,13 +13,6 @@ import TypeConstants from "app/constants/type_constants";
 class ViewContainer extends Component {
 
   // --------------------------------------------------
-  // Defaults
-  // --------------------------------------------------
-  displayName() {
-    return "ViewContainer";
-  }
-
-  // --------------------------------------------------
   // State
   // --------------------------------------------------
   getDefaultState() {

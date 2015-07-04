@@ -6,13 +6,6 @@ import BlockExport from "app/templates/block_export";
 class BlockQuote extends BlockExport {
 
   // --------------------------------------------------
-  // Defaults
-  // --------------------------------------------------
-  displayName() {
-    return "BlockQuote";
-  }
-
-  // --------------------------------------------------
   // Render
   // --------------------------------------------------
   renderClass() {

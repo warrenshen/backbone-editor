@@ -6,13 +6,6 @@ import Component from "app/templates/component";
 class BlockImage extends Component {
 
   // --------------------------------------------------
-  // Defaults
-  // --------------------------------------------------
-  displayName() {
-    return "BlockImage";
-  }
-
-  // --------------------------------------------------
   // Render
   // --------------------------------------------------
   renderCaption() {

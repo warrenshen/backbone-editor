@@ -14,16 +14,6 @@ class Router extends Backbone.Router {
   }
 
   // --------------------------------------------------
-  // Defaults
-  // --------------------------------------------------
-  routes() {
-    return {
-      "": "editor",
-      "editor/": "editor",
-    };
-  }
-
-  // --------------------------------------------------
   // Methods
   // --------------------------------------------------
   editor() {
@@ -31,6 +21,13 @@ class Router extends Backbone.Router {
       <ViewContainer />,
       document.body
     );
+  }
+
+  routes() {
+    return {
+      "": "editor",
+      "editor/": "editor",
+    };
   }
 }
 

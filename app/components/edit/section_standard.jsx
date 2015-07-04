@@ -16,10 +16,13 @@ import TypeConstants from "app/constants/type_constants";
 class SectionStandard extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "SectionStandard";
+  static get propTypes() {
+    return {
+      section: React.PropTypes.instanceOf(Section).isRequired,
+      updateStoryEditable: React.PropTypes.func.isRequired,
+    };
   }
 
   // --------------------------------------------------
@@ -65,18 +68,6 @@ class SectionStandard extends Component {
     );
   }
 }
-
-SectionStandard.propTypes = {
-  section: React.PropTypes.instanceOf(Section).isRequired,
-  updateStoryStyle: React.PropTypes.func.isRequired,
-  updateStoryEditable: React.PropTypes.func.isRequired,
-};
-
-SectionStandard.defaultProps = {
-  section: new Section(),
-  updateStoryStyle: null,
-  updateStoryEditable: null,
-};
 
 
 module.exports = SectionStandard;

@@ -18,10 +18,14 @@ import KeyConstants from "app/constants/key_constants";
 class BlockImage extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "BlockImage";
+  static get propTypes() {
+    return {
+      block: React.PropTypes.instanceOf(Block).isRequired,
+      updateStoryStyle: React.PropTypes.func.isRequired,
+      updateStoryEditable: React.PropTypes.func.isRequired,
+    };
   }
 
   // --------------------------------------------------
@@ -166,18 +170,6 @@ class BlockImage extends Component {
     );
   }
 }
-
-BlockImage.propTypes = {
-  block: React.PropTypes.instanceOf(Block).isRequired,
-  updateStoryStyle: React.PropTypes.func.isRequired,
-  updateStoryEditable: React.PropTypes.func.isRequired,
-};
-
-BlockImage.defaultProps = {
-  block: new Block(),
-  updateStoryStyle: null,
-  updateStoryEditable: null,
-};
 
 
 module.exports = BlockImage;

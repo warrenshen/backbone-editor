@@ -262,7 +262,7 @@ class EditorStore extends Store {
 
   retrieveCookies() {
     // TODO: Fix cookies to support longer stories.
-    if (true && CookiesJS.enabled) {
+    if (CookiesJS.enabled) {
       var cookie = CookiesJS.get("editor");
       if (cookie) {
         var json = JSON.parse(cookie);
@@ -277,7 +277,7 @@ class EditorStore extends Store {
   }
 
   resetCookies() {
-    if (true && CookiesJS.enabled) {
+    if (CookiesJS.enabled) {
       var json = this._story.toJSON();
       CookiesJS.set("editor", JSON.stringify(json));
     }

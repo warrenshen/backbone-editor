@@ -8,13 +8,6 @@ import RouterDirectory from "app/directories/router_directory";
 class Clickable extends Component {
 
   // --------------------------------------------------
-  // Defaults
-  // --------------------------------------------------
-  displayName() {
-    return "Clickable";
-  }
-
-  // --------------------------------------------------
   // Handlers
   // --------------------------------------------------
   handleClick() {
@@ -46,17 +39,17 @@ class Clickable extends Component {
   }
 }
 
-Clickable.propTypes = {
-  action: React.PropTypes.func.isRequired,
-  className: React.PropTypes.string.isRequired,
-  content: React.PropTypes.string.isRequired,
-};
+// Clickable.propTypes = {
+//   action: React.PropTypes.func.isRequired,
+//   className: React.PropTypes.string.isRequired,
+//   content: React.PropTypes.string.isRequired,
+// };
 
-Clickable.defaultProps = {
-  action:  null,
-  className: "general-button",
-  content: "",
-};
+// Clickable.defaultProps = {
+//   action:  null,
+//   className: "general-button",
+//   content: "",
+// };
 
 
 module.exports = Clickable;

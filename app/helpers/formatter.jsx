@@ -5,28 +5,37 @@ import TypeConstants from "app/constants/type_constants";
 
 class Formatter {
 
-  parseElements(elements) {
+  codifyBlock(block) {
+    var elements = block.get("elements");
+    var characters = block.get("content").split("");
+    var sets = this.parseElements(elements, false);
+    return this.mergeCode(characters, sets[0], sets[1]);
+  }
+
+  parseElements(elements, isString=true) {
     var openers = {};
     var closers = {};
     elements.map(function(element) {
       var start = element.get("start");
       var end = element.get("end");
+      var type = element.get("type");
       var opener = "";
       var closer = "";
-      switch (element.get("type")) {
-        case TypeConstants.element.bold:
-          opener = "strong";
-          closer = "strong";
-          break;
-        case TypeConstants.element.italic:
-          opener = "i";
-          closer = "i";
-          break;
-        case TypeConstants.element.link:
-          opener = "span class=\"element-link\" " +
-                   "data-link=\"" + element.get("url") + "\"";
+      if (type === TypeConstants.element.bold) {
+        opener = "strong";
+        closer = "strong";
+      } else if (type === TypeConstants.element.italic) {
+        opener = "i";
+        closer = "i";
+      } else {
+        var url = element.get("url") + "\"";
+        if (isString) {
+          opener = "span class=\"element-link\" data-link=\"" + url;
           closer = "span";
-          break;
+        } else {
+          opener = "a href=\"" + url;
+          closer = "a";
+        }
       }
       if (openers[start]) {
         openers[start].push("<" + opener + ">");
@@ -95,13 +104,6 @@ class Formatter {
     var characters = block.get("content").split("");
     var sets = this.parseElements(elements);
     return this.mergeStrings(characters, sets[0], sets[1]);
-  }
-
-  codifyBlock(block) {
-    var elements = block.get("elements");
-    var characters = block.get("content").split("");
-    var sets = this.parseElements(elements);
-    return this.mergeCode(characters, sets[0], sets[1]);
   }
 }
 

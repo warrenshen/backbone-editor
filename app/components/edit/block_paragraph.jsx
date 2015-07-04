@@ -11,13 +11,6 @@ import EditorStore from "app/stores/editor_store";
 class BlockParagraph extends BlockEdit {
 
   // --------------------------------------------------
-  // Defaults
-  // --------------------------------------------------
-  displayName() {
-    return "BlockParagraph";
-  }
-
-  // --------------------------------------------------
   // Render
   // --------------------------------------------------
   renderModal() {

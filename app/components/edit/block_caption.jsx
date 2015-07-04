@@ -16,10 +16,14 @@ import TypeConstants from "app/constants/type_constants";
 class BlockCaption extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "BlockCaption";
+  static get propTypes() {
+    return {
+      block: React.PropTypes.instanceOf(Block).isRequired,
+      updateStoryStyle: React.PropTypes.func.isRequired,
+      updateStoryEditable: React.PropTypes.func.isRequired,
+    };
   }
 
   // --------------------------------------------------
@@ -132,18 +136,6 @@ class BlockCaption extends Component {
     );
   }
 }
-
-BlockCaption.propTypes = {
-  block: React.PropTypes.instanceOf(Block).isRequired,
-  updateStoryStyle: React.PropTypes.func.isRequired,
-  updateStoryEditable: React.PropTypes.func.isRequired,
-};
-
-BlockCaption.defaultProps = {
-  block: new Block(),
-  updateStoryStyle: null,
-  updateStoryEditable: null,
-};
 
 
 module.exports = BlockCaption;

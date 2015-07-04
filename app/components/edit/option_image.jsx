@@ -6,13 +6,6 @@ import Component from "app/templates/component";
 class OptionImage extends Component {
 
   // --------------------------------------------------
-  // Defaults
-  // --------------------------------------------------
-  displayName() {
-    return "OptionImage";
-  }
-
-  // --------------------------------------------------
   // Lifecycle
   // --------------------------------------------------
   componentDidMount() {

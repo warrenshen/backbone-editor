@@ -19,10 +19,13 @@ import TypeConstants from "app/constants/type_constants";
 class ModalMedia extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "ModalMedia";
+  static get propTypes() {
+    return {
+      block: React.PropTypes.instanceOf(Block).isRequired,
+      updateStoryEditable: React.PropTypes.func.isRequired,
+    };
   }
 
   // --------------------------------------------------
@@ -177,16 +180,6 @@ class ModalMedia extends Component {
     );
   }
 }
-
-ModalMedia.propTypes = {
-  block: React.PropTypes.instanceOf(Block).isRequired,
-  updateStoryEditable: React.PropTypes.func.isRequired,
-};
-
-ModalMedia.defaultProps = {
-  block: new Block(),
-  updateStoryEditable: null,
-};
 
 
 module.exports = ModalMedia;

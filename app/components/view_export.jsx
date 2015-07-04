@@ -10,13 +10,6 @@ import EditorStore from "app/stores/editor_store";
 class ViewExport extends Component {
 
   // --------------------------------------------------
-  // Defaults
-  // --------------------------------------------------
-  displayName() {
-    return "ViewExport";
-  }
-
-  // --------------------------------------------------
   // State
   // --------------------------------------------------
   getStoreState() {

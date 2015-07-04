@@ -6,13 +6,6 @@ import BlockExport from "app/templates/block_export";
 class BlockDivider extends BlockExport {
 
   // --------------------------------------------------
-  // Defaults
-  // --------------------------------------------------
-  displayName() {
-    return "BlockDivider";
-  }
-
-  // --------------------------------------------------
   // Render
   // --------------------------------------------------
   renderClass() {

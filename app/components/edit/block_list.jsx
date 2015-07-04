@@ -6,13 +6,6 @@ import BlockEdit from "app/templates/block_edit";
 class BlockList extends BlockEdit {
 
   // --------------------------------------------------
-  // Defaults
-  // --------------------------------------------------
-  displayName() {
-    return "BlockList";
-  }
-
-  // --------------------------------------------------
   // Render
   // --------------------------------------------------
   render() {

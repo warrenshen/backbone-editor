@@ -8,10 +8,12 @@ import Block from "app/models/block";
 class BlockExport extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "BlockExport";
+  static get propTypes() {
+    return {
+      block: React.PropTypes.instanceOf(Block).isRequired,
+    };
   }
 
   // --------------------------------------------------
@@ -91,14 +93,6 @@ class BlockExport extends Component {
     );
   }
 }
-
-BlockExport.propTypes = {
-  block: React.PropTypes.instanceOf(Block).isRequired,
-};
-
-BlockExport.defaultProps = {
-  block: new Block(),
-};
 
 
 module.exports = BlockExport;

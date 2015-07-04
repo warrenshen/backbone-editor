@@ -23,10 +23,18 @@ import TypeConstants from "app/constants/type_constants";
 class StoryEdit extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "StoryEdit";
+  static get propTypes() {
+    return {
+      point: React.PropTypes.instanceOf(Point),
+      shouldUpdate: React.PropTypes.bool.isRequired,
+      story: React.PropTypes.instanceOf(Story).isRequired,
+      updateModalLink: React.PropTypes.func.isRequired,
+      updateModalStyle: React.PropTypes.func.isRequired,
+      updateStoryStyle: React.PropTypes.func.isRequired,
+      updateStoryEditable: React.PropTypes.func.isRequired,
+    };
   }
 
   // --------------------------------------------------
@@ -294,25 +302,6 @@ class StoryEdit extends Component {
     );
   }
 }
-
-StoryEdit.propTypes = {
-  point: React.PropTypes.instanceOf(Point),
-  shouldUpdate: React.PropTypes.bool.isRequired,
-  story: React.PropTypes.instanceOf(Story).isRequired,
-  updateModalLink: React.PropTypes.func.isRequired,
-  updateModalStyle: React.PropTypes.func.isRequired,
-  updateStoryStyle: React.PropTypes.func.isRequired,
-  updateStoryEditable: React.PropTypes.func.isRequired,
-};
-
-StoryEdit.defaultProps = {
-  shouldUpdate: true,
-  story: new Story(),
-  updateModalLink: null,
-  updateModalStyle: null,
-  updateStoryStyle: null,
-  updateStoryEditable: null,
-};
 
 
 module.exports = StoryEdit;

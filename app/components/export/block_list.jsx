@@ -6,13 +6,6 @@ import BlockExport from "app/templates/block_export";
 class BlockList extends BlockExport {
 
   // --------------------------------------------------
-  // Defaults
-  // --------------------------------------------------
-  displayName() {
-    return "BlockList";
-  }
-
-  // --------------------------------------------------
   // Render
   // --------------------------------------------------
   renderClass() {

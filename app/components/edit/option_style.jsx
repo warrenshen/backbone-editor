@@ -7,10 +7,15 @@ import Component from "app/templates/component";
 class OptionStyle extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "OptionStyle";
+  static get propTypes() {
+    return {
+      action: React.PropTypes.func.isRequired,
+      className: React.PropTypes.string.isRequired,
+      isActive: React.PropTypes.bool.isRequired,
+      isHidden: React.PropTypes.bool.isRequired,
+    };
   }
 
   // --------------------------------------------------
@@ -42,20 +47,6 @@ class OptionStyle extends Component {
     );
   }
 }
-
-OptionStyle.propTypes = {
-  action: React.PropTypes.func.isRequired,
-  className: React.PropTypes.string.isRequired,
-  isActive: React.PropTypes.bool.isRequired,
-  isHidden: React.PropTypes.bool.isRequired,
-};
-
-OptionStyle.defaultProps = {
-  action: null,
-  className: "fa fa-header",
-  isActive: false,
-  isHidden: false,
-};
 
 
 module.exports = OptionStyle;

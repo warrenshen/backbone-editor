@@ -21,13 +21,6 @@ import TypeConstants from "app/constants/type_constants";
 class ViewEdit extends Component {
 
   // --------------------------------------------------
-  // Defaults
-  // --------------------------------------------------
-  displayName() {
-    return "ViewEdit";
-  }
-
-  // --------------------------------------------------
   // State
   // --------------------------------------------------
   getDefaultState() {
