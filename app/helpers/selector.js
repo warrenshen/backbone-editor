@@ -27,9 +27,7 @@ class Selector {
 
   findParentNode(childNode) {
     var parentNode = childNode;
-    while (parentNode &&
-           (!parentNode.dataset ||
-           !parentNode.dataset.index)) {
+    while (!parentNode.dataset || !parentNode.dataset.index) {
       parentNode = parentNode.parentNode;
     }
     return parentNode;
@@ -37,19 +35,13 @@ class Selector {
 
   generatePoint(selection, type="anchor") {
     var childNode = selection[type + "Node"];
-    if (childNode) {
-      var parentNode = this.findParentNode(childNode);
-      if (parentNode) {
-        var grandparentNode = parentNode.parentNode;
-        var childOffset = this.findChildOffset(childNode, parentNode);
-        var caretOffset = childOffset + selection[type + "Offset"];
-        var blockIndex = parseInt(parentNode.dataset.index);
-        var sectionIndex = parseInt(grandparentNode.dataset.index);
-        return new Point(sectionIndex, blockIndex, caretOffset);
-      }
-    } else {
-      return false;
-    }
+    var parentNode = this.findParentNode(childNode);
+    var grandparentNode = parentNode.parentNode;
+    var childOffset = this.findChildOffset(childNode, parentNode);
+    var caretOffset = childOffset + selection[type + "Offset"];
+    var blockIndex = parseInt(parentNode.dataset.index);
+    var sectionIndex = parseInt(grandparentNode.dataset.index);
+    return new Point(sectionIndex, blockIndex, caretOffset);
   }
 
   generateVector(selection) {

@@ -151,7 +151,7 @@ class ModalStyle extends Component {
       node.style.top = rectangle.top - 44 + "px";
       node.style.left = rectangle.left + offset + "px";
     } else {
-      EditorActor.updateVector(false);
+      EditorActor.updateVector(null);
       this.props.updateModalStyle();
     }
   }
@@ -242,7 +242,7 @@ class ModalStyle extends Component {
         className: "fa fa-align-center",
         isActive: styles[types.centered] === true,
         isHidden: styles["shouldHideOptions"] ||
-                  styles[TypeConstants.block.quote],
+                  styles[TypeConstants.block.quote] || false,
       },
       {
         action: this.styleBold.bind(this),
@@ -254,7 +254,7 @@ class ModalStyle extends Component {
         action: this.styleItalic.bind(this),
         className: "fa fa-italic",
         isActive: styles[types.italic] === true,
-        isHidden: styles[TypeConstants.block.quote],
+        isHidden: styles[TypeConstants.block.quote] || false,
       },
       {
         action: this.handleClick.bind(this),
