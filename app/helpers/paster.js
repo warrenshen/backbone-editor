@@ -112,7 +112,10 @@ class Paster {
         var node = nodes[i];
         block = this.createBlock(node);
         if (block) {
-          EditorStore.addBlock(point.clone(), block);
+          EditorStore.addBlock(
+            point.clone(),
+            { block: block, shouldIgnore: true }
+          );
           point.blockIndex += 1;
         }
       }

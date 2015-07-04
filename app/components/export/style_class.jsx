@@ -12,7 +12,7 @@ class StyleClass extends Component {
   // --------------------------------------------------
   static get propTypes() {
     return {
-      attributes: React.PropTypes.object.isRequired,
+      attributes: React.PropTypes.array.isRequired,
     };
   }
 

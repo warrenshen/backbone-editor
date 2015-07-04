@@ -61,7 +61,7 @@ class ModalMedia extends Component {
           source: source,
         });
         var point = this.generatePoint();
-        EditorActor.addBlock(point, block);
+        EditorActor.addBlock(point, { block: block });
         this.props.updateStoryEditable();
       }.bind(this);
       reader.readAsDataURL(files[0]);
@@ -84,7 +84,7 @@ class ModalMedia extends Component {
   styleDivider(event) {
     var block = new Block({ type: TypeConstants.block.divider });
     var point = this.generatePoint();
-    EditorActor.addBlock(point, block);
+    EditorActor.addBlock(point, { block: block });
     this.props.updateStoryEditable();
   }
 

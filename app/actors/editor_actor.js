@@ -5,11 +5,11 @@ import ActionConstants from "app/constants/action_constants";
 
 class EditorActor extends Actor {
 
-  addBlock(point, block) {
+  addBlock(point, options) {
     this.act({
       type: ActionConstants.editor.addBlock,
       point: point,
-      block: block,
+      options: options,
     });
   }
 

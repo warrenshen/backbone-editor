@@ -154,14 +154,17 @@ class EditorStore extends Store {
   // --------------------------------------------------
   // Actions
   // --------------------------------------------------
-  addBlock(point, block) {
+  addBlock(point, options) {
+    var block = options.block;
     var section = this.getSection(point);
     section.addBlock(block, point.blockIndex);
     if (!block.isEditable()) {
       point.blockIndex += 1;
     }
     this.updatePoint(point);
-    this.resetCookies();
+    if (!options.shouldIgnore) {
+      this.resetCookies();
+    }
   }
 
   addSection(point, options) {
@@ -208,7 +211,10 @@ class EditorStore extends Store {
       if (block.isImage()) {
         section.removeBlock(block);
         if (block.isLast()) {
-          this.addBlock(point, new Block());
+          this.addBlock(
+            point,
+            { block: new Block(), shouldIgnore: true }
+          );
         }
       } else {
         this.updatePoint(point);
@@ -322,10 +328,11 @@ class EditorStore extends Store {
       }
       point.blockIndex += 1;
       point.caretOffset = 0;
-      this.addBlock(point, clone);
+      this.addBlock(point, { block: clone });
     }
     if (!block.length && !block.isParagraph()) {
       block.set("type", TypeConstants.block.paragraph);
+      block.set("is_centered", false);
     }
   }
 
@@ -391,7 +398,7 @@ class EditorStore extends Store {
     var action = payload.action;
     switch (action.type) {
       case ActionConstants.editor.addBlock:
-        return this.addBlock(action.point, action.block);
+        return this.addBlock(action.point, action.options);
       case ActionConstants.editor.addSection:
         return this.addSection(action.point, action.options);
       case ActionConstants.editor.removeBlock:

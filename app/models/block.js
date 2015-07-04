@@ -97,6 +97,7 @@ class Block extends Model {
     var content = this.get("content");
     var block = new Block({
       content: content.substring(offset),
+      is_centered: this.isCentered(),
       type: this.get("type"),
     });
     var bucket = [];
