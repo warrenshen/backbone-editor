@@ -121,7 +121,6 @@ class EditorStore extends Store {
   filterStyles(vector) {
     var maps = [];
     var styles = {};
-    var types = TypeConstants.block;
     var callback = function(block, start, end) {
       var map = block.filterStyles(start, end);
       maps.push(map);
@@ -129,10 +128,15 @@ class EditorStore extends Store {
     this.callBlocks(vector, callback);
     for (var map of maps) {
       for (var [type, value] of map) {
-        if (!value && (styles[type] || styles[type] === undefined)) {
-          styles[type] = false;
-        } else if (value && styles[type] === undefined) {
-          styles[type] = true;
+        if (value && type === TypeConstants.block.list &&
+            !styles["shouldHideOptions"]) {
+          styles["shouldHideOptions"] = true;
+        } else {
+          if (!value && (styles[type] || styles[type] === undefined)) {
+            styles[type] = false;
+          } else if (value && styles[type] === undefined) {
+            styles[type] = true;
+          }
         }
       }
     }

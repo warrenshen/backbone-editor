@@ -142,6 +142,7 @@ class Block extends Model {
     bucket.push([types.headingOne, type === types.headingOne]);
     bucket.push([types.headingTwo, type === types.headingTwo]);
     bucket.push([types.headingThree, type === types.headingThree]);
+    bucket.push([types.list, this.isList()]);
     bucket.push([types.quote, this.isQuote()]);
     for (var element of elements.models) {
       if (element.get("start") <= firstOffset &&

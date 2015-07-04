@@ -217,31 +217,32 @@ class ModalStyle extends Component {
         action: this.styleHeadingOne.bind(this),
         className: "fa fa-header",
         isActive: styles[types.headingOne] === true,
-        isHidden: false,
+        isHidden: styles["shouldHideOptions"] || false,
       },
       {
         action: this.styleHeadingTwo.bind(this),
         className: "fa fa-header",
         isActive: styles[types.headingTwo] === true,
-        isHidden: false,
+        isHidden: styles["shouldHideOptions"] || false,
       },
       {
         action: this.styleHeadingThree.bind(this),
         className: "fa fa-header",
         isActive: styles[types.headingThree] === true,
-        isHidden: false,
+        isHidden: styles["shouldHideOptions"] || false,
       },
       {
         action: this.styleQuote.bind(this),
         className: "fa fa-quote-right",
         isActive: styles[types.quote] === true,
-        isHidden: false,
+        isHidden: styles["shouldHideOptions"] || false,
       },
       {
         action: this.styleCentered.bind(this),
         className: "fa fa-align-center",
         isActive: styles[types.centered] === true,
-        isHidden: styles[TypeConstants.block.quote],
+        isHidden: styles["shouldHideOptions"] ||
+                  styles[TypeConstants.block.quote],
       },
       {
         action: this.styleBold.bind(this),
