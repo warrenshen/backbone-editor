@@ -266,13 +266,16 @@ class EditorStore extends Store {
   }
 
   retrieveCookies() {
-    // TODO: Fix cookies to support longer stories.
-    // Should divide cookies every 2000 characters.
     if (CookiesJS.enabled) {
-      var cookie = CookiesJS.get("editor");
-      if (cookie) {
-        console.log(cookie.length);
-        var json = JSON.parse(cookie);
+      var data = "";
+      for (var i = 0; i < 20; i += 1) {
+        var cookie = CookiesJS.get("cookie" + i);
+        if (cookie) {
+          data += cookie;
+        }
+      }
+      if (data) {
+        var json = JSON.parse(data);
         return new Story(json);
       }
     }
@@ -285,8 +288,17 @@ class EditorStore extends Store {
 
   resetCookies() {
     if (CookiesJS.enabled) {
-      var json = this._story.toJSON();
-      CookiesJS.set("editor", JSON.stringify(json));
+      var data = JSON.stringify(this._story.toJSON());
+      for (var i = 0; i < 20; i += 1) {
+        var length = data.length;
+        if (length > 2500) {
+          CookiesJS.set("cookie" + i, data.substring(0, 2500));
+          data = data.substring(2500);
+        } else {
+          CookiesJS.set("cookie" + i, data);
+          data = "";
+        }
+      }
     }
   }
 
