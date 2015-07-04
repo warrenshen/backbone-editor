@@ -100,6 +100,19 @@ class StoryExport extends Component {
         ],
       },
       {
+        class: "block-caption",
+        attributes: [
+          { type: "width", value: "87.5%" },
+          { type: "padding-top", value: "8px" },
+          { type: "margin", value: "auto" },
+          { type: "color", value: "#878B8D" },
+          { type: "font-size", value: "14px" },
+          { type: "line-height", value: "18px" },
+          { type: "font-style", value: "italic" },
+          { type: "text-align", value: "center" },
+        ],
+      },
+      {
         class: "block-centered",
         attributes: [
           { type: "text-align", value: "center" },
@@ -127,31 +140,35 @@ class StoryExport extends Component {
       {
         class: "block-heading-two",
         attributes: [
-        { type: "font-weight", value: "700" },
-        { type: "font-size", value: "36px" },
-        { type: "font-family", value: "\"Montserrat\", sans-serif" },
-        { type: "line-height", value: "48px" },
+          { type: "font-weight", value: "700" },
+          { type: "font-size", value: "36px" },
+          { type: "font-family", value: "\"Montserrat\", sans-serif" },
+          { type: "line-height", value: "48px" },
         ],
       },
       {
         class: "block-heading-three",
         attributes: [
-        { type: "font-weight", value: "700" },
-        { type: "font-size", value: "30px" },
-        { type: "font-family", value: "\"Montserrat\", sans-serif" },
-        { type: "line-height", value: "36px" },
+          { type: "font-weight", value: "700" },
+          { type: "font-size", value: "30px" },
+          { type: "font-family", value: "\"Montserrat\", sans-serif" },
+          { type: "line-height", value: "36px" },
         ],
+      },
+      {
+        class: "block-image",
+        attributes: [],
       },
       {
         class: "block-quote",
         attributes: [
-        { type: "width", value: "115%" },
-        { type: "margin-left", value: "-7.5%" },
-        { type: "font-size", value: "24px" },
-        { type: "font-family", value: "\"Montserrat\", sans-serif" },
-        { type: "font-style", value: "italic" },
-        { type: "line-height", value: "48px" },
-        { type: "text-align", value: "center" },
+          { type: "width", value: "115%" },
+          { type: "margin-left", value: "-7.5%" },
+          { type: "font-size", value: "24px" },
+          { type: "font-family", value: "\"Montserrat\", sans-serif" },
+          { type: "font-style", value: "italic" },
+          { type: "line-height", value: "48px" },
+          { type: "text-align", value: "center" },
         ],
       },
       {

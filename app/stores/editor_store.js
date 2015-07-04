@@ -21,11 +21,11 @@ class EditorStore extends Store {
   // Setup
   // --------------------------------------------------
   setDefaults() {
-    this._link = false;
+    this._link = null;
     this._point = new Point(0, 0, 0);
     this._story = this.retrieveCookies();
     this._styles = {};
-    this._vector = false;
+    this._vector = null;
   }
 
   // --------------------------------------------------
@@ -352,7 +352,7 @@ class EditorStore extends Store {
 
   updatePoint(point) {
     this._point = point;
-    this._vector = false;
+    this._vector = null;
   }
 
   updateStyles(vector) {
@@ -360,7 +360,7 @@ class EditorStore extends Store {
   }
 
   updateVector(vector) {
-    this._point = false;
+    this._point = null;
     this._vector = vector;
     this.updateStyles(vector);
   }

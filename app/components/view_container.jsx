@@ -2,7 +2,7 @@ import React from "react";
 
 import Component from "app/templates/component";
 
-import Clickable from "app/components/clickable";
+import ViewButton from "app/components/view_button";
 import ViewEdit from "app/components/view_edit";
 import ViewExport from "app/components/view_export";
 
@@ -63,7 +63,7 @@ class ViewContainer extends Component {
     var className = "view-button";
     className += (props.isSelected) ? " view-button-selected" : "";
     return (
-      <Clickable
+      <ViewButton
         action={props.action}
         className={className}
         content={props.content}

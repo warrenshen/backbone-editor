@@ -3,9 +3,9 @@
 
 .block-caption {
   position: relative;
-  max-width: 87.5%;
+  width: 87.5%;
   min-height: $font-size-small;
-  padding-top: 6px;
+  padding-top: 8px;
   margin: auto;
   color: $gray;
   font-size: $font-size-smallest;
@@ -69,7 +69,6 @@
 .block-image {
   position: relative;
   width: 100%;
-  box-sizing: border-box;
 }
 
 .block-image-container {

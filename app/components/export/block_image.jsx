@@ -69,7 +69,7 @@ class BlockImage extends Component {
             {" class="}
           </span>
           <span className={"code code-blue"}>
-            {"\"container\""}
+            {"\"section\""}
           </span>
           <span className={"code code-rose"}>
             {">"}
