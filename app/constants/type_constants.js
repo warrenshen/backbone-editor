@@ -7,8 +7,8 @@ module.exports = {
     headingThree: "heading_three",
     image: "image",
     list: "list",
-    quote: "quote",
     paragraph: "paragraph",
+    quote: "quote",
   },
 
   element: {
@@ -31,6 +31,7 @@ module.exports = {
     headingFour: "H4",
     headingFive: "H5",
     image: "IMG",
+    paragraph: "P",
     quote: "BLOCKQUOTE",
 
     bold: "STRONG",

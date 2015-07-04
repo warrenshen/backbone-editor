@@ -48,7 +48,7 @@ class Selector {
         return new Point(sectionIndex, blockIndex, caretOffset);
       }
     } else {
-      return null;
+      return false;
     }
   }
 

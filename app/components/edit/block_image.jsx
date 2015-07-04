@@ -73,6 +73,7 @@ class BlockImage extends Component {
     );
     EditorActor.removeBlock(point);
     this.props.updateStoryEditable();
+    EditorActor.resetCookies();
   }
 
   handleUpload(event) {

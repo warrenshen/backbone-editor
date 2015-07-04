@@ -24,10 +24,14 @@ class Paster {
         return TypeConstants.block.headingThree;
       case TypeConstants.node.image:
         return TypeConstants.block.image;
+      case TypeConstants.node.paragraph:
+        return TypeConstants.block.paragraph;
       case TypeConstants.node.quote:
         return TypeConstants.block.quote;
-      default:
+      case TypeConstants.node.span:
         return TypeConstants.block.paragraph;
+      default:
+        return false;
     }
   }
 
@@ -46,17 +50,22 @@ class Paster {
 
   createBlock(node) {
     var type = this.classifyBlock(node);
-    var block = new Block({
-      content: node.textContent ? node.textContent : "",
-      is_centered: node.style.textAlign === "center",
-      source: node.src ? node.src : "",
-      type: type,
-    });
-    if (block.isParagraph()) {
-      var elements = node.childNodes;
-      this.createElements(block, elements);
+    console.log(type);
+    if (type) {
+      var block = new Block({
+        content: node.textContent ? node.textContent : "",
+        is_centered: node.style.textAlign === "center",
+        source: node.src ? node.src : "",
+        type: type,
+      });
+      if (block.isParagraph()) {
+        var elements = node.childNodes;
+        this.createElements(block, elements);
+      }
+      return block;
+    } else {
+      return false;
     }
-    return block;
   }
 
   createElements(block, elements) {
@@ -92,17 +101,21 @@ class Paster {
       $.fn.shift = [].shift;
       var node = nodes.shift();
       block = this.createBlock(node);
-      clone = anchor.cloneDestructively(point.caretOffset);
-      if (!anchor.length) {
-        anchor.set("type", block.get("type"));
+      if (block) {
+        clone = anchor.cloneDestructively(point.caretOffset);
+        if (!anchor.length) {
+          anchor.set("type", block.get("type"));
+        }
+        block = anchor.mergeBlock(block, point.clone());
+        point.blockIndex += 1;
       }
-      block = anchor.mergeBlock(block, point.clone());
-      point.blockIndex += 1;
       for (var i = 0; i < nodes.length; i += 1) {
         var node = nodes[i];
         block = this.createBlock(node);
-        EditorStore.addBlock(point.clone(), block);
-        point.blockIndex += 1;
+        if (block) {
+          EditorStore.addBlock(point.clone(), block);
+          point.blockIndex += 1;
+        }
       }
       if (clone) {
         block.mergeBlock(clone, block.length);

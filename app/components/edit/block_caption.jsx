@@ -60,7 +60,11 @@ class BlockCaption extends Component {
       if (selection.type === TypeConstants.selection.caret) {
         var point = Selector.generatePoint(selection);
         var caretOffset = point.caretOffset;
-        block.removeFragment(caretOffset - 1, caretOffset);
+        if (caretOffset) {
+          block.removeFragment(caretOffset - 1, caretOffset);
+        } else {
+          event.preventDefault();
+        }
       } else if (selection.type === TypeConstants.selection.range) {
         var vector = Selector.generateVector(selection);
         var startOffset = vector.startPoint.caretOffset;
