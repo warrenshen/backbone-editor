@@ -12,7 +12,7 @@ class BlockImage extends Component {
     return [
       <p className={"code"}>
         <span className={"code code-rose"}>
-          {"      <p"}
+          {"        <p"}
         </span>
         <span className={"code code-green"}>
           {" class="}
@@ -25,10 +25,10 @@ class BlockImage extends Component {
         </span>
       </p>,
       <p className={"code indented-secondary"}>
-        {"        " + this.props.block.get("content")}
+        {"          " + this.props.block.get("content")}
       </p>,
       <p className={"code code-rose"}>
-        {"      </p>"}
+        {"        </p>"}
       </p>,
     ];
   }
@@ -37,7 +37,7 @@ class BlockImage extends Component {
     return (
       <p className={"code"}>
         <span className={"code code-rose"}>
-          {"      <image"}
+          {"        <image"}
         </span>
         <span className={"code code-green"}>
           {" class="}
@@ -63,7 +63,7 @@ class BlockImage extends Component {
       <code>
         <p className={"code"}>
           <span className={"code code-rose"}>
-            {"    <div"}
+            {"      <div"}
           </span>
           <span className={"code code-green"}>
             {" class="}
@@ -78,7 +78,7 @@ class BlockImage extends Component {
         {this.renderImage()}
         {this.renderCaption()}
         <p className={"code code-rose"}>
-          {"    </div>"}
+          {"      </div>"}
         </p>
       </code>
     );

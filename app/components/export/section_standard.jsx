@@ -57,7 +57,7 @@ class SectionStandard extends Component {
       <code>
         <p className={"code"}>
           <span className={"code code-rose"}>
-            {"  <section"}
+            {"    <section"}
           </span>
           <span className={"code code-green"}>
             {" class="}
@@ -71,7 +71,7 @@ class SectionStandard extends Component {
         </p>
         {this.renderBlocks()}
         <p className={"code code-rose"}>
-          {"  </section>"}
+          {"    </section>"}
         </p>
       </code>
     );

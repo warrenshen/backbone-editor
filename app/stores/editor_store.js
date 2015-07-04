@@ -267,9 +267,11 @@ class EditorStore extends Store {
 
   retrieveCookies() {
     // TODO: Fix cookies to support longer stories.
+    // Should divide cookies every 2000 characters.
     if (CookiesJS.enabled) {
       var cookie = CookiesJS.get("editor");
       if (cookie) {
+        console.log(cookie.length);
         var json = JSON.parse(cookie);
         return new Story(json);
       }
