@@ -17,12 +17,6 @@ module.exports = {
     link: "link",
   },
 
-  mouse: {
-    down: "down",
-    move: "move",
-    up: "up",
-  },
-
   node: {
     divider: "HR",
     headingOne: "H1",
@@ -31,6 +25,7 @@ module.exports = {
     headingFour: "H4",
     headingFive: "H5",
     image: "IMG",
+    list: "LI",
     paragraph: "P",
     quote: "BLOCKQUOTE",
 

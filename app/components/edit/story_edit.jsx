@@ -184,7 +184,7 @@ class StoryEdit extends Component {
   }
 
   handleMouseLeave(event) {
-    EditorActor.updateLink(null);
+    EditorActor.updateLink(false);
     this.props.updateModalLink();
   }
 
@@ -197,7 +197,7 @@ class StoryEdit extends Component {
                        .childNodes[point.sectionIndex]
                        .childNodes[point.blockIndex];
       var childrenNodes = parentNode.childNodes;
-      var node = null;
+      var node = false;
       for (var i = 0; i < childrenNodes.length && !node; i += 1) {
         if (childrenNodes[i].isContentEditable) {
           node = childrenNodes[i];

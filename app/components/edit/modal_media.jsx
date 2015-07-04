@@ -81,10 +81,6 @@ class ModalMedia extends Component {
   // --------------------------------------------------
   // Actions
   // --------------------------------------------------
-  styleCode(event) {
-    console.log("Create code!");
-  }
-
   styleDivider(event) {
     var block = new Block({ type: TypeConstants.block.divider });
     var point = this.generatePoint();
@@ -139,10 +135,6 @@ class ModalMedia extends Component {
       {
         action: this.styleDivider.bind(this),
         className: "fa fa-minus",
-      },
-      {
-        action: this.styleCode.bind(this),
-        className: "fa fa-code",
       },
     ].map(this.renderOption, this);
   }

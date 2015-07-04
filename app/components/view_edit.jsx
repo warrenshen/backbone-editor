@@ -96,7 +96,7 @@ class ViewEdit extends Component {
   }
 
   handlePaste(event) {
-    var point = null;
+    var point = false;
     var selection = window.getSelection();
     if (selection.type === TypeConstants.selection.caret) {
       point = Selector.generatePoint(selection);

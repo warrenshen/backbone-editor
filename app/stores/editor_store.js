@@ -21,11 +21,11 @@ class EditorStore extends Store {
   // Setup
   // --------------------------------------------------
   setDefaults() {
-    this._link = null;
+    this._link = false;
     this._point = new Point(0, 0, 0);
     this._story = this.retrieveCookies();
     this._styles = {};
-    this._vector = null;
+    this._vector = false;
   }
 
   // --------------------------------------------------
@@ -72,7 +72,7 @@ class EditorStore extends Store {
     for (var sectionIndex of sectionIndices) {
       var point = new Point(sectionIndex, 0, 0);
       var section = this.getSection(point);
-      var blockIndices = null;
+      var blockIndices = false;
       if (startSectionIndex === endSectionIndex) {
         blockIndices = _.range(startBlockIndex, endBlockIndex + 1);
       } else if (sectionIndex === startSectionIndex) {
@@ -191,7 +191,7 @@ class EditorStore extends Store {
     var section = this.getSection(point);
     var block = this.getBlock(point);
     var clone = point.clone();
-    var previousBlock = null;
+    var previousBlock = false;
     if (block.get("index") > 0) {
       clone.blockIndex -= 1;
       previousBlock = this.getBlock(clone);
@@ -352,7 +352,7 @@ class EditorStore extends Store {
 
   updatePoint(point) {
     this._point = point;
-    this._vector = null;
+    this._vector = false;
   }
 
   updateStyles(vector) {
@@ -360,7 +360,7 @@ class EditorStore extends Store {
   }
 
   updateVector(vector) {
-    this._point = null;
+    this._point = false;
     this._vector = vector;
     this.updateStyles(vector);
   }

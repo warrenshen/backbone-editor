@@ -50,7 +50,6 @@ class Paster {
 
   createBlock(node) {
     var type = this.classifyBlock(node);
-    console.log(type);
     if (type) {
       var block = new Block({
         content: node.textContent ? node.textContent : "",
@@ -90,23 +89,23 @@ class Paster {
   }
 
   parseContainer(container, point) {
-    var anchor = EditorStore.getBlock(point);
+    var startBlock = EditorStore.getBlock(point);
     var nodes = $("blockquote, h1, h2, h3, h4, h5, " +
                   "img, hr, p, span", container);
     if (!nodes.length) {
       return false;
     } else {
-      var block = null;
-      var clone = null;
+      var clone = false;
       $.fn.shift = [].shift;
       var node = nodes.shift();
-      block = this.createBlock(node);
+      var block = this.createBlock(node);
       if (block) {
-        clone = anchor.cloneDestructively(point.caretOffset);
-        if (!anchor.length) {
-          anchor.set("type", block.get("type"));
+        clone = startBlock.cloneDestructively(point.caretOffset);
+        if (!startBlock.length) {
+          startBlock.set("type", block.get("type"));
+          startBlock.set("is_centered", block.isCentered());
         }
-        block = anchor.mergeBlock(block, point.clone());
+        block = startBlock.mergeBlock(block, point.clone());
         point.blockIndex += 1;
       }
       for (var i = 0; i < nodes.length; i += 1) {
@@ -117,9 +116,7 @@ class Paster {
           point.blockIndex += 1;
         }
       }
-      if (clone) {
-        block.mergeBlock(clone, block.length);
-      }
+      block.mergeBlock(clone, block.length);
       point.blockIndex -= 1;
       point.caretOffset = block.length;
       EditorStore.updatePoint(point);

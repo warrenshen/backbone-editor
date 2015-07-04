@@ -119,7 +119,7 @@ class ModalStyle extends Component {
       var selection = window.getSelection();
       var range = document.createRange();
       var caretOffset = startPoint.caretOffset;
-      var currentNode = null;
+      var currentNode = false;
       var walker = Selector.createTreeWalker(startNode);
       while (walker.nextNode() && caretOffset >= 0) {
         currentNode = walker.currentNode;
@@ -151,7 +151,7 @@ class ModalStyle extends Component {
       node.style.top = rectangle.top - 44 + "px";
       node.style.left = rectangle.left + offset + "px";
     } else {
-      EditorActor.updateVector(null);
+      EditorActor.updateVector(false);
       this.props.updateModalStyle();
     }
   }
