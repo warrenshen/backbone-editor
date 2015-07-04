@@ -221,7 +221,7 @@ class EditorStore extends Store {
       }
     } else {
       if (previousBlock.isImage()) {
-        if (!block.get("content")) {
+        if (!block.get("content") && !block.isLast()) {
           section.removeBlock(block);
         }
       } else {
@@ -323,16 +323,9 @@ class EditorStore extends Store {
       this.addSection(point, { type: TypeConstants.section.standard });
     } else {
       var clone = block.cloneDestructively(point.caretOffset);
-      if (!clone.length && !clone.isList()) {
-        clone.set("type", TypeConstants.block.paragraph);
-      }
       point.blockIndex += 1;
       point.caretOffset = 0;
       this.addBlock(point, { block: clone });
-    }
-    if (!block.length && !block.isParagraph()) {
-      block.set("type", TypeConstants.block.paragraph);
-      block.set("is_centered", false);
     }
   }
 

@@ -100,6 +100,12 @@ class Block extends Model {
       is_centered: this.isCentered(),
       type: this.get("type"),
     });
+    if (!block.length && !block.isList()) {
+      block.set({
+        is_centered: false,
+        type: TypeConstants.block.paragraph,
+      });
+    }
     var bucket = [];
     var elements = this.get("elements");
     for (var i = 0; i < elements.length; i += 1) {
@@ -123,6 +129,12 @@ class Block extends Model {
       elements.push(element);
     }
     this.set("content", content.substring(0, offset));
+    if (!this.length) {
+      this.set({
+        type: TypeConstants.block.paragraph,
+        is_centered: false
+      });
+    }
     return block;
   }
 
@@ -172,7 +184,10 @@ class Block extends Model {
       var content = this.get("content");
       var elements = this.get("elements");
       if (!content) {
-        this.set("type", block.get("type"));
+        this.set({
+          is_centered: block.isCentered(),
+          type: block.get("type"),
+        });
       }
       this.set("content", content.substring(0, offset) +
                           block.get("content") +

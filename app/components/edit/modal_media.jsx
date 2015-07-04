@@ -56,12 +56,20 @@ class ModalMedia extends Component {
       var reader = new FileReader();
       reader.onloadend = function(file) {
         var source = file.target.result;
-        var block = new Block({
-          type: TypeConstants.block.image,
-          source: source,
-        });
-        var point = this.generatePoint();
-        EditorActor.addBlock(point, { block: block });
+        var block = this.props.block;
+        if (block.isLast()) {
+          block = new Block({
+            type: TypeConstants.block.image,
+            source: source,
+          });
+          var point = this.generatePoint();
+          EditorActor.addBlock(point, { block: block });
+        } else {
+          block.set({
+            type: TypeConstants.block.image,
+            source: source,
+          });
+        }
         this.props.updateStoryEditable();
       }.bind(this);
       reader.readAsDataURL(files[0]);

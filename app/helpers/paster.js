@@ -104,6 +104,7 @@ class Paster {
         if (!startBlock.length) {
           startBlock.set("type", block.get("type"));
           startBlock.set("is_centered", block.isCentered());
+          console.log("hello");
         }
         block = startBlock.mergeBlock(block, point.clone());
         point.blockIndex += 1;
@@ -119,7 +120,9 @@ class Paster {
           point.blockIndex += 1;
         }
       }
-      block.mergeBlock(clone, block.length);
+      if (block) {
+        block.mergeBlock(clone, block.length);
+      }
       point.blockIndex -= 1;
       point.caretOffset = block.length;
       EditorStore.updatePoint(point);
