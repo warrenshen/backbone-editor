@@ -59,8 +59,10 @@ class Story extends Model {
 
   resetIndices() {
     this.get("sections").map(function(section, index) {
-      section.set("index", index);
-      section.set("is_last", index === this.length - 1);
+      section.set({
+        index: index,
+        is_last: index === this.length - 1
+      });
       section.resetIndices();
     }, this);
   }

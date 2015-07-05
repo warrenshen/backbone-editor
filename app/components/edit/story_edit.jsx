@@ -176,9 +176,10 @@ class StoryEdit extends Component {
     var range = document.createRange();
     range.setStartBefore(event.target);
     range.setEndAfter(event.target);
-    var rectangle = range.getBoundingClientRect();
-    var url = event.currentTarget.dataset.link;
-    var link = new Link(rectangle, url);
+    var link = new Link(
+      range.getBoundingClientRect(),
+      event.currentTarget.dataset.url
+    );
     EditorActor.updateLink(link)
     this.props.updateModalLink();
   }

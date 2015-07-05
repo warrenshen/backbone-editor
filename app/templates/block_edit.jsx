@@ -20,19 +20,18 @@ class BlockEdit extends Component {
   // Lifecycle
   // --------------------------------------------------
   componentDidMount() {
-    var node = React.findDOMNode(this.refs.content);
-    this.renderContent(node);
+    this.renderContent();
   }
 
   componentDidUpdate() {
-    var node = React.findDOMNode(this.refs.content);
-    this.renderContent(node);
+    this.renderContent();
   }
 
   // --------------------------------------------------
   // Render
   // --------------------------------------------------
-  renderContent(node) {
+  renderContent() {
+    var node = React.findDOMNode(this.refs.content);
     node.innerHTML = this.props.block.toString();
   }
 

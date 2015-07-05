@@ -22,30 +22,30 @@ class Formatter {
       var opener = "";
       var closer = "";
       if (type === TypeConstants.element.bold) {
-        opener = "strong";
-        closer = "strong";
+        opener = "<strong>";
+        closer = "</strong>";
       } else if (type === TypeConstants.element.italic) {
-        opener = "i";
-        closer = "i";
+        opener = "<i>";
+        closer = "</i>";
       } else {
-        var url = element.get("url") + "\"";
+        var url = element.get("url") + "\">";
         if (isString) {
-          opener = "span class=\"element-link\" data-link=\"" + url;
-          closer = "span";
+          opener = "<span class=\"element-link\" data-url=\"" + url;
+          closer = "</span>";
         } else {
-          opener = "a href=\"" + url;
-          closer = "a";
+          opener = "<a href=\"" + url;
+          closer = "</a>";
         }
       }
       if (openers[start]) {
-        openers[start].push("<" + opener + ">");
+        openers[start].push(opener);
       } else {
-        openers[start] = ["<" + opener + ">"]
+        openers[start] = [opener]
       }
       if (closers[end]) {
-        closers[end].unshift("</" + closer +">");
+        closers[end].unshift(closer);
       } else {
-        closers[end] = ["</" + closer + ">"];
+        closers[end] = [closer];
       }
     });
     return [openers, closers];
@@ -102,8 +102,8 @@ class Formatter {
   stringifyBlock(block) {
     var elements = block.get("elements");
     var characters = block.get("content").split("");
-    var sets = this.parseElements(elements);
-    return this.mergeStrings(characters, sets[0], sets[1]);
+    var tags = this.parseElements(elements);
+    return this.mergeStrings(characters, tags[0], tags[1]);
   }
 }
 

@@ -210,50 +210,49 @@ class ModalStyle extends Component {
   }
 
   renderOptions() {
-    var types = TypeConstants.block;
     var styles = this.props.styles;
     return [
       {
         action: this.styleHeadingOne.bind(this),
         className: "fa fa-header",
-        isActive: styles[types.headingOne] === true,
+        isActive: styles[TypeConstants.block.headingOne] === true,
         isHidden: styles["shouldHideOptions"] || false,
       },
       {
         action: this.styleHeadingTwo.bind(this),
         className: "fa fa-header",
-        isActive: styles[types.headingTwo] === true,
+        isActive: styles[TypeConstants.block.headingTwo] === true,
         isHidden: styles["shouldHideOptions"] || false,
       },
       {
         action: this.styleHeadingThree.bind(this),
         className: "fa fa-header",
-        isActive: styles[types.headingThree] === true,
+        isActive: styles[TypeConstants.block.headingThree] === true,
         isHidden: styles["shouldHideOptions"] || false,
       },
       {
         action: this.styleQuote.bind(this),
         className: "fa fa-quote-right",
-        isActive: styles[types.quote] === true,
+        isActive: styles[TypeConstants.block.quote] === true,
         isHidden: styles["shouldHideOptions"] || false,
       },
       {
         action: this.styleCentered.bind(this),
         className: "fa fa-align-center",
-        isActive: styles[types.centered] === true,
+        isActive: styles[TypeConstants.block.centered] === true,
         isHidden: styles["shouldHideOptions"] ||
                   styles[TypeConstants.block.quote] || false,
       },
       {
         action: this.styleBold.bind(this),
         className: "fa fa-bold",
-        isActive: styles[types.bold] === true,
+        isActive: styles[TypeConstants.element.bold] === true,
         isHidden: false,
       },
       {
         action: this.styleItalic.bind(this),
         className: "fa fa-italic",
-        isActive: styles[types.italic] === true,
+        isActive: styles[TypeConstants.element.italic] === true,
         isHidden: styles[TypeConstants.block.quote] || false,
       },
       {
