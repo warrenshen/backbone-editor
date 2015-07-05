@@ -7,20 +7,14 @@ module.exports = {
     headingThree: "heading_three",
     image: "image",
     list: "list",
-    quote: "quote",
     paragraph: "paragraph",
+    quote: "quote",
   },
 
   element: {
     bold: "bold",
     italic: "italic",
     link: "link",
-  },
-
-  mouse: {
-    down: "down",
-    move: "move",
-    up: "up",
   },
 
   node: {
@@ -31,7 +25,10 @@ module.exports = {
     headingFour: "H4",
     headingFive: "H5",
     image: "IMG",
+    list: "LI",
+    paragraph: "P",
     quote: "BLOCKQUOTE",
+    span: "SPAN",
 
     bold: "STRONG",
     italic: "EM",

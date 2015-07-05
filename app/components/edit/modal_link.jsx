@@ -9,10 +9,13 @@ import Link from "app/helpers/link";
 class ModalLink extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "ModalLink";
+  static get propTypes() {
+    return {
+      link: React.PropTypes.instanceOf(Link),
+      shouldUpdate: React.PropTypes.bool.isRequired,
+    };
   }
 
   // --------------------------------------------------
@@ -61,16 +64,6 @@ class ModalLink extends Component {
     );
   }
 }
-
-ModalLink.propTypes = {
-  link: React.PropTypes.instanceOf(Link),
-  shouldUpdate: React.PropTypes.bool.isRequired,
-};
-
-ModalLink.defaultProps = {
-  link: null,
-  shouldUpdate: false,
-};
 
 
 module.exports = ModalLink;

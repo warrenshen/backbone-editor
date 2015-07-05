@@ -16,10 +16,12 @@ import TypeConstants from "app/constants/type_constants";
 class SectionStandard extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "SectionStandard";
+  static get propTypes() {
+    return {
+      section: React.PropTypes.instanceOf(Section).isRequired,
+    };
   }
 
   // --------------------------------------------------
@@ -55,7 +57,7 @@ class SectionStandard extends Component {
       <code>
         <p className={"code"}>
           <span className={"code code-rose"}>
-            {"  <section"}
+            {"    <section"}
           </span>
           <span className={"code code-green"}>
             {" class="}
@@ -69,20 +71,12 @@ class SectionStandard extends Component {
         </p>
         {this.renderBlocks()}
         <p className={"code code-rose"}>
-          {"  </section>"}
+          {"    </section>"}
         </p>
       </code>
     );
   }
 }
-
-SectionStandard.propTypes = {
-  section: React.PropTypes.instanceOf(Section).isRequired,
-};
-
-SectionStandard.defaultProps = {
-  section: new Section(),
-};
 
 
 module.exports = SectionStandard;

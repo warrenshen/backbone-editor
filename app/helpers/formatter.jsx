@@ -5,73 +5,68 @@ import TypeConstants from "app/constants/type_constants";
 
 class Formatter {
 
-  parseElements(elements) {
+  codifyBlock(block) {
+    var elements = block.get("elements");
+    var characters = block.get("content").split("");
+    var sets = this.parseElements(elements, false);
+    return this.mergeCode(characters, sets[0], sets[1]);
+  }
+
+  parseElements(elements, needsClass=true) {
     var openers = {};
     var closers = {};
     elements.map(function(element) {
       var start = element.get("start");
       var end = element.get("end");
+      var type = element.get("type");
       var opener = "";
       var closer = "";
-      switch (element.get("type")) {
-        case TypeConstants.element.bold:
-          opener = "strong";
-          closer = "strong";
-          break;
-        case TypeConstants.element.italic:
-          opener = "i";
-          closer = "i";
-          break;
-        case TypeConstants.element.link:
-          opener = "span class=\"element-link\" " +
-                   "data-link=\"" + element.get("url") + "\"";
-          closer = "span";
-          break;
-      }
-      if (openers[start]) {
-        openers[start].push("<" + opener + ">");
+      if (type === TypeConstants.element.bold) {
+        opener = "<strong>";
+        closer = "</strong>";
+      } else if (type === TypeConstants.element.italic) {
+        opener = "<i>";
+        closer = "</i>";
       } else {
-        openers[start] = ["<" + opener + ">"]
+        var url = element.get("url") + "\">";
+        if (needsClass) {
+          opener = "<span class=\"element-link\" data-url=\"" + url;
+          closer = "</span>";
+        } else {
+          opener = "<a href=\"" + url;
+          closer = "</a>";
+        }
       }
-      if (closers[end]) {
-        closers[end].unshift("</" + closer +">");
-      } else {
-        closers[end] = ["</" + closer + ">"];
-      }
+      openers[start] = openers[start] ? openers[start] + opener : opener;
+      closers[end] = closers[end] ? closer + closers[end] : closer;
     });
     return [openers, closers];
   }
 
   mergeCode(characters, openers, closers) {
-    var index = -1;
+    var index = 0;
     var nodes = [];
     var string = "";
     var helper = function(style, content) {
+      if (string) {
+        nodes.push(<span className={"code"} key={index}>{string}</span>);
+        index += 1;
+        string = "";
+      }
+      nodes.push(<span className={style} key={index}>{content}</span>);
       index += 1;
-      string = "";
-      return (
-        <span className={style} key={index}>
-          {content}
-        </span>
-      );
     };
     for (var i = 0; i < characters.length; i += 1) {
       if (closers[i]) {
-        if (string) {
-          nodes.push(helper("code", string));
-        }
-        nodes.push(helper("code code-rose", closers[i].join("")));
+        helper("code code-rose", closers[i]);
       }
       if (openers[i]) {
-        if (string) {
-          nodes.push(helper("code", string));
-        }
-        nodes.push(helper("code code-rose", openers[i].join("")));
+        helper("code code-rose", openers[i]);
       }
       string += characters[i];
-      if (i === characters.length - 1 && string) {
-        nodes.push(helper("code", string));
-      }
+    }
+    if (string) {
+      nodes.push(<span className={"code"} key={index}>{string}</span>);
     }
     return nodes;
   }
@@ -80,10 +75,10 @@ class Formatter {
     var content = "";
     for (var i = 0; i < characters.length; i += 1) {
       if (closers[i]) {
-        content += closers[i].join("");
+        content += closers[i];
       }
       if (openers[i]) {
-        content += openers[i].join("");
+        content += openers[i];
       }
       content += characters[i];
     }
@@ -93,15 +88,8 @@ class Formatter {
   stringifyBlock(block) {
     var elements = block.get("elements");
     var characters = block.get("content").split("");
-    var sets = this.parseElements(elements);
-    return this.mergeStrings(characters, sets[0], sets[1]);
-  }
-
-  codifyBlock(block) {
-    var elements = block.get("elements");
-    var characters = block.get("content").split("");
-    var sets = this.parseElements(elements);
-    return this.mergeCode(characters, sets[0], sets[1]);
+    var tags = this.parseElements(elements);
+    return this.mergeStrings(characters, tags[0], tags[1]);
   }
 }
 

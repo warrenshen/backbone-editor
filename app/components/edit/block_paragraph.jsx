@@ -11,13 +11,6 @@ import EditorStore from "app/stores/editor_store";
 class BlockParagraph extends BlockEdit {
 
   // --------------------------------------------------
-  // Defaults
-  // --------------------------------------------------
-  displayName() {
-    return "BlockParagraph";
-  }
-
-  // --------------------------------------------------
   // Render
   // --------------------------------------------------
   renderModal() {
@@ -41,7 +34,10 @@ class BlockParagraph extends BlockEdit {
       <div
         className={"block-container"}
         data-index={block.get("index")}>
-        <p className={contentClass} ref={"content"}></p>
+        <p
+          className={contentClass}
+          ref={"content"}>
+        </p>
         {this.renderModal()}
       </div>
     );

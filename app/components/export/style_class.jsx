@@ -8,10 +8,12 @@ import StyleAttribute from "app/components/export/style_attribute";
 class StyleClass extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "StyleClass";
+  static get propTypes() {
+    return {
+      attributes: React.PropTypes.array.isRequired,
+    };
   }
 
   // --------------------------------------------------

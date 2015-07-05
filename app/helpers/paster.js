@@ -24,10 +24,14 @@ class Paster {
         return TypeConstants.block.headingThree;
       case TypeConstants.node.image:
         return TypeConstants.block.image;
+      case TypeConstants.node.paragraph:
+        return TypeConstants.block.paragraph;
       case TypeConstants.node.quote:
         return TypeConstants.block.quote;
-      default:
+      case TypeConstants.node.span:
         return TypeConstants.block.paragraph;
+      default:
+        return false;
     }
   }
 
@@ -46,17 +50,21 @@ class Paster {
 
   createBlock(node) {
     var type = this.classifyBlock(node);
-    var block = new Block({
-      content: node.textContent ? node.textContent : "",
-      is_centered: node.style.textAlign === "center",
-      source: node.src ? node.src : "",
-      type: type,
-    });
-    if (block.isParagraph()) {
-      var elements = node.childNodes;
-      this.createElements(block, elements);
+    if (type) {
+      var block = new Block({
+        content: node.textContent,
+        is_centered: node.style.textAlign === "center",
+        source: node.src,
+        type: type,
+      });
+      if (block.isParagraph()) {
+        var elements = node.childNodes;
+        this.createElements(block, elements);
+      }
+      return block;
+    } else {
+      return false;
     }
-    return block;
   }
 
   createElements(block, elements) {
@@ -81,33 +89,34 @@ class Paster {
   }
 
   parseContainer(container, point) {
-    var anchor = EditorStore.getBlock(point);
-    var nodes = $("blockquote, h1, h2, h3, h4, h5, " +
-                  "img, hr, p, span", container);
+    var nodes = $("blockquote, h1, h2, h3, h4, h5, img, hr, p, span", container);
     if (!nodes.length) {
       return false;
     } else {
-      var block = null;
-      var clone = null;
+      var section = EditorStore.getSection(point);
+      var block = EditorStore.getBlock(point);
+      var clone = false;
       $.fn.shift = [].shift;
       var node = nodes.shift();
-      block = this.createBlock(node);
-      clone = anchor.cloneDestructively(point.caretOffset);
-      if (!anchor.length) {
-        anchor.set("type", block.get("type"));
+      var leader = this.createBlock(node);
+      if (leader) {
+        clone = block.cloneDestructively(point.caretOffset);
+        block.mergeBlock(leader, block.length);
       }
-      block = anchor.mergeBlock(block, point.clone());
-      point.blockIndex += 1;
+      var bucket = [];
       for (var i = 0; i < nodes.length; i += 1) {
-        var node = nodes[i];
-        block = this.createBlock(node);
-        EditorStore.addBlock(point.clone(), block);
-        point.blockIndex += 1;
+        block = this.createBlock(nodes[i]);
+        if (block) {
+          bucket.push(block);
+        }
+      }
+      if (bucket.length) {
+        section.addBlocks(bucket, point.blockIndex + 1);
       }
       if (clone) {
         block.mergeBlock(clone, block.length);
       }
-      point.blockIndex -= 1;
+      point.blockIndex = block.get("index");
       point.caretOffset = block.length;
       EditorStore.updatePoint(point);
       return true;

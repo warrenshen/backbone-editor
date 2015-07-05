@@ -23,10 +23,18 @@ import TypeConstants from "app/constants/type_constants";
 class StoryEdit extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "StoryEdit";
+  static get propTypes() {
+    return {
+      point: React.PropTypes.instanceOf(Point),
+      shouldUpdate: React.PropTypes.bool.isRequired,
+      story: React.PropTypes.instanceOf(Story).isRequired,
+      updateModalLink: React.PropTypes.func.isRequired,
+      updateModalStyle: React.PropTypes.func.isRequired,
+      updateStoryEdit: React.PropTypes.func.isRequired,
+      updateStoryStyle: React.PropTypes.func.isRequired,
+    };
   }
 
   // --------------------------------------------------
@@ -37,32 +45,26 @@ class StoryEdit extends Component {
     var selection = window.getSelection();
     var which = event.which;
     if (event.ctrlKey || event.metaKey && which === KeyConstants.a) {
+      // TODO: Try to figure out why selection on empty block breaks.
       EditorActor.selectAll();
       this.props.updateStoryStyle();
     } else if (selection.type === TypeConstants.selection.caret) {
       var point = Selector.generatePoint(selection);
+      var block = EditorStore.getBlock(point);
       if (which === KeyConstants.backspace) {
-        var block = EditorStore.getBlock(point);
-        if (point.caretOffset !== 0) {
-          var caretOffset = point.caretOffset;
+        var caretOffset = point.caretOffset;
+        if (caretOffset) {
           block.removeFragment(caretOffset - 1, caretOffset);
           if (!block.get("content")) {
             event.preventDefault();
             point.caretOffset = 0;
             EditorActor.updatePoint(point);
-            this.props.updateStoryEditable();
+            this.props.updateStoryEdit();
           }
         } else {
           event.preventDefault();
-          if (block.isList()) {
-            EditorActor.addSection(
-              point,
-              { type: TypeConstants.section.standard }
-            );
-          } else {
-            EditorActor.removeBlock(point);
-          }
-          this.props.updateStoryEditable();
+          EditorActor.removeBlock(point);
+          this.props.updateStoryEdit();
         }
       }
     } else if (selection.type === TypeConstants.selection.range) {
@@ -102,7 +104,7 @@ class StoryEdit extends Component {
       if (which === KeyConstants.enter) {
         event.preventDefault();
         EditorActor.splitBlock(point);
-        this.props.updateStoryEditable();
+        this.props.updateStoryEdit();
       } else {
         var block = EditorStore.getBlock(point);
         var character = String.fromCharCode(which);
@@ -111,21 +113,21 @@ class StoryEdit extends Component {
           event.preventDefault();
           point.caretOffset = 1;
           EditorActor.updatePoint(point);
-          this.props.updateStoryEditable();
+          this.props.updateStoryEdit();
         } else if (block.get("content").substring(0, 2) === "* ") {
           event.preventDefault();
           EditorActor.addSection(
             point,
             { type: TypeConstants.section.listUnordered }
           );
-          this.props.updateStoryEditable();
+          this.props.updateStoryEdit();
         } else if (block.get("content").substring(0, 3) === "1. ") {
           event.preventDefault();
           EditorActor.addSection(
             point,
             { type: TypeConstants.section.listOrdered }
           );
-          this.props.updateStoryEditable();
+          this.props.updateStoryEdit();
         } else if (character === "." ||
                    character === "?" ||
                    character === "!") {
@@ -159,7 +161,7 @@ class StoryEdit extends Component {
       var point = Selector.generatePoint(selection);
       if (point.compareShallowly(EditorStore.point)) {
         EditorActor.updatePoint(point);
-        this.props.updateStoryEditable();
+        this.props.updateStoryEdit();
       }
     }
   }
@@ -168,9 +170,10 @@ class StoryEdit extends Component {
     var range = document.createRange();
     range.setStartBefore(event.target);
     range.setEndAfter(event.target);
-    var rectangle = range.getBoundingClientRect();
-    var url = event.currentTarget.dataset.link;
-    var link = new Link(rectangle, url);
+    var link = new Link(
+      range.getBoundingClientRect(),
+      event.currentTarget.dataset.url
+    );
     EditorActor.updateLink(link)
     this.props.updateModalLink();
   }
@@ -189,7 +192,7 @@ class StoryEdit extends Component {
                        .childNodes[point.sectionIndex]
                        .childNodes[point.blockIndex];
       var childrenNodes = parentNode.childNodes;
-      var node = null;
+      var node = false;
       for (var i = 0; i < childrenNodes.length && !node; i += 1) {
         if (childrenNodes[i].isContentEditable) {
           node = childrenNodes[i];
@@ -270,7 +273,7 @@ class StoryEdit extends Component {
       key: section.cid,
       section: section,
       updateStoryStyle: this.props.updateStoryStyle,
-      updateStoryEditable: this.props.updateStoryEditable,
+      updateStoryEdit: this.props.updateStoryEdit,
     };
     if (section.isList()) {
       return <SectionList {...props} />;
@@ -294,25 +297,6 @@ class StoryEdit extends Component {
     );
   }
 }
-
-StoryEdit.propTypes = {
-  point: React.PropTypes.instanceOf(Point),
-  shouldUpdate: React.PropTypes.bool.isRequired,
-  story: React.PropTypes.instanceOf(Story).isRequired,
-  updateModalLink: React.PropTypes.func.isRequired,
-  updateModalStyle: React.PropTypes.func.isRequired,
-  updateStoryStyle: React.PropTypes.func.isRequired,
-  updateStoryEditable: React.PropTypes.func.isRequired,
-};
-
-StoryEdit.defaultProps = {
-  shouldUpdate: true,
-  story: new Story(),
-  updateModalLink: null,
-  updateModalStyle: null,
-  updateStoryStyle: null,
-  updateStoryEditable: null,
-};
 
 
 module.exports = StoryEdit;

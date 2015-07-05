@@ -3,9 +3,9 @@
 
 .block-caption {
   position: relative;
-  max-width: 87.5%;
+  width: 87.5%;
   min-height: $font-size-small;
-  padding-top: 6px;
+  padding-top: 8px;
   margin: auto;
   color: $gray;
   font-size: $font-size-smallest;
@@ -69,7 +69,6 @@
 .block-image {
   position: relative;
   width: 100%;
-  box-sizing: border-box;
 }
 
 .block-image-container {
@@ -172,13 +171,12 @@
   left: -48px;
   width: 34px;
   height: 34px;
-  background-color: $white;
   overflow: hidden;
   -webkit-user-select: none;
 }
 
 .media-modal-open {
-  width: 110%;
+  width: 144px;
 }
 
 .media-modal-prompt {

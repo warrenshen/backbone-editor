@@ -7,10 +7,14 @@ import Component from "app/templates/component";
 class OptionMedia extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "OptionMedia";
+  static get propTypes() {
+    return {
+      action: React.PropTypes.func.isRequired,
+      className: React.PropTypes.string.isRequired,
+      isActive: React.PropTypes.bool.isRequired,
+    };
   }
 
   // --------------------------------------------------
@@ -51,18 +55,6 @@ class OptionMedia extends Component {
     );
   }
 }
-
-OptionMedia.propTypes = {
-  action: React.PropTypes.func.isRequired,
-  className: React.PropTypes.string.isRequired,
-  isActive: React.PropTypes.bool.isRequired,
-};
-
-OptionMedia.defaultProps = {
-  action: null,
-  className: "fa fa-image",
-  isActive: false,
-};
 
 
 module.exports = OptionMedia;

@@ -8,21 +8,144 @@ import StyleClass from "app/components/export/style_class";
 
 import Story from "app/models/story";
 
-import TypeConstants from "app/constants/type_constants";
-
 
 class StoryExport extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "StoryExport";
+  static get propTypes() {
+    return {
+      story: React.PropTypes.instanceOf(Story).isRequired,
+    };
   }
 
   // --------------------------------------------------
   // Render
   // --------------------------------------------------
+  renderClasses() {
+    return [
+      {
+        class: "block",
+        attributes: [
+          { type: "display", value: "block" },
+          { type: "position", value: "relative" },
+          { type: "width", value: "100%" },
+          { type: "padding-bottom", value: "24px" },
+          { type: "margin", value: "0" },
+          { type: "color", value: "#565A5C" },
+          { type: "font-weight", value: "400" },
+          { type: "font-size", value: "18px" },
+          { type: "font-family", value: "\"Merriweather\", serif" },
+          { type: "line-height", value: "30px" },
+          { type: "text-align", value: "left" },
+          { type: "white-space", value: "pre-wrap" },
+        ],
+      },
+      {
+        class: "block-caption",
+        attributes: [
+          { type: "width", value: "87.5%" },
+          { type: "padding-top", value: "8px" },
+          { type: "margin", value: "auto" },
+          { type: "color", value: "#878B8D" },
+          { type: "font-size", value: "14px" },
+          { type: "line-height", value: "18px" },
+          { type: "font-style", value: "italic" },
+          { type: "text-align", value: "center" },
+        ],
+      },
+      {
+        class: "block-centered",
+        attributes: [
+          { type: "text-align", value: "center" },
+        ],
+      },
+      {
+        class: "block-divider",
+        attributes: [
+          { type: "width", value: "10%" },
+          { type: "margin", value: "auto" },
+          { type: "border-width", value: "1px" },
+          { type: "border-style", value: "solid" },
+          { type: "border-color", value: "#878B8D" },
+        ],
+      },
+      {
+        class: "block-heading-one",
+        attributes: [
+          { type: "font-weight", value: "700" },
+          { type: "font-size", value: "48px" },
+          { type: "font-family", value: "\"Montserrat\", sans-serif" },
+          { type: "line-height", value: "64px" },
+        ],
+      },
+      {
+        class: "block-heading-two",
+        attributes: [
+          { type: "font-weight", value: "700" },
+          { type: "font-size", value: "36px" },
+          { type: "font-family", value: "\"Montserrat\", sans-serif" },
+          { type: "line-height", value: "48px" },
+        ],
+      },
+      {
+        class: "block-heading-three",
+        attributes: [
+          { type: "font-weight", value: "700" },
+          { type: "font-size", value: "30px" },
+          { type: "font-family", value: "\"Montserrat\", sans-serif" },
+          { type: "line-height", value: "36px" },
+        ],
+      },
+      {
+        class: "block-image",
+        attributes: [],
+      },
+      {
+        class: "block-quote",
+        attributes: [
+          { type: "width", value: "115%" },
+          { type: "margin-left", value: "-7.5%" },
+          { type: "font-size", value: "24px" },
+          { type: "font-family", value: "\"Montserrat\", sans-serif" },
+          { type: "font-style", value: "italic" },
+          { type: "line-height", value: "48px" },
+          { type: "text-align", value: "center" },
+        ],
+      },
+      {
+        class: "section",
+        attributes: [
+          { type: "display", value: "block" },
+          { type: "position", value: "relative" },
+          { type: "width", value: "100%" },
+        ],
+      },
+      {
+        class: "section-standard",
+        attributes: [],
+      },
+      {
+        class: "section-list",
+        attributes: [
+          { type: "padding", value: "0" },
+          { type: "margin", value: "0" },
+        ],
+      },
+      {
+        class: "story",
+        attributes: [
+          { type: "display", value: "block" },
+          { type: "position", value: "relative" },
+          { type: "width", value: "712px" },
+          { type: "padding-bottom", value: "356px" },
+          { type: "margin", value: "auto" },
+        ],
+      },
+    ].map(this.renderClass, this);
+  }
+
   renderImports() {
     return (
       <p className="code indented-tertiary">
@@ -78,112 +201,6 @@ class StoryExport extends Component {
     );
   }
 
-  renderClasses() {
-    return [
-      {
-        class: "block",
-        attributes: [
-          { type: "display", value: "block" },
-          { type: "position", value: "relative" },
-          { type: "width", value: "100%" },
-          { type: "padding-bottom", value: "24px" },
-          { type: "margin", value: "0" },
-          { type: "color", value: "#565A5C" },
-          { type: "font-weight", value: "400" },
-          { type: "font-size", value: "18px" },
-          { type: "font-family", value: "\"Merriweather\", serif" },
-          { type: "line-height", value: "30px" },
-          { type: "text-align", value: "left" },
-          { type: "white-space", value: "pre-wrap" },
-        ],
-      },
-      {
-        class: "block-centered",
-        attributes: [
-          { type: "text-align", value: "center" },
-        ],
-      },
-      {
-        class: "block-divider",
-        attributes: [
-          { type: "width", value: "10%" },
-          { type: "margin", value: "auto" },
-          { type: "border-width", value: "1px" },
-          { type: "border-style", value: "solid" },
-          { type: "border-color", value: "#878B8D" },
-        ],
-      },
-      {
-        class: "block-heading-one",
-        attributes: [
-          { type: "font-weight", value: "700" },
-          { type: "font-size", value: "48px" },
-          { type: "font-family", value: "\"Montserrat\", sans-serif" },
-          { type: "line-height", value: "64px" },
-        ],
-      },
-      {
-        class: "block-heading-two",
-        attributes: [
-        { type: "font-weight", value: "700" },
-        { type: "font-size", value: "36px" },
-        { type: "font-family", value: "\"Montserrat\", sans-serif" },
-        { type: "line-height", value: "48px" },
-        ],
-      },
-      {
-        class: "block-heading-three",
-        attributes: [
-        { type: "font-weight", value: "700" },
-        { type: "font-size", value: "30px" },
-        { type: "font-family", value: "\"Montserrat\", sans-serif" },
-        { type: "line-height", value: "36px" },
-        ],
-      },
-      {
-        class: "block-quote",
-        attributes: [
-        { type: "width", value: "115%" },
-        { type: "margin-left", value: "-7.5%" },
-        { type: "font-size", value: "24px" },
-        { type: "font-family", value: "\"Montserrat\", sans-serif" },
-        { type: "font-style", value: "italic" },
-        { type: "line-height", value: "48px" },
-        { type: "text-align", value: "center" },
-        ],
-      },
-      {
-        class: "section",
-        attributes: [
-          { type: "display", value: "block" },
-          { type: "position", value: "relative" },
-          { type: "width", value: "100%" },
-        ],
-      },
-      {
-        class: "section-standard",
-        attributes: [],
-      },
-      {
-        class: "section-list",
-        attributes: [
-          { type: "padding", value: "0" },
-          { type: "margin", value: "0" },
-        ],
-      },
-      {
-        class: "story",
-        attributes: [
-          { type: "display", value: "block" },
-          { type: "position", value: "relative" },
-          { type: "width", value: "712px" },
-          { type: "padding-bottom", value: "356px" },
-          { type: "margin", value: "auto" },
-        ],
-      },
-    ].map(this.renderClass, this);
-  }
-
   render() {
     return (
       <code>
@@ -196,7 +213,7 @@ class StoryExport extends Component {
         <p className="code code-rose">{"<body>"}</p>
         <p className="code">
           <span className="code code-rose">
-            {"<div"}
+            {"  <div"}
           </span>
           <span className="code code-green">
             {" class="}
@@ -209,7 +226,7 @@ class StoryExport extends Component {
           </span>
         </p>
         {this.renderSections()}
-        <p className="code code-rose">{"</div>"}</p>
+        <p className="code code-rose">{"  </div>"}</p>
         <p className="code code-rose">{"</body>"}</p>
         <p className="code code-rose">{"</html>"}</p>
         {this.renderClasses()}
@@ -217,14 +234,6 @@ class StoryExport extends Component {
     );
   }
 }
-
-StoryExport.propTypes = {
-  story: React.PropTypes.instanceOf(Story).isRequired,
-};
-
-StoryExport.defaultProps = {
-  story: new Story(),
-};
 
 
 module.exports = StoryExport;

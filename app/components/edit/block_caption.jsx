@@ -16,10 +16,14 @@ import TypeConstants from "app/constants/type_constants";
 class BlockCaption extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "BlockCaption";
+  static get propTypes() {
+    return {
+      block: React.PropTypes.instanceOf(Block).isRequired,
+      updateStoryEdit: React.PropTypes.func.isRequired,
+      updateStoryStyle: React.PropTypes.func.isRequired,
+    };
   }
 
   // --------------------------------------------------
@@ -56,7 +60,11 @@ class BlockCaption extends Component {
       if (selection.type === TypeConstants.selection.caret) {
         var point = Selector.generatePoint(selection);
         var caretOffset = point.caretOffset;
-        block.removeFragment(caretOffset - 1, caretOffset);
+        if (caretOffset) {
+          block.removeFragment(caretOffset - 1, caretOffset);
+        } else {
+          event.preventDefault();
+        }
       } else if (selection.type === TypeConstants.selection.range) {
         var vector = Selector.generateVector(selection);
         var startOffset = vector.startPoint.caretOffset;
@@ -81,8 +89,12 @@ class BlockCaption extends Component {
       var character = String.fromCharCode(event.which);
       var vector = Selector.generateVector(selection);
       EditorActor.removeBlocks(vector, { character: character });
-      this.props.updateStoryEditable();
+      this.props.updateStoryEdit();
     }
+  }
+
+  handleMouseUp(event) {
+    event.stopPropagation();
   }
 
   // --------------------------------------------------
@@ -94,6 +106,7 @@ class BlockCaption extends Component {
     node.addEventListener("focus", this.handleFocus.bind(this));
     node.addEventListener("keydown", this.handleKeyDown.bind(this));
     node.addEventListener("keypress", this.handleKeyPress.bind(this));
+    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
     this.renderContent(node);
   }
 
@@ -108,6 +121,7 @@ class BlockCaption extends Component {
     node.removeEventListener("focus", this.handleFocus);
     node.removeEventListener("keydown", this.handleKeyDown);
     node.removeEventListener("keypress", this.handleKeyPress);
+    node.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   // --------------------------------------------------
@@ -132,18 +146,6 @@ class BlockCaption extends Component {
     );
   }
 }
-
-BlockCaption.propTypes = {
-  block: React.PropTypes.instanceOf(Block).isRequired,
-  updateStoryStyle: React.PropTypes.func.isRequired,
-  updateStoryEditable: React.PropTypes.func.isRequired,
-};
-
-BlockCaption.defaultProps = {
-  block: new Block(),
-  updateStoryStyle: null,
-  updateStoryEditable: null,
-};
 
 
 module.exports = BlockCaption;

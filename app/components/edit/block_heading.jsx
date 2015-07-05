@@ -9,13 +9,6 @@ import TypeConstants from "app/constants/type_constants";
 class BlockHeading extends BlockEdit {
 
   // --------------------------------------------------
-  // Defaults
-  // --------------------------------------------------
-  displayName() {
-    return "BlockHeading";
-  }
-
-  // --------------------------------------------------
   // Render
   // --------------------------------------------------
   renderEditable() {

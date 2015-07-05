@@ -7,8 +7,6 @@ import OptionMedia from "app/components/edit/option_media";
 
 import Block from "app/models/block";
 
-import EditorStore from "app/stores/editor_store";
-
 import EditorActor from "app/actors/editor_actor";
 
 import Point from "app/helpers/point";
@@ -19,10 +17,13 @@ import TypeConstants from "app/constants/type_constants";
 class ModalMedia extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "ModalMedia";
+  static get propTypes() {
+    return {
+      block: React.PropTypes.instanceOf(Block).isRequired,
+      updateStoryEdit: React.PropTypes.func.isRequired,
+    };
   }
 
   // --------------------------------------------------
@@ -37,7 +38,7 @@ class ModalMedia extends Component {
   // --------------------------------------------------
   generatePoint() {
     var block = this.props.block;
-    return new Point(block.get("section_index"), block.get("index"), 0);
+    return new Point(block.get("section_index"), block.get("index"));
   }
 
   // --------------------------------------------------
@@ -52,41 +53,38 @@ class ModalMedia extends Component {
     if (files && files[0]) {
       var reader = new FileReader();
       reader.onloadend = function(file) {
-        var source = file.target.result;
-        var block = new Block({
-          type: TypeConstants.block.image,
-          source: source,
-        });
         var point = this.generatePoint();
-        EditorActor.addBlock(point, block);
-        this.props.updateStoryEditable();
+        EditorActor.changeBlock(
+          point,
+          { source: file.target.result, type: TypeConstants.block.image }
+        );
+        this.props.updateStoryEdit();
       }.bind(this);
       reader.readAsDataURL(files[0]);
     }
   }
 
   handleClick(event) {
-    React.findDOMNode(this.refs.input).focus();
     if (!this.state.shouldShowOptions) {
+      React.findDOMNode(this.refs.input).focus();
       this.setState({ shouldShowOptions: true });
     } else {
       this.setState({ shouldShowOptions: false });
-      this.props.updateStoryEditable();
     }
+  }
+
+  handleMouseDown(event) {
+    event.preventDefault();
   }
 
   // --------------------------------------------------
   // Actions
   // --------------------------------------------------
-  styleCode(event) {
-    console.log("Create code!");
-  }
-
   styleDivider(event) {
-    var block = new Block({ type: TypeConstants.block.divider });
     var point = this.generatePoint();
-    EditorActor.addBlock(point, block);
-    this.props.updateStoryEditable();
+    EditorActor.changeBlock(point, { type: TypeConstants.block.divider });
+    React.findDOMNode(this.refs.input).blur();
+    this.props.updateStoryEdit();
   }
 
   styleImage(event) {
@@ -102,6 +100,8 @@ class ModalMedia extends Component {
     node.addEventListener("blur", this.handleBlur.bind(this));
     node = React.findDOMNode(this.refs.prompt);
     node.addEventListener("click", this.handleClick.bind(this));
+    node = React.findDOMNode(this.refs.modal);
+    node.addEventListener("mousedown", this.handleMouseDown.bind(this));
     node = React.findDOMNode(this.refs.uploader);
     node.addEventListener("change", this.handleChange.bind(this));
   }
@@ -111,6 +111,8 @@ class ModalMedia extends Component {
     node.removeEventListener("blur", this.handleBlur);
     node = React.findDOMNode(this.refs.prompt);
     node.removeEventListener("click", this.handleClick);
+    node = React.findDOMNode(this.refs.modal);
+    node.removeEventListener("mousedown", this.handleMouseDown);
     node = React.findDOMNode(this.refs.uploader);
     node.removeEventListener("change", this.handleChange);
   }
@@ -137,18 +139,13 @@ class ModalMedia extends Component {
         action: this.styleDivider.bind(this),
         className: "fa fa-minus",
       },
-      {
-        action: this.styleCode.bind(this),
-        className: "fa fa-code",
-      },
     ].map(this.renderOption, this);
   }
 
   render() {
     var modalClass = ClassNames(
       { "media-modal": true },
-      { "media-modal-open": this.state.shouldShowOptions },
-      { "general-hidden": false }
+      { "media-modal-open": this.state.shouldShowOptions }
     );
     var promptClass = ClassNames(
       { "media-modal-prompt": true },
@@ -157,7 +154,8 @@ class ModalMedia extends Component {
     return (
       <div
         className={modalClass}
-        contentEditable={"false"}>
+        contentEditable={"false"}
+        ref={"modal"}>
         <span className={promptClass} ref={"prompt"}>
           <span className={"vertical-anchor"}></span>
           <i className={"fa fa-plus"}></i>
@@ -177,16 +175,6 @@ class ModalMedia extends Component {
     );
   }
 }
-
-ModalMedia.propTypes = {
-  block: React.PropTypes.instanceOf(Block).isRequired,
-  updateStoryEditable: React.PropTypes.func.isRequired,
-};
-
-ModalMedia.defaultProps = {
-  block: new Block(),
-  updateStoryEditable: null,
-};
 
 
 module.exports = ModalMedia;

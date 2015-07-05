@@ -15,6 +15,7 @@ class Section extends Model {
   get defaults() {
     return {
       index: 0,
+      is_last: false,
       type: TypeConstants.section.standard,
     };
   }
@@ -57,18 +58,23 @@ class Section extends Model {
   // Methods
   // --------------------------------------------------
   addBlock(block, index=0) {
-    block.set("section_index", this.get("index"));
     this.get("blocks").add(block, { at: index });
+    this.resetIndices();
+  }
+
+  addBlocks(blocks, index=0) {
+    this.get("blocks").add(blocks, { at: index });
     this.resetIndices();
   }
 
   cloneDestructively(index) {
     var section = new Section({ type: this.get("type") });
     var blocks = this.get("blocks");
+    var bucket = [];
     for (var i = 0; i < this.length - index; i += 1) {
-      section.get("blocks").add(blocks.pop(), { at: 0 });
+      bucket.unshift(blocks.pop());
     }
-    section.resetIndices();
+    section.addBlocks(bucket);
     return section;
   }
 
@@ -76,11 +82,7 @@ class Section extends Model {
     if (this.get("type") !== section.get("type")) {
       return false;
     } else {
-      var index = this.length;
-      var blocks = section.get("blocks");
-      while (section.length) {
-        this.addBlock(blocks.pop(), index);
-      }
+      this.addBlocks(section.get("blocks").models, this.length);
       return true;
     }
   }
@@ -92,9 +94,11 @@ class Section extends Model {
 
   resetIndices() {
     this.get("blocks").map(function(block, index) {
-      block.set("index", index);
-      block.set("section_index", this.get("index"));
-      block.set("is_last", index === this.length - 1 && this.get("is_last"));
+      block.set({
+        index: index,
+        is_last: index === this.length - 1 && this.get("is_last"),
+        section_index: this.get("index"),
+      });
     }, this);
   }
 }

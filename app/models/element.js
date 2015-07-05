@@ -59,31 +59,28 @@ class Element extends Model {
     if (this.get("type") === element.get("type") &&
         this.get("start") <= element.get("end") &&
         this.get("end") >= element.get("start")) {
-      this.setOffsets(
+      return this.setOffsets(
         Math.min(this.get("start"), element.get("start")),
         Math.max(this.get("end"), element.get("end"))
       );
-      return true;
     } else {
       return false;
     }
   }
 
-  partialClones(firstOffset, lastOffset) {
+  partialClones(start, end) {
     var clones = [];
-    var startOffset = this.get("start");
-    var endOffset = this.get("end");
-    if (firstOffset > startOffset) {
+    if (start > this.get("start")) {
       clones.push(new Element({
-        end: firstOffset,
-        start: startOffset,
+        end: start,
+        start: this.get("start"),
         type: this.get("type"),
       }));
     }
-    if (lastOffset < endOffset) {
+    if (end < this.get("end")) {
       clones.push(new Element({
-        end: endOffset,
-        start: lastOffset,
+        end: this.get("end"),
+        start: end,
         type: this.get("type"),
       }));
     }
@@ -93,7 +90,7 @@ class Element extends Model {
   setOffsets(startOffset, endOffset) {
     this.set("start", startOffset);
     this.set("end", endOffset);
-    return this;
+    return true;
   }
 }
 

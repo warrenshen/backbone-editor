@@ -7,22 +7,31 @@ import Block from "app/models/block";
 class BlockEdit extends Component {
 
   // --------------------------------------------------
+  // Getters
+  // --------------------------------------------------
+  static get propTypes() {
+    return {
+      block: React.PropTypes.instanceOf(Block).isRequired,
+      updateStoryEdit: React.PropTypes.func.isRequired,
+    };
+  }
+
+  // --------------------------------------------------
   // Lifecycle
   // --------------------------------------------------
   componentDidMount() {
-    var node = React.findDOMNode(this.refs.content);
-    this.renderContent(node);
+    this.renderContent();
   }
 
   componentDidUpdate() {
-    var node = React.findDOMNode(this.refs.content);
-    this.renderContent(node);
+    this.renderContent();
   }
 
   // --------------------------------------------------
   // Render
   // --------------------------------------------------
-  renderContent(node) {
+  renderContent() {
+    var node = React.findDOMNode(this.refs.content);
     node.innerHTML = this.props.block.toString();
   }
 
@@ -36,16 +45,6 @@ class BlockEdit extends Component {
     );
   }
 }
-
-BlockEdit.propTypes = {
-  block: React.PropTypes.instanceOf(Block).isRequired,
-  updateStoryEditable: React.PropTypes.func.isRequired,
-};
-
-BlockEdit.defaultProps = {
-  block: new Block(),
-  updateStoryEditable: null,
-};
 
 
 module.exports = BlockEdit;

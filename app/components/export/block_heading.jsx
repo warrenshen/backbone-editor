@@ -8,13 +8,6 @@ import TypeConstants from "app/constants/type_constants";
 class BlockHeading extends BlockExport {
 
   // --------------------------------------------------
-  // Defaults
-  // --------------------------------------------------
-  displayName() {
-    return "BlockHeading";
-  }
-
-  // --------------------------------------------------
   // Render
   // --------------------------------------------------
   renderClass() {

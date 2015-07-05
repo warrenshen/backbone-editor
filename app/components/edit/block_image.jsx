@@ -12,16 +12,18 @@ import EditorActor from "app/actors/editor_actor";
 
 import Point from "app/helpers/point";
 
-import KeyConstants from "app/constants/key_constants";
-
 
 class BlockImage extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "BlockImage";
+  static get propTypes() {
+    return {
+      block: React.PropTypes.instanceOf(Block).isRequired,
+      updateStoryEdit: React.PropTypes.func.isRequired,
+      updateStoryStyle: React.PropTypes.func.isRequired,
+    };
   }
 
   // --------------------------------------------------
@@ -32,6 +34,14 @@ class BlockImage extends Component {
   }
 
   // --------------------------------------------------
+  // Helpers
+  // --------------------------------------------------
+  generatePoint() {
+    var block = this.props.block;
+    return new Point(block.get("section_index"), block.get("index"));
+  }
+
+  // --------------------------------------------------
   // Handlers
   // --------------------------------------------------
   handleChange(event) {
@@ -39,10 +49,11 @@ class BlockImage extends Component {
     if (files && files[0]) {
       var reader = new FileReader();
       reader.onloadend = function(file) {
-        var source = file.target.result;
-        this.props.block.set("source", source);
-        this.props.updateStoryEditable();
-        EditorActor.resetCookies();
+        EditorActor.changeBlock(
+          this.generatePoint(),
+          { source: file.target.result }
+        );
+        this.props.updateStoryEdit();
       }.bind(this);
       reader.readAsDataURL(files[0]);
     }
@@ -61,14 +72,8 @@ class BlockImage extends Component {
   }
 
   handleRemove(event) {
-    var block = this.props.block;
-    var point = new Point(
-      block.get("section_index"),
-      block.get("index"),
-      0
-    );
-    EditorActor.removeBlock(point);
-    this.props.updateStoryEditable();
+    EditorActor.removeBlock(this.generatePoint());
+    this.props.updateStoryEdit();
   }
 
   handleUpload(event) {
@@ -82,7 +87,6 @@ class BlockImage extends Component {
     var node = React.findDOMNode(this.refs.container);
     node.addEventListener("mouseenter", this.handleMouseEnter.bind(this));
     node.addEventListener("mouseleave", this.handleMouseLeave.bind(this));
-    node = React.findDOMNode(this.refs.uploader);
   }
 
   componentDidUpdate() {
@@ -166,18 +170,6 @@ class BlockImage extends Component {
     );
   }
 }
-
-BlockImage.propTypes = {
-  block: React.PropTypes.instanceOf(Block).isRequired,
-  updateStoryStyle: React.PropTypes.func.isRequired,
-  updateStoryEditable: React.PropTypes.func.isRequired,
-};
-
-BlockImage.defaultProps = {
-  block: new Block(),
-  updateStoryStyle: null,
-  updateStoryEditable: null,
-};
 
 
 module.exports = BlockImage;

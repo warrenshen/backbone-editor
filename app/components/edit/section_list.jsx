@@ -12,10 +12,13 @@ import TypeConstants from "app/constants/type_constants";
 class SectionList extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "SectionList";
+  static get propTypes() {
+    return {
+      section: React.PropTypes.instanceOf(Section).isRequired,
+      updateStoryEdit: React.PropTypes.func.isRequired,
+    };
   }
 
   // --------------------------------------------------
@@ -29,7 +32,7 @@ class SectionList extends Component {
       <BlockList
         block={block}
         key={block.cid}
-        updateStoryEditable={this.props.updateStoryEditable} />
+        updateStoryEdit={this.props.updateStoryEdit} />
     );
   }
 
@@ -59,16 +62,6 @@ class SectionList extends Component {
     }
   }
 }
-
-SectionList.propTypes = {
-  section: React.PropTypes.instanceOf(Section).isRequired,
-  updateStoryEditable: React.PropTypes.func.isRequired,
-};
-
-SectionList.defaultProps = {
-  section: new Section(),
-  updateStoryEditable: null,
-};
 
 
 module.exports = SectionList;

@@ -8,10 +8,12 @@ import Block from "app/models/block";
 class BlockExport extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "BlockExport";
+  static get propTypes() {
+    return {
+      block: React.PropTypes.instanceOf(Block).isRequired,
+    };
   }
 
   // --------------------------------------------------
@@ -23,12 +25,12 @@ class BlockExport extends Component {
       return [
         <p className={"code indented-primary"} key={0}>
           <span className={"code"}>
-            {"      "}
+            {"        "}
           </span>
           {this.renderContent()}
         </p>,
         <p className={"code code-rose"} key={1}>
-          {"    </" + this.renderTag() + ">"}
+          {"      </" + this.renderTag() + ">"}
         </p>,
       ];
     }
@@ -48,7 +50,7 @@ class BlockExport extends Component {
   renderHead() {
     var clause = [
       <span className={"code code-rose"} key={0}>
-        {"    <" + this.renderTag()}
+        {"      <" + this.renderTag()}
       </span>,
       <span className={"code code-green"} key={1}>
         {" class="}
@@ -91,14 +93,6 @@ class BlockExport extends Component {
     );
   }
 }
-
-BlockExport.propTypes = {
-  block: React.PropTypes.instanceOf(Block).isRequired,
-};
-
-BlockExport.defaultProps = {
-  block: new Block(),
-};
 
 
 module.exports = BlockExport;

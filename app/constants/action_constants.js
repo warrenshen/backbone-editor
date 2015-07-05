@@ -1,6 +1,7 @@
 module.exports = {
   editor: {
-    addBlock: "add-block",
+    addSection: "add-section",
+    changeBlock: "change-block",
     removeBlock: "remove-block",
     removeBlocks: "remove-blocks",
     resetCookies: "reset-cookies",

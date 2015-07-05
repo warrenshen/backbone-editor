@@ -12,10 +12,12 @@ import TypeConstants from "app/constants/type_constants";
 class SectionList extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "SectionList";
+  static get propTypes() {
+    return {
+      section: React.PropTypes.instanceOf(Section).isRequired,
+    };
   }
 
   // --------------------------------------------------
@@ -47,7 +49,7 @@ class SectionList extends Component {
       <code>
         <p className={"code"}>
           <span className={"code code-rose"}>
-            {"  <" + this.renderTag()}
+            {"    <" + this.renderTag()}
           </span>
           <span className={"code code-green"}>
             {" class="}
@@ -61,20 +63,12 @@ class SectionList extends Component {
         </p>
         {this.renderBlocks()}
         <p className={"code code-rose"}>
-          {"  </" + this.renderTag() + ">"}
+          {"    </" + this.renderTag() + ">"}
         </p>
       </code>
     );
   }
 }
-
-SectionList.propTypes = {
-  section: React.PropTypes.instanceOf(Section).isRequired,
-};
-
-SectionList.defaultProps = {
-  section: new Section(),
-};
 
 
 module.exports = SectionList;

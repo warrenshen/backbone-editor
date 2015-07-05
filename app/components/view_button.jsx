@@ -1,10 +1,9 @@
-import ClassNames from "classnames";
 import React from "react";
 
 import Component from "app/templates/component";
 
 
-class OptionStyle extends Component {
+class ViewButton extends Component {
 
   // --------------------------------------------------
   // Getters
@@ -13,8 +12,7 @@ class OptionStyle extends Component {
     return {
       action: React.PropTypes.func.isRequired,
       className: React.PropTypes.string.isRequired,
-      isActive: React.PropTypes.bool.isRequired,
-      isHidden: React.PropTypes.bool.isRequired,
+      content: React.PropTypes.string.isRequired,
     };
   }
 
@@ -22,12 +20,12 @@ class OptionStyle extends Component {
   // Lifecycle
   // --------------------------------------------------
   componentDidMount() {
-    var node = React.findDOMNode(this.refs.option);
+    var node = React.findDOMNode(this.refs.button);
     node.addEventListener("click", this.props.action);
   }
 
   componentWillUnmount() {
-    var node = React.findDOMNode(this.refs.option);
+    var node = React.findDOMNode(this.refs.button);
     node.removeEventListener("click", this.props.action);
   }
 
@@ -35,18 +33,13 @@ class OptionStyle extends Component {
   // Render
   // --------------------------------------------------
   render() {
-    var optionClass = ClassNames(
-      { "style-option": true },
-      { "style-option-active": this.props.isActive },
-      { "general-hidden": this.props.isHidden }
-    );
     return (
-      <span className={optionClass} ref="option">
-        <i className={this.props.className}></i>
+      <span className={this.props.className} ref={"button"}>
+        {this.props.content}
       </span>
     );
   }
 }
 
 
-module.exports = OptionStyle;
+module.exports = ViewButton;

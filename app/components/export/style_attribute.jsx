@@ -6,10 +6,12 @@ import Component from "app/templates/component";
 class StyleAttribute extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "StyleAttribute";
+  static get propTypes() {
+    return {
+      attribute: React.PropTypes.object.isRequired,
+    };
   }
 
   // --------------------------------------------------
@@ -34,14 +36,6 @@ class StyleAttribute extends Component {
       </p>
     );
   }
-}
-
-StyleAttribute.propTypes = {
-  attribute: React.PropTypes.object.isRequired,
-}
-
-StyleAttribute.defaultProps = {
-  attribute: { type: "position", value: "relative" },
 }
 
 

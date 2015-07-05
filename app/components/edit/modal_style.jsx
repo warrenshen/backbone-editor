@@ -9,7 +9,6 @@ import OptionStyle from "app/components/edit/option_style";
 
 import EditorActor from "app/actors/editor_actor";
 
-import Point from "app/helpers/point";
 import Selector from "app/helpers/selector";
 import Vector from "app/helpers/vector";
 
@@ -19,10 +18,16 @@ import TypeConstants from "app/constants/type_constants";
 class ModalStyle extends Component {
 
   // --------------------------------------------------
-  // Defaults
+  // Getters
   // --------------------------------------------------
-  displayName() {
-    return "ModalStyle";
+  static get propTypes() {
+    return {
+      shouldUpdate: React.PropTypes.bool.isRequired,
+      styles: React.PropTypes.object.isRequired,
+      updateModalStyle: React.PropTypes.func.isRequired,
+      updateStoryStyle: React.PropTypes.func.isRequired,
+      vector: React.PropTypes.instanceOf(Vector),
+    };
   }
 
   // --------------------------------------------------
@@ -32,22 +37,13 @@ class ModalStyle extends Component {
     return { shouldShowInput: false };
   }
 
-  // --------------------------------------------------
-  // Handlers
-  // --------------------------------------------------
-  handleBlur(event) {
-    this.setState({ shouldShowInput: false });
-  }
-
-  handleClick(event) {
-    event.stopPropagation();
+  showInput(event) {
     this.setState({ shouldShowInput: true });
   }
 
-  handleMouseDown(event) {
-    event.preventDefault();
-  }
-
+  // --------------------------------------------------
+  // Handlers
+  // --------------------------------------------------
   handleMouseUp(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -113,7 +109,7 @@ class ModalStyle extends Component {
       var selection = window.getSelection();
       var range = document.createRange();
       var caretOffset = startPoint.caretOffset;
-      var currentNode = null;
+      var currentNode = false;
       var walker = Selector.createTreeWalker(startNode);
       while (walker.nextNode() && caretOffset >= 0) {
         currentNode = walker.currentNode;
@@ -155,7 +151,6 @@ class ModalStyle extends Component {
   // --------------------------------------------------
   componentDidMount() {
     var node = React.findDOMNode(this.refs.modal);
-    node.addEventListener("mousedown", this.handleMouseDown.bind(this));
     node.addEventListener("mouseup", this.handleMouseUp.bind(this));
     this.createVector(this.props.vector);
   }
@@ -173,7 +168,6 @@ class ModalStyle extends Component {
 
   componentWillUnmount() {
     var node = React.findDOMNode(this.refs.modal);
-    node.removeEventListener("mousedown", this.handleMouseDown);
     node.removeEventListener("mouseup", this.handleMouseUp);
   }
 
@@ -183,37 +177,11 @@ class ModalStyle extends Component {
   }
 
   // --------------------------------------------------
-  // Helpers
-  // --------------------------------------------------
-  shouldShowCenteredOption() {
-    return !this.props.styles[TypeConstants.block.quote];
-  }
-
-  shouldShowItalicOption() {
-    return !this.props.styles[TypeConstants.block.quote];
-  }
-
-  shouldShowHeadingOptions() {
-    return !this.props.styles[TypeConstants.block.quote];
-  }
-
-  shouldShowQuoteOption() {
-    var styles = this.props.styles;
-    return !styles[TypeConstants.block.headingOne] &&
-           !styles[TypeConstants.block.headingTwo] &&
-           !styles[TypeConstants.block.headingThree];
-  }
-
-  // --------------------------------------------------
   // Render
   // --------------------------------------------------
   renderInput() {
     if (this.state.shouldShowInput) {
-      return (
-        <ModalInput
-          handleBlur={this.handleBlur.bind(this)}
-          styleLink={this.styleLink.bind(this)} />
-      );
+      return <ModalInput styleLink={this.styleLink.bind(this)} />;
     }
   }
 
@@ -226,53 +194,55 @@ class ModalStyle extends Component {
   }
 
   renderOptions() {
+    var styles = this.props.styles;
     return [
       {
         action: this.styleHeadingOne.bind(this),
         className: "fa fa-header",
-        isActive: this.props.styles[TypeConstants.block.headingOne],
-        isHidden: !this.shouldShowHeadingOptions(),
+        isActive: styles[TypeConstants.block.headingOne] === true,
+        isHidden: styles["shouldHideOptions"] || false,
       },
       {
         action: this.styleHeadingTwo.bind(this),
         className: "fa fa-header",
-        isActive: this.props.styles[TypeConstants.block.headingTwo],
-        isHidden: !this.shouldShowHeadingOptions(),
+        isActive: styles[TypeConstants.block.headingTwo] === true,
+        isHidden: styles["shouldHideOptions"] || false,
       },
       {
         action: this.styleHeadingThree.bind(this),
         className: "fa fa-header",
-        isActive: this.props.styles[TypeConstants.block.headingThree],
-        isHidden: !this.shouldShowHeadingOptions(),
+        isActive: styles[TypeConstants.block.headingThree] === true,
+        isHidden: styles["shouldHideOptions"] || false,
       },
       {
         action: this.styleQuote.bind(this),
         className: "fa fa-quote-right",
-        isActive: this.props.styles[TypeConstants.block.quote],
-        isHidden: !this.shouldShowQuoteOption(),
+        isActive: styles[TypeConstants.block.quote] === true,
+        isHidden: styles["shouldHideOptions"] || false,
       },
       {
         action: this.styleCentered.bind(this),
         className: "fa fa-align-center",
-        isActive: this.props.styles[TypeConstants.block.centered],
-        isHidden: !this.shouldShowCenteredOption(),
+        isActive: styles[TypeConstants.block.centered] === true,
+        isHidden: styles["shouldHideOptions"] ||
+                  styles[TypeConstants.block.quote] || false,
       },
       {
         action: this.styleBold.bind(this),
         className: "fa fa-bold",
-        isActive: this.props.styles[TypeConstants.element.bold],
+        isActive: styles[TypeConstants.element.bold] === true,
         isHidden: false,
       },
       {
         action: this.styleItalic.bind(this),
         className: "fa fa-italic",
-        isActive: this.props.styles[TypeConstants.element.italic],
-        isHidden: !this.shouldShowItalicOption(),
+        isActive: styles[TypeConstants.element.italic] === true,
+        isHidden: styles[TypeConstants.block.quote] || false,
       },
       {
-        action: this.handleClick.bind(this),
+        action: this.showInput.bind(this),
         className: "fa fa-link",
-        isActive: this.props.styles[TypeConstants.element.link],
+        isActive: styles[TypeConstants.element.link] === true,
         isHidden: false,
       },
     ].map(this.renderOption, this);
@@ -293,22 +263,6 @@ class ModalStyle extends Component {
     );
   }
 }
-
-ModalStyle.propTypes = {
-  shouldUpdate: React.PropTypes.bool.isRequired,
-  styles: React.PropTypes.object.isRequired,
-  updateModalStyle: React.PropTypes.func.isRequired,
-  updateStoryStyle: React.PropTypes.func.isRequired,
-  vector: React.PropTypes.instanceOf(Vector),
-};
-
-ModalStyle.defaultProps = {
-  shouldUpdate: true,
-  styles: {},
-  updateModalStyle: null,
-  updateStoryStyle: null,
-  vector: null,
-};
 
 
 module.exports = ModalStyle;
