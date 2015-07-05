@@ -103,7 +103,6 @@ class ViewEdit extends Component {
       point = vector.startPoint;
       EditorActor.removeBlocks(vector);
     }
-    // TODO: We'll be back to refactor this.
     if (point) {
       event.preventDefault();
       var html = event.clipboardData.getData("text/html");
@@ -151,7 +150,7 @@ class ViewEdit extends Component {
   // --------------------------------------------------
   render() {
     return (
-      <div className={"general-view"} ref={"view"}>
+      <div className={"story-container"} ref={"view"}>
         <StoryEdit
           point={this.state.point}
           shouldUpdate={this.state.shouldUpdateStoryEdit}

@@ -3,7 +3,7 @@
 
 body {
   position: relative;
-  min-width: 100vw;
+  width: 100vw;
   min-height: 100vh;
   padding: 0;
   margin: 0;
@@ -13,6 +13,7 @@ h1,
 h2,
 h3 {
   position: relative;
+  padding: 0;
   margin: 0;
   color: $ash;
   font-weight: $font-weight-medium;
@@ -28,12 +29,12 @@ h1 {
 
 h2 {
   font-size: $font-size-larger;
-  line-height: 48px;
+  line-height: $font-size-largest;
 }
 
 h3 {
   font-size: $font-size-large;
-  line-height: 36px;
+  line-height: $font-size-larger;
 }
 
 hr {
@@ -65,6 +66,7 @@ ul {
 }
 
 pre {
+  display: block;
   position: relative;
   clear: both;
 }
@@ -94,7 +96,7 @@ code {
   }
 }
 
-.general-view {
+.story-container {
   position: relative;
   width: 100%;
   min-height: 100%;
@@ -146,6 +148,8 @@ code {
 .view-container {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  -moz-user-select: none;
+  -ms-user-select: none;
   -webkit-user-select: none;
 }

@@ -58,10 +58,10 @@ class Formatter {
     };
     for (var i = 0; i < characters.length; i += 1) {
       if (closers[i]) {
-        helper("code code-rose", closers[i]);
+        helper("code code-red", closers[i]);
       }
       if (openers[i]) {
-        helper("code code-rose", openers[i]);
+        helper("code code-red", openers[i]);
       }
       string += characters[i];
     }

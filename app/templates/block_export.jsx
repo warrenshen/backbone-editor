@@ -21,7 +21,7 @@ class BlockExport extends Component {
   // --------------------------------------------------
   renderBody() {
     var block = this.props.block;
-    if (block.get("content") && block.isEditable()) {
+    if (block.length && block.isEditable()) {
       return [
         <p className={"code indented-primary"} key={0}>
           <span className={"code"}>
@@ -29,7 +29,7 @@ class BlockExport extends Component {
           </span>
           {this.renderContent()}
         </p>,
-        <p className={"code code-rose"} key={1}>
+        <p className={"code code-red"} key={1}>
           {"      </" + this.renderTag() + ">"}
         </p>,
       ];
@@ -49,7 +49,7 @@ class BlockExport extends Component {
 
   renderHead() {
     var clause = [
-      <span className={"code code-rose"} key={0}>
+      <span className={"code code-red"} key={0}>
         {"      <" + this.renderTag()}
       </span>,
       <span className={"code code-green"} key={1}>
@@ -58,11 +58,11 @@ class BlockExport extends Component {
       <span className={"code code-blue"} key={2}>
         {"\"block " + this.renderClass() + "\""}
       </span>,
-      <span className={"code code-rose"} key={3}>
+      <span className={"code code-red"} key={3}>
         {">"}
       </span>,
     ];
-    if (this.props.block.get("content")) {
+    if (this.props.block.length) {
       return (
         <p className={"code"}>
           {clause}
@@ -72,7 +72,7 @@ class BlockExport extends Component {
       return (
         <p className={"code"}>
           {clause}
-          <span className={"code code-rose"}>
+          <span className={"code code-red"}>
             {"</" + this.renderTag() + ">"}
           </span>
         </p>

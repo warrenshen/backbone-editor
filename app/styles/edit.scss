@@ -27,6 +27,8 @@
   margin: 0 auto;
   cursor: text;
   outline: none;
+  -moz-user-select: text;
+  -ms-user-select: text;
   -webkit-user-select: text;
 }
 
@@ -71,15 +73,8 @@
   width: 100%;
 }
 
-.block-image-container {
-  position: relative;
-  width: 100%;
-  line-height: 0;
-}
-
 .block-image-placeholder {
   width: 100%;
-  height: 436px;
   content: url("http://media2.loungepuppy.com/2013/10/placeholder_image12.png");
 }
 
@@ -119,7 +114,7 @@
   margin-left: -7.5%;
   font-size: $font-size-medium;
   font-style: italic;
-  line-height: 48px;
+  line-height: $font-size-larger;
   text-align: center;
 }
 
@@ -140,6 +135,7 @@
   border-radius: 3px;
   box-shadow: 0, 0, 3px, $black;
   background-image: linear-gradient(to bottom, $ash, $black);
+  text-align: center;
 }
 
 .link-modal-content {
@@ -148,7 +144,6 @@
   position: relative;
   color: $white;
   font-size: $font-size-smallest;
-  text-align: center;
 }
 
 .link-modal-triangle {
@@ -163,7 +158,7 @@
   line-height: 0;
 }
 
-.media-modal {
+.modal-media {
   display: inline-block;
   position: absolute;
   z-index: $z-index-1;
@@ -172,44 +167,20 @@
   width: 34px;
   height: 34px;
   overflow: hidden;
+  -moz-user-select: none;
+  -ms-user-select: none;
   -webkit-user-select: none;
 }
 
-.media-modal-open {
+.modal-media-hidden {
+  transform: scale(0, 0);
+}
+
+.modal-media-open {
   width: 144px;
 }
 
-.media-modal-prompt {
-  display: inline-block;
-  vertical-align: middle;
-  position: relative;
-  z-index: $z-index-2;
-  width: 34px;
-  height: 34px;
-  margin-right: 16px;
-  color: $gray;
-  border: 2px solid $gray;
-  border-radius: 17px;
-  line-height: 0;
-  text-align: center;
-  cursor: pointer;
-  box-sizing: border-box;
-  transition: transform 100ms;
-  transform: rotate(0deg);
-
-  &:hover {
-    color: $coral;
-    border-color: $coral;
-  }
-}
-
-.media-modal-prompt-open {
-  color: $coral;
-  border-color: $coral;
-  transform: rotate(45deg);
-}
-
-.media-modal-option {
+.modal-media-option {
   display: inline-block;
   vertical-align: middle;
   position: relative;
@@ -225,43 +196,56 @@
   cursor: pointer;
   box-sizing: border-box;
   transition: transform 100ms;
-  transform: scale(1, 1);
 
   &:hover {
     color: $coral;
     border-color: $coral;
   }
 
+  &:nth-child(2) {
+    transition-delay: 45ms;
+  }
+
   &:nth-child(3) {
-    transition-delay: 40ms;
-  }
-
-  &:nth-child(4) {
-    transition-delay: 80ms;
+    transition-delay: 90ms;
   }
 }
 
-.media-modal-option-hidden {
-  transform: scale(0, 0);
-}
-
-.section-container {
+.modal-media-prompt {
+  display: inline-block;
+  vertical-align: middle;
   position: relative;
-  width: 100%;
-  -webkit-user-select: text;
+  z-index: $z-index-2;
+  width: 34px;
+  height: 34px;
+  margin-right: 16px;
+  color: $gray;
+  border: 2px solid $gray;
+  border-radius: 17px;
+  line-height: 0;
+  text-align: center;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: transform 135ms;
+  transform: rotate(0deg);
+
+  &:hover {
+    color: $coral;
+    border-color: $coral;
+  }
 }
 
-.story-container {
-  display: block;
-  position: relative;
-  width: 712px;
-  padding-bottom: 356px;
-  margin: auto;
-  outline: none;
-  -webkit-user-select: none;
+.modal-media-rotated {
+  color: $coral;
+  border-color: $coral;
+  transform: rotate(45deg);
 }
 
-.style-modal {
+.modal-media-visible {
+  transform: scale(1, 1);
+}
+
+.modal-style {
   position: fixed;
   z-index: $z-index-1;
   top: 128px;
@@ -272,9 +256,16 @@
   box-shadow: 0, 0, 3px, $black;
   transition: top 100ms, left 100ms;
   background-image: linear-gradient(to bottom, $ash, $black);
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
 }
 
-.style-modal-triangle {
+.modal-style-active {
+  color: $coral;
+}
+
+.modal-style-triangle {
   display: block;
   position: relative;
   width: 0;
@@ -285,19 +276,7 @@
   line-height: 0;
 }
 
-.style-modal-overlay {
-  position: absolute;
-  z-index: $z-index-2;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 3px;
-  background-image: linear-gradient(to bottom, $ash, $black);
-  overflow: hidden;
-}
-
-.style-modal-input {
+.modal-style-input {
   display: inline-block;
   vertical-align: middle;
   position: relative;
@@ -311,7 +290,19 @@
   box-sizing: border-box;
 }
 
-.style-option {
+.modal-style-overlay {
+  position: absolute;
+  z-index: $z-index-2;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+  background-image: linear-gradient(to bottom, $ash, $black);
+  overflow: hidden;
+}
+
+.modal-style-option {
   display: inline-block;
   vertical-align: middle;
   position: relative;
@@ -322,6 +313,22 @@
   cursor: pointer;
 }
 
-.style-option-active {
-  color: $coral;
+.section-container {
+  position: relative;
+  width: 100%;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  -webkit-user-select: text;
+}
+
+.story-edit {
+  display: block;
+  position: relative;
+  width: 712px;
+  padding-bottom: 356px;
+  margin: auto;
+  outline: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
 }

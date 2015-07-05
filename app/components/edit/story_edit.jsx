@@ -45,7 +45,6 @@ class StoryEdit extends Component {
     var selection = window.getSelection();
     var which = event.which;
     if (event.ctrlKey || event.metaKey && which === KeyConstants.a) {
-      // TODO: Try to figure out why selection on empty block breaks.
       EditorActor.selectAll();
       this.props.updateStoryStyle();
     } else if (selection.type === TypeConstants.selection.caret) {
@@ -289,7 +288,7 @@ class StoryEdit extends Component {
   render() {
     return (
       <div
-        className={"story-container"}
+        className={"story-edit"}
         contentEditable={"true"}
         ref={"story"}>
         {this.renderSections()}

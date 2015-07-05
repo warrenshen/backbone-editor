@@ -44,9 +44,11 @@ class OptionMedia extends Component {
   // --------------------------------------------------
   render() {
     var optionClass = ClassNames(
-      { "media-modal-option": true },
-      { "media-modal-option-hidden": !this.props.isActive }
+      { "modal-media-option": true },
+      { "modal-media-hidden": !this.props.isActive },
+      { "modal-media-visible": this.props.isActive }
     );
+    console.log(optionClass);
     return (
       <span className={optionClass} ref={"option"}>
         <span className={"vertical-anchor"}></span>
