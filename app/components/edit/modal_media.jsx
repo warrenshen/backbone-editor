@@ -144,12 +144,12 @@ class ModalMedia extends Component {
 
   render() {
     var modalClass = ClassNames(
-      { "media-modal": true },
-      { "media-modal-open": this.state.shouldShowOptions }
+      { "modal-media": true },
+      { "modal-media-open": this.state.shouldShowOptions }
     );
     var promptClass = ClassNames(
-      { "media-modal-prompt": true },
-      { "media-modal-prompt-open": this.state.shouldShowOptions }
+      { "modal-media-prompt": true },
+      { "modal-media-rotated": this.state.shouldShowOptions }
     );
     return (
       <div

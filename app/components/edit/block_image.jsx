@@ -159,7 +159,7 @@ class BlockImage extends Component {
         contentEditable={"false"}
         data-index={block.get("index")}
         ref={"container"}>
-        <div className={"block-image-container"}>
+        <div className={"block-image"}>
           <img
             className={imageClass}
             src={block.get("source")} />

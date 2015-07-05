@@ -288,7 +288,7 @@ class StoryEdit extends Component {
   render() {
     return (
       <div
-        className={"story-container"}
+        className={"story-edit"}
         contentEditable={"true"}
         ref={"story"}>
         {this.renderSections()}

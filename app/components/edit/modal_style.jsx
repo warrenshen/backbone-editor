@@ -250,7 +250,7 @@ class ModalStyle extends Component {
 
   render() {
     var modalClass = ClassNames(
-      { "style-modal": true },
+      { "modal-style": true },
       { "general-hidden": !this.props.vector }
     );
     return (
@@ -258,7 +258,7 @@ class ModalStyle extends Component {
         <span className={"vertical-anchor"}></span>
         {this.renderOptions()}
         {this.renderInput()}
-        <span className={"style-modal-triangle"}></span>
+        <span className={"modal-style-triangle"}></span>
       </div>
     );
   }

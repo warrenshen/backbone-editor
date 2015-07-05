@@ -100,7 +100,10 @@ class StoryExport extends Component {
       },
       {
         class: "block-image",
-        attributes: [],
+        attributes: [
+          { type: "position", value: "relative" },
+          { type: "width", value: "100%" },
+        ],
       },
       {
         class: "block-quote",
