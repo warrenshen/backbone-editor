@@ -36,14 +36,6 @@ class EditorActor extends Actor {
     });
   }
 
-  // removeFragment(point, options) {
-  //   this.act({
-  //     type: ActionConstants.editor.removeFragment,
-  //     point: point,
-  //     options: options,
-  //   });
-  // }
-
   resetCookies() {
     this.act({
       type: ActionConstants.editor.resetCookies,

@@ -93,6 +93,10 @@ class BlockCaption extends Component {
     }
   }
 
+  handleMouseUp(event) {
+    event.stopPropagation();
+  }
+
   // --------------------------------------------------
   // Lifecycle
   // --------------------------------------------------
@@ -102,6 +106,7 @@ class BlockCaption extends Component {
     node.addEventListener("focus", this.handleFocus.bind(this));
     node.addEventListener("keydown", this.handleKeyDown.bind(this));
     node.addEventListener("keypress", this.handleKeyPress.bind(this));
+    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
     this.renderContent(node);
   }
 
@@ -116,6 +121,7 @@ class BlockCaption extends Component {
     node.removeEventListener("focus", this.handleFocus);
     node.removeEventListener("keydown", this.handleKeyDown);
     node.removeEventListener("keypress", this.handleKeyPress);
+    node.removeEventListener("mouseup", this.handleMouseUp);
   }
 
   // --------------------------------------------------

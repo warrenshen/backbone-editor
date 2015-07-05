@@ -7,8 +7,6 @@ import OptionMedia from "app/components/edit/option_media";
 
 import Block from "app/models/block";
 
-import EditorStore from "app/stores/editor_store";
-
 import EditorActor from "app/actors/editor_actor";
 
 import Point from "app/helpers/point";
@@ -85,7 +83,7 @@ class ModalMedia extends Component {
   styleDivider(event) {
     var point = this.generatePoint();
     EditorActor.changeBlock(point, { type: TypeConstants.block.divider });
-    this.setState({ shouldShowOptions: false });
+    React.findDOMNode(this.refs.input).blur();
     this.props.updateStoryEdit();
   }
 
@@ -102,10 +100,10 @@ class ModalMedia extends Component {
     node.addEventListener("blur", this.handleBlur.bind(this));
     node = React.findDOMNode(this.refs.prompt);
     node.addEventListener("click", this.handleClick.bind(this));
-    node = React.findDOMNode(this.refs.uploader);
-    node.addEventListener("change", this.handleChange.bind(this));
     node = React.findDOMNode(this.refs.modal);
     node.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    node = React.findDOMNode(this.refs.uploader);
+    node.addEventListener("change", this.handleChange.bind(this));
   }
 
   componentWillUnmount() {
@@ -113,10 +111,10 @@ class ModalMedia extends Component {
     node.removeEventListener("blur", this.handleBlur);
     node = React.findDOMNode(this.refs.prompt);
     node.removeEventListener("click", this.handleClick);
-    node = React.findDOMNode(this.refs.uploader);
-    node.removeEventListener("change", this.handleChange);
     node = React.findDOMNode(this.refs.modal);
     node.removeEventListener("mousedown", this.handleMouseDown);
+    node = React.findDOMNode(this.refs.uploader);
+    node.removeEventListener("change", this.handleChange);
   }
 
   // --------------------------------------------------
@@ -147,8 +145,7 @@ class ModalMedia extends Component {
   render() {
     var modalClass = ClassNames(
       { "media-modal": true },
-      { "media-modal-open": this.state.shouldShowOptions },
-      { "general-hidden": false }
+      { "media-modal-open": this.state.shouldShowOptions }
     );
     var promptClass = ClassNames(
       { "media-modal-prompt": true },

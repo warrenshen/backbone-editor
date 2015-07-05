@@ -9,7 +9,6 @@ import OptionStyle from "app/components/edit/option_style";
 
 import EditorActor from "app/actors/editor_actor";
 
-import Point from "app/helpers/point";
 import Selector from "app/helpers/selector";
 import Vector from "app/helpers/vector";
 
@@ -38,22 +37,13 @@ class ModalStyle extends Component {
     return { shouldShowInput: false };
   }
 
-  // --------------------------------------------------
-  // Handlers
-  // --------------------------------------------------
-  handleBlur(event) {
-    this.setState({ shouldShowInput: false });
-  }
-
-  handleClick(event) {
-    event.stopPropagation();
+  showInput(event) {
     this.setState({ shouldShowInput: true });
   }
 
-  handleMouseDown(event) {
-    event.preventDefault();
-  }
-
+  // --------------------------------------------------
+  // Handlers
+  // --------------------------------------------------
   handleMouseUp(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -161,7 +151,6 @@ class ModalStyle extends Component {
   // --------------------------------------------------
   componentDidMount() {
     var node = React.findDOMNode(this.refs.modal);
-    node.addEventListener("mousedown", this.handleMouseDown.bind(this));
     node.addEventListener("mouseup", this.handleMouseUp.bind(this));
     this.createVector(this.props.vector);
   }
@@ -179,7 +168,6 @@ class ModalStyle extends Component {
 
   componentWillUnmount() {
     var node = React.findDOMNode(this.refs.modal);
-    node.removeEventListener("mousedown", this.handleMouseDown);
     node.removeEventListener("mouseup", this.handleMouseUp);
   }
 
@@ -193,11 +181,7 @@ class ModalStyle extends Component {
   // --------------------------------------------------
   renderInput() {
     if (this.state.shouldShowInput) {
-      return (
-        <ModalInput
-          handleBlur={this.handleBlur.bind(this)}
-          styleLink={this.styleLink.bind(this)} />
-      );
+      return <ModalInput styleLink={this.styleLink.bind(this)} />;
     }
   }
 
@@ -256,7 +240,7 @@ class ModalStyle extends Component {
         isHidden: styles[TypeConstants.block.quote] || false,
       },
       {
-        action: this.handleClick.bind(this),
+        action: this.showInput.bind(this),
         className: "fa fa-link",
         isActive: styles[TypeConstants.element.link] === true,
         isHidden: false,
