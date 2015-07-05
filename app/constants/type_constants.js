@@ -28,6 +28,7 @@ module.exports = {
     list: "LI",
     paragraph: "P",
     quote: "BLOCKQUOTE",
+    span: "SPAN",
 
     bold: "STRONG",
     italic: "EM",

@@ -52,9 +52,9 @@ class Paster {
     var type = this.classifyBlock(node);
     if (type) {
       var block = new Block({
-        content: node.textContent ? node.textContent : "",
+        content: node.textContent,
         is_centered: node.style.textAlign === "center",
-        source: node.src ? node.src : "",
+        source: node.src,
         type: type,
       });
       if (block.isParagraph()) {
@@ -89,42 +89,34 @@ class Paster {
   }
 
   parseContainer(container, point) {
-    var startBlock = EditorStore.getBlock(point);
-    var nodes = $("blockquote, h1, h2, h3, h4, h5, " +
-                  "img, hr, p, span", container);
+    var nodes = $("blockquote, h1, h2, h3, h4, h5, img, hr, p, span", container);
     if (!nodes.length) {
       return false;
     } else {
+      var section = EditorStore.getSection(point);
+      var block = EditorStore.getBlock(point);
       var clone = false;
       $.fn.shift = [].shift;
       var node = nodes.shift();
-      var block = this.createBlock(node);
-      if (block) {
-        clone = startBlock.cloneDestructively(point.caretOffset);
-        if (!startBlock.length) {
-          startBlock.set("type", block.get("type"));
-          startBlock.set("is_centered", block.isCentered());
-          console.log("hello");
-        }
-        // Currently invalid, cannot pass mergeBlock a point.
-        block = startBlock.mergeBlock(block, point.clone());
-        point.blockIndex += 1;
+      var leader = this.createBlock(node);
+      if (leader) {
+        clone = block.cloneDestructively(point.caretOffset);
+        block.mergeBlock(leader, block.length);
       }
+      var bucket = [];
       for (var i = 0; i < nodes.length; i += 1) {
-        var node = nodes[i];
-        block = this.createBlock(node);
+        block = this.createBlock(nodes[i]);
         if (block) {
-          EditorStore.addBlock(
-            point.clone(),
-            { block: block, shouldIgnore: true }
-          );
-          point.blockIndex += 1;
+          bucket.push(block);
         }
       }
-      if (block) {
+      if (bucket.length) {
+        section.addBlocks(bucket, point.blockIndex + 1);
+      }
+      if (clone) {
         block.mergeBlock(clone, block.length);
       }
-      point.blockIndex -= 1;
+      point.blockIndex = block.get("index");
       point.caretOffset = block.length;
       EditorStore.updatePoint(point);
       return true;

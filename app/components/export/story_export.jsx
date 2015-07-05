@@ -8,8 +8,6 @@ import StyleClass from "app/components/export/style_class";
 
 import Story from "app/models/story";
 
-import TypeConstants from "app/constants/type_constants";
-
 
 class StoryExport extends Component {
 
