@@ -156,8 +156,7 @@ class EditorStore extends Store {
   // --------------------------------------------------
   addBlock(point, options) {
     var block = options.block;
-    var section = this.getSection(point);
-    section.addBlock(block, point.blockIndex);
+    this.getSection(point).addBlock(block, point.blockIndex);
     if (!block.isEditable()) {
       point.blockIndex += 1;
     }
@@ -370,6 +369,7 @@ class EditorStore extends Store {
   }
 
   updatePoint(point) {
+    console.log("updating point");
     this._point = point;
     this._vector = null;
   }

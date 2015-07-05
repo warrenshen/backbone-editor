@@ -193,7 +193,7 @@ class StoryEdit extends Component {
   // Helpers
   // --------------------------------------------------
   createCaret(point) {
-    if (point) {
+    if (point && point.sectionIndex) {
       var parentNode = React.findDOMNode(this.refs.story)
                        .childNodes[point.sectionIndex]
                        .childNodes[point.blockIndex];
@@ -294,7 +294,6 @@ class StoryEdit extends Component {
 
   render() {
     console.log(this.props.story.length);
-    console.log(this.props.story);
     return (
       <div
         className={"story-container"}

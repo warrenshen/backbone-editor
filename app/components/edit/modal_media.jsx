@@ -77,22 +77,34 @@ class ModalMedia extends Component {
   }
 
   handleClick(event) {
-    React.findDOMNode(this.refs.input).focus();
     if (!this.state.shouldShowOptions) {
+      console.log("setting options to true");
+      React.findDOMNode(this.refs.input).focus();
       this.setState({ shouldShowOptions: true });
     } else {
+      console.log("setting options to false");
       this.setState({ shouldShowOptions: false });
-      this.props.updateStoryEditable();
     }
+  }
+
+  handleMouseDown(event) {
+    event.preventDefault();
   }
 
   // --------------------------------------------------
   // Actions
   // --------------------------------------------------
   styleDivider(event) {
-    var block = new Block({ type: TypeConstants.block.divider });
-    var point = this.generatePoint();
-    EditorActor.addBlock(point, { block: block });
+    var block = this.props.block;
+    if (block.isLast()) {
+      block = new Block({ type: TypeConstants.block.divider });
+      var point = this.generatePoint();
+      EditorActor.addBlock(point, { block: block });
+    } else {
+      block.set({ type: TypeConstants.block.divider });
+      EditorActor.updatePoint(null);
+    }
+    this.setState({ shouldShowOptions: false });
     this.props.updateStoryEditable();
   }
 
@@ -111,6 +123,8 @@ class ModalMedia extends Component {
     node.addEventListener("click", this.handleClick.bind(this));
     node = React.findDOMNode(this.refs.uploader);
     node.addEventListener("change", this.handleChange.bind(this));
+    node = React.findDOMNode(this.refs.modal);
+    node.addEventListener("mousedown", this.handleMouseDown.bind(this));
   }
 
   componentWillUnmount() {
@@ -120,6 +134,8 @@ class ModalMedia extends Component {
     node.removeEventListener("click", this.handleClick);
     node = React.findDOMNode(this.refs.uploader);
     node.removeEventListener("change", this.handleChange);
+    node = React.findDOMNode(this.refs.modal);
+    node.removeEventListener("mousedown", this.handleMouseDown);
   }
 
   // --------------------------------------------------
@@ -160,7 +176,8 @@ class ModalMedia extends Component {
     return (
       <div
         className={modalClass}
-        contentEditable={"false"}>
+        contentEditable={"false"}
+        ref={"modal"}>
         <span className={promptClass} ref={"prompt"}>
           <span className={"vertical-anchor"}></span>
           <i className={"fa fa-plus"}></i>
