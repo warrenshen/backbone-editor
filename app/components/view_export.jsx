@@ -21,11 +21,9 @@ class ViewExport extends Component {
   // --------------------------------------------------
   render() {
     return (
-      <div className={"general-view"} ref={"view"}>
-        <pre className={"pre-container"}>
-          <StoryExport
-            story={this.state.story} />
-        </pre>
+      <div className={"story-container"} ref={"view"}>
+        <StoryExport
+          story={this.state.story} />
       </div>
     );
   }

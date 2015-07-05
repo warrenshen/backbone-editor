@@ -206,7 +206,7 @@ class StoryExport extends Component {
 
   render() {
     return (
-      <code>
+      <pre className={"story-export"}>
         <p className="code code-blue">{"<!DOCTYPE html>"}</p>
         <p className="code code-red">{"<html>"}</p>
         <p className="code code-red">{"<head>"}</p>
@@ -233,7 +233,7 @@ class StoryExport extends Component {
         <p className="code code-red">{"</body>"}</p>
         <p className="code code-red">{"</html>"}</p>
         {this.renderClasses()}
-      </code>
+      </pre>
     );
   }
 }

@@ -9,7 +9,6 @@
   font-family: $font-family-tertiary;
   line-height: 20px;
   white-space: pre-wrap;
-  box-sizing: border-box;
 }
 
 .code-blue {
@@ -35,7 +34,7 @@
 
 .indented-secondary {
   padding-left: 81px;
-  text-indent: -83px;
+  text-indent: -84px;
 }
 
 .indented-tertiary {
@@ -43,11 +42,13 @@
   text-indent: -16px;
 }
 
-.pre-container {
+.story-export {
   position: relative;
   width: 712px;
   padding-bottom: 128px;
   margin: auto;
+  -moz-user-select: all;
+  -ms-user-select: all;
   -webkit-user-select: all;
 
   &:hover {
