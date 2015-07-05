@@ -12,7 +12,7 @@ class Formatter {
     return this.mergeCode(characters, sets[0], sets[1]);
   }
 
-  parseElements(elements, isString=true) {
+  parseElements(elements, needsClass=true) {
     var openers = {};
     var closers = {};
     elements.map(function(element) {
@@ -29,7 +29,7 @@ class Formatter {
         closer = "</i>";
       } else {
         var url = element.get("url") + "\">";
-        if (isString) {
+        if (needsClass) {
           opener = "<span class=\"element-link\" data-url=\"" + url;
           closer = "</span>";
         } else {
@@ -37,50 +37,36 @@ class Formatter {
           closer = "</a>";
         }
       }
-      if (openers[start]) {
-        openers[start].push(opener);
-      } else {
-        openers[start] = [opener]
-      }
-      if (closers[end]) {
-        closers[end].unshift(closer);
-      } else {
-        closers[end] = [closer];
-      }
+      openers[start] = openers[start] ? openers[start] + opener : opener;
+      closers[end] = closers[end] ? closer + closers[end] : closer;
     });
     return [openers, closers];
   }
 
   mergeCode(characters, openers, closers) {
-    var index = -1;
+    var index = 0;
     var nodes = [];
     var string = "";
     var helper = function(style, content) {
+      if (string) {
+        nodes.push(<span className={"code"} key={index}>{string}</span>);
+        index += 1;
+        string = "";
+      }
+      nodes.push(<span className={style} key={index}>{content}</span>);
       index += 1;
-      string = "";
-      return (
-        <span className={style} key={index}>
-          {content}
-        </span>
-      );
     };
     for (var i = 0; i < characters.length; i += 1) {
       if (closers[i]) {
-        if (string) {
-          nodes.push(helper("code", string));
-        }
-        nodes.push(helper("code code-rose", closers[i].join("")));
+        helper("code code-rose", closers[i]);
       }
       if (openers[i]) {
-        if (string) {
-          nodes.push(helper("code", string));
-        }
-        nodes.push(helper("code code-rose", openers[i].join("")));
+        helper("code code-rose", openers[i]);
       }
       string += characters[i];
-      if (i === characters.length - 1 && string) {
-        nodes.push(helper("code", string));
-      }
+    }
+    if (string) {
+      nodes.push(<span className={"code"} key={index}>{string}</span>);
     }
     return nodes;
   }
@@ -89,10 +75,10 @@ class Formatter {
     var content = "";
     for (var i = 0; i < characters.length; i += 1) {
       if (closers[i]) {
-        content += closers[i].join("");
+        content += closers[i];
       }
       if (openers[i]) {
-        content += openers[i].join("");
+        content += openers[i];
       }
       content += characters[i];
     }
