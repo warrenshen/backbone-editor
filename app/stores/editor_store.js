@@ -192,8 +192,6 @@ class EditorStore extends Store {
       var section = this.getSection(point);
       section.addBlock(new Block(), section.length);
     }
-    // TODO: This block index increment isn't working,
-    // somehow the store point is being updated again...
     if (!block.isEditable()) {
       point.blockIndex += 1;
     }
@@ -326,7 +324,6 @@ class EditorStore extends Store {
   splitBlock(point) {
     var section = this.getSection(point);
     var block = this.getBlock(point);
-    // TODO: Check this if conditional.
     if (!block.length && block.isList()) {
       this.addSection(point, { type: TypeConstants.section.standard });
     } else {

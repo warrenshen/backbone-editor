@@ -36,7 +36,7 @@ class StyleClass extends Component {
       <code>
         <p className="code">{""}</p>
         <p className="code">
-          <span className="code code-rose">
+          <span className="code code-red">
             {"." + this.props.class}
           </span>
           <span className="code">

@@ -48,7 +48,7 @@ class SectionList extends Component {
     return (
       <code>
         <p className={"code"}>
-          <span className={"code code-rose"}>
+          <span className={"code code-red"}>
             {"    <" + this.renderTag()}
           </span>
           <span className={"code code-green"}>
@@ -57,12 +57,12 @@ class SectionList extends Component {
           <span className={"code code-blue"}>
             {"\"section section-standard\""}
           </span>
-          <span className={"code code-rose"}>
+          <span className={"code code-red"}>
             {">"}
           </span>
         </p>
         {this.renderBlocks()}
-        <p className={"code code-rose"}>
+        <p className={"code code-red"}>
           {"    </" + this.renderTag() + ">"}
         </p>
       </code>

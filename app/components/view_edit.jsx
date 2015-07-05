@@ -103,7 +103,6 @@ class ViewEdit extends Component {
       point = vector.startPoint;
       EditorActor.removeBlocks(vector);
     }
-    // TODO: We'll be back to refactor this.
     if (point) {
       event.preventDefault();
       var html = event.clipboardData.getData("text/html");

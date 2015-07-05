@@ -110,7 +110,7 @@ class StoryExport extends Component {
           { type: "font-size", value: "24px" },
           { type: "font-family", value: "\"Montserrat\", sans-serif" },
           { type: "font-style", value: "italic" },
-          { type: "line-height", value: "48px" },
+          { type: "line-height", value: "36px" },
           { type: "text-align", value: "center" },
         ],
       },
@@ -149,7 +149,7 @@ class StoryExport extends Component {
   renderImports() {
     return (
       <p className="code indented-tertiary">
-        <span className={"code code-rose"}>
+        <span className={"code code-red"}>
           {"  <link"}
         </span>
         <span className={"code code-green"}>
@@ -159,18 +159,18 @@ class StoryExport extends Component {
           {"\"http://fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic|Montserrat:400,700\""}
         </span>
         <span className={"code code-green"}>
-          {" rel= "}
+          {" rel="}
         </span>
         <span className={"code code-blue"}>
           {"\"stylesheet\""}
         </span>
         <span className={"code code-green"}>
-          {" type= "}
+          {" type="}
         </span>
         <span className={"code code-blue"}>
           {"\"text/css\""}
         </span>
-        <span className={"code code-rose"}>
+        <span className={"code code-red"}>
           {">"}
         </span>
       </p>
@@ -205,14 +205,14 @@ class StoryExport extends Component {
     return (
       <code>
         <p className="code code-blue">{"<!DOCTYPE html>"}</p>
-        <p className="code code-rose">{"<html>"}</p>
-        <p className="code code-rose">{"<head>"}</p>
+        <p className="code code-red">{"<html>"}</p>
+        <p className="code code-red">{"<head>"}</p>
         {this.renderImports()}
-        <p className="code code-rose">{"<head>"}</p>
-        <p className="code code-rose">{"</head>"}</p>
-        <p className="code code-rose">{"<body>"}</p>
+        <p className="code code-red">{"<head>"}</p>
+        <p className="code code-red">{"</head>"}</p>
+        <p className="code code-red">{"<body>"}</p>
         <p className="code">
-          <span className="code code-rose">
+          <span className="code code-red">
             {"  <div"}
           </span>
           <span className="code code-green">
@@ -221,14 +221,14 @@ class StoryExport extends Component {
           <span className="code code-blue">
             {"\"story\""}
           </span>
-          <span className="code code-rose">
+          <span className="code code-red">
             {">"}
           </span>
         </p>
         {this.renderSections()}
-        <p className="code code-rose">{"  </div>"}</p>
-        <p className="code code-rose">{"</body>"}</p>
-        <p className="code code-rose">{"</html>"}</p>
+        <p className="code code-red">{"  </div>"}</p>
+        <p className="code code-red">{"</body>"}</p>
+        <p className="code code-red">{"</html>"}</p>
         {this.renderClasses()}
       </code>
     );
