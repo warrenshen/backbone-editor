@@ -21,8 +21,8 @@ class BlockCaption extends Component {
   static get propTypes() {
     return {
       block: React.PropTypes.instanceOf(Block).isRequired,
+      updateStoryEdit: React.PropTypes.func.isRequired,
       updateStoryStyle: React.PropTypes.func.isRequired,
-      updateStoryEditable: React.PropTypes.func.isRequired,
     };
   }
 
@@ -89,7 +89,7 @@ class BlockCaption extends Component {
       var character = String.fromCharCode(event.which);
       var vector = Selector.generateVector(selection);
       EditorActor.removeBlocks(vector, { character: character });
-      this.props.updateStoryEditable();
+      this.props.updateStoryEdit();
     }
   }
 

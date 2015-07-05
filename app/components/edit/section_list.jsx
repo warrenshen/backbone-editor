@@ -17,7 +17,7 @@ class SectionList extends Component {
   static get propTypes() {
     return {
       section: React.PropTypes.instanceOf(Section).isRequired,
-      updateStoryEditable: React.PropTypes.func.isRequired,
+      updateStoryEdit: React.PropTypes.func.isRequired,
     };
   }
 
@@ -32,7 +32,7 @@ class SectionList extends Component {
       <BlockList
         block={block}
         key={block.cid}
-        updateStoryEditable={this.props.updateStoryEditable} />
+        updateStoryEdit={this.props.updateStoryEdit} />
     );
   }
 

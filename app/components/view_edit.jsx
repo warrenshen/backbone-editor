@@ -2,11 +2,9 @@ import React from "react";
 
 import Component from "app/templates/component";
 
-import StoryEdit from "app/components/edit/story_edit";
 import ModalLink from "app/components/edit/modal_link";
 import ModalStyle from "app/components/edit/modal_style";
-
-import Block from "app/models/block";
+import StoryEdit from "app/components/edit/story_edit";
 
 import EditorStore from "app/stores/editor_store";
 
@@ -27,7 +25,7 @@ class ViewEdit extends Component {
     return {
       shouldUpdateModalLink: false,
       shouldUpdateModalStyle: false,
-      shouldUpdateStoryEditable: false,
+      shouldUpdateStoryEdit: false,
     };
   }
 
@@ -45,7 +43,7 @@ class ViewEdit extends Component {
     this.setState({
       shouldUpdateModalLink: true,
       shouldUpdateModalStyle: false,
-      shouldUpdateStoryEditable: false,
+      shouldUpdateStoryEdit: false,
     });
   }
 
@@ -53,7 +51,7 @@ class ViewEdit extends Component {
     this.setState({
       shouldUpdateModalLink: false,
       shouldUpdateModalStyle: true,
-      shouldUpdateStoryEditable: false,
+      shouldUpdateStoryEdit: false,
     });
   }
 
@@ -61,15 +59,15 @@ class ViewEdit extends Component {
     this.setState({
       shouldUpdateModalLink: false,
       shouldUpdateModalStyle: true,
-      shouldUpdateStoryEditable: true,
+      shouldUpdateStoryEdit: true,
     });
   }
 
-  updateStoryEditable() {
+  updateStoryEdit() {
     this.setState({
       shouldUpdateModalLink: false,
       shouldUpdateModalStyle: false,
-      shouldUpdateStoryEditable: true,
+      shouldUpdateStoryEdit: true,
     });
   }
 
@@ -105,13 +103,14 @@ class ViewEdit extends Component {
       point = vector.startPoint;
       EditorActor.removeBlocks(vector);
     }
+    // TODO: We'll be back to refactor this.
     if (point) {
       event.preventDefault();
       var html = event.clipboardData.getData("text/html");
       var container = document.createElement("div");
       container.innerHTML = html;
       if (Paster.parseContainer(container, point)) {
-        this.updateStoryEditable();
+        this.updateStoryEdit();
       }
     }
   }
@@ -155,12 +154,12 @@ class ViewEdit extends Component {
       <div className={"general-view"} ref={"view"}>
         <StoryEdit
           point={this.state.point}
-          shouldUpdate={this.state.shouldUpdateStoryEditable}
+          shouldUpdate={this.state.shouldUpdateStoryEdit}
           story={this.state.story}
           updateModalLink={this.updateModalLink.bind(this)}
           updateModalStyle={this.updateModalStyle.bind(this)}
-          updateStoryStyle={this.updateStoryStyle.bind(this)}
-          updateStoryEditable={this.updateStoryEditable.bind(this)} />
+          updateStoryEdit={this.updateStoryEdit.bind(this)}
+          updateStoryStyle={this.updateStoryStyle.bind(this)} />
         <ModalStyle
           shouldUpdate={this.state.shouldUpdateModalStyle}
           styles={this.state.styles}

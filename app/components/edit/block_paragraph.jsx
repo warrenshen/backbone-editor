@@ -34,7 +34,10 @@ class BlockParagraph extends BlockEdit {
       <div
         className={"block-container"}
         data-index={block.get("index")}>
-        <p className={contentClass} ref={"content"}></p>
+        <p
+          className={contentClass}
+          ref={"content"}>
+        </p>
         {this.renderModal()}
       </div>
     );

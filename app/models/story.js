@@ -37,7 +37,7 @@ class Story extends Model {
   // --------------------------------------------------
   addSection(section, index=0) {
     this.get("sections").add(section, { at: index });
-    this.resetIndices();
+    this.mergeSections();
   }
 
   mergeSections() {

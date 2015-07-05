@@ -12,7 +12,7 @@ class BlockEdit extends Component {
   static get propTypes() {
     return {
       block: React.PropTypes.instanceOf(Block).isRequired,
-      updateStoryEditable: React.PropTypes.func.isRequired,
+      updateStoryEdit: React.PropTypes.func.isRequired,
     };
   }
 

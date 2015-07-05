@@ -213,7 +213,9 @@ class EditorStore extends Store {
       clone.sectionIndex -= 1;
       previous = this.getSection(clone).footer;
     }
-    if (!previous) {
+    if (block.isList()) {
+      this.addSection(point, { type: TypeConstants.section.standard });
+    } else if (!previous) {
       if (block.isImage()) {
         block.set({
           content: "",
@@ -345,7 +347,7 @@ class EditorStore extends Store {
       } else {
         block.set("type", block.get("type") === type ?
                           TypeConstants.block.paragraph :
-                          type;
+                          type);
       }
     };
     this.callBlocks(vector, callback);

@@ -5,8 +5,8 @@ import Component from "app/templates/component";
 import BlockDivider from "app/components/edit/block_divider";
 import BlockHeading from "app/components/edit/block_heading";
 import BlockImage from "app/components/edit/block_image";
-import BlockQuote from "app/components/edit/block_quote";
 import BlockParagraph from "app/components/edit/block_paragraph";
+import BlockQuote from "app/components/edit/block_quote";
 
 import Section from "app/models/section";
 
@@ -21,7 +21,7 @@ class SectionStandard extends Component {
   static get propTypes() {
     return {
       section: React.PropTypes.instanceOf(Section).isRequired,
-      updateStoryEditable: React.PropTypes.func.isRequired,
+      updateStoryEdit: React.PropTypes.func.isRequired,
     };
   }
 
@@ -32,7 +32,7 @@ class SectionStandard extends Component {
     var props = {
       block: block,
       key: block.cid,
-      updateStoryEditable: this.props.updateStoryEditable,
+      updateStoryEdit: this.props.updateStoryEdit,
     };
     switch (block.get("type")) {
       case TypeConstants.block.divider:
@@ -42,11 +42,8 @@ class SectionStandard extends Component {
       case TypeConstants.block.headingThree:
         return <BlockHeading {...props} />;
       case TypeConstants.block.image:
-        return (
-          <BlockImage
-            updateStoryStyle={this.props.updateStoryStyle}
-            {...props} />
-        );
+        props["updateStoryStyle"] = this.props.updateStoryStyle;
+        return <BlockImage {...props} />;
       case TypeConstants.block.quote:
         return <BlockQuote {...props} />;
       case TypeConstants.block.paragraph:

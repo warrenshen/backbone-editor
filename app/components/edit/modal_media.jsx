@@ -24,7 +24,7 @@ class ModalMedia extends Component {
   static get propTypes() {
     return {
       block: React.PropTypes.instanceOf(Block).isRequired,
-      updateStoryEditable: React.PropTypes.func.isRequired,
+      updateStoryEdit: React.PropTypes.func.isRequired,
     };
   }
 
@@ -60,7 +60,7 @@ class ModalMedia extends Component {
           point,
           { source: file.target.result, type: TypeConstants.block.image }
         );
-        this.props.updateStoryEditable();
+        this.props.updateStoryEdit();
       }.bind(this);
       reader.readAsDataURL(files[0]);
     }
@@ -86,7 +86,7 @@ class ModalMedia extends Component {
     var point = this.generatePoint();
     EditorActor.changeBlock(point, { type: TypeConstants.block.divider });
     this.setState({ shouldShowOptions: false });
-    this.props.updateStoryEditable();
+    this.props.updateStoryEdit();
   }
 
   styleImage(event) {

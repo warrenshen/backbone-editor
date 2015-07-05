@@ -1,4 +1,3 @@
-import ClassNames from "classnames";
 import React from "react";
 
 import BlockEdit from "app/templates/block_edit";
