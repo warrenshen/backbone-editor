@@ -106,6 +106,7 @@ class Paster {
           startBlock.set("is_centered", block.isCentered());
           console.log("hello");
         }
+        // Currently invalid, cannot pass mergeBlock a point.
         block = startBlock.mergeBlock(block, point.clone());
         point.blockIndex += 1;
       }

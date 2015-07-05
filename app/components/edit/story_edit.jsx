@@ -293,6 +293,8 @@ class StoryEdit extends Component {
   }
 
   render() {
+    console.log(this.props.story.length);
+    console.log(this.props.story);
     return (
       <div
         className={"story-container"}

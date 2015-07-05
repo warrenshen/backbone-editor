@@ -69,21 +69,19 @@ class Element extends Model {
     }
   }
 
-  partialClones(firstOffset, lastOffset) {
+  partialClones(start, end) {
     var clones = [];
-    var startOffset = this.get("start");
-    var endOffset = this.get("end");
-    if (firstOffset > startOffset) {
+    if (start > this.get("start")) {
       clones.push(new Element({
-        end: firstOffset,
-        start: startOffset,
+        end: start,
+        start: this.get("start"),
         type: this.get("type"),
       }));
     }
-    if (lastOffset < endOffset) {
+    if (end < this.get("end")) {
       clones.push(new Element({
-        end: endOffset,
-        start: lastOffset,
+        end: this.get("end"),
+        start: end,
         type: this.get("type"),
       }));
     }
