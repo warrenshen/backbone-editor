@@ -395,10 +395,10 @@ class EditorStore extends Store {
   handleDispatch(payload) {
     var action = payload.action;
     switch (action.type) {
-      case ActionConstants.editor.changeBlock:
-        return this.changeBlock(action.point, action.options);
       case ActionConstants.editor.addSection:
         return this.addSection(action.point, action.options);
+      case ActionConstants.editor.changeBlock:
+        return this.changeBlock(action.point, action.options);
       case ActionConstants.editor.removeBlock:
         return this.removeBlock(action.point);
       case ActionConstants.editor.removeBlocks:
