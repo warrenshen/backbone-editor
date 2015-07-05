@@ -5,17 +5,17 @@ import ActionConstants from "app/constants/action_constants";
 
 class EditorActor extends Actor {
 
-  addBlock(point, options) {
+  addSection(point, options) {
     this.act({
-      type: ActionConstants.editor.addBlock,
+      type: ActionConstants.editor.addSection,
       point: point,
       options: options,
     });
   }
 
-  addSection(point, options) {
+  changeBlock(point, options) {
     this.act({
-      type: ActionConstants.editor.addSection,
+      type: ActionConstants.editor.changeBlock,
       point: point,
       options: options,
     });

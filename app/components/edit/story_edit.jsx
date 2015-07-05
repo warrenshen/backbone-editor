@@ -193,6 +193,7 @@ class StoryEdit extends Component {
   // Helpers
   // --------------------------------------------------
   createCaret(point) {
+    console.log(point);
     if (point && point.sectionIndex) {
       var parentNode = React.findDOMNode(this.refs.story)
                        .childNodes[point.sectionIndex]

@@ -154,18 +154,6 @@ class EditorStore extends Store {
   // --------------------------------------------------
   // Actions
   // --------------------------------------------------
-  addBlock(point, options) {
-    var block = options.block;
-    this.getSection(point).addBlock(block, point.blockIndex);
-    if (!block.isEditable()) {
-      point.blockIndex += 1;
-    }
-    this.updatePoint(point);
-    if (!options.shouldIgnore) {
-      this.resetCookies();
-    }
-  }
-
   addSection(point, options) {
     var story = this._story;
     var section = this.getSection(point);
@@ -190,6 +178,25 @@ class EditorStore extends Store {
     point.sectionIndex = block.get("section_index");
     point.blockIndex = block.get("index");
     point.caretOffset = 0;
+    this.updatePoint(point);
+    this.resetCookies();
+  }
+
+  changeBlock(point, options) {
+    var block = this.getBlock(point);
+    block.set({
+      source: options.source,
+      type: options.type,
+    });
+    if (block.isLast()) {
+      var section = this.getSection(point);
+      section.addBlock(new Block(), section.length);
+    }
+    // TODO: This block index increment isn't working,
+    // somehow the store point is being updated again...
+    if (!block.isEditable()) {
+      point.blockIndex += 1;
+    }
     this.updatePoint(point);
     this.resetCookies();
   }
@@ -227,7 +234,7 @@ class EditorStore extends Store {
         point.sectionIndex = previousBlock.get("section_index");
         point.blockIndex = previousBlock.get("index");
         point.caretOffset = previousBlock.length;
-        if (!previousBlock.isEditable()) {
+        if (!block.isImage() && !previousBlock.isEditable()) {
           section.removeBlock(previousBlock);
         } else {
           previousBlock.mergeBlock(block, previousBlock.length);
@@ -275,9 +282,7 @@ class EditorStore extends Store {
       var data = "";
       for (var i = 0; i < 20; i += 1) {
         var cookie = CookiesJS.get("cookie" + i);
-        if (cookie) {
-          data += cookie;
-        }
+        data += cookie ? cookie : "";
       }
       if (data) {
         var json = JSON.parse(data);
@@ -318,13 +323,16 @@ class EditorStore extends Store {
   splitBlock(point) {
     var section = this.getSection(point);
     var block = this.getBlock(point);
+    // TODO: Check this if conditional.
     if (!block.length && block.isList()) {
       this.addSection(point, { type: TypeConstants.section.standard });
     } else {
       var clone = block.cloneDestructively(point.caretOffset);
       point.blockIndex += 1;
       point.caretOffset = 0;
-      this.addBlock(point, { block: clone });
+      section.addBlock(clone, point.blockIndex);
+      this.updatePoint(point);
+      this.resetCookies();
     }
   }
 
@@ -369,7 +377,6 @@ class EditorStore extends Store {
   }
 
   updatePoint(point) {
-    console.log("updating point");
     this._point = point;
     this._vector = null;
   }
@@ -390,8 +397,8 @@ class EditorStore extends Store {
   handleDispatch(payload) {
     var action = payload.action;
     switch (action.type) {
-      case ActionConstants.editor.addBlock:
-        return this.addBlock(action.point, action.options);
+      case ActionConstants.editor.changeBlock:
+        return this.changeBlock(action.point, action.options);
       case ActionConstants.editor.addSection:
         return this.addSection(action.point, action.options);
       case ActionConstants.editor.removeBlock:
