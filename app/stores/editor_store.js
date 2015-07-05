@@ -205,39 +205,39 @@ class EditorStore extends Store {
     var section = this.getSection(point);
     var block = this.getBlock(point);
     var clone = point.clone();
-    var previousBlock = false;
+    var previous = false;
     if (block.get("index") > 0) {
       clone.blockIndex -= 1;
-      previousBlock = this.getBlock(clone);
+      previous = this.getBlock(clone);
     } else if (section.get("index") > 0) {
       clone.sectionIndex -= 1;
-      previousBlock = this.getSection(clone).footer;
+      previous = this.getSection(clone).footer;
     }
-    if (!previousBlock) {
+    if (!previous) {
       if (block.isImage()) {
-        section.removeBlock(block);
-        if (block.isLast()) {
-          this.addBlock(
-            point,
-            { block: new Block(), shouldIgnore: true }
-          );
+        block.set({
+          content: "",
+          type: TypeConstants.block.paragraph,
+        });
+        if (!block.isLast()) {
+          section.removeBlock(block);
         }
       } else {
         this.updatePoint(point);
       }
     } else {
-      if (previousBlock.isImage()) {
-        if (!block.get("content") && !block.isLast()) {
+      if (previous.isImage()) {
+        if (!block.length && !block.isLast()) {
           section.removeBlock(block);
         }
       } else {
-        point.sectionIndex = previousBlock.get("section_index");
-        point.blockIndex = previousBlock.get("index");
-        point.caretOffset = previousBlock.length;
-        if (!block.isImage() && !previousBlock.isEditable()) {
-          section.removeBlock(previousBlock);
+        point.sectionIndex = previous.get("section_index");
+        point.blockIndex = previous.get("index");
+        point.caretOffset = previous.length;
+        if (!block.isImage() && !previous.isEditable()) {
+          section.removeBlock(previous);
         } else {
-          previousBlock.mergeBlock(block, previousBlock.length);
+          previous.mergeBlock(block, previous.length);
           section.removeBlock(block);
         }
       }
@@ -250,8 +250,7 @@ class EditorStore extends Store {
   removeBlocks(vector, options={}) {
     var startPoint = vector.startPoint;
     var endPoint = vector.endPoint;
-    var startBlock = this.getBlock(startPoint);
-    var endBlock = this.getBlock(endPoint);
+    var block = this.getBlock(endPoint);
     var callback = function(block, start, end) {
       block.removeFragment(start, end);
     };
@@ -260,14 +259,16 @@ class EditorStore extends Store {
       this.splitBlock(startPoint);
     } else {
       if (options.character) {
-        startBlock.addFragment(options.character, startPoint.caretOffset);
+        this.getBlock(startPoint).addFragment(
+          options.character,
+          startPoint.caretOffset
+        );
         startPoint.caretOffset += 1;
       }
       if (startPoint.compareShallowly(endPoint)) {
         var point = new Point(
-          endBlock.get("section_index"),
-          endBlock.get("index"),
-          0
+          block.get("section_index"),
+          block.get("index")
         );
         this.removeBlock(point);
       } else {
@@ -337,16 +338,14 @@ class EditorStore extends Store {
   }
 
   styleBlocks(vector, options) {
+    var type = options.type;
     var callback = function(block, start, end) {
-      var type = options.type;
       if (type === TypeConstants.block.centered) {
         block.set("is_centered", !block.isCentered());
       } else {
-        if (block.get("type") === type) {
-          block.set("type", TypeConstants.block.paragraph);
-        } else {
-          block.set("type", type);
-        }
+        block.set("type", block.get("type") === type ?
+                          TypeConstants.block.paragraph :
+                          type;
       }
     };
     this.callBlocks(vector, callback);
@@ -356,10 +355,7 @@ class EditorStore extends Store {
 
   styleElements(vector, options) {
     var callback = function(block, start, end) {
-      var element = new Element({
-        type: options.type,
-        url: options.url,
-      });
+      var element = new Element({ type: options.type, url: options.url });
       element.setOffsets(start, end);
       block.parseElement(element);
     };
