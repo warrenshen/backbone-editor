@@ -59,11 +59,10 @@ class Element extends Model {
     if (this.get("type") === element.get("type") &&
         this.get("start") <= element.get("end") &&
         this.get("end") >= element.get("start")) {
-      this.setOffsets(
+      return this.setOffsets(
         Math.min(this.get("start"), element.get("start")),
         Math.max(this.get("end"), element.get("end"))
       );
-      return true;
     } else {
       return false;
     }
@@ -91,7 +90,7 @@ class Element extends Model {
   setOffsets(startOffset, endOffset) {
     this.set("start", startOffset);
     this.set("end", endOffset);
-    return this;
+    return true;
   }
 }
 

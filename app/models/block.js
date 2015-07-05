@@ -109,10 +109,10 @@ class Block extends Model {
       var element = elements.at(i);
       if (element.get("start") < offset && element.get("end") > offset) {
         var clones = element.partialClones(offset, offset);
+        var start = clones[1].get("start");
         elements.remove(element);
         elements.add(clones[0], i);
-        clones[1].decrementOffsets(clones[1].get("start"));
-        block.get("elements").push(clones[1]);
+        block.get("elements").push(clones[1].decrementOffsets(start));
       } else if (element.get("start") >= offset) {
         elements.remove(element);
         block.get("elements").push(element.decrementOffsets(offset));
