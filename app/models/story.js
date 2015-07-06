@@ -40,6 +40,14 @@ class Story extends Model {
     this.mergeSections();
   }
 
+  filterTypes() {
+    var types = {};
+    for (var section of this.get("sections").models) {
+      section.filterTypes(types);
+    }
+    return types;
+  }
+
   mergeSections() {
     var sections = this.get("sections");
     for (var i = 0; i < sections.length - 1; i += 1) {

@@ -37,7 +37,7 @@ class OptionStyle extends Component {
   render() {
     var optionClass = ClassNames(
       { "modal-style-option": true },
-      { "modal-style-active": this.props.isActive },
+      { "modal-style-selected": this.props.isActive },
       { "general-hidden": this.props.isHidden }
     );
     return (

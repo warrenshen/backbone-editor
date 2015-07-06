@@ -374,6 +374,7 @@ class EditorStore extends Store {
   updatePoint(point) {
     this._point = point;
     this._vector = null;
+    this._styles = {};
   }
 
   updateStyles(vector) {
