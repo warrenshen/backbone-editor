@@ -45,10 +45,10 @@ class ModalInput extends Component {
   // --------------------------------------------------
   render() {
     return (
-      <div className={"style-modal-overlay"}>
+      <div className={"modal-style-overlay"}>
         <span className={"vertical-anchor"}></span>
         <input
-          className={"style-modal-input"}
+          className={"modal-style-input"}
           ref={"input"}
           placeholder={"Enter a link here..."}>
         </input>
