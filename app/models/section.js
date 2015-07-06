@@ -78,6 +78,20 @@ class Section extends Model {
     return section;
   }
 
+  filterTypes(types) {
+    for (var block of this.get("blocks").models) {
+      var type = block.get("type");
+      if (!types[type]) {
+        types[type] = true;
+      }
+      if (type === TypeConstants.block.image &&
+          !types[TypeConstants.block.caption] &&
+          block.length) {
+        types[TypeConstants.block.caption] = true;
+      }
+    }
+  }
+
   mergeSection(section) {
     if (this.get("type") !== section.get("type")) {
       return false;

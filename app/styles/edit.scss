@@ -261,10 +261,6 @@
   -webkit-user-select: none;
 }
 
-.modal-style-active {
-  color: $coral;
-}
-
 .modal-style-triangle {
   display: block;
   position: relative;
@@ -311,6 +307,10 @@
   color: $white;
   text-align: center;
   cursor: pointer;
+}
+
+.modal-style-selected {
+  color: $coral;
 }
 
 .section-container {

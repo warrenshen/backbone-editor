@@ -63,7 +63,7 @@ class SectionStandard extends Component {
             {" class="}
           </span>
           <span className={"code code-blue"}>
-            {"\"section section-standard\""}
+            {"\"section\""}
           </span>
           <span className={"code code-red"}>
             {">"}
