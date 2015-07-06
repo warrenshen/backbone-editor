@@ -8,6 +8,8 @@ import StyleClass from "app/components/export/style_class";
 
 import Story from "app/models/story";
 
+import TypeConstants from "app/constants/type_constants";
+
 
 class StoryExport extends Component {
 
@@ -24,25 +26,27 @@ class StoryExport extends Component {
   // Render
   // --------------------------------------------------
   renderClasses() {
-    return [
-      {
-        class: "block",
-        attributes: [
-          { type: "display", value: "block" },
-          { type: "position", value: "relative" },
-          { type: "width", value: "100%" },
-          { type: "padding-bottom", value: "24px" },
-          { type: "margin", value: "0" },
-          { type: "color", value: "#565A5C" },
-          { type: "font-weight", value: "400" },
-          { type: "font-size", value: "18px" },
-          { type: "font-family", value: "\"Merriweather\", serif" },
-          { type: "line-height", value: "30px" },
-          { type: "text-align", value: "left" },
-          { type: "white-space", value: "pre-wrap" },
-        ],
-      },
-      {
+    var classes = [];
+    var types = this.props.story.filterTypes();
+    classes.push({
+      class: "block",
+      attributes: [
+        { type: "display", value: "block" },
+        { type: "position", value: "relative" },
+        { type: "width", value: "100%" },
+        { type: "padding-bottom", value: "24px" },
+        { type: "margin", value: "0" },
+        { type: "color", value: "#565A5C" },
+        { type: "font-weight", value: "400" },
+        { type: "font-size", value: "18px" },
+        { type: "font-family", value: "\"Merriweather\", serif" },
+        { type: "line-height", value: "30px" },
+        { type: "text-align", value: "left" },
+        { type: "white-space", value: "pre-wrap" },
+      ],
+    });
+    if (types[TypeConstants.block.caption]) {
+      classes.push({
         class: "block-caption",
         attributes: [
           { type: "width", value: "87.5%" },
@@ -54,14 +58,18 @@ class StoryExport extends Component {
           { type: "font-style", value: "italic" },
           { type: "text-align", value: "center" },
         ],
-      },
-      {
+      });
+    }
+    if (types[TypeConstants.block.centered]) {
+      classes.push({
         class: "block-centered",
         attributes: [
           { type: "text-align", value: "center" },
         ],
-      },
-      {
+      });
+    }
+    if (types[TypeConstants.block.divider]) {
+      classes.push({
         class: "block-divider",
         attributes: [
           { type: "width", value: "10%" },
@@ -70,8 +78,10 @@ class StoryExport extends Component {
           { type: "border-style", value: "solid" },
           { type: "border-color", value: "#878B8D" },
         ],
-      },
-      {
+      });
+    }
+    if (types[TypeConstants.block.headingOne]) {
+      classes.push({
         class: "block-heading-one",
         attributes: [
           { type: "font-weight", value: "700" },
@@ -79,8 +89,10 @@ class StoryExport extends Component {
           { type: "font-family", value: "\"Montserrat\", sans-serif" },
           { type: "line-height", value: "64px" },
         ],
-      },
-      {
+      });
+    }
+    if (types[TypeConstants.block.headingTwo]) {
+      classes.push({
         class: "block-heading-two",
         attributes: [
           { type: "font-weight", value: "700" },
@@ -88,8 +100,10 @@ class StoryExport extends Component {
           { type: "font-family", value: "\"Montserrat\", sans-serif" },
           { type: "line-height", value: "48px" },
         ],
-      },
-      {
+      });
+    }
+    if (types[TypeConstants.block.headingThree]) {
+      classes.push({
         class: "block-heading-three",
         attributes: [
           { type: "font-weight", value: "700" },
@@ -97,15 +111,19 @@ class StoryExport extends Component {
           { type: "font-family", value: "\"Montserrat\", sans-serif" },
           { type: "line-height", value: "36px" },
         ],
-      },
-      {
+      });
+    }
+    if (types[TypeConstants.block.image]) {
+      classes.push({
         class: "block-image",
         attributes: [
           { type: "position", value: "relative" },
           { type: "width", value: "100%" },
         ],
-      },
-      {
+      });
+    }
+    if (types[TypeConstants.block.quote]) {
+      classes.push({
         class: "block-quote",
         attributes: [
           { type: "width", value: "115%" },
@@ -116,37 +134,36 @@ class StoryExport extends Component {
           { type: "line-height", value: "36px" },
           { type: "text-align", value: "center" },
         ],
-      },
-      {
-        class: "section",
-        attributes: [
-          { type: "display", value: "block" },
-          { type: "position", value: "relative" },
-          { type: "width", value: "100%" },
-        ],
-      },
-      {
-        class: "section-standard",
-        attributes: [],
-      },
-      {
+      });
+    }
+    classes.push({
+      class: "section",
+      attributes: [
+        { type: "display", value: "block" },
+        { type: "position", value: "relative" },
+        { type: "width", value: "100%" },
+      ],
+    });
+    if (types[TypeConstants.block.list]) {
+      classes.push({
         class: "section-list",
         attributes: [
           { type: "padding", value: "0" },
           { type: "margin", value: "0" },
         ],
-      },
-      {
-        class: "story",
-        attributes: [
-          { type: "display", value: "block" },
-          { type: "position", value: "relative" },
-          { type: "width", value: "712px" },
-          { type: "padding-bottom", value: "356px" },
-          { type: "margin", value: "auto" },
-        ],
-      },
-    ].map(this.renderClass, this);
+      });
+    }
+    classes.push({
+      class: "story",
+      attributes: [
+        { type: "display", value: "block" },
+        { type: "position", value: "relative" },
+        { type: "width", value: "712px" },
+        { type: "padding-bottom", value: "356px" },
+        { type: "margin", value: "auto" },
+      ],
+    });
+    return classes.map(this.renderClass, this);
   }
 
   renderImports() {

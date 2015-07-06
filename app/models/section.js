@@ -84,6 +84,11 @@ class Section extends Model {
       if (!types[type]) {
         types[type] = true;
       }
+      if (type === TypeConstants.block.image &&
+          !types[TypeConstants.block.caption] &&
+          block.length) {
+        types[TypeConstants.block.caption] = true;
+      }
     }
   }
 
