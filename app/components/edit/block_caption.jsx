@@ -57,7 +57,7 @@ class BlockCaption extends Component {
       EditorActor.selectAll();
       this.props.updateStoryStyle();
     } else if (which === KeyConstants.backspace) {
-      if (selection.type === TypeConstants.selection.caret) {
+      if (selection.isCollapsed) {
         var point = Selector.generatePoint(selection);
         var caretOffset = point.caretOffset;
         if (caretOffset) {
@@ -65,7 +65,7 @@ class BlockCaption extends Component {
         } else {
           event.preventDefault();
         }
-      } else if (selection.type === TypeConstants.selection.range) {
+      } else {
         var vector = Selector.generateVector(selection);
         var startOffset = vector.startPoint.caretOffset;
         var endOffset = vector.endPoint.caretOffset;
@@ -80,11 +80,11 @@ class BlockCaption extends Component {
     var selection = window.getSelection();
     if (event.which === KeyConstants.enter) {
       event.preventDefault();
-    } else if (selection.type === TypeConstants.selection.caret) {
+    } else if (selection.isCollapsed) {
       var character = String.fromCharCode(event.which);
       var point = Selector.generatePoint(selection);
       block.addFragment(character, point.caretOffset);
-    } else if (selection.type === TypeConstants.selection.range) {
+    } else {
       event.preventDefault();
       var character = String.fromCharCode(event.which);
       var vector = Selector.generateVector(selection);
