@@ -38,9 +38,7 @@ class BlockExport extends Component {
 
   renderClass() {
     var block = this.props.block;
-    return block.isCentered() ?
-           "block-paragraph block-centered" :
-           "block-paragraph";
+    return block.isCentered() ? " block-centered" : "";
   }
 
   renderContent() {
@@ -56,7 +54,7 @@ class BlockExport extends Component {
         {" class="}
       </span>,
       <span className={"code code-blue"} key={2}>
-        {"\"block " + this.renderClass() + "\""}
+        {"\"block" + this.renderClass() + "\""}
       </span>,
       <span className={"code code-red"} key={3}>
         {">"}
