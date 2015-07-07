@@ -77,7 +77,7 @@ class ViewEdit extends Component {
   handleMouseUp(event) {
     var selection = window.getSelection();
     setTimeout(function() {
-      if (selection.type === TypeConstants.selection.caret) {
+      if (selection.isCollapsed) {
         var point = Selector.generatePoint(selection);
         if (!EditorStore.point ||
             point.compareShallowly(EditorStore.point) ||
@@ -85,7 +85,7 @@ class ViewEdit extends Component {
           EditorActor.updatePoint(point);
           this.updateStoryStyle();
         }
-      } else if (selection.type === TypeConstants.selection.range) {
+      } else {
         var vector = Selector.generateVector(selection);
         EditorActor.updateVector(vector);
         this.updateModalStyle();
@@ -96,9 +96,9 @@ class ViewEdit extends Component {
   handlePaste(event) {
     var point = false;
     var selection = window.getSelection();
-    if (selection.type === TypeConstants.selection.caret) {
+    if (selection.isCollapsed) {
       point = Selector.generatePoint(selection);
-    } else if (selection.type === TypeConstants.selection.range) {
+    } else {
       var vector = Selector.generateVector(selection);
       point = vector.startPoint;
       EditorActor.removeBlocks(vector);

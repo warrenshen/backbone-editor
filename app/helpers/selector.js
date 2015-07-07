@@ -19,7 +19,7 @@ class Selector {
     var offset = 0;
     var walker = this.createTreeWalker(parentNode);
     while (walker.nextNode() &&
-           !walker.currentNode.isSameNode(childNode)) {
+           !walker.currentNode.isEqualNode(childNode)) {
       offset += walker.currentNode.length;
     }
     return offset;

@@ -44,13 +44,14 @@ class StoryEdit extends Component {
     event.stopPropagation();
     var selection = window.getSelection();
     var which = event.which;
-    if (event.ctrlKey || event.metaKey && which === KeyConstants.a) {
+    if ((event.ctrlKey || event.metaKey) && which === KeyConstants.a) {
+      event.preventDefault();
       EditorActor.selectAll();
       this.props.updateStoryStyle();
-    } else if (selection.type === TypeConstants.selection.caret) {
-      var point = Selector.generatePoint(selection);
-      var block = EditorStore.getBlock(point);
+    } else if (selection.isCollapsed) {
       if (which === KeyConstants.backspace) {
+        var point = Selector.generatePoint(selection);
+        var block = EditorStore.getBlock(point);
         var caretOffset = point.caretOffset;
         if (caretOffset) {
           block.removeFragment(caretOffset - 1, caretOffset);
@@ -66,7 +67,7 @@ class StoryEdit extends Component {
           this.props.updateStoryEdit();
         }
       }
-    } else if (selection.type === TypeConstants.selection.range) {
+    } else {
       var vector = Selector.generateVector(selection);
       if (which >= KeyConstants.left && which <= KeyConstants.down) {
         if (event.shiftKey) {
@@ -98,7 +99,7 @@ class StoryEdit extends Component {
   handleKeyPress(event) {
     var selection = window.getSelection();
     var which = event.which;
-    if (selection.type === TypeConstants.selection.caret) {
+    if (selection.isCollapsed) {
       var point = Selector.generatePoint(selection);
       if (which === KeyConstants.enter) {
         event.preventDefault();
@@ -133,7 +134,7 @@ class StoryEdit extends Component {
           EditorActor.resetCookies();
         }
       }
-    } else if (selection.type === TypeConstants.selection.range) {
+    } else {
       event.preventDefault();
       var vector = Selector.generateVector(selection);
       if (which === KeyConstants.enter) {
@@ -149,8 +150,7 @@ class StoryEdit extends Component {
   handleKeyUp(event) {
     var selection = window.getSelection();
     var which = event.which;
-    if (EditorStore.vector &&
-        selection.type === TypeConstants.selection.caret) {
+    if (EditorStore.vector && selection.isCollapsed) {
       var point = Selector.generatePoint(selection);
       EditorActor.updatePoint(point);
       this.props.updateStoryStyle();
