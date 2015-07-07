@@ -44,7 +44,7 @@ class StoryEdit extends Component {
     event.stopPropagation();
     var selection = window.getSelection();
     var which = event.which;
-    if (event.ctrlKey || event.metaKey && which === KeyConstants.a) {
+    if ((event.ctrlKey || event.metaKey) && which === KeyConstants.a) {
       EditorActor.selectAll();
       this.props.updateStoryStyle();
     } else if (selection.isCollapsed) {

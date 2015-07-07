@@ -147,6 +147,20 @@ class EditorStore extends Store {
     return this.getSection(point).get("blocks").at(point.blockIndex);
   }
 
+  getPrevious(point) {
+    if (point.blockIndex) {
+      point.blockIndex -= 1;
+      return this.getBlock(point);
+    } else if (point.sectionIndex) {
+      point.sectionIndex -= 1;
+      var section = this.getSection(point);
+      point.blockIndex = section.length - 1;
+      return this.getBlock(point);
+    } else {
+      return false;
+    }
+  }
+
   getSection(point) {
     return this._story.get("sections").at(point.sectionIndex);
   }
@@ -203,14 +217,7 @@ class EditorStore extends Store {
     var section = this.getSection(point);
     var block = this.getBlock(point);
     var clone = point.clone();
-    var previous = false;
-    if (block.get("index") > 0) {
-      clone.blockIndex -= 1;
-      previous = this.getBlock(clone);
-    } else if (section.get("index") > 0) {
-      clone.sectionIndex -= 1;
-      previous = this.getSection(clone).footer;
-    }
+    var previous = this.getPrevious(point);
     if (block.isList()) {
       this.addSection(point, { type: TypeConstants.section.standard });
     } else if (!previous) {
@@ -317,7 +324,8 @@ class EditorStore extends Store {
     var startPoint = new Point(0, 0);
     var endPoint = new Point(this._story.length - 1, 0);
     endPoint.blockIndex = this.getSection(endPoint).length - 1;
-    endPoint.caretOffset = this.getBlock(endPoint).length;
+    var block = this.getBlock(endPoint);
+    endPoint.caretOffset = block.length;
     this.updateVector(new Vector(startPoint, endPoint));
   }
 
