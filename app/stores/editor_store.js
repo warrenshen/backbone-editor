@@ -217,7 +217,7 @@ class EditorStore extends Store {
     var section = this.getSection(point);
     var block = this.getBlock(point);
     var clone = point.clone();
-    var previous = this.getPrevious(point);
+    var previous = this.getPrevious(point.clone());
     if (block.isList()) {
       this.addSection(point, { type: TypeConstants.section.standard });
     } else if (!previous) {
@@ -325,6 +325,9 @@ class EditorStore extends Store {
     var endPoint = new Point(this._story.length - 1, 0);
     endPoint.blockIndex = this.getSection(endPoint).length - 1;
     var block = this.getBlock(endPoint);
+    while (!block.length) {
+      block = this.getPrevious(endPoint);
+    }
     endPoint.caretOffset = block.length;
     this.updateVector(new Vector(startPoint, endPoint));
   }
