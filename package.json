@@ -6,7 +6,7 @@
   "scripts": {
     "compile": "webpack --config development.config.js -d --watch",
     "deploy": "webpack --config production.config.js -p",
-    "serve": "webpack-dev-server --content-base build --hot --port 3333"
+    "serve": "webpack-dev-server --content-base build --hot --port 3333",
   },
   "repository": {
     "type": "git",
