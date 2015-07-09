@@ -4,9 +4,9 @@
   "description": "wysiwyg html editor",
   "main": "app/app.js",
   "scripts": {
-    "compile": "webpack --watch --config development.config.js",
-    "deploy": "NODE_ENV=production webpack -p --config production.config.js",
-    "serve": "webpack-dev-server --devtool eval --progress --colors --hot --content-base build"
+    "compile": "webpack --config development.config.js -d --watch",
+    "deploy": "webpack --config production.config.js -p",
+    "serve": "webpack-dev-server --content-base build --hot --port 3333"
   },
   "repository": {
     "type": "git",
@@ -30,7 +30,7 @@
     "jquery": "^2.1.4",
     "lodash": "^3.9.2",
     "node-libs-browser": "^0.5.0",
-    "node-sass": "^3.1.1",
+    "node-sass": "^3.2.0",
     "react": "^0.13.3",
     "react-hot-loader": "^1.2.7",
     "sass-loader": "^1.0.2",
