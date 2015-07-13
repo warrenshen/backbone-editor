@@ -9,7 +9,7 @@ class BlockDivider extends BlockExport {
   // Render
   // --------------------------------------------------
   renderClass() {
-    return "block-divider";
+    return " block-divider";
   }
 
   renderTag() {

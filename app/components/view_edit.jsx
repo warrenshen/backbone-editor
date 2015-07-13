@@ -109,6 +109,7 @@ class ViewEdit extends Component {
       var container = document.createElement("div");
       container.innerHTML = html;
       if (Paster.parseContainer(container, point)) {
+        EditorActor.resetCookies();
         this.updateStoryEdit();
       }
     }

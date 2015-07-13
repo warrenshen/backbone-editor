@@ -37,8 +37,7 @@ class BlockExport extends Component {
   }
 
   renderClass() {
-    var block = this.props.block;
-    return block.isCentered() ? " block-centered" : "";
+    return this.props.block.isCentered() ? " block-centered" : "";
   }
 
   renderContent() {
