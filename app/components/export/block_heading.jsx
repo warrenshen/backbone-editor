@@ -15,11 +15,11 @@ class BlockHeading extends BlockExport {
     var centered = block.isCentered() ? " block-centered" : "";
     switch (this.props.block.get("type")) {
       case TypeConstants.block.headingOne:
-        return "block-heading-one" + centered;
+        return " block-heading-one" + centered;
       case TypeConstants.block.headingTwo:
-        return "block-heading-two" + centered;
+        return " block-heading-two" + centered;
       case TypeConstants.block.headingThree:
-        return "block-heading-three" + centered;
+        return " block-heading-three" + centered;
     }
   }
 

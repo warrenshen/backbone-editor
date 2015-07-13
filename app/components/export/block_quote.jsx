@@ -9,7 +9,7 @@ class BlockQuote extends BlockExport {
   // Render
   // --------------------------------------------------
   renderClass() {
-    return "block-quote";
+    return " block-quote";
   }
 
   renderTag() {
