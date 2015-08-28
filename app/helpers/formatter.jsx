@@ -2,7 +2,6 @@ import React from 'react';
 
 import TypeConstants from 'app/constants/type_constants';
 
-
 class Formatter {
 
   codifyBlock(block) {
@@ -92,6 +91,5 @@ class Formatter {
     return this.mergeStrings(characters, tags[0], tags[1]);
   }
 }
-
 
 module.exports = new Formatter();

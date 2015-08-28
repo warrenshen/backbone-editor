@@ -19,7 +19,6 @@ import Selector from 'app/helpers/selector';
 import KeyConstants from 'app/constants/key_constants';
 import TypeConstants from 'app/constants/type_constants';
 
-
 class StoryEdit extends Component {
 
   // --------------------------------------------------
@@ -296,6 +295,5 @@ class StoryEdit extends Component {
     );
   }
 }
-
 
 module.exports = StoryEdit;

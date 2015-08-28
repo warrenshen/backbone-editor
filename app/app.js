@@ -12,7 +12,6 @@ import 'app/styles/edit.scss';
 import 'app/styles/etcetera.scss';
 import 'app/styles/export.scss';
 
-
 class App {
 
   constructor(models, stores) {
@@ -33,6 +32,5 @@ class App {
     });
   }
 }
-
 
 module.exports = new App(Models, Stores);

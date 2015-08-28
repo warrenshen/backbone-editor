@@ -6,7 +6,6 @@ import StoryExport from 'app/components/export/story_export';
 
 import EditorStore from 'app/stores/editor_store';
 
-
 class ViewExport extends Component {
 
   // --------------------------------------------------
@@ -28,6 +27,5 @@ class ViewExport extends Component {
     );
   }
 }
-
 
 module.exports = ViewExport;

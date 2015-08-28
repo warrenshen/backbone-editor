@@ -1,7 +1,6 @@
 import Backbone from 'backbone';
 import 'backbone-relational';
 
-
 class Model extends Backbone.RelationalModel {
 
   // --------------------------------------------------
@@ -19,6 +18,5 @@ class Model extends Backbone.RelationalModel {
     return [];
   }
 }
-
 
 module.exports = Model;

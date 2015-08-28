@@ -1,6 +1,5 @@
 import Dispatcher from 'app/dispatcher';
 
-
 class Actor {
 
   // Tell the dispatcher to dispatch given action.
@@ -12,6 +11,5 @@ class Actor {
     Dispatcher.dispatchAction(action);
   }
 }
-
 
 module.exports = Actor;

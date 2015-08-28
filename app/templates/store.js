@@ -2,7 +2,6 @@ import Events from 'events';
 
 import Dispatcher from 'app/dispatcher';
 
-
 class Store extends Events.EventEmitter {
 
   // --------------------------------------------------
@@ -26,8 +25,9 @@ class Store extends Events.EventEmitter {
   // Dispatch
   // --------------------------------------------------
   // Stores that listen for dispatches must override this method.
-  handleDispatch(payload) {}
+  handleDispatch(payload) {
+    
+  }
 }
-
 
 module.exports = Store;

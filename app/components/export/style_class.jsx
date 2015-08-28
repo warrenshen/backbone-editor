@@ -4,7 +4,6 @@ import Component from 'app/templates/component';
 
 import StyleAttribute from 'app/components/export/style_attribute';
 
-
 class StyleClass extends Component {
 
   // --------------------------------------------------
@@ -51,6 +50,5 @@ class StyleClass extends Component {
     );
   }
 }
-
 
 module.exports = StyleClass;

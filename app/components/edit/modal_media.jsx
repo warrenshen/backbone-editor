@@ -13,7 +13,6 @@ import Point from 'app/helpers/point';
 
 import TypeConstants from 'app/constants/type_constants';
 
-
 class ModalMedia extends Component {
 
   // --------------------------------------------------
@@ -175,6 +174,5 @@ class ModalMedia extends Component {
     );
   }
 }
-
 
 module.exports = ModalMedia;

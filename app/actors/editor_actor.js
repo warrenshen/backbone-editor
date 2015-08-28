@@ -2,7 +2,6 @@ import Actor from 'app/templates/actor';
 
 import ActionConstants from 'app/constants/action_constants';
 
-
 class EditorActor extends Actor {
 
   addSection(point, options) {
@@ -92,6 +91,5 @@ class EditorActor extends Actor {
     });
   }
 }
-
 
 module.exports = new EditorActor();

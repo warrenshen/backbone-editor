@@ -6,7 +6,6 @@ import ModelDirectory from 'app/directories/model_directory';
 
 import TypeConstants from 'app/constants/type_constants';
 
-
 class Block extends Model {
 
   // --------------------------------------------------
@@ -251,6 +250,5 @@ class Block extends Model {
     return Formatter.stringifyBlock(this);
   }
 }
-
 
 module.exports = Block;

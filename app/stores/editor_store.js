@@ -14,7 +14,6 @@ import Vector from 'app/helpers/vector';
 import ActionConstants from 'app/constants/action_constants';
 import TypeConstants from 'app/constants/type_constants';
 
-
 class EditorStore extends Store {
 
   // --------------------------------------------------
@@ -431,6 +430,5 @@ class EditorStore extends Store {
     };
   }
 }
-
 
 module.exports = new EditorStore();

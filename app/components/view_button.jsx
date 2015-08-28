@@ -2,7 +2,6 @@ import React from 'react';
 
 import Component from 'app/templates/component';
 
-
 class ViewButton extends Component {
 
   // --------------------------------------------------
@@ -40,6 +39,5 @@ class ViewButton extends Component {
     );
   }
 }
-
 
 module.exports = ViewButton;

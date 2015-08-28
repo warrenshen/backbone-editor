@@ -9,7 +9,6 @@ import ViewExport from 'app/components/view_export';
 import KeyConstants from 'app/constants/key_constants';
 import TypeConstants from 'app/constants/type_constants';
 
-
 class ViewContainer extends Component {
 
   // --------------------------------------------------
@@ -106,6 +105,5 @@ class ViewContainer extends Component {
     );
   }
 }
-
 
 module.exports = ViewContainer;

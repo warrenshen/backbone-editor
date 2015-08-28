@@ -6,7 +6,6 @@ import ModelDirectory from 'app/directories/model_directory';
 
 import TypeConstants from 'app/constants/type_constants';
 
-
 class Section extends Model {
 
   // --------------------------------------------------
@@ -116,6 +115,5 @@ class Section extends Model {
     }, this);
   }
 }
-
 
 module.exports = Section;

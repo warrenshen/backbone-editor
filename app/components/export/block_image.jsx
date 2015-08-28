@@ -2,7 +2,6 @@ import React from 'react';
 
 import Component from 'app/templates/component';
 
-
 class BlockImage extends Component {
 
   // --------------------------------------------------
@@ -93,6 +92,5 @@ class BlockImage extends Component {
     }
   }
 }
-
 
 module.exports = BlockImage;

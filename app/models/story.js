@@ -4,7 +4,6 @@ import Section from 'app/models/section';
 
 import ModelDirectory from 'app/directories/model_directory';
 
-
 class Story extends Model {
 
   // --------------------------------------------------
@@ -75,6 +74,5 @@ class Story extends Model {
     }, this);
   }
 }
-
 
 module.exports = Story;

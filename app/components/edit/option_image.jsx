@@ -2,7 +2,6 @@ import React from 'react';
 
 import Component from 'app/templates/component';
 
-
 class OptionImage extends Component {
 
   // --------------------------------------------------
@@ -29,6 +28,5 @@ class OptionImage extends Component {
     );
   }
 }
-
 
 module.exports = OptionImage;

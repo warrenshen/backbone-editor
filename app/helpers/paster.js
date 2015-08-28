@@ -7,7 +7,6 @@ import EditorStore from 'app/stores/editor_store';
 
 import TypeConstants from 'app/constants/type_constants';
 
-
 class Paster {
 
   classifyBlock(node) {
@@ -50,7 +49,7 @@ class Paster {
 
   createBlock(node) {
     var type = this.classifyBlock(node);
-    if (type) {
+    if (type && node.className != 'Apple-converted-space') {
       var block = new Block({
         content: node.textContent,
         is_centered: node.style.textAlign === 'center',
@@ -123,6 +122,5 @@ class Paster {
     }
   }
 }
-
 
 module.exports = new Paster();
