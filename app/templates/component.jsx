@@ -12,7 +12,6 @@
 import _ from 'lodash';
 import React from 'react';
 
-
 class Component extends React.Component {
 
   // --------------------------------------------------
@@ -53,6 +52,5 @@ class Component extends React.Component {
     return <div></div>;
   }
 }
-
 
 module.exports = Component;

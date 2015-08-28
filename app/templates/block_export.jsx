@@ -4,7 +4,6 @@ import Component from 'app/templates/component';
 
 import Block from 'app/models/block';
 
-
 class BlockExport extends Component {
 
   // --------------------------------------------------
@@ -90,6 +89,5 @@ class BlockExport extends Component {
     );
   }
 }
-
 
 module.exports = BlockExport;

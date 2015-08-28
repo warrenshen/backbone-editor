@@ -12,7 +12,6 @@ import EditorActor from 'app/actors/editor_actor';
 
 import Point from 'app/helpers/point';
 
-
 class BlockImage extends Component {
 
   // --------------------------------------------------
@@ -170,6 +169,5 @@ class BlockImage extends Component {
     );
   }
 }
-
 
 module.exports = BlockImage;

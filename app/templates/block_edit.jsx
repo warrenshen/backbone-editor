@@ -3,7 +3,6 @@ import Component from 'app/templates/component';
 
 import Block from 'app/models/block';
 
-
 class BlockEdit extends Component {
 
   // --------------------------------------------------
@@ -45,6 +44,5 @@ class BlockEdit extends Component {
     );
   }
 }
-
 
 module.exports = BlockEdit;

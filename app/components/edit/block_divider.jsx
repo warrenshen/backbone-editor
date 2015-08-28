@@ -2,7 +2,6 @@ import React from 'react';
 
 import Component from 'app/templates/component';
 
-
 class BlockDivider extends Component {
 
   // --------------------------------------------------
@@ -19,6 +18,5 @@ class BlockDivider extends Component {
     );
   }
 }
-
 
 module.exports = BlockDivider;

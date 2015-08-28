@@ -14,7 +14,6 @@ import Vector from 'app/helpers/vector';
 
 import TypeConstants from 'app/constants/type_constants';
 
-
 class ModalStyle extends Component {
 
   // --------------------------------------------------
@@ -263,6 +262,5 @@ class ModalStyle extends Component {
     );
   }
 }
-
 
 module.exports = ModalStyle;

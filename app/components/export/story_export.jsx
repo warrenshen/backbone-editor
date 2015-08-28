@@ -10,7 +10,6 @@ import Story from 'app/models/story';
 
 import TypeConstants from 'app/constants/type_constants';
 
-
 class StoryExport extends Component {
 
   // --------------------------------------------------
@@ -254,6 +253,5 @@ class StoryExport extends Component {
     );
   }
 }
-
 
 module.exports = StoryExport;

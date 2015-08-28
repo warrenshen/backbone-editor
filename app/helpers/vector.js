@@ -1,6 +1,5 @@
 import Point from 'app/helpers/point';
 
-
 class Vector {
 
   // --------------------------------------------------
@@ -22,6 +21,5 @@ class Vector {
     return this._endPoint;
   }
 }
-
 
 module.exports = Vector;

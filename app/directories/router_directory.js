@@ -19,5 +19,4 @@ class RouterDirectory {
   }
 }
 
-
 module.exports = new RouterDirectory();

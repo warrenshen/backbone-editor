@@ -2,7 +2,6 @@ import React from 'react';
 
 import BlockExport from 'app/templates/block_export';
 
-
 class BlockList extends BlockExport {
 
   // --------------------------------------------------
@@ -16,6 +15,5 @@ class BlockList extends BlockExport {
     return 'li';
   }
 }
-
 
 module.exports = BlockList;

@@ -19,5 +19,4 @@ class ModelDirectory {
   }
 }
 
-
 module.exports = new ModelDirectory();

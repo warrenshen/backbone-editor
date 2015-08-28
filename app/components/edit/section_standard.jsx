@@ -12,7 +12,6 @@ import Section from 'app/models/section';
 
 import TypeConstants from 'app/constants/type_constants';
 
-
 class SectionStandard extends Component {
 
   // --------------------------------------------------
@@ -65,6 +64,5 @@ class SectionStandard extends Component {
     );
   }
 }
-
 
 module.exports = SectionStandard;

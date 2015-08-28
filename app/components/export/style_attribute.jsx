@@ -2,7 +2,6 @@ import React from 'react';
 
 import Component from 'app/templates/component';
 
-
 class StyleAttribute extends Component {
 
   // --------------------------------------------------
@@ -37,6 +36,5 @@ class StyleAttribute extends Component {
     );
   }
 }
-
 
 module.exports = StyleAttribute;

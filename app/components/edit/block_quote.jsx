@@ -2,7 +2,6 @@ import React from 'react';
 
 import BlockEdit from 'app/templates/block_edit';
 
-
 class BlockQuote extends BlockEdit {
 
   // --------------------------------------------------
@@ -21,6 +20,5 @@ class BlockQuote extends BlockEdit {
     );
   }
 }
-
 
 module.exports = BlockQuote;
