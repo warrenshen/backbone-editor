@@ -1,6 +1,6 @@
-import Events from "events";
+import Events from 'events';
 
-import Dispatcher from "app/dispatcher";
+import Dispatcher from 'app/dispatcher';
 
 
 class Store extends Events.EventEmitter {
@@ -19,7 +19,7 @@ class Store extends Events.EventEmitter {
   // Getters
   // --------------------------------------------------
   get name() {
-    return "Store";
+    return 'Store';
   }
 
   // --------------------------------------------------

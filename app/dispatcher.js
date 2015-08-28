@@ -1,4 +1,4 @@
-import Flux from "flux";
+import Flux from 'flux';
 
 
 class Dispatcher extends Flux.Dispatcher {

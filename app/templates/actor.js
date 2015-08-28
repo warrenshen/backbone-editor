@@ -1,4 +1,4 @@
-import Dispatcher from "app/dispatcher";
+import Dispatcher from 'app/dispatcher';
 
 
 class Actor {
@@ -7,7 +7,7 @@ class Actor {
   // @param action - hash with `type` and other params.
   act(action) {
     if (false) {
-      console.log("Dispatching action: " + action.type);
+      console.log('Dispatching action: ' + action.type);
     }
     Dispatcher.dispatchAction(action);
   }

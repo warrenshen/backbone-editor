@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
-import Component from "app/templates/component";
+import Component from 'app/templates/component';
 
-import StyleAttribute from "app/components/export/style_attribute";
+import StyleAttribute from 'app/components/export/style_attribute';
 
 
 class StyleClass extends Component {
@@ -34,18 +34,18 @@ class StyleClass extends Component {
   render() {
     return (
       <code>
-        <p className="code">{""}</p>
-        <p className="code">
-          <span className="code code-red">
-            {"." + this.props.class}
+        <p className='code'>{''}</p>
+        <p className='code'>
+          <span className='code code-red'>
+            {'.' + this.props.class}
           </span>
-          <span className="code">
-            {" {"}
+          <span className='code'>
+            {' {'}
           </span>
         </p>
         {this.renderAttributes()}
-        <p className="code">
-          {"}"}
+        <p className='code'>
+          {'}'}
         </p>
       </code>
     );

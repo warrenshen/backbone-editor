@@ -1,16 +1,16 @@
-import React from "react";
+import React from 'react';
 
-import Component from "app/templates/component";
+import Component from 'app/templates/component';
 
-import BlockDivider from "app/components/export/block_divider";
-import BlockHeading from "app/components/export/block_heading";
-import BlockImage from "app/components/export/block_image";
-import BlockQuote from "app/components/export/block_quote";
-import BlockParagraph from "app/components/export/block_paragraph";
+import BlockDivider from 'app/components/export/block_divider';
+import BlockHeading from 'app/components/export/block_heading';
+import BlockImage from 'app/components/export/block_image';
+import BlockQuote from 'app/components/export/block_quote';
+import BlockParagraph from 'app/components/export/block_paragraph';
 
-import Section from "app/models/section";
+import Section from 'app/models/section';
 
-import TypeConstants from "app/constants/type_constants";
+import TypeConstants from 'app/constants/type_constants';
 
 
 class SectionStandard extends Component {
@@ -32,7 +32,7 @@ class SectionStandard extends Component {
       block: block,
       key: block.cid,
     };
-    switch (block.get("type")) {
+    switch (block.get('type')) {
       case TypeConstants.block.divider:
         return <BlockDivider {...props} />;
       case TypeConstants.block.headingOne:
@@ -49,29 +49,29 @@ class SectionStandard extends Component {
   }
 
   renderBlocks() {
-    return this.props.section.get("blocks").map(this.renderBlock, this);
+    return this.props.section.get('blocks').map(this.renderBlock, this);
   }
 
   render() {
     return (
       <code>
-        <p className={"code"}>
-          <span className={"code code-red"}>
-            {"    <section"}
+        <p className={'code'}>
+          <span className={'code code-red'}>
+            {'    <section'}
           </span>
-          <span className={"code code-green"}>
-            {" class="}
+          <span className={'code code-green'}>
+            {' class='}
           </span>
-          <span className={"code code-blue"}>
-            {"\"section\""}
+          <span className={'code code-blue'}>
+            {'\'section\''}
           </span>
-          <span className={"code code-red"}>
-            {">"}
+          <span className={'code code-red'}>
+            {'>'}
           </span>
         </p>
         {this.renderBlocks()}
-        <p className={"code code-red"}>
-          {"    </section>"}
+        <p className={'code code-red'}>
+          {'    </section>'}
         </p>
       </code>
     );

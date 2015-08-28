@@ -1,7 +1,7 @@
-import React from "react";
-import Component from "app/templates/component";
+import React from 'react';
+import Component from 'app/templates/component';
 
-import Block from "app/models/block";
+import Block from 'app/models/block';
 
 
 class BlockEdit extends Component {
@@ -38,9 +38,9 @@ class BlockEdit extends Component {
   render() {
     return (
       <div
-        className={"block-container"}
-        data-index={this.props.block.get("index")}>
-        <p className={"block-content"} ref={"content"}></p>
+        className={'block-container'}
+        data-index={this.props.block.get('index')}>
+        <p className={'block-content'} ref={'content'}></p>
       </div>
     );
   }

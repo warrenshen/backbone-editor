@@ -1,16 +1,16 @@
-import React from "react";
+import React from 'react';
 
-import Component from "app/templates/component";
+import Component from 'app/templates/component';
 
-import BlockDivider from "app/components/edit/block_divider";
-import BlockHeading from "app/components/edit/block_heading";
-import BlockImage from "app/components/edit/block_image";
-import BlockParagraph from "app/components/edit/block_paragraph";
-import BlockQuote from "app/components/edit/block_quote";
+import BlockDivider from 'app/components/edit/block_divider';
+import BlockHeading from 'app/components/edit/block_heading';
+import BlockImage from 'app/components/edit/block_image';
+import BlockParagraph from 'app/components/edit/block_paragraph';
+import BlockQuote from 'app/components/edit/block_quote';
 
-import Section from "app/models/section";
+import Section from 'app/models/section';
 
-import TypeConstants from "app/constants/type_constants";
+import TypeConstants from 'app/constants/type_constants';
 
 
 class SectionStandard extends Component {
@@ -34,7 +34,7 @@ class SectionStandard extends Component {
       key: block.cid,
       updateStoryEdit: this.props.updateStoryEdit,
     };
-    switch (block.get("type")) {
+    switch (block.get('type')) {
       case TypeConstants.block.divider:
         return <BlockDivider {...props} />;
       case TypeConstants.block.headingOne:
@@ -42,7 +42,7 @@ class SectionStandard extends Component {
       case TypeConstants.block.headingThree:
         return <BlockHeading {...props} />;
       case TypeConstants.block.image:
-        props["updateStoryStyle"] = this.props.updateStoryStyle;
+        props['updateStoryStyle'] = this.props.updateStoryStyle;
         return <BlockImage {...props} />;
       case TypeConstants.block.quote:
         return <BlockQuote {...props} />;
@@ -52,14 +52,14 @@ class SectionStandard extends Component {
   }
 
   renderBlocks() {
-    return this.props.section.get("blocks").map(this.renderBlock, this);
+    return this.props.section.get('blocks').map(this.renderBlock, this);
   }
 
   render() {
     return (
       <section
-        className={"section-container"}
-        data-index={this.props.section.get("index")}>
+        className={'section-container'}
+        data-index={this.props.section.get('index')}>
         {this.renderBlocks()}
       </section>
     );

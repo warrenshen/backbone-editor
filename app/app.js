@@ -1,16 +1,16 @@
-import Backbone from "backbone";
-import Router from "app/routers/router";
+import Backbone from 'backbone';
+import Router from 'app/routers/router';
 
-import Models from "app/buckets/models";
-import Stores from "app/buckets/stores";
+import Models from 'app/buckets/models';
+import Stores from 'app/buckets/stores';
 
-import ModelDirectory from "app/directories/model_directory";
-import RouterDirectory from "app/directories/router_directory";
-import StoreDirectory from "app/directories/store_directory";
+import ModelDirectory from 'app/directories/model_directory';
+import RouterDirectory from 'app/directories/router_directory';
+import StoreDirectory from 'app/directories/store_directory';
 
-import "app/styles/edit.scss";
-import "app/styles/etcetera.scss";
-import "app/styles/export.scss";
+import 'app/styles/edit.scss';
+import 'app/styles/etcetera.scss';
+import 'app/styles/export.scss';
 
 
 class App {

@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import Component from "app/templates/component";
+import Component from 'app/templates/component';
 
 
 class ViewButton extends Component {
@@ -21,12 +21,12 @@ class ViewButton extends Component {
   // --------------------------------------------------
   componentDidMount() {
     var node = React.findDOMNode(this.refs.button);
-    node.addEventListener("click", this.props.action);
+    node.addEventListener('click', this.props.action);
   }
 
   componentWillUnmount() {
     var node = React.findDOMNode(this.refs.button);
-    node.removeEventListener("click", this.props.action);
+    node.removeEventListener('click', this.props.action);
   }
 
   // --------------------------------------------------
@@ -34,7 +34,7 @@ class ViewButton extends Component {
   // --------------------------------------------------
   render() {
     return (
-      <span className={this.props.className} ref={"button"}>
+      <span className={this.props.className} ref={'button'}>
         {this.props.content}
       </span>
     );

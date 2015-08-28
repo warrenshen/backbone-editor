@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import Component from "app/templates/component";
+import Component from 'app/templates/component';
 
-import StoryExport from "app/components/export/story_export";
+import StoryExport from 'app/components/export/story_export';
 
-import EditorStore from "app/stores/editor_store";
+import EditorStore from 'app/stores/editor_store';
 
 
 class ViewExport extends Component {
@@ -21,7 +21,7 @@ class ViewExport extends Component {
   // --------------------------------------------------
   render() {
     return (
-      <div className={"story-container"} ref={"view"}>
+      <div className={'story-container'} ref={'view'}>
         <StoryExport
           story={this.state.story} />
       </div>

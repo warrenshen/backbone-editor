@@ -1,5 +1,5 @@
-import Backbone from "backbone";
-import "backbone-relational";
+import Backbone from 'backbone';
+import 'backbone-relational';
 
 
 class Model extends Backbone.RelationalModel {
@@ -12,7 +12,7 @@ class Model extends Backbone.RelationalModel {
   }
 
   get name() {
-    return "Model";
+    return 'Model';
   }
 
   get relations() {

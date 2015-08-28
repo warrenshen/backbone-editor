@@ -1,4 +1,4 @@
-import Point from "app/helpers/point";
+import Point from 'app/helpers/point';
 
 
 class Vector {

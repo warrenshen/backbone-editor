@@ -1,17 +1,17 @@
-import ClassNames from "classnames";
-import React from "react";
+import ClassNames from 'classnames';
+import React from 'react';
 
-import Component from "app/templates/component";
+import Component from 'app/templates/component';
 
-import OptionMedia from "app/components/edit/option_media";
+import OptionMedia from 'app/components/edit/option_media';
 
-import Block from "app/models/block";
+import Block from 'app/models/block';
 
-import EditorActor from "app/actors/editor_actor";
+import EditorActor from 'app/actors/editor_actor';
 
-import Point from "app/helpers/point";
+import Point from 'app/helpers/point';
 
-import TypeConstants from "app/constants/type_constants";
+import TypeConstants from 'app/constants/type_constants';
 
 
 class ModalMedia extends Component {
@@ -38,7 +38,7 @@ class ModalMedia extends Component {
   // --------------------------------------------------
   generatePoint() {
     var block = this.props.block;
-    return new Point(block.get("section_index"), block.get("index"));
+    return new Point(block.get('section_index'), block.get('index'));
   }
 
   // --------------------------------------------------
@@ -97,24 +97,24 @@ class ModalMedia extends Component {
   // --------------------------------------------------
   componentDidMount() {
     var node = React.findDOMNode(this.refs.input);
-    node.addEventListener("blur", this.handleBlur.bind(this));
+    node.addEventListener('blur', this.handleBlur.bind(this));
     node = React.findDOMNode(this.refs.prompt);
-    node.addEventListener("click", this.handleClick.bind(this));
+    node.addEventListener('click', this.handleClick.bind(this));
     node = React.findDOMNode(this.refs.modal);
-    node.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    node.addEventListener('mousedown', this.handleMouseDown.bind(this));
     node = React.findDOMNode(this.refs.uploader);
-    node.addEventListener("change", this.handleChange.bind(this));
+    node.addEventListener('change', this.handleChange.bind(this));
   }
 
   componentWillUnmount() {
     var node = React.findDOMNode(this.refs.input);
-    node.removeEventListener("blur", this.handleBlur);
+    node.removeEventListener('blur', this.handleBlur);
     node = React.findDOMNode(this.refs.prompt);
-    node.removeEventListener("click", this.handleClick);
+    node.removeEventListener('click', this.handleClick);
     node = React.findDOMNode(this.refs.modal);
-    node.removeEventListener("mousedown", this.handleMouseDown);
+    node.removeEventListener('mousedown', this.handleMouseDown);
     node = React.findDOMNode(this.refs.uploader);
-    node.removeEventListener("change", this.handleChange);
+    node.removeEventListener('change', this.handleChange);
   }
 
   // --------------------------------------------------
@@ -133,43 +133,43 @@ class ModalMedia extends Component {
     return [
       {
         action: this.styleImage.bind(this),
-        className: "fa fa-image",
+        className: 'fa fa-image',
       },
       {
         action: this.styleDivider.bind(this),
-        className: "fa fa-minus",
+        className: 'fa fa-minus',
       },
     ].map(this.renderOption, this);
   }
 
   render() {
     var modalClass = ClassNames(
-      { "modal-media": true },
-      { "modal-media-open": this.state.shouldShowOptions }
+      { 'modal-media': true },
+      { 'modal-media-open': this.state.shouldShowOptions }
     );
     var promptClass = ClassNames(
-      { "modal-media-prompt": true },
-      { "modal-media-rotated": this.state.shouldShowOptions }
+      { 'modal-media-prompt': true },
+      { 'modal-media-rotated': this.state.shouldShowOptions }
     );
     return (
       <div
         className={modalClass}
-        contentEditable={"false"}
-        ref={"modal"}>
-        <span className={promptClass} ref={"prompt"}>
-          <span className={"vertical-anchor"}></span>
-          <i className={"fa fa-plus"}></i>
+        contentEditable={'false'}
+        ref={'modal'}>
+        <span className={promptClass} ref={'prompt'}>
+          <span className={'vertical-anchor'}></span>
+          <i className={'fa fa-plus'}></i>
         </span>
         {this.renderOptions()}
         <input
-          className={"general-invisible"}
-          ref={"uploader"}
-          type={"file"}
-          accept={"image/*"}>
+          className={'general-invisible'}
+          ref={'uploader'}
+          type={'file'}
+          accept={'image/*'}>
         </input>
         <input
-          className={"general-invisible"}
-          ref={"input"}>
+          className={'general-invisible'}
+          ref={'input'}>
         </input>
       </div>
     );

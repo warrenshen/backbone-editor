@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import BlockExport from "app/templates/block_export";
+import BlockExport from 'app/templates/block_export';
 
 
 class BlockParagraph extends BlockExport {

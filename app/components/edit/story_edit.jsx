@@ -1,23 +1,23 @@
-import $ from "jquery";
-import React from "react";
+import $ from 'jquery';
+import React from 'react';
 
-import Component from "app/templates/component";
+import Component from 'app/templates/component';
 
-import SectionList from "app/components/edit/section_list";
-import SectionStandard from "app/components/edit/section_standard";
+import SectionList from 'app/components/edit/section_list';
+import SectionStandard from 'app/components/edit/section_standard';
 
-import Story from "app/models/story";
+import Story from 'app/models/story';
 
-import EditorStore from "app/stores/editor_store";
+import EditorStore from 'app/stores/editor_store';
 
-import EditorActor from "app/actors/editor_actor";
+import EditorActor from 'app/actors/editor_actor';
 
-import Link from "app/helpers/link";
-import Point from "app/helpers/point";
-import Selector from "app/helpers/selector";
+import Link from 'app/helpers/link';
+import Point from 'app/helpers/point';
+import Selector from 'app/helpers/selector';
 
-import KeyConstants from "app/constants/key_constants";
-import TypeConstants from "app/constants/type_constants";
+import KeyConstants from 'app/constants/key_constants';
+import TypeConstants from 'app/constants/type_constants';
 
 
 class StoryEdit extends Component {
@@ -55,7 +55,7 @@ class StoryEdit extends Component {
         var caretOffset = point.caretOffset;
         if (caretOffset) {
           block.removeFragment(caretOffset - 1, caretOffset);
-          if (!block.get("content")) {
+          if (!block.get('content')) {
             event.preventDefault();
             point.caretOffset = 0;
             EditorActor.updatePoint(point);
@@ -114,23 +114,23 @@ class StoryEdit extends Component {
           point.caretOffset = 1;
           EditorActor.updatePoint(point);
           this.props.updateStoryEdit();
-        } else if (block.get("content").substring(0, 2) === "* ") {
+        } else if (block.get('content').substring(0, 2) === '* ') {
           event.preventDefault();
           EditorActor.addSection(
             point,
             { type: TypeConstants.section.listUnordered }
           );
           this.props.updateStoryEdit();
-        } else if (block.get("content").substring(0, 3) === "1. ") {
+        } else if (block.get('content').substring(0, 3) === '1. ') {
           event.preventDefault();
           EditorActor.addSection(
             point,
             { type: TypeConstants.section.listOrdered }
           );
           this.props.updateStoryEdit();
-        } else if (character === "." ||
-                   character === "?" ||
-                   character === "!") {
+        } else if (character === '.' ||
+                   character === '?' ||
+                   character === '!') {
           EditorActor.resetCookies();
         }
       }
@@ -225,11 +225,11 @@ class StoryEdit extends Component {
   }
 
   attachHandlers() {
-    var nodes = $(".element-link");
+    var nodes = $('.element-link');
     for (var i = 0; i < nodes.length; i += 1) {
       var node = nodes[i];
-      node.addEventListener("mouseenter", this.handleMouseEnter.bind(this));
-      node.addEventListener("mouseleave", this.handleMouseLeave.bind(this));
+      node.addEventListener('mouseenter', this.handleMouseEnter.bind(this));
+      node.addEventListener('mouseleave', this.handleMouseLeave.bind(this));
     }
   }
 
@@ -238,16 +238,16 @@ class StoryEdit extends Component {
   // --------------------------------------------------
   componentDidMount() {
     var node = React.findDOMNode(this.refs.story);
-    node.addEventListener("keydown", this.handleKeyDown.bind(this));
-    node.addEventListener("keypress", this.handleKeyPress.bind(this));
-    node.addEventListener("keyup", this.handleKeyUp.bind(this));
+    node.addEventListener('keydown', this.handleKeyDown.bind(this));
+    node.addEventListener('keypress', this.handleKeyPress.bind(this));
+    node.addEventListener('keyup', this.handleKeyUp.bind(this));
     this.createCaret(this.props.point);
     this.attachHandlers();
   }
 
   componentDidUpdate() {
     if (false) {
-      console.log("Story editable component updated.");
+      console.log('Story editable component updated.');
     }
     this.createCaret(this.props.point);
     this.attachHandlers();
@@ -255,9 +255,9 @@ class StoryEdit extends Component {
 
   componentWillUnmount() {
     var node = React.findDOMNode(this.refs.story);
-    node.removeEventListener("keydown", this.handleKeyDown);
-    node.removeEventListener("keypress", this.handleKeyPress);
-    node.removeEventListener("keyup", this.handleKeyUp);
+    node.removeEventListener('keydown', this.handleKeyDown);
+    node.removeEventListener('keypress', this.handleKeyPress);
+    node.removeEventListener('keyup', this.handleKeyUp);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -282,15 +282,15 @@ class StoryEdit extends Component {
   }
 
   renderSections() {
-    return this.props.story.get("sections").map(this.renderSection, this);
+    return this.props.story.get('sections').map(this.renderSection, this);
   }
 
   render() {
     return (
       <div
-        className={"story-edit"}
-        contentEditable={"true"}
-        ref={"story"}>
+        className={'story-edit'}
+        contentEditable={'true'}
+        ref={'story'}>
         {this.renderSections()}
       </div>
     );
