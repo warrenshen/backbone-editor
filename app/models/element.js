@@ -4,7 +4,6 @@ import ModelDirectory from 'app/directories/model_directory';
 
 import TypeConstants from 'app/constants/type_constants';
 
-
 class Element extends Model {
 
   // --------------------------------------------------
@@ -93,6 +92,5 @@ class Element extends Model {
     return true;
   }
 }
-
 
 module.exports = Element;

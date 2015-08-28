@@ -2,7 +2,6 @@ import React from 'react';
 
 import BlockEdit from 'app/templates/block_edit';
 
-
 class BlockList extends BlockEdit {
 
   // --------------------------------------------------
@@ -21,6 +20,5 @@ class BlockList extends BlockEdit {
     );
   }
 }
-
 
 module.exports = BlockList;

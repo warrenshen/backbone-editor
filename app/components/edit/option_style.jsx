@@ -3,7 +3,6 @@ import React from 'react';
 
 import Component from 'app/templates/component';
 
-
 class OptionStyle extends Component {
 
   // --------------------------------------------------
@@ -47,6 +46,5 @@ class OptionStyle extends Component {
     );
   }
 }
-
 
 module.exports = OptionStyle;

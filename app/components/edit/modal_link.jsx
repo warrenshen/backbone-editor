@@ -5,7 +5,6 @@ import Component from 'app/templates/component';
 
 import Link from 'app/helpers/link';
 
-
 class ModalLink extends Component {
 
   // --------------------------------------------------
@@ -64,6 +63,5 @@ class ModalLink extends Component {
     );
   }
 }
-
 
 module.exports = ModalLink;

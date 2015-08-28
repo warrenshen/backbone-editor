@@ -3,7 +3,6 @@ import React from 'react';
 
 import ViewContainer from 'app/components/view_container';
 
-
 class Router extends Backbone.Router {
 
   // --------------------------------------------------
@@ -30,6 +29,5 @@ class Router extends Backbone.Router {
     };
   }
 }
-
 
 module.exports = new Router();

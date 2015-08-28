@@ -15,7 +15,6 @@ import Selector from 'app/helpers/selector';
 
 import TypeConstants from 'app/constants/type_constants';
 
-
 class ViewEdit extends Component {
 
   // --------------------------------------------------
@@ -173,6 +172,5 @@ class ViewEdit extends Component {
     );
   }
 }
-
 
 module.exports = ViewEdit;

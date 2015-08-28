@@ -1,7 +1,6 @@
 import Point from 'app/helpers/point';
 import Vector from 'app/helpers/vector';
 
-
 class Selector {
 
   createTreeWalker(parentNode) {
@@ -54,6 +53,5 @@ class Selector {
     }
   }
 }
-
 
 module.exports = new Selector();

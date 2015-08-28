@@ -19,5 +19,4 @@ class StoreDirectory {
   }
 }
 
-
 module.exports = new StoreDirectory();

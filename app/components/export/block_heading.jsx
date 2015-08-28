@@ -4,7 +4,6 @@ import BlockExport from 'app/templates/block_export';
 
 import TypeConstants from 'app/constants/type_constants';
 
-
 class BlockHeading extends BlockExport {
 
   // --------------------------------------------------
@@ -34,6 +33,5 @@ class BlockHeading extends BlockExport {
     }
   }
 }
-
 
 module.exports = BlockHeading;

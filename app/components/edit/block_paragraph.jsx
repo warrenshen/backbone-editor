@@ -7,7 +7,6 @@ import ModalMedia from 'app/components/edit/modal_media';
 
 import EditorStore from 'app/stores/editor_store';
 
-
 class BlockParagraph extends BlockEdit {
 
   // --------------------------------------------------
@@ -43,6 +42,5 @@ class BlockParagraph extends BlockEdit {
     );
   }
 }
-
 
 module.exports = BlockParagraph;

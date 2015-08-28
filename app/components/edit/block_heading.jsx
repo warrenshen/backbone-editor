@@ -5,7 +5,6 @@ import BlockEdit from 'app/templates/block_edit';
 
 import TypeConstants from 'app/constants/type_constants';
 
-
 class BlockHeading extends BlockEdit {
 
   // --------------------------------------------------
@@ -54,6 +53,5 @@ class BlockHeading extends BlockEdit {
     }
   }
 }
-
 
 module.exports = BlockHeading;

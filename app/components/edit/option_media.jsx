@@ -3,7 +3,6 @@ import React from 'react';
 
 import Component from 'app/templates/component';
 
-
 class OptionMedia extends Component {
 
   // --------------------------------------------------
@@ -56,6 +55,5 @@ class OptionMedia extends Component {
     );
   }
 }
-
 
 module.exports = OptionMedia;

@@ -7,7 +7,6 @@ import EditorStore from 'app/stores/editor_store';
 
 import TypeConstants from 'app/constants/type_constants';
 
-
 class Paster {
 
   classifyBlock(node) {
@@ -123,6 +122,5 @@ class Paster {
     }
   }
 }
-
 
 module.exports = new Paster();

@@ -4,7 +4,6 @@ import Component from 'app/templates/component';
 
 import KeyConstants from 'app/constants/key_constants';
 
-
 class ModalInput extends Component {
 
   // --------------------------------------------------
@@ -56,6 +55,5 @@ class ModalInput extends Component {
     );
   }
 }
-
 
 module.exports = ModalInput;
