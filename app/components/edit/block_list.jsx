@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import BlockEdit from "app/templates/block_edit";
+import BlockEdit from 'app/templates/block_edit';
 
 
 class BlockList extends BlockEdit {
@@ -11,11 +11,11 @@ class BlockList extends BlockEdit {
   render() {
     return (
       <div
-        className={"block-container"}
-        data-index={this.props.block.get("index")}>
+        className={'block-container'}
+        data-index={this.props.block.get('index')}>
         <li
-          className={"block-content block-list"}
-          ref={"content"}>
+          className={'block-content block-list'}
+          ref={'content'}>
         </li>
       </div>
     );

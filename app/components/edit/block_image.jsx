@@ -1,16 +1,16 @@
-import ClassNames from "classnames";
-import React from "react";
+import ClassNames from 'classnames';
+import React from 'react';
 
-import Component from "app/templates/component";
+import Component from 'app/templates/component';
 
-import BlockCaption from "app/components/edit/block_caption";
-import OptionImage from "app/components/edit/option_image";
+import BlockCaption from 'app/components/edit/block_caption';
+import OptionImage from 'app/components/edit/option_image';
 
-import Block from "app/models/block";
+import Block from 'app/models/block';
 
-import EditorActor from "app/actors/editor_actor";
+import EditorActor from 'app/actors/editor_actor';
 
-import Point from "app/helpers/point";
+import Point from 'app/helpers/point';
 
 
 class BlockImage extends Component {
@@ -38,7 +38,7 @@ class BlockImage extends Component {
   // --------------------------------------------------
   generatePoint() {
     var block = this.props.block;
-    return new Point(block.get("section_index"), block.get("index"));
+    return new Point(block.get('section_index'), block.get('index'));
   }
 
   // --------------------------------------------------
@@ -85,24 +85,24 @@ class BlockImage extends Component {
   // --------------------------------------------------
   componentDidMount() {
     var node = React.findDOMNode(this.refs.container);
-    node.addEventListener("mouseenter", this.handleMouseEnter.bind(this));
-    node.addEventListener("mouseleave", this.handleMouseLeave.bind(this));
+    node.addEventListener('mouseenter', this.handleMouseEnter.bind(this));
+    node.addEventListener('mouseleave', this.handleMouseLeave.bind(this));
   }
 
   componentDidUpdate() {
     var node = React.findDOMNode(this.refs.uploader);
     if (node) {
-      node.addEventListener("change", this.handleChange.bind(this));
+      node.addEventListener('change', this.handleChange.bind(this));
     }
   }
 
   componentWillUnmount() {
     var node = React.findDOMNode(this.refs.container);
-    node.removeEventListener("mouseenter", this.handleMouseEnter);
-    node.removeEventListener("mouseleave", this.handleMouseLeave);
+    node.removeEventListener('mouseenter', this.handleMouseEnter);
+    node.removeEventListener('mouseleave', this.handleMouseLeave);
     node = React.findDOMNode(this.refs.uploader);
     if (node) {
-      node.removeEventListener("change", this.handleChange);
+      node.removeEventListener('change', this.handleChange);
     }
   }
 
@@ -121,11 +121,11 @@ class BlockImage extends Component {
     return [
       {
         action: this.handleUpload.bind(this),
-        className: "fa fa-image",
+        className: 'fa fa-image',
       },
       {
         action: this.handleRemove.bind(this),
-        className: "fa fa-close",
+        className: 'fa fa-close',
       },
     ].map(this.renderOption, this);
   }
@@ -133,14 +133,14 @@ class BlockImage extends Component {
   renderOverlay() {
     if (this.state.shouldShowOptions) {
       return (
-        <div className={"block-image-overlay"}>
-          <span className={"vertical-anchor"}></span>
+        <div className={'block-image-overlay'}>
+          <span className={'vertical-anchor'}></span>
           {this.renderOptions()}
           <input
-            className={"general-invisible"}
-            ref={"uploader"}
-            type={"file"}
-            accept={"image/*"}>
+            className={'general-invisible'}
+            ref={'uploader'}
+            type={'file'}
+            accept={'image/*'}>
           </input>
         </div>
       );
@@ -150,19 +150,19 @@ class BlockImage extends Component {
   render() {
     var block = this.props.block;
     var imageClass = ClassNames(
-      { "block-image": true },
-      { "block-image-placeholder": !block.get("source") }
+      { 'block-image': true },
+      { 'block-image-placeholder': !block.get('source') }
     );
     return (
       <div
-        className={"block-container"}
-        contentEditable={"false"}
-        data-index={block.get("index")}
-        ref={"container"}>
-        <div className={"block-image"}>
+        className={'block-container'}
+        contentEditable={'false'}
+        data-index={block.get('index')}
+        ref={'container'}>
+        <div className={'block-image'}>
           <img
             className={imageClass}
-            src={block.get("source")} />
+            src={block.get('source')} />
           {this.renderOverlay()}
         </div>
         <BlockCaption {...this.props} />

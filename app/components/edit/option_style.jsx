@@ -1,7 +1,7 @@
-import ClassNames from "classnames";
-import React from "react";
+import ClassNames from 'classnames';
+import React from 'react';
 
-import Component from "app/templates/component";
+import Component from 'app/templates/component';
 
 
 class OptionStyle extends Component {
@@ -23,12 +23,12 @@ class OptionStyle extends Component {
   // --------------------------------------------------
   componentDidMount() {
     var node = React.findDOMNode(this.refs.option);
-    node.addEventListener("click", this.props.action);
+    node.addEventListener('click', this.props.action);
   }
 
   componentWillUnmount() {
     var node = React.findDOMNode(this.refs.option);
-    node.removeEventListener("click", this.props.action);
+    node.removeEventListener('click', this.props.action);
   }
 
   // --------------------------------------------------
@@ -36,12 +36,12 @@ class OptionStyle extends Component {
   // --------------------------------------------------
   render() {
     var optionClass = ClassNames(
-      { "modal-style-option": true },
-      { "modal-style-selected": this.props.isActive },
-      { "general-hidden": this.props.isHidden }
+      { 'modal-style-option': true },
+      { 'modal-style-selected': this.props.isActive },
+      { 'general-hidden': this.props.isHidden }
     );
     return (
-      <span className={optionClass} ref="option">
+      <span className={optionClass} ref='option'>
         <i className={this.props.className}></i>
       </span>
     );

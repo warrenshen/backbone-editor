@@ -1,18 +1,18 @@
-import _ from "lodash";
-import CookiesJS from "cookies-js";
+import _ from 'lodash';
+import CookiesJS from 'cookies-js';
 
-import Store from "app/templates/store";
+import Store from 'app/templates/store';
 
-import Block from "app/models/block";
-import Element from "app/models/element";
-import Section from "app/models/section";
-import Story from "app/models/story";
+import Block from 'app/models/block';
+import Element from 'app/models/element';
+import Section from 'app/models/section';
+import Story from 'app/models/story';
 
-import Point from "app/helpers/point";
-import Vector from "app/helpers/vector";
+import Point from 'app/helpers/point';
+import Vector from 'app/helpers/vector';
 
-import ActionConstants from "app/constants/action_constants";
-import TypeConstants from "app/constants/type_constants";
+import ActionConstants from 'app/constants/action_constants';
+import TypeConstants from 'app/constants/type_constants';
 
 
 class EditorStore extends Store {
@@ -40,7 +40,7 @@ class EditorStore extends Store {
   }
 
   get name() {
-    return "EditorStore";
+    return 'EditorStore';
   }
 
   get point() {
@@ -129,8 +129,8 @@ class EditorStore extends Store {
     for (var map of maps) {
       for (var [type, value] of map) {
         if (value && type === TypeConstants.block.list &&
-            !styles["shouldHideOptions"]) {
-          styles["shouldHideOptions"] = true;
+            !styles['shouldHideOptions']) {
+          styles['shouldHideOptions'] = true;
         } else {
           if (!value && (styles[type] || styles[type] === undefined)) {
             styles[type] = false;
@@ -144,7 +144,7 @@ class EditorStore extends Store {
   }
 
   getBlock(point) {
-    return this.getSection(point).get("blocks").at(point.blockIndex);
+    return this.getSection(point).get('blocks').at(point.blockIndex);
   }
 
   getPrevious(point) {
@@ -162,7 +162,7 @@ class EditorStore extends Store {
   }
 
   getSection(point) {
-    return this._story.get("sections").at(point.sectionIndex);
+    return this._story.get('sections').at(point.sectionIndex);
   }
 
   // --------------------------------------------------
@@ -175,13 +175,13 @@ class EditorStore extends Store {
     var type = options.type;
     var clone = section.cloneDestructively(point.blockIndex + 1);
     var addition = section.cloneDestructively(point.blockIndex);
-    addition.set("type", type);
+    addition.set('type', type);
     story.addSection(addition, point.sectionIndex + 1);
     if (addition.isList()) {
-      block.set("type", TypeConstants.block.list);
-      block.set("content", block.get("content").substring(3));
+      block.set('type', TypeConstants.block.list);
+      block.set('content', block.get('content').substring(3));
     } else {
-      block.set("type", TypeConstants.block.paragraph);
+      block.set('type', TypeConstants.block.paragraph);
     }
     if (clone.length) {
       story.addSection(clone, point.sectionIndex + 2);
@@ -189,8 +189,8 @@ class EditorStore extends Store {
     if (!section.length) {
       story.removeSection(section);
     }
-    point.sectionIndex = block.get("section_index");
-    point.blockIndex = block.get("index");
+    point.sectionIndex = block.get('section_index');
+    point.blockIndex = block.get('index');
     point.caretOffset = 0;
     this.updatePoint(point);
     this.resetCookies();
@@ -223,7 +223,7 @@ class EditorStore extends Store {
     } else if (!previous) {
       if (block.isImage()) {
         block.set({
-          content: "",
+          content: '',
           type: TypeConstants.block.paragraph,
         });
         if (!block.isLast()) {
@@ -238,8 +238,8 @@ class EditorStore extends Store {
           section.removeBlock(block);
         }
       } else {
-        point.sectionIndex = previous.get("section_index");
-        point.blockIndex = previous.get("index");
+        point.sectionIndex = previous.get('section_index');
+        point.blockIndex = previous.get('index');
         point.caretOffset = previous.length;
         if (!block.isImage() && !previous.isEditable()) {
           section.removeBlock(previous);
@@ -274,8 +274,8 @@ class EditorStore extends Store {
       }
       if (startPoint.compareShallowly(endPoint)) {
         var point = new Point(
-          block.get("section_index"),
-          block.get("index")
+          block.get('section_index'),
+          block.get('index')
         );
         this.removeBlock(point);
       } else {
@@ -286,11 +286,11 @@ class EditorStore extends Store {
   }
 
   retrieveCookies() {
-    if (CookiesJS.enabled) {
-      var data = "";
+    if (false && CookiesJS.enabled) {
+      var data = '';
       for (var i = 0; i < 20; i += 1) {
-        var cookie = CookiesJS.get("cookie" + i);
-        data += cookie ? cookie : "";
+        var cookie = CookiesJS.get('cookie' + i);
+        data += cookie ? cookie : '';
       }
       if (data) {
         var json = JSON.parse(data);
@@ -305,16 +305,16 @@ class EditorStore extends Store {
   }
 
   resetCookies() {
-    if (CookiesJS.enabled) {
+    if (false && CookiesJS.enabled) {
       var data = JSON.stringify(this._story.toJSON());
       for (var i = 0; i < 20; i += 1) {
         var length = data.length;
         if (length > 2500) {
-          CookiesJS.set("cookie" + i, data.substring(0, 2500));
+          CookiesJS.set('cookie' + i, data.substring(0, 2500));
           data = data.substring(2500);
         } else {
-          CookiesJS.set("cookie" + i, data);
-          data = "";
+          CookiesJS.set('cookie' + i, data);
+          data = '';
         }
       }
     }
@@ -351,9 +351,9 @@ class EditorStore extends Store {
     var type = options.type;
     var callback = function(block, start, end) {
       if (type === TypeConstants.block.centered) {
-        block.set("is_centered", !block.isCentered());
+        block.set('is_centered', !block.isCentered());
       } else {
-        block.set("type", block.get("type") === type ?
+        block.set('type', block.get('type') === type ?
                           TypeConstants.block.paragraph :
                           type);
       }

@@ -1,19 +1,19 @@
-import React from "react";
+import React from 'react';
 
-import Component from "app/templates/component";
+import Component from 'app/templates/component';
 
-import ModalLink from "app/components/edit/modal_link";
-import ModalStyle from "app/components/edit/modal_style";
-import StoryEdit from "app/components/edit/story_edit";
+import ModalLink from 'app/components/edit/modal_link';
+import ModalStyle from 'app/components/edit/modal_style';
+import StoryEdit from 'app/components/edit/story_edit';
 
-import EditorStore from "app/stores/editor_store";
+import EditorStore from 'app/stores/editor_store';
 
-import EditorActor from "app/actors/editor_actor";
+import EditorActor from 'app/actors/editor_actor';
 
-import Paster from "app/helpers/paster";
-import Selector from "app/helpers/selector";
+import Paster from 'app/helpers/paster';
+import Selector from 'app/helpers/selector';
 
-import TypeConstants from "app/constants/type_constants";
+import TypeConstants from 'app/constants/type_constants';
 
 
 class ViewEdit extends Component {
@@ -105,8 +105,8 @@ class ViewEdit extends Component {
     }
     if (point) {
       event.preventDefault();
-      var html = event.clipboardData.getData("text/html");
-      var container = document.createElement("div");
+      var html = event.clipboardData.getData('text/html');
+      var container = document.createElement('div');
       container.innerHTML = html;
       if (Paster.parseContainer(container, point)) {
         EditorActor.resetCookies();
@@ -132,18 +132,18 @@ class ViewEdit extends Component {
   // --------------------------------------------------
   componentDidMount() {
     var node = React.findDOMNode(this.refs.view);
-    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
-    document.addEventListener("paste", this.handlePaste.bind(this));
-    window.addEventListener("scroll", this.handleScroll.bind(this));
-    window.addEventListener("resize", this.handleResize.bind(this));
+    node.addEventListener('mouseup', this.handleMouseUp.bind(this));
+    document.addEventListener('paste', this.handlePaste.bind(this));
+    window.addEventListener('scroll', this.handleScroll.bind(this));
+    window.addEventListener('resize', this.handleResize.bind(this));
   }
 
   componentWillUnmount() {
     var node = React.findDOMNode(this.refs.view);
-    node.removeEventListener("mouseup", this.handleMouseUp);
-    document.removeEventListener("paste", this.handlePaste);
-    window.removeEventListener("scroll", this.handleScroll);
-    window.removeEventListener("resize", this.handleResize);
+    node.removeEventListener('mouseup', this.handleMouseUp);
+    document.removeEventListener('paste', this.handlePaste);
+    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('resize', this.handleResize);
   }
 
   // --------------------------------------------------
@@ -151,7 +151,7 @@ class ViewEdit extends Component {
   // --------------------------------------------------
   render() {
     return (
-      <div className={"story-container"} ref={"view"}>
+      <div className={'story-container'} ref={'view'}>
         <StoryEdit
           point={this.state.point}
           shouldUpdate={this.state.shouldUpdateStoryEdit}

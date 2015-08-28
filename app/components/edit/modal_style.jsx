@@ -1,18 +1,18 @@
-import $ from "jquery";
-import ClassNames from "classnames";
-import React from "react";
+import $ from 'jquery';
+import ClassNames from 'classnames';
+import React from 'react';
 
-import Component from "app/templates/component";
+import Component from 'app/templates/component';
 
-import ModalInput from "app/components/edit/modal_input";
-import OptionStyle from "app/components/edit/option_style";
+import ModalInput from 'app/components/edit/modal_input';
+import OptionStyle from 'app/components/edit/option_style';
 
-import EditorActor from "app/actors/editor_actor";
+import EditorActor from 'app/actors/editor_actor';
 
-import Selector from "app/helpers/selector";
-import Vector from "app/helpers/vector";
+import Selector from 'app/helpers/selector';
+import Vector from 'app/helpers/vector';
 
-import TypeConstants from "app/constants/type_constants";
+import TypeConstants from 'app/constants/type_constants';
 
 
 class ModalStyle extends Component {
@@ -77,7 +77,7 @@ class ModalStyle extends Component {
     this.styleBlocks(TypeConstants.block.quote);
   }
 
-  styleElements(type, url="") {
+  styleElements(type, url='') {
     EditorActor.styleElements(this.props.vector, { type: type, url: url });
     this.props.updateStoryStyle();
   }
@@ -101,7 +101,7 @@ class ModalStyle extends Component {
     if (vector) {
       var startPoint = vector.startPoint;
       var endPoint = vector.endPoint;
-      var sectionNodes = $("section, ol, ul");
+      var sectionNodes = $('section, ol, ul');
       var startNode = sectionNodes[startPoint.sectionIndex]
                       .childNodes[startPoint.blockIndex];
       var endNode = sectionNodes[endPoint.sectionIndex]
@@ -138,8 +138,8 @@ class ModalStyle extends Component {
     var node = React.findDOMNode(this.refs.modal);
     var offset = rectangle.width / 2 - node.offsetWidth / 2;
     if (rectangle.top) {
-      node.style.top = rectangle.top - 44 + "px";
-      node.style.left = rectangle.left + offset + "px";
+      node.style.top = rectangle.top - 44 + 'px';
+      node.style.left = rectangle.left + offset + 'px';
     } else {
       EditorActor.updateVector(null);
       this.props.updateModalStyle();
@@ -151,13 +151,13 @@ class ModalStyle extends Component {
   // --------------------------------------------------
   componentDidMount() {
     var node = React.findDOMNode(this.refs.modal);
-    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
+    node.addEventListener('mouseup', this.handleMouseUp.bind(this));
     this.createVector(this.props.vector);
   }
 
   componentDidUpdate() {
     if (false) {
-      console.log("Style modal component updated.");
+      console.log('Style modal component updated.');
     }
     if (!this.props.vector && this.state.shouldShowInput) {
       this.setState({ shouldShowInput: false });
@@ -168,7 +168,7 @@ class ModalStyle extends Component {
 
   componentWillUnmount() {
     var node = React.findDOMNode(this.refs.modal);
-    node.removeEventListener("mouseup", this.handleMouseUp);
+    node.removeEventListener('mouseup', this.handleMouseUp);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -198,50 +198,50 @@ class ModalStyle extends Component {
     return [
       {
         action: this.styleHeadingOne.bind(this),
-        className: "fa fa-header",
+        className: 'fa fa-header',
         isActive: styles[TypeConstants.block.headingOne] === true,
-        isHidden: styles["shouldHideOptions"] || false,
+        isHidden: styles['shouldHideOptions'] || false,
       },
       {
         action: this.styleHeadingTwo.bind(this),
-        className: "fa fa-header",
+        className: 'fa fa-header',
         isActive: styles[TypeConstants.block.headingTwo] === true,
-        isHidden: styles["shouldHideOptions"] || false,
+        isHidden: styles['shouldHideOptions'] || false,
       },
       {
         action: this.styleHeadingThree.bind(this),
-        className: "fa fa-header",
+        className: 'fa fa-header',
         isActive: styles[TypeConstants.block.headingThree] === true,
-        isHidden: styles["shouldHideOptions"] || false,
+        isHidden: styles['shouldHideOptions'] || false,
       },
       {
         action: this.styleQuote.bind(this),
-        className: "fa fa-quote-right",
+        className: 'fa fa-quote-right',
         isActive: styles[TypeConstants.block.quote] === true,
-        isHidden: styles["shouldHideOptions"] || false,
+        isHidden: styles['shouldHideOptions'] || false,
       },
       {
         action: this.styleCentered.bind(this),
-        className: "fa fa-align-center",
+        className: 'fa fa-align-center',
         isActive: styles[TypeConstants.block.centered] === true,
-        isHidden: styles["shouldHideOptions"] ||
+        isHidden: styles['shouldHideOptions'] ||
                   styles[TypeConstants.block.quote] || false,
       },
       {
         action: this.styleBold.bind(this),
-        className: "fa fa-bold",
+        className: 'fa fa-bold',
         isActive: styles[TypeConstants.element.bold] === true,
         isHidden: false,
       },
       {
         action: this.styleItalic.bind(this),
-        className: "fa fa-italic",
+        className: 'fa fa-italic',
         isActive: styles[TypeConstants.element.italic] === true,
         isHidden: styles[TypeConstants.block.quote] || false,
       },
       {
         action: this.showInput.bind(this),
-        className: "fa fa-link",
+        className: 'fa fa-link',
         isActive: styles[TypeConstants.element.link] === true,
         isHidden: false,
       },
@@ -250,15 +250,15 @@ class ModalStyle extends Component {
 
   render() {
     var modalClass = ClassNames(
-      { "modal-style": true },
-      { "general-hidden": !this.props.vector }
+      { 'modal-style': true },
+      { 'general-hidden': !this.props.vector }
     );
     return (
-      <div className={modalClass} ref="modal">
-        <span className={"vertical-anchor"}></span>
+      <div className={modalClass} ref='modal'>
+        <span className={'vertical-anchor'}></span>
         {this.renderOptions()}
         {this.renderInput()}
-        <span className={"modal-style-triangle"}></span>
+        <span className={'modal-style-triangle'}></span>
       </div>
     );
   }

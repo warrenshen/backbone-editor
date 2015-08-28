@@ -1,5 +1,5 @@
-import Point from "app/helpers/point";
-import Vector from "app/helpers/vector";
+import Point from 'app/helpers/point';
+import Vector from 'app/helpers/vector';
 
 
 class Selector {
@@ -33,12 +33,12 @@ class Selector {
     return parentNode;
   }
 
-  generatePoint(selection, type="anchor") {
-    var childNode = selection[type + "Node"];
+  generatePoint(selection, type='anchor') {
+    var childNode = selection[type + 'Node'];
     var parentNode = this.findParentNode(childNode);
     var grandparentNode = parentNode.parentNode;
     var childOffset = this.findChildOffset(childNode, parentNode);
-    var caretOffset = childOffset + selection[type + "Offset"];
+    var caretOffset = childOffset + selection[type + 'Offset'];
     var blockIndex = parseInt(parentNode.dataset.index);
     var sectionIndex = parseInt(grandparentNode.dataset.index);
     return new Point(sectionIndex, blockIndex, caretOffset);
@@ -46,7 +46,7 @@ class Selector {
 
   generateVector(selection) {
     var anchorPoint = this.generatePoint(selection);
-    var focusPoint = this.generatePoint(selection, "focus");
+    var focusPoint = this.generatePoint(selection, 'focus');
     if (anchorPoint.compareDeeply(focusPoint) < 0) {
       return new Vector(anchorPoint, focusPoint);
     } else {

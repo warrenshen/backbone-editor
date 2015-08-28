@@ -1,7 +1,7 @@
-import Backbone from "backbone";
-import React from "react";
+import Backbone from 'backbone';
+import React from 'react';
 
-import ViewContainer from "app/components/view_container";
+import ViewContainer from 'app/components/view_container';
 
 
 class Router extends Backbone.Router {
@@ -10,7 +10,7 @@ class Router extends Backbone.Router {
   // Getters
   // --------------------------------------------------
   get name() {
-    return "Router";
+    return 'Router';
   }
 
   // --------------------------------------------------
@@ -25,8 +25,8 @@ class Router extends Backbone.Router {
 
   routes() {
     return {
-      "": "editor",
-      "editor/": "editor",
+      '': 'editor',
+      'editor/': 'editor',
     };
   }
 }

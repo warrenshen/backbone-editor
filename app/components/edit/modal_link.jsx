@@ -1,9 +1,9 @@
-import ClassNames from "classnames";
-import React from "react";
+import ClassNames from 'classnames';
+import React from 'react';
 
-import Component from "app/templates/component";
+import Component from 'app/templates/component';
 
-import Link from "app/helpers/link";
+import Link from 'app/helpers/link';
 
 
 class ModalLink extends Component {
@@ -24,8 +24,8 @@ class ModalLink extends Component {
   positionModal(rectangle) {
     var modal = React.findDOMNode(this.refs.modal);
     var offset = rectangle.width / 2 - modal.offsetWidth / 2;
-    modal.style.top = rectangle.bottom + 6 + "px";
-    modal.style.left = rectangle.left + offset + "px";
+    modal.style.top = rectangle.bottom + 6 + 'px';
+    modal.style.left = rectangle.left + offset + 'px';
   }
 
   // --------------------------------------------------
@@ -33,7 +33,7 @@ class ModalLink extends Component {
   // --------------------------------------------------
   componentDidUpdate() {
     if (false) {
-      console.log("Link modal component updated.");
+      console.log('Link modal component updated.');
     }
     var link = this.props.link;
     if (link) {
@@ -52,14 +52,14 @@ class ModalLink extends Component {
   // --------------------------------------------------
   render() {
     var modalClass = ClassNames(
-      { "link-modal": true },
-      { "general-hidden": !this.props.link }
+      { 'link-modal': true },
+      { 'general-hidden': !this.props.link }
     );
     return (
-      <div className={modalClass} ref={"modal"}>
-        <span className={"vertical-anchor"}></span>
-        <span className={"link-modal-content"} ref={"content"}></span>
-        <span className={"link-modal-triangle"}></span>
+      <div className={modalClass} ref={'modal'}>
+        <span className={'vertical-anchor'}></span>
+        <span className={'link-modal-content'} ref={'content'}></span>
+        <span className={'link-modal-triangle'}></span>
       </div>
     );
   }

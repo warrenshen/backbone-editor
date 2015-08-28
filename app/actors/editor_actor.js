@@ -1,6 +1,6 @@
-import Actor from "app/templates/actor";
+import Actor from 'app/templates/actor';
 
-import ActionConstants from "app/constants/action_constants";
+import ActionConstants from 'app/constants/action_constants';
 
 
 class EditorActor extends Actor {

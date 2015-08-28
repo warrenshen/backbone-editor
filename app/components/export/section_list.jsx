@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 
-import Component from "app/templates/component";
+import Component from 'app/templates/component';
 
-import BlockList from "app/components/export/block_list";
+import BlockList from 'app/components/export/block_list';
 
-import Section from "app/models/section";
+import Section from 'app/models/section';
 
-import TypeConstants from "app/constants/type_constants";
+import TypeConstants from 'app/constants/type_constants';
 
 
 class SectionList extends Component {
@@ -32,38 +32,38 @@ class SectionList extends Component {
   }
 
   renderBlocks() {
-    return this.props.section.get("blocks").map(this.renderBlock, this);
+    return this.props.section.get('blocks').map(this.renderBlock, this);
   }
 
   renderTag() {
     var section = this.props.section;
-    if (section.get("type") === TypeConstants.section.listOrdered) {
-      return "ol";
+    if (section.get('type') === TypeConstants.section.listOrdered) {
+      return 'ol';
     } else {
-      return "ul";
+      return 'ul';
     }
   }
   render() {
 
     return (
       <code>
-        <p className={"code"}>
-          <span className={"code code-red"}>
-            {"    <" + this.renderTag()}
+        <p className={'code'}>
+          <span className={'code code-red'}>
+            {'    <' + this.renderTag()}
           </span>
-          <span className={"code code-green"}>
-            {" class="}
+          <span className={'code code-green'}>
+            {' class='}
           </span>
-          <span className={"code code-blue"}>
-            {"\"section section-standard\""}
+          <span className={'code code-blue'}>
+            {'\'section section-standard\''}
           </span>
-          <span className={"code code-red"}>
-            {">"}
+          <span className={'code code-red'}>
+            {'>'}
           </span>
         </p>
         {this.renderBlocks()}
-        <p className={"code code-red"}>
-          {"    </" + this.renderTag() + ">"}
+        <p className={'code code-red'}>
+          {'    </' + this.renderTag() + '>'}
         </p>
       </code>
     );

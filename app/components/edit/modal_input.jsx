@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
-import Component from "app/templates/component";
+import Component from 'app/templates/component';
 
-import KeyConstants from "app/constants/key_constants";
+import KeyConstants from 'app/constants/key_constants';
 
 
 class ModalInput extends Component {
@@ -31,13 +31,13 @@ class ModalInput extends Component {
   // --------------------------------------------------
   componentDidMount() {
     var node = React.findDOMNode(this.refs.input);
-    node.addEventListener("keypress", this.handleKeyPress.bind(this));
+    node.addEventListener('keypress', this.handleKeyPress.bind(this));
     node.focus();
   }
 
   componentWillUnmount() {
     var node = React.findDOMNode(this.refs.input);
-    node.removeEventListener("keypress", this.handleKeyPress);
+    node.removeEventListener('keypress', this.handleKeyPress);
   }
 
   // --------------------------------------------------
@@ -45,12 +45,12 @@ class ModalInput extends Component {
   // --------------------------------------------------
   render() {
     return (
-      <div className={"modal-style-overlay"}>
-        <span className={"vertical-anchor"}></span>
+      <div className={'modal-style-overlay'}>
+        <span className={'vertical-anchor'}></span>
         <input
-          className={"modal-style-input"}
-          ref={"input"}
-          placeholder={"Enter a link here..."}>
+          className={'modal-style-input'}
+          ref={'input'}
+          placeholder={'Enter a link here...'}>
         </input>
       </div>
     );

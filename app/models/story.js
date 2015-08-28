@@ -1,8 +1,8 @@
-import Model from "app/templates/model";
+import Model from 'app/templates/model';
 
-import Section from "app/models/section";
+import Section from 'app/models/section';
 
-import ModelDirectory from "app/directories/model_directory";
+import ModelDirectory from 'app/directories/model_directory';
 
 
 class Story extends Model {
@@ -15,19 +15,19 @@ class Story extends Model {
   }
 
   get length() {
-    return this.get("sections").length;
+    return this.get('sections').length;
   }
 
   get name() {
-    return "Story";
+    return 'Story';
   }
 
   get relations() {
     return [
       {
-        type: "HasMany",
-        key: "sections",
-        relatedModel: ModelDirectory.get("Section"),
+        type: 'HasMany',
+        key: 'sections',
+        relatedModel: ModelDirectory.get('Section'),
       },
     ];
   }
@@ -36,20 +36,20 @@ class Story extends Model {
   // Methods
   // --------------------------------------------------
   addSection(section, index=0) {
-    this.get("sections").add(section, { at: index });
+    this.get('sections').add(section, { at: index });
     this.mergeSections();
   }
 
   filterTypes() {
     var types = {};
-    for (var section of this.get("sections").models) {
+    for (var section of this.get('sections').models) {
       section.filterTypes(types);
     }
     return types;
   }
 
   mergeSections() {
-    var sections = this.get("sections");
+    var sections = this.get('sections');
     for (var i = 0; i < sections.length - 1; i += 1) {
       var section = sections.at(i + 1);
       if (sections.at(i).mergeSection(section) || !section.length) {
@@ -61,12 +61,12 @@ class Story extends Model {
   }
 
   removeSection(section) {
-    this.get("sections").remove(section);
+    this.get('sections').remove(section);
     this.mergeSections();
   }
 
   resetIndices() {
-    this.get("sections").map(function(section, index) {
+    this.get('sections').map(function(section, index) {
       section.set({
         index: index,
         is_last: index === this.length - 1

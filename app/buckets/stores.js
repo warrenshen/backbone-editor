@@ -1,4 +1,4 @@
-import EditorStore from "app/stores/editor_store";
+import EditorStore from 'app/stores/editor_store';
 
 
 module.exports = [EditorStore];

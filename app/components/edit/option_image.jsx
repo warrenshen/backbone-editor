@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import Component from "app/templates/component";
+import Component from 'app/templates/component';
 
 
 class OptionImage extends Component {
@@ -10,12 +10,12 @@ class OptionImage extends Component {
   // --------------------------------------------------
   componentDidMount() {
     var node = React.findDOMNode(this.refs.option);
-    node.addEventListener("click", this.props.action);
+    node.addEventListener('click', this.props.action);
   }
 
   componentWillUnmount() {
     var node = React.findDOMNode(this.refs.option);
-    node.removeEventListener("click", this.props.action);
+    node.removeEventListener('click', this.props.action);
   }
 
   // --------------------------------------------------
@@ -23,7 +23,7 @@ class OptionImage extends Component {
   // --------------------------------------------------
   render() {
     return (
-      <span className={"block-image-option"} ref={"option"}>
+      <span className={'block-image-option'} ref={'option'}>
         <i className={this.props.className}></i>
       </span>
     );

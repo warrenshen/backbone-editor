@@ -1,7 +1,7 @@
-import ClassNames from "classnames";
-import React from "react";
+import ClassNames from 'classnames';
+import React from 'react';
 
-import Component from "app/templates/component";
+import Component from 'app/templates/component';
 
 
 class OptionMedia extends Component {
@@ -29,14 +29,14 @@ class OptionMedia extends Component {
   // --------------------------------------------------
   componentDidMount() {
     var node = React.findDOMNode(this.refs.option);
-    node.addEventListener("click", this.props.action);
-    node.addEventListener("mousedown", this.handleMouseDown);
+    node.addEventListener('click', this.props.action);
+    node.addEventListener('mousedown', this.handleMouseDown);
   }
 
   componentWillUnmount() {
     var node = React.findDOMNode(this.refs.option);
-    node.removeEventListener("click", this.props.action);
-    node.removeEventListener("mousedown", this.handleMouseDown);
+    node.removeEventListener('click', this.props.action);
+    node.removeEventListener('mousedown', this.handleMouseDown);
   }
 
   // --------------------------------------------------
@@ -44,13 +44,13 @@ class OptionMedia extends Component {
   // --------------------------------------------------
   render() {
     var optionClass = ClassNames(
-      { "modal-media-option": true },
-      { "modal-media-hidden": !this.props.isActive },
-      { "modal-media-visible": this.props.isActive }
+      { 'modal-media-option': true },
+      { 'modal-media-hidden': !this.props.isActive },
+      { 'modal-media-visible': this.props.isActive }
     );
     return (
-      <span className={optionClass} ref={"option"}>
-        <span className={"vertical-anchor"}></span>
+      <span className={optionClass} ref={'option'}>
+        <span className={'vertical-anchor'}></span>
         <i className={this.props.className}></i>
       </span>
     );

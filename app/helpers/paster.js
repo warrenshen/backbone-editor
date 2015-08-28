@@ -1,11 +1,11 @@
-import $ from "jquery";
+import $ from 'jquery';
 
-import Block from "app/models/block";
-import Element from "app/models/element";
+import Block from 'app/models/block';
+import Element from 'app/models/element';
 
-import EditorStore from "app/stores/editor_store";
+import EditorStore from 'app/stores/editor_store';
 
-import TypeConstants from "app/constants/type_constants";
+import TypeConstants from 'app/constants/type_constants';
 
 
 class Paster {
@@ -53,7 +53,7 @@ class Paster {
     if (type) {
       var block = new Block({
         content: node.textContent,
-        is_centered: node.style.textAlign === "center",
+        is_centered: node.style.textAlign === 'center',
         source: node.src,
         type: type,
       });
@@ -79,7 +79,7 @@ class Paster {
           var attributes = node.attributes;
           var dataset = node.dataset;
           var url = dataset.link ? dataset.link : attributes.href.value;
-          element.set("url", url);
+          element.set('url', url);
         }
         element.setOffsets(offset, offset + length);
         block.parseElement(element);
@@ -89,7 +89,7 @@ class Paster {
   }
 
   parseContainer(container, point) {
-    var nodes = $("blockquote, h1, h2, h3, h4, h5, img, hr, p, span", container);
+    var nodes = $('blockquote, h1, h2, h3, h4, h5, img, hr, p, span', container);
     if (!nodes.length) {
       return false;
     } else {
@@ -116,7 +116,7 @@ class Paster {
       if (clone) {
         block.mergeBlock(clone, block.length);
       }
-      point.blockIndex = block.get("index");
+      point.blockIndex = block.get('index');
       point.caretOffset = block.length;
       EditorStore.updatePoint(point);
       return true;

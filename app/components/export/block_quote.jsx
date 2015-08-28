@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import BlockExport from "app/templates/block_export";
+import BlockExport from 'app/templates/block_export';
 
 
 class BlockQuote extends BlockExport {
@@ -9,11 +9,11 @@ class BlockQuote extends BlockExport {
   // Render
   // --------------------------------------------------
   renderClass() {
-    return " block-quote";
+    return ' block-quote';
   }
 
   renderTag() {
-    return "blockquote";
+    return 'blockquote';
   }
 }
 

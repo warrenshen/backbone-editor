@@ -1,16 +1,16 @@
-import ClassNames from "classnames";
-import React from "react";
+import ClassNames from 'classnames';
+import React from 'react';
 
-import Component from "app/templates/component";
+import Component from 'app/templates/component';
 
-import Block from "app/models/block";
+import Block from 'app/models/block';
 
-import EditorActor from "app/actors/editor_actor";
+import EditorActor from 'app/actors/editor_actor';
 
-import Selector from "app/helpers/selector";
+import Selector from 'app/helpers/selector';
 
-import KeyConstants from "app/constants/key_constants";
-import TypeConstants from "app/constants/type_constants";
+import KeyConstants from 'app/constants/key_constants';
+import TypeConstants from 'app/constants/type_constants';
 
 
 class BlockCaption extends Component {
@@ -37,7 +37,7 @@ class BlockCaption extends Component {
   // Handlers
   // --------------------------------------------------
   handleBlur(event) {
-    if (!this.props.block.get("content")) {
+    if (!this.props.block.get('content')) {
       this.setState({ shouldShowPlaceholder: true });
     }
   }
@@ -102,11 +102,11 @@ class BlockCaption extends Component {
   // --------------------------------------------------
   componentDidMount() {
     var node = React.findDOMNode(this.refs.content);
-    node.addEventListener("blur", this.handleBlur.bind(this));
-    node.addEventListener("focus", this.handleFocus.bind(this));
-    node.addEventListener("keydown", this.handleKeyDown.bind(this));
-    node.addEventListener("keypress", this.handleKeyPress.bind(this));
-    node.addEventListener("mouseup", this.handleMouseUp.bind(this));
+    node.addEventListener('blur', this.handleBlur.bind(this));
+    node.addEventListener('focus', this.handleFocus.bind(this));
+    node.addEventListener('keydown', this.handleKeyDown.bind(this));
+    node.addEventListener('keypress', this.handleKeyPress.bind(this));
+    node.addEventListener('mouseup', this.handleMouseUp.bind(this));
     this.renderContent(node);
   }
 
@@ -117,31 +117,31 @@ class BlockCaption extends Component {
 
   componentWillUnmount() {
     var node = React.findDOMNode(this.refs.content);
-    node.removeEventListener("blur", this.handleBlur);
-    node.removeEventListener("focus", this.handleFocus);
-    node.removeEventListener("keydown", this.handleKeyDown);
-    node.removeEventListener("keypress", this.handleKeyPress);
-    node.removeEventListener("mouseup", this.handleMouseUp);
+    node.removeEventListener('blur', this.handleBlur);
+    node.removeEventListener('focus', this.handleFocus);
+    node.removeEventListener('keydown', this.handleKeyDown);
+    node.removeEventListener('keypress', this.handleKeyPress);
+    node.removeEventListener('mouseup', this.handleMouseUp);
   }
 
   // --------------------------------------------------
   // Render
   // --------------------------------------------------
   renderContent(node) {
-    node.innerHTML = this.props.block.get("content");
+    node.innerHTML = this.props.block.get('content');
   }
 
   render() {
     var captionClass = ClassNames(
-      { "block-caption": true },
-      { "general-placeholder": this.state.shouldShowPlaceholder }
+      { 'block-caption': true },
+      { 'general-placeholder': this.state.shouldShowPlaceholder }
     );
     return (
       <p
         className={captionClass}
-        contentEditable={"true"}
-        placeholder={"Write a caption here..."}
-        ref={"content"}>
+        contentEditable={'true'}
+        placeholder={'Write a caption here...'}
+        ref={'content'}>
       </p>
     );
   }

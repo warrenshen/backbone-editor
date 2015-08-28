@@ -1,8 +1,8 @@
-import Model from "app/templates/model";
+import Model from 'app/templates/model';
 
-import ModelDirectory from "app/directories/model_directory";
+import ModelDirectory from 'app/directories/model_directory';
 
-import TypeConstants from "app/constants/type_constants";
+import TypeConstants from 'app/constants/type_constants';
 
 
 class Element extends Model {
@@ -15,12 +15,12 @@ class Element extends Model {
       end: 0,
       start: 0,
       type: TypeConstants.element.bold,
-      url: "",
+      url: '',
     };
   }
 
   get name() {
-    return "Element";
+    return 'Element';
   }
 
   get relations() {
@@ -31,37 +31,37 @@ class Element extends Model {
   // Conditionals
   // --------------------------------------------------
   isLink() {
-    return this.get("type") === TypeConstants.element.link;
+    return this.get('type') === TypeConstants.element.link;
   }
 
   // --------------------------------------------------
   // Methods
   // --------------------------------------------------
   completelyBounds(element) {
-    return this.get("type") === element.get("type") &&
-           this.get("start") <= element.get("start") &&
-           this.get("end") >= element.get("end");
+    return this.get('type') === element.get('type') &&
+           this.get('start') <= element.get('start') &&
+           this.get('end') >= element.get('end');
   }
 
   decrementOffsets(value) {
-    this.set("start", this.get("start") - value);
-    this.set("end", this.get("end") - value);
+    this.set('start', this.get('start') - value);
+    this.set('end', this.get('end') - value);
     return this;
   }
 
   incrementOffsets(value) {
-    this.set("start", this.get("start") + value);
-    this.set("end", this.get("end") + value);
+    this.set('start', this.get('start') + value);
+    this.set('end', this.get('end') + value);
     return this;
   }
 
   mergeElement(element) {
-    if (this.get("type") === element.get("type") &&
-        this.get("start") <= element.get("end") &&
-        this.get("end") >= element.get("start")) {
+    if (this.get('type') === element.get('type') &&
+        this.get('start') <= element.get('end') &&
+        this.get('end') >= element.get('start')) {
       return this.setOffsets(
-        Math.min(this.get("start"), element.get("start")),
-        Math.max(this.get("end"), element.get("end"))
+        Math.min(this.get('start'), element.get('start')),
+        Math.max(this.get('end'), element.get('end'))
       );
     } else {
       return false;
@@ -70,26 +70,26 @@ class Element extends Model {
 
   partialClones(start, end) {
     var clones = [];
-    if (start > this.get("start")) {
+    if (start > this.get('start')) {
       clones.push(new Element({
         end: start,
-        start: this.get("start"),
-        type: this.get("type"),
+        start: this.get('start'),
+        type: this.get('type'),
       }));
     }
-    if (end < this.get("end")) {
+    if (end < this.get('end')) {
       clones.push(new Element({
-        end: this.get("end"),
+        end: this.get('end'),
         start: end,
-        type: this.get("type"),
+        type: this.get('type'),
       }));
     }
     return clones;
   }
 
   setOffsets(startOffset, endOffset) {
-    this.set("start", startOffset);
-    this.set("end", endOffset);
+    this.set('start', startOffset);
+    this.set('end', endOffset);
     return true;
   }
 }

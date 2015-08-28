@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react';
 
-import Component from "app/templates/component";
+import Component from 'app/templates/component';
 
-import ViewButton from "app/components/view_button";
-import ViewEdit from "app/components/view_edit";
-import ViewExport from "app/components/view_export";
+import ViewButton from 'app/components/view_button';
+import ViewEdit from 'app/components/view_edit';
+import ViewExport from 'app/components/view_export';
 
-import KeyConstants from "app/constants/key_constants";
-import TypeConstants from "app/constants/type_constants";
+import KeyConstants from 'app/constants/key_constants';
+import TypeConstants from 'app/constants/type_constants';
 
 
 class ViewContainer extends Component {
@@ -36,7 +36,7 @@ class ViewContainer extends Component {
   // --------------------------------------------------
   handleKeyDown(event) {
     if (event.which === KeyConstants.backspace) {
-      var shouldPrevent = !confirm("Are you sure you want to leave this page?");
+      var shouldPrevent = !confirm('Are you sure you want to leave this page?');
       if (shouldPrevent) {
         event.preventDefault();
       }
@@ -48,20 +48,20 @@ class ViewContainer extends Component {
   // --------------------------------------------------
   componentDidMount() {
     var node = React.findDOMNode(this.refs.view);
-    document.addEventListener("keydown", this.handleKeyDown.bind(this));
+    document.addEventListener('keydown', this.handleKeyDown.bind(this));
   }
 
   componentWillUnmount() {
     var node = React.findDOMNode(this.refs.view);
-    document.removeEventListener("keydown", this.handleKeyDown);
+    document.removeEventListener('keydown', this.handleKeyDown);
   }
 
   // --------------------------------------------------
   // Render
   // --------------------------------------------------
   renderButton(props, index) {
-    var className = "view-button";
-    className += (props.isSelected) ? " view-button-selected" : "";
+    var className = 'view-button';
+    className += (props.isSelected) ? ' view-button-selected' : '';
     return (
       <ViewButton
         action={props.action}
@@ -97,8 +97,8 @@ class ViewContainer extends Component {
 
   render() {
     return (
-      <div className={"view-container"}>
-        <div className={"view-buttons"}>
+      <div className={'view-container'}>
+        <div className={'view-buttons'}>
           {this.renderButtons()}
         </div>
         {this.renderView()}
