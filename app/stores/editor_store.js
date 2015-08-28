@@ -286,7 +286,7 @@ class EditorStore extends Store {
   }
 
   retrieveCookies() {
-    if (CookiesJS.enabled) {
+    if (false && CookiesJS.enabled) {
       var data = "";
       for (var i = 0; i < 20; i += 1) {
         var cookie = CookiesJS.get("cookie" + i);
@@ -305,7 +305,7 @@ class EditorStore extends Store {
   }
 
   resetCookies() {
-    if (CookiesJS.enabled) {
+    if (false && CookiesJS.enabled) {
       var data = JSON.stringify(this._story.toJSON());
       for (var i = 0; i < 20; i += 1) {
         var length = data.length;
