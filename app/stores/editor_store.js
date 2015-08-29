@@ -298,8 +298,34 @@ class EditorStore extends Store {
     }
     var story = new Story();
     var section = new Section();
+    var block = new Block({
+      content: 'Write your story here. Highlight words to format. Click export for code.',
+    });
+    block.parseElement(new Element({
+      end: 5,
+      type: TypeConstants.element.bold,
+      start: 0,
+    }));
+    block.parseElement(new Element({
+      end: 32,
+      type: TypeConstants.element.italic,
+      start: 23,
+    }));
+    block.parseElement(new Element({
+      end: 55,
+      type: TypeConstants.element.bold,
+      start: 50,
+    }));
+    block.parseElement(new Element({
+      end: 55,
+      type: TypeConstants.element.italic,
+      start: 50,
+    }));
     section.addBlock(new Block());
+    section.addBlock(block);
     story.addSection(section);
+    var point = new Point(0, 1, 0);
+    this.updatePoint(point);
     return story;
   }
 
